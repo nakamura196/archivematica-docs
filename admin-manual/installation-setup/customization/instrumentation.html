@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>パフォーマンス計装 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="統合" href="../integrations/integrations.html" />
+    <link rel="prev" title="Archivematicaのスケーリング" href="scaling-archivematica.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../integrations/integrations.html" title="統合"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="scaling-archivematica.html" title="Archivematicaのスケーリング"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">パフォーマンス計装</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="performance-instrumentation">
+<span id="instrumentation"></span><h1>パフォーマンス計装<a class="headerlink" href="#performance-instrumentation" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<span id="instrumentation-overview"></span><h2>概要<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>Archivematicaには、時間の経過に伴う処理やパフォーマンスに関するメトリクスを収集する機能があります。このように設定すると、ArchivematicaとArchivematica Storage Serviceは、 <a class="reference external" href="https://prometheus.io/">Prometheus</a> のようなツールでスクレイピングできる形式で、HTTP経由でメトリクスをエクスポートし、保存と分析を行います。このデータは、 <a class="reference external" href="https://grafana.com/">Grafana</a> のようなツールを使って可視化できます。</p>
+<p>インスツルメンテーションは、Archivematicaのパイプラインがどのように動作しているかを短期間、ほぼリアルタイムで把握できます。</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#instrumentation-prometheus"><span class="std std-ref">Prometheus</span></a></p></li>
+<li><p><a class="reference internal" href="#instrumentation-grafana"><span class="std std-ref">Grafana</span></a></p></li>
+<li><p><a class="reference internal" href="#instrumentation-available-metrics"><span class="std std-ref">利用可能なメトリクス</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#mcp-client-metrics"><span class="std std-ref">MCPクライアントメトリクス</span></a></p></li>
+<li><p><a class="reference internal" href="#mcp-server-metrics"><span class="std std-ref">MCP Serverメトリクス</span></a></p></li>
+<li><p><a class="reference internal" href="#dashboard-metrics"><span class="std std-ref">ダッシュボードのメトリクス</span></a></p></li>
+<li><p><a class="reference internal" href="#storage-service-metrics"><span class="std std-ref">Storage Serviceメトリクス</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#instrumentation-configuration"><span class="std std-ref">設定</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#configure-prometheus"><span class="std std-ref">Prometheusの設定</span></a></p></li>
+<li><p><a class="reference internal" href="#configure-grafana"><span class="std std-ref">Grafanaの設定</span></a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="prometheus">
+<span id="instrumentation-prometheus"></span><h2>Prometheus<a class="headerlink" href="#prometheus" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://prometheus.io/">Prometheus</a> は、時系列データをスクレイピング、保存、照会するためのオープンソースツールです。各メトリックには名前と時系列における一連の値があります。</p>
+<p>Archivematicaで一般的に使用される指標の一例として、 <strong>AIPs Stored Count</strong> 、つまり時間の経過とともに保存されたAIPの数があります。パイプラインが最初に作成されたときの値は <code class="docutils literal notranslate"><span class="pre">0</span></code> で、最初のAIPが保存された後は <code class="docutils literal notranslate"><span class="pre">1</span></code> に増えます。</p>
+<p>PrometheusとArchivematicaを使用する際に注意すべき点がいくつかあります：</p>
+<ul class="simple">
+<li><p>Prometheusのウェブインターフェースは認証されていません。デフォルトではポート9090で動作し、誰でもアクセスできるため、パブリックインターネットからのアクセスはファイアウォールで制限する必要があります。同様に、Archivematicaのメトリクスエンドポイントも認証されていないので、Archivematicaインスタンスがインターネット上で公開されている場合は、ファイアウォール経由で <code class="docutils literal notranslate"><span class="pre">/metrics</span></code> URLへのアクセスを制限する必要があります。</p></li>
+<li><p>Prometheusは、設定された間隔でArchivematicaからデータをスクレイピングしますが、スクレイピングの間にいつ値が変更したかはわかりません。スクレイプ間隔が15秒に設定されている場合、前のスクレイプ間隔が60秒であっても、その値がデータで表示されます。</p></li>
+<li><p>Prometheusは、短期間のデータ保存を目的としています。デフォルトでは15日間保存されます。これを変更するには、Prometheusを起動時に、より大きな値（例えば、 <code class="docutils literal notranslate"><span class="pre">60d</span></code> ）を <code class="docutils literal notranslate"><span class="pre">--storage.tsdb.retention.time</span></code> に渡します。</p></li>
+</ul>
+<p>Prometheusの設定については、 <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">Prometheusの文書</a> を参照してください。</p>
+</section>
+<section id="grafana">
+<span id="instrumentation-grafana"></span><h2>Grafana<a class="headerlink" href="#grafana" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://grafana.com/">Grafana</a> は、データを可視化するためのオープンソースツールです。高度な設定が可能であり、Prometheusに保存されたデータを有用な方法で視覚化するための多くのオプションがあります。Grafanaは、ほぼ自由に設定できます。新しいダッシュボードは、Webインターフェイスから試してみるできるため、お勧めです。私たちが提供するデフォルトのArchivematicaダッシュボードは、あくまで出発点として意図されたものです。</p>
+</section>
+<section id="available-metrics">
+<span id="instrumentation-available-metrics"></span><h2>利用可能なメトリクス<a class="headerlink" href="#available-metrics" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、様々な <a class="reference external" href="https://prometheus.io/docs/concepts/metric_types/">Prometheusメトリックタイプ</a> を使用します。カウンタは、増加し続ける数値です。ゲージは増減する数値です。ヒストグラムとサマリーは、カウントと値の合計の両方を提供し、分位数（しばしばパーセンタイルと考えられ、0.95分位数は95パーセンタイルです）にわたって分割できます。</p>
+<section id="mcp-client-metrics">
+<span id="id1"></span><h3>MCPクライアントメトリクス<a class="headerlink" href="#mcp-client-metrics" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_job_total</span></code> （カウンタ）：処理されたジョブの数、スクリプトによるラベル付け。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_job_success_timestamp</span></code> （ゲージ）：最近処理されたジョブのタイムスタンプ、スクリプトによるラベル付け。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_job_error_total</span></code> （カウンタ）：ジョブ処理の失敗数、スクリプトによるラベル付け。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_job_error_timestamp</span></code> （ゲージ）：ジョブ処理の失敗数、スクリプトによるラベル付け。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_task_execution_time_seconds</span></code> （ヒストグラム）：ワーカータスクの実行時間のヒストグラム（秒）、スクリプトによるラベル付け。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_gearman_sleep_time_seconds</span></code> （カウンタ）：ギアマンエラー後の作業者の睡眠時間の合計（秒単位）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_transfer_started_total</span></code> （カウンタ）：転送タイプごとに開始された転送の数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_transfer_started_timestamp</span></code> （ゲージ）：転送タイプごとに開始された最新の転送のタイムスタンプ。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_transfer_completed_total</span></code> （カウンター）：転送タイプ別の完了した転送の数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_transfer_completed_timestamp</span></code> （ゲージ）：転送タイプ別に完了した最新の転送のタイムスタンプ。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_transfer_error_total</span></code> （カウンタ）：転送失敗の数、転送タイプ別、エラータイプ。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_transfer_error_timestamp</span></code> （ゲージ）：最新の転送失敗のタイムスタンプ、転送タイプ別、エラータイプ。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_transfer_files</span></code> （ヒストグラム）：転送に含まれるファイル数のヒストグラム、転送タイプ別。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_transfer_size_bytes</span></code> （ヒストグラム）：転送バイト数のヒストグラム、転送タイプ別。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_sip_started_total</span></code> （カウンター）：開始されたSIPの数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_sip_started_timestamp</span></code> （ゲージ）：直近のSIPが開始されたタイムスタンプ。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_sip_error_total</span></code> （カウンタ）：SIP失敗数、エラータイプ別。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_sip_error_timestamp</span></code> （ゲージ）：最新のSIP失敗のタイムスタンプ、エラータイプ別。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_aips_stored_total</span></code> （カウンタ）：保存されているAIPの数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_aips_stored_timestamp</span></code> （ゲージ）：最新のAIPのタイムスタンプ。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_dips_stored_total</span></code> （カウンタ）：DIP保存数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_dips_stored_timestamp</span></code> （ゲージ）：最新のDIPが保存されたタイムスタンプ。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_aip_processing_seconds</span></code> （ヒストグラム）：DBに記録された最初のファイルからSSに保存されるまでのAIP処理時間のヒストグラム。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_dip_processing_seconds</span></code> （ヒストグラム）：DBに記録された最初のファイルからSSに保存されるまでのDIP処理時間のヒストグラム。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_aip_files_stored</span></code> （ヒストグラム）：AIPに保存されているファイル数のヒストグラム。メタデータや派生物なども含まれます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_dip_files_stored</span></code> （ヒストグラム）：DIPに保存されているファイル数のヒストグラム。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_aip_size_bytes</span></code> （ヒストグラム）：AIPに格納されたバイト数のヒストグラム。メタデータや派生物なども含まれます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_dip_size_bytes</span></code> （ヒストグラム）：DIPに格納されたバイト数のヒストグラム。メタデータや派生物なども含まれます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_aip_files_stored_by_file_group_and_format_total</span></code> （カウンタ）：ファイルグループ、フォーマット名でラベル付けされたAIPに保存されているオリジナルファイルの数。注意：フォーマットラベルは、 <a class="reference external" href="https://www.robustperception.io/existential-issues-with-metrics">意図的にゼロにされていません</a> 。したがって、クエリを実行するときはその点に注意してください。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpclient_aip_original_file_timestamps</span></code> （ヒストグラム）：AIPに保存されたファイルの更新時間のヒストグラム、年別にバケット分け。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">archivematica_info</span></code> （情報）：Archivematicaのバージョン情報。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">environment_info</span></code> （情報）：環境変数（設定）情報。</p></li>
+</ul>
+</section>
+<section id="mcp-server-metrics">
+<span id="id2"></span><h3>MCP Serverメトリクス<a class="headerlink" href="#mcp-server-metrics" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpserver_gearman_active_jobs</span></code> （ゲージ）：現在処理中のギアマンジョブの数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpserver_gearman_pending_jobs</span></code> （ゲージ）：Gearmanジョブの未提出数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpserver_task_total</span></code> （カウンタ）：処理されたタスクの数、タスクグループ、タスク名でラベル付け。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpserver_task_error_total</span></code> （カウンタ）：タスクグループ、タスク名でラベル付けされた、タスク処理に失敗した数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpserver_task_success_timestamp</span></code> （ゲージ）：最近正常に処理されたタスク、タスクグループ、タスク名でラベル付け。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpserver_task_error_timestamp</span></code> （ゲージ）：タスク処理中の最近の失敗、タスクグループ、タスク名によりラベル付け。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mcpserver_task_duration_seconds</span></code> （ヒストグラム）：秒単位のタスク処理時間のヒストグラム、タスクグループ、タスク名、スクリプト名によりラベル付け。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">archivematica_info</span></code> （情報）：Archivematicaのバージョン情報。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">environment_info</span></code> （情報）：環境変数（設定）情報。</p></li>
+</ul>
+</section>
+<section id="dashboard-metrics">
+<span id="id3"></span><h3>ダッシュボードのメトリクス<a class="headerlink" href="#dashboard-metrics" title="Link to this heading">¶</a></h3>
+<p>ダッシュボードには、 <a class="reference external" href="https://github.com/korfuri/django-prometheus">django-prometheus</a> パッケージが提供する多数のメトリックが含まれています。これらは、HTTPリクエストの数、リクエストのサイズ、待ち時間、エラーなどを様々な方法で分解します。主にダッシュボードで作業している開発者に有用ですが、一般的なレポーティングに有用なものもあります（例：リクエストの待ち時間を表す <code class="docutils literal notranslate"><span class="pre">django_http_requests_latency_including_middlewares_seconds</span></code> やHTTPレスポンスの数を表す <code class="docutils literal notranslate"><span class="pre">django_http_responses_total_by_status</span></code> など）。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_responses_before_middlewares_total</span></code> （カウンタ）：ミドルウェア実行前のリクエスト総数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_requests_before_middlewares_total</span></code> （カウンタ）：ミドルウェア実行前の総レスポンス数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_requests_latency_including_middlewares_seconds</span></code> （ヒストグラム）：リクエスト処理時間のヒストグラム（ミドルウェアの処理時間を含む）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_requests_unknown_latency_including_middlewares_total</span></code> （カウンタ）：（*django_http_requests_latency_including_middlewares_secondsの計算時）レイテンシが不明だったリクエストの数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_requests_latency_seconds_by_view_method</span></code> （ヒストグラム）：ビューごとにラベル付けされたリクエスト処理時間のヒストグラム</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_requests_unknown_latency_total</span></code> （カウンタ）：待ち時間が不明だったリクエストの数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_ajax_requests_total</span></code> （カウンタ）：AJAXリクエスト数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_requests_total_by_method</span></code> （カウンタ）：メソッド別のリクエスト数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_requests_total_by_transport</span></code> （カウンタ）：トランスポート別のリクエスト数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_requests_total_by_view_transport_method</span></code> （カウンタ）：ビュー、トランスポート、メソッド別のリクエスト数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_requests_body_total_bytes</span></code> （ヒストグラム）：ボディサイズ別リクエストのヒストグラム</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_responses_total_by_templatename</span></code> （カウンタ）：テンプレート名ごとの応答数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_responses_total_by_status</span></code> （カウンタ）：ステータス別の応答数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_responses_total_by_status_view_method</span></code> （カウンタ）：ステータス、ビュー、メソッド別の応答数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_responses_body_total_bytes</span></code> （ヒストグラム）：ボディサイズ別応答のヒストグラム</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_responses_total_by_charset</span></code> （カウンタ）：文字セットごとの応答数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_responses_streaming_total</span></code> （カウンタ）：ストリーミング応答数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_exceptions_total_by_type</span></code> （カウンタ）：オブジェクトタイプ別の例外回数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_http_exceptions_total_by_view</span></code> （カウンタ）：ビューごとの例外回数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_model_save_total</span></code> （カウンタ）：モデルクラスによってラベル付けされたモデル保存呼び出しの合計</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_model_delete_total</span></code> （カウンタ）：モデルクラスによってラベル付けされたモデル保存呼び出しの合計</p></li>
+</ul>
+<p>ダッシュボードには、次の追加メトリクスも含まれます：データベーストランザクションの再試行を待機する合計時間（秒単位）。操作説明common_ss_api_request_duration_seconds（カウンタ）によるラベル付け：機能ごとにラベル付けされたStorage Service APIの合計待機時間（秒単位）</p>
+</section>
+<section id="storage-service-metrics">
+<span id="id4"></span><h3>Storage Serviceメトリクス<a class="headerlink" href="#storage-service-metrics" title="Link to this heading">¶</a></h3>
+<p>Storage Serviceには、ダッシュボードと同じDjangoベースのメトリクスがすべて含まれています。</p>
+</section>
+</section>
+<section id="configuration">
+<span id="instrumentation-configuration"></span><h2>設定<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<p>以下の環境変数は、Archivematicaのメトリクスのキャプチャとエクスポートを有効にします（値の例を示す）：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_MCPSERVER_MCPSERVER_PROMETHEUS_BIND_PORT=7998</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_MCPSERVER_MCPSERVER_PROMETHEUS_BIND_ADDRESS=0.0.0.0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_PROMETHEUS_BIND_PORT=7999</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_PROMETHEUS_BIND_ADDRESS=0.0.0.0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_DASHBOARD_DASHBOARD_PROMETHEUS_ENABLED=true</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SS_PROMETHEUS_ENABLED=true</span></code></p></li>
+</ul>
+<p>これらの詳細については、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/qa/1.x/src/dashboard/install/README.md">Dashboard</a> 、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/qa/1.x/src/MCPClient/install/README.md">MCPClient</a> 、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/qa/1.x/src/MCPServer/install/README.md">MCPServer</a> 、 <a class="reference external" href="https://github.com/artefactual/archivematica-storage-service/blob/qa/0.x/install/README.md">Storage Service</a> のREADMEファイルを参照してください（Archivematica qa/1.x / Storage Service qa/0.xを使用していない場合は、ブランチのドロップダウンメニューから正しいブランチを選択してください）。すべてのサービスのメトリクスをエクスポートする必要はありません。</p>
+<p>複数のMCPClientsを実行している場合は、それぞれ異なるポートを設定する必要があります。</p>
+<p>環境変数を設定したら、Archivematicaのサービスを再起動し、指定されたポート（例： <code class="docutils literal notranslate"><span class="pre">http://&lt;am-hostname&gt;:62080/metrics</span></code> ）で <code class="docutils literal notranslate"><span class="pre">/metrics</span></code> のパスにアクセスできることを確認します。以下のようなテキストブロックが返されるはずです：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># HELP django_http_requests_latency_seconds_by_view_method Histogram of request processing time labelled by view.</span>
+<span class="c1"># TYPE django_http_requests_latency_seconds_by_view_method histogram</span>
+django_http_requests_latency_seconds_by_view_method_bucket<span class="o">{</span><span class="nv">le</span><span class="o">=</span><span class="s2">&quot;0.005&quot;</span>,method<span class="o">=</span><span class="s2">&quot;POST&quot;</span>,view<span class="o">=</span><span class="s2">&quot;components.api.views.wrapper&quot;</span><span class="o">}</span><span class="w"> </span><span class="m">0</span>.0
+django_http_requests_latency_seconds_by_view_method_bucket<span class="o">{</span><span class="nv">le</span><span class="o">=</span><span class="s2">&quot;0.01&quot;</span>,method<span class="o">=</span><span class="s2">&quot;POST&quot;</span>,view<span class="o">=</span><span class="s2">&quot;components.api.views.wrapper&quot;</span><span class="o">}</span><span class="w"> </span><span class="m">0</span>.0
+</pre></div>
+</div>
+<section id="configure-prometheus">
+<span id="id5"></span><h3>Prometheusの設定<a class="headerlink" href="#configure-prometheus" title="Link to this heading">¶</a></h3>
+<p>Archivematicaが変数をエクスポートするように設定されると、Prometheusがそこからデータをスクレイピングするように設定できます。</p>
+<p>まず、 <a class="reference external" href="https://prometheus.io/">Prometheus</a> をダウンロードしてインストールします。</p>
+<p>Prometheus設定ファイルを作成します（この例では、 <code class="docutils literal notranslate"><span class="pre">prometheus.yml</span></code> というYAMLファイルです）。Archivematicaの全コンポーネントを単一のホストで実行する場合、次の点から始めるとよいでしょう：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">scrape_configs</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">archivematica</span>
+<span class="w">  </span><span class="nt">scrape_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5s</span>
+<span class="w">  </span><span class="nt">static_configs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost:7998</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost:7999</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost:62080</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost:62081</span>
+</pre></div>
+</div>
+<p>Prometheusを起動し、設定ファイルへのパスを渡します： <code class="docutils literal notranslate"><span class="pre">./prometheus</span> <span class="pre">--config.file=prometheus.yml</span></code> .</p>
+<p>Prometheusのウェブインタフェースは、 <code class="docutils literal notranslate"><span class="pre">http://&lt;hostname&gt;:9090</span></code> で見ることができます。メニューバーのStatus -&gt; Targetsで、様々なArchivematicaサービスのステータスを見ることができます。</p>
+</section>
+<section id="configure-grafana">
+<span id="id6"></span><h3>Grafanaの設定<a class="headerlink" href="#configure-grafana" title="Link to this heading">¶</a></h3>
+<p>Prometheusにメトリクスを保存させたら、Grafanaをセットアップして、それらを表示できます。</p>
+<p>まず、 <a class="reference external" href="https://grafana.com/">Grafana</a> をダウンロードしてインストールします。</p>
+<p>お使いのプラットフォームのインストールガイドに従った後、ウェブインターフェースにログインできます（ <code class="docutils literal notranslate"><span class="pre">http://&lt;hostname&gt;:3000/</span></code> 、ユーザー名：admin、パスワード：admin）。アクセスを制限したい場合でも、Grafana Webインターフェイスは、（デフォルトのパスワードを変更した後に）インターネットに公開できることに注意してください。</p>
+<p>Grafanaインターフェースにログインしたら、 <a class="reference external" href="https://grafana.com/docs/grafana/latest/datasources/prometheus/configure-prometheus-data-source/">Prometheusをデータソースとして追加します</a> 。 <strong>保存とテスト</strong> をクリックすると、「データソースが機能しています」というメッセージが表示されるはずです。</p>
+<p>次にダッシュボードをインポートします。Archivematicaの <a class="reference external" href="https://github.com/artefactual/archivematica/blob/qa/1.x/hack/etc/grafana/provisioning/dashboards/Archivematica.json">Docker Compose環境</a> で利用できる基本的なArchivematicaダッシュボードが用意されていますが、 <a class="reference external" href="https://github.com/artefactual/archivematica/tree/qa/1.x/hack">ダッシュボードのJSONファイル</a> をGitHubから直接ダウンロードもできます。GrafanaのDashboards -&gt; Manageで、 <strong>Import</strong> を選択し、JSONをテキストボックスに貼り付けるか、ダッシュボードをファイルとして保存してアップロードします。</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">パフォーマンス計装</a><ul>
+<li><a class="reference internal" href="#overview">概要</a></li>
+<li><a class="reference internal" href="#prometheus">Prometheus</a></li>
+<li><a class="reference internal" href="#grafana">Grafana</a></li>
+<li><a class="reference internal" href="#available-metrics">利用可能なメトリクス</a><ul>
+<li><a class="reference internal" href="#mcp-client-metrics">MCPクライアントメトリクス</a></li>
+<li><a class="reference internal" href="#mcp-server-metrics">MCP Serverメトリクス</a></li>
+<li><a class="reference internal" href="#dashboard-metrics">ダッシュボードのメトリクス</a></li>
+<li><a class="reference internal" href="#storage-service-metrics">Storage Serviceメトリクス</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration">設定</a><ul>
+<li><a class="reference internal" href="#configure-prometheus">Prometheusの設定</a></li>
+<li><a class="reference internal" href="#configure-grafana">Grafanaの設定</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="scaling-archivematica.html"
+                          title="前の章へ">Archivematicaのスケーリング</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../integrations/integrations.html"
+                          title="次の章へ">統合</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/admin-manual/installation-setup/customization/instrumentation.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../integrations/integrations.html" title="統合"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="scaling-archivematica.html" title="Archivematicaのスケーリング"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">パフォーマンス計装</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

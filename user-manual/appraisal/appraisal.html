@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>評価 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="Backlog" href="../backlog/backlog.html" />
+    <link rel="prev" title="Archivematica のPREMISメタデータ" href="../metadata/premis.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../backlog/backlog.html" title="Backlog"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../metadata/premis.html" title="Archivematica のPREMISメタデータ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">評価</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="appraisal">
+<span id="id1"></span><h1>評価<a class="headerlink" href="#appraisal" title="Link to this heading">¶</a></h1>
+<p>[評価] タブでは、ユーザーが転送に含まれるファイルを評価および分析する機会が提供されます。[評価] タブには、ファイルの特性と内容を調べる機能が含まれており、ユーザーは、ファイルがArchivesSpaceで作成された検索支援に接続でき、転送からどのファイルをSIPに追加するか、およびこれらのファイルをSIP内でどのように配列するかをユーザーが決定できます。</p>
+<p>鑑定タブを使用するには、 <a class="reference internal" href="../transfer/transfer.html#transfer-tab-microservices"><span class="std std-ref">転送タブのマイクロサービス</span></a> の最後に到達したときに、バックログに転送する必要があります。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><a class="reference internal" href="../../admin-manual/installation-setup/installation/installation.html#install-elasticsearch"><span class="std std-ref">ArchivematicaをElasticsearchなし</span></a> で実行している場合、またはElasticsearchの機能が制限されている場合、ダッシュボードに「鑑定」タブが表示されないことがあります。</p>
+</div>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#backlog-pane"><span class="std std-ref">バックログペイン</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#adding-tags"><span class="std std-ref">ファイルのタグ付け</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#analysis-pane"><span class="std std-ref">分析ペイン</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#analysis-objects"><span class="std std-ref">オブジェクト</span></a></p></li>
+<li><p><a class="reference internal" href="#analysis-tags"><span class="std std-ref">タグ</span></a></p></li>
+<li><p><a class="reference internal" href="#analysis-examine-contents"><span class="std std-ref">内容検査</span></a></p></li>
+<li><p><a class="reference internal" href="#analysis-preview-file"><span class="std std-ref">ファイルのプレビュー</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#file-list-pane"><span class="std std-ref">ファイルリストペイン</span></a></p></li>
+<li><p><a class="reference internal" href="#archivesspace-pane"><span class="std std-ref">アーカイブスペースペイン</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#archivesspace-terms"><span class="std std-ref">ArchivesSpaceの用語</span></a></p></li>
+<li><p><a class="reference internal" href="#archivesspace-searching"><span class="std std-ref">リソースの検索</span></a></p></li>
+<li><p><a class="reference internal" href="#archivesspace-child-objects"><span class="std std-ref">アーカイブ記述の作成と編集</span></a></p></li>
+<li><p><a class="reference internal" href="#archivesspace-rights-metadata"><span class="std std-ref">権利メタデータの追加</span></a></p></li>
+<li><p><a class="reference internal" href="#archivesspace-digital-objects"><span class="std std-ref">デジタルオブジェクトをArchivesSpaceのリソースに接続</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#arrangement"><span class="std std-ref">配列ペイン</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#arrangement-drag-drop"><span class="std std-ref">ドラッグ＆ドロップによるSIPの配列</span></a></p></li>
+<li><p><a class="reference internal" href="#creating-sips-tags"><span class="std std-ref">タグを使ったSIPの作成</span></a></p></li>
+<li><p><a class="reference internal" href="#adding-atom-lod"><span class="std std-ref">AtoMの記述レベルを追加</span></a></p></li>
+</ul>
+</li>
+</ul>
+<section id="backlog">
+<span id="backlog-pane"></span><h2>Backlog<a class="headerlink" href="#backlog" title="Link to this heading">¶</a></h2>
+<p>バックログに送られた転送は、鑑定タブのバックログペインで確認できます。ページ上部の検索ボックスを使用して空白検索を行うか、検索用語とパラメーターを入力して検索を絞り込むことにより、バックログ内のすべてを見ることができます。</p>
+<a class="reference internal image-reference" href="../../_images/backlog-search.png"><img alt="&quot;abcd&quot;を検索すると、バックログペインに結果が表示されます。" class="align-center" src="../../_images/backlog-search.png" style="width: 80%;" />
+</a>
+<p>[Backlog]ペインに転送名のリストが表示されます。黄色いフォルダのアイコンをクリックするか、 <strong>Expand all</strong> を選択すると、各フォルダを展開できます。 <strong>Collapse all</strong> をクリックすると、開いているフォルダがすべて折りたたまれます。</p>
+<a class="reference internal image-reference" href="../../_images/backlog-search-expand-all.png"><img alt="すべての検索結果フォルダが展開され、内容が表示されたバックログペイン。" class="align-center" src="../../_images/backlog-search-expand-all.png" style="width: 60%;" />
+</a>
+<p><strong>Show metadata &amp; logs directory</strong> 検索ボックスの右側にある「Show metadata &amp; logs directory」にチェックを入れると、検索結果にメタデータとログファイルを含めることができます。</p>
+<a class="reference internal image-reference" href="../../_images/backlog-search-md-logs.png"><img alt="ログとメタデータファイルによる検索結果" class="align-center" src="../../_images/backlog-search-md-logs.png" style="width: 60%;" />
+</a>
+<p>ファイルが灰色で表示されたり、取り消し線が引かれたりする理由は2つあります：</p>
+<ul class="simple">
+<li><p>このファイルは、メタデータまたはログファイルであるため、ユーザーが操作することはできません。</p></li>
+<li><p>このファイルはすでに、SIPに <a class="reference internal" href="#arrangement"><span class="std std-ref">配列</span></a> されているため、バックログには存在しません。</p></li>
+</ul>
+<section id="tagging-files">
+<span id="adding-tags"></span><h3>ファイルのタグ付け<a class="headerlink" href="#tagging-files" title="Link to this heading">¶</a></h3>
+<p>バックログペインでは、鑑定を助けるためにファイルにタグを追加できます。タグは、どのような形でも記録されず、「鑑定」タブ以降も持続しません。</p>
+<ol class="arabic">
+<li><p>Backlogペインでファイル名をクリックして、1つ以上のファイルを選択します。ディレクトリ内のすべてのファイルにタグを追加したい場合は、ディレクトリ名を選択します。</p>
+<a class="reference internal image-reference" href="../../_images/backlog-select-files.png"><img alt="いくつかのファイルが選択され、青くハイライトされます。" class="align-center" src="../../_images/backlog-select-files.png" style="width: 60%;" />
+</a>
+</li>
+<li><p>テキストボックスにタグ名を入力し、 <strong>Add tag to selected files</strong> を選択します。</p>
+<a class="reference internal image-reference" href="../../_images/backlog-add-tag.png"><img alt="選択されたファイルには、その横に&quot;keep&quot;というタグが付いています。" class="align-center" src="../../_images/backlog-add-tag.png" style="width: 60%;" />
+</a>
+</li>
+<li><p>タグを削除するには、タグ名の横にあるマイナス記号をクリックします。</p></li>
+</ol>
+<p>タグを作成したら、鑑定ページの上部にある検索ボックスの下にあるタグのドロップダウンから <strong>タグ</strong> を選択することで、タグ付けされたファイルのみを表示するように検索結果をフィルタリングすることができます。</p>
+<a class="reference internal image-reference" href="../../_images/backlog-tag-filter.png"><img alt="バックログペインで、&quot;keep&quot;タグを持つファイルのみが表示されるようになりました。" class="align-center" src="../../_images/backlog-tag-filter.png" style="width: 80%;" />
+</a>
+<p>タグは、 <a class="reference internal" href="#file-list-pane"><span class="std std-ref">ファイルリストペイン</span></a> でも追加できます。</p>
+</section>
+</section>
+<section id="analysis">
+<span id="analysis-pane"></span><h2>分析<a class="headerlink" href="#analysis" title="Link to this heading">¶</a></h2>
+<p>[分析]ペインでは、個々のファイルだけでなく、一括して転送素材を分析できます。Backlogペインで選択されたファイルは、Analysisペインに表示され、4つのタブを使用して分析できます：[オブジェクト]、[タグ]、[内容検査]、[ファイルのプレビュー]の4つのタブを使用して分析できます。</p>
+<section id="objects">
+<span id="analysis-objects"></span><h3>オブジェクト<a class="headerlink" href="#objects" title="Link to this heading">¶</a></h3>
+<p>[分析]ペインの[オブジェクト]タブには、選択したファイルのフォーマットとサイズの情報が表示されます。</p>
+<p>レポートビューには、選択されたファイルのフォーマット、PRONOM一意識別子（PUID）、フォーマットグループ、ファイル数、選択ファイルのサイズに関する情報のリストが表示されます。</p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="../../_images/analysis-objects-report.png"><img alt="画像の左側には、多数のファイルが選択されたバックログペインが表示されています。画像の右側には、ファイルフォーマット名、PUID、サイズなどのファイルに関する情報が表示されます。" src="../../_images/analysis-objects-report.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Backlogペインで選択されているファイルに関する情報を表示するレポート。</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>[視覚化] ビューには、各フォーマットのファイルの合計数、または各フォーマットのファイルの合計サイズの 2 つの視覚化オプションが用意されています。</p>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="../../_images/analysis-objects-visualizations.png"><img alt="画像の左側には、多数のファイルが選択されたバックログペインが表示されます。画像の右側には、各フォーマットのファイル数を示す円グラフが表示されます。" src="../../_images/analysis-objects-visualizations.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">選択されたファイルの各フォーマットの総数を示す視覚化</span><a class="headerlink" href="#id5" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>[分析]に表示されたファイルは、[レポート]ビューでこれらのファセットの値を選択することで、[フォーマット]、[PUID]、および[グループ]によってフィルタリングもできます。たとえば、ユーザーがファイルの1つにリストされているグループ「Portable Document Format」をクリックすると、このフィルターが追加され、PDFファイルのみが分析ペインにリスト表示されます。フィルタは、［タグ］ドロップダウンメニューの下に表示され、名前の横にある「x」をクリックすれば削除できます。</p>
+</section>
+<section id="tags">
+<span id="analysis-tags"></span><h3>タグ<a class="headerlink" href="#tags" title="Link to this heading">¶</a></h3>
+<p>[タグ]タブには、追加されたタグと、各タグを持つファイルが選択したファイルにいくつ存在するかが一覧表示されます。</p>
+<a class="reference internal image-reference" href="../../_images/analysis-tags.png"><img alt="画像の左側は、いくつかのファイルが選択されたバックログペインです。画像の右側は、5つのファイルに&quot;keep&quot;というタグが付けられていることを示しています。" class="align-center" src="../../_images/analysis-tags.png" style="width: 80%;" />
+</a>
+</section>
+<section id="examine-contents">
+<span id="analysis-examine-contents"></span><h3>内容検査<a class="headerlink" href="#examine-contents" title="Link to this heading">¶</a></h3>
+<p>転送プロセス中、ユーザーは、 <em>コンテンツの検査</em> を行うかどうかを選択できます。これは、 <a class="reference external" href="https://github.com/simsong/bulk_extractor/wiki">Bulk Extractor</a> というツールを実行するマイクロサービスであり、ファイルの内容をスキャンして有用な情報を探すフォレンジックツールです。Bulk Extractorは、社会保障番号、クレジットカード番号、郵便住所、電子メールアドレスなど、さまざまなパターンを探します。</p>
+<p>[分析]ペインの[内容検査]タブで、ユーザーは、ファイルのいずれかがPII（個人識別情報、より具体的には米国の社会保障番号）またはクレジットカード番号を含むかどうかを確認するために転送を確認できます。</p>
+<figure class="align-center" id="id6">
+<a class="reference internal image-reference" href="../../_images/analysis-examine-contents.png"><img alt="画像の左側は、転送ディレクトリが選択されたバックログペインを示します。画像の右側は、転送内のファイルの1つにクレジットカード番号が含まれている可能性があることを示しています。" src="../../_images/analysis-examine-contents.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">この転送には、クレジットカード番号を含む可能性のあるファイルが含まれています。</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>ファイル名を選択すると、データのプレビューが表示されます。</p>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="../../_images/analysis-examine-contents-cc-data.png"><img alt="クレジットカード番号のリストは、「内容検査 」タブに表示されます。" src="../../_images/analysis-examine-contents-cc-data.png" style="width: 60%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">このファイルには明らかにクレジットカードのデータが含まれており、&quot;Content&quot;列にクレジットカード番号が、&quot;Context&quot;列に番号のコンテキストが示されています。</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p><strong>プレビュー</strong> をクリックすると、可能であればファイルがファイルのプレビュタブに表示されます（ <a class="reference internal" href="#analysis-preview-file"><span class="std std-ref">ファイルのプレビュー</span></a> 、以下を参照）。</p>
+<p>また、機密情報を含むファイルにタグを追加するには、ファイル名の横にあるチェックボックスを選択し、テキストボックスにタグを追加して、 <strong>Add tag to checked files</strong> をクリックします。タグは、[Backlog]ペインのファイルに添付されて表示されます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>その他の Bulk Extractorデータは、[バックログ]タブから転送をダウンロードして確認できます。</p>
+</div>
+</section>
+<section id="preview-file">
+<span id="analysis-preview-file"></span><h3>ファイルのプレビュー<a class="headerlink" href="#preview-file" title="Link to this heading">¶</a></h3>
+<p>[プレビュー]ファイルペインを使用すると、ユーザーは、ファイルをコンピュータにダウンロードすることなく見ることができます。プレビューウィンドウは、ブラウザでレンダリング可能なファイル、例えば JPEG画像やMP3オーディオファイルに対してのみ機能します。</p>
+<p>ファイルをプレビューするには、ファイルリストペインからファイルを選択する必要があります。</p>
+<ol class="arabic simple">
+<li><p>[バックログ]ペインで、表示したいファイルまたはファイルのディレクトリを選択します。</p></li>
+<li><p>[分析]ペインを開き、[ファイルのプレビュー]タブをクリックします。</p></li>
+<li><p>[ファイル]一覧ペインで、プレビューしたいファイルを選択します。画像ファイルは、ウィンドウに表示され、オーディオおよびビデオファイルは、メディアプレーヤーに表示されます。</p></li>
+</ol>
+<figure class="align-center" id="id8">
+<a class="reference internal image-reference" href="../../_images/analysis-preview-file.png"><img alt="左側の列は、転送ディレクトリが選択された状態でのバックログペインを表示します。右側の列には、転送中のファイルのリストが表示されます。中央の列は、bird.mp3というファイルが再生されているメディアプレーヤーを表示しています。" src="../../_images/analysis-preview-file.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>bird.mp3</em> ファイルをファイルのプレビュータブで再生中。</span><a class="headerlink" href="#id8" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="file-list">
+<span id="file-list-pane"></span><h2>ファイルリスト<a class="headerlink" href="#file-list" title="Link to this heading">¶</a></h2>
+<p>[ファイルリスト]ペインは、[バックログ]ペインでファイルを選択すると表示されます。ファイルリストには、ファイル名、サイズ、ファイルの最終更新日（可能な場合）、選択したファイルに追加されたタグに関する情報が表示されます。</p>
+<figure class="align-center" style="width: 60%">
+<a class="reference internal image-reference" href="../../_images/file-list.png"><img alt="ファイルリストペイン" src="../../_images/file-list.png" style="width: 100%;" />
+</a>
+</figure>
+<p>[分析]ペインまたは[タグ]ドロップダウンメニューで適用されたフィルタは、[ファイル]リストに表示されるファイルに影響します。</p>
+<p>ファイル名、サイズ、または最終更新日の列ヘッダーをクリックすると、ファイルリストを並べえることができます。</p>
+<p>ファイルリストペインのファイルにタグを追加するには、ファイル名の横のチェックボックスを選択し、テキストボックスにタグを追加して、 <strong>Add tag to selected files</strong> をクリックします。タグは、[Backlog]ペインのファイルと、[File]リストペインの[Tags]列に表示されます。タグを削除するには、タグ名の横のマイナス記号をクリックします。</p>
+<p>ファイル名をクリックすると、分析ペインの <a class="reference internal" href="#analysis-preview-file"><span class="std std-ref">ファイルのプレビュー</span></a> タブで、可能であればファイルを表示できます。</p>
+<p>また、 <strong>Show path</strong> をクリックして、ファイルのフルパスのオン/オフを切り替えることもできます。</p>
+</section>
+<section id="archivesspace">
+<span id="archivesspace-pane"></span><h2>ArchivesSpace<a class="headerlink" href="#archivesspace" title="Link to this heading">¶</a></h2>
+<p>AppraisalタブのArchivesSpaceペインでは、ArchivesSpaceリソースの表示、新しい子レコードやデジタルオブジェクトの追加、リソースメタデータの編集ができます。Archivematicaに転送された素材は、ArchivesSpaceで作成されたリソースに関連付けることができます。ArchivesSpaceペインで素材を整理すると、ArchivesSpaceリソースに関連付けられた素材を含むSIPが作成されます。</p>
+<p>ArchivesSpaceとの連携を有効にするには、ArchivesSpaceインスタンスをArchivematicaに接続し、Administrationタブの <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-as"><span class="std std-ref">ArchivesSpace DIP upload</span></a> セクションに認証情報を追加します。</p>
+<section id="archivesspace-terms">
+<span id="id2"></span><h3>ArchivesSpaceの用語<a class="headerlink" href="#archivesspace-terms" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Resources</strong> ：トップレベルの説明メタデータレコードまたはファインディングエイド（所蔵素材、コレクション、レコードグループなど）</p></li>
+<li><p><strong>Archival objects</strong> ：リソース（シリーズ、ファイル、アイテムなど）の下にネストされた下位レベルの記述</p></li>
+<li><p><strong>Digital objects</strong> ：デジタルオブジェクトに関するメタデータ。どのレベルの記述であっても、リソースやアーカイブオブジェクトに関連付けることができます。</p></li>
+</ul>
+<p>ArchivesSpaceの詳細については、<a class="reference external" href="https://archivesspace.org/">https://archivesspace.org/</a>.を参照してください</p>
+</section>
+<section id="searching-for-archivesspace-resources">
+<span id="archivesspace-searching"></span><h3>ArchivesSpaceリソースの検索<a class="headerlink" href="#searching-for-archivesspace-resources" title="Link to this heading">¶</a></h3>
+<p>ArchivesSpaceペインを開いても、入力はされていません。 <em>Title</em> と <em>Identifier</em> フィールドを空白のまま、 <strong>Search ArchivesSpace</strong> ボタンをクリックすると、すべてのリソースが入力されます。</p>
+<p>ArchivesSpaceペインの上部にある検索ボックスを使用すると、リソースのタイトルまたは識別子で検索結果を制限できます。</p>
+<p>キャレット（三角形）をクリックしてリソースの階層を展開し、ナビゲートします。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/archivesspace-search.png"><img alt="ArchivesSpaceのペインで、&quot;Hugh Acton&quot;の検索結果を表示し、結果のリソースを展開してリソースの階層を表示します" src="../../_images/archivesspace-search.png" style="width: 60%;" />
+</a>
+</figure>
+<p>フォルダのアイコンは、ArchivesSpaceリソースまたはアーカイブオブジェクトの階層で、その下に子レコードがネストされていることを示します。</p>
+<p>ページアイコンは、ArchivesSpaceリソースとアーカイブオブジェクトの階層で、その下に子レコードがネストされていないことを示します。</p>
+<p>デジタルオブジェクトは、平行線のアイコンで示されます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ArchivesSpaceで作成されたデジタルオブジェクトは、ArchivematicaのArchivesSpaceペインには表示されません。Archivematica内からリソースに追加されたデジタルオブジェクトのみが表示されます。</p>
+</div>
+</section>
+<section id="creating-and-editing-archival-objects">
+<span id="archivesspace-child-objects"></span><h3>アーカイブオブジェクトの作成と編集<a class="headerlink" href="#creating-and-editing-archival-objects" title="Link to this heading">¶</a></h3>
+<p>ArchivematicaのArchivesSpaceペインから、既存のリソースやアーカイブオブジェクトに新しい子アーカイブオブジェクトを追加できます。</p>
+<ol class="arabic">
+<li><p>子アーカイブ オブジェクトを追加したいリソースまたはアーカイブオブジェクトに移動し、リソースまたはアーカイブオブジェクトの名前をクリックします。</p></li>
+<li><p><strong>新しい子レコードの追加</strong> をクリックします。メタデータボックスがポップアップ表示され、レコードの基本的なメタデータを入力できます。最低限、新しいアーカイブオブジェクトには、タイトルと説明のレベルが必要です。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/archivesspace-add-new-child.png"><img alt="&quot;新しい子レコードの追加&quot;ダイアログボックスには、タイトル、説明のレベル、一般的なメモ、アクセスを管理する条件メモ、開始日、終了日、および日付表現のフィールドが表示されます。" src="../../_images/archivesspace-add-new-child.png" style="width: 60%;" />
+</a>
+</figure>
+</li>
+<li><p>メタデータに問題がなければ、 <strong>Save</strong> をクリックします。新しい子アーカイブオブジェクトが階層に表示され、ArchivesSpaceリポジトリにも追加されます。</p></li>
+<li><p>リソースまたはアーカイブオブジェクトを削除するには、リソースまたはアーカイブオブジェクトの名前を選択し、 <strong>Delete selected</strong> をクリックします。この操作は取り消すことができず、ArchivesSpaceリポジトリでも削除されることに注意してください。</p></li>
+<li><p>リソースまたはアーカイブオブジェクトのタイトルまたは説明のレベルを編集するには、リソースまたはアーカイブオブジェクトの名前を選択し、 <strong>Edit metadata</strong> をクリックします。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/archivesspace-edit-metadata.png"><img alt="&quot;Edit metadata&quot;ダイアログボックス。タイトルや説明のレベルを変更するフィールドが表示されます。" src="../../_images/archivesspace-edit-metadata.png" style="width: 60%;" />
+</a>
+</figure>
+</li>
+</ol>
+</section>
+<section id="adding-rights-metadata">
+<span id="archivesspace-rights-metadata"></span><h3>権利メタデータの追加<a class="headerlink" href="#adding-rights-metadata" title="Link to this heading">¶</a></h3>
+<p>ArchivematicaのArchivesSpaceペインを使用して、リソースやアーカイブオブジェクトにライツメタデータを追加できます。Archivematicaは、ライツメタデータに <a class="reference external" href="http://www.loc.gov/standards/premis/">PREMIS rights</a> を使用します。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>権利は、SIPレベル、つまり、最終的にSIPとなるリソースまたはアーカイブオブジェクトにのみ追加できます。</p>
+</div>
+<ol class="arabic">
+<li><p>リソースまたはアーカイブオブジェクトに権利メタデータを追加するには、リソースまたはアーカイブオブジェクトの名前を選択し、 <strong>Edit rights metadata</strong> をクリックします。新しいタブが開き、メタデータ情報ページが表示されます。Rightsの見出しの下にある <strong>Add</strong> を選択します。これにより、権利メタデータ入力フォームの最初のページが開きます。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/archivesspace-add-rights-basis.png"><img alt="権利情報を追加するフォーム。" src="../../_images/archivesspace-add-rights-basis.png" style="width: 80%;" />
+</a>
+</figure>
+</li>
+<li><p>リソースまたはアーカイブオブジェクトの権利ベース情報を追加し、 <strong>Save</strong> をクリックします。</p></li>
+<li><p><strong>Next</strong> をクリックし、権利行為を追加します。行為情報の追加が完了したら、 <strong>完了</strong> をクリックします。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/archivesspace-add-rights-act.png"><img alt="権利情報を追加するフォーム。" src="../../_images/archivesspace-add-rights-act.png" style="width: 80%;" />
+</a>
+</figure>
+</li>
+<li><p>権利メタデータを保存したら、メタデータ情報ページから <strong>Add</strong> を選択します。</p></li>
+</ol>
+</section>
+<section id="connecting-digital-objects-to-archivesspace-resources">
+<span id="archivesspace-digital-objects"></span><h3>デジタルオブジェクトをArchivesSpaceのリソースに接続<a class="headerlink" href="#connecting-digital-objects-to-archivesspace-resources" title="Link to this heading">¶</a></h3>
+<p>バックログに保存されている素材は、デジタルオブジェクトコンポーネントを作成し、バックログペインからArchivesSpaceペインの新しいデジタルオブジェクトコンポーネントにファイルをドラッグ＆ドロップすることで、ArchivesSpaceリソースに関連付けることができます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>デジタルオブジェクトのコンポーネントは、デジタルオブジェクトのAIPが保存されるまでArchivesSpaceリポジトリに表示されません。</p>
+</div>
+<ol class="arabic">
+<li><p>ページ上部の検索ボックスを使って空白検索を行うか、検索語句とパラメーターを入力して検索条件を絞り込んで、Backlogペインに入力します。</p></li>
+<li><p>ArchivesSpaceペインの検索ボックスを使用して、空白検索を行うか、 <a class="reference internal" href="#archivesspace-searching"><span class="std std-ref">リソースのタイトルまたは識別子で検索して、ArchivesSpaceペインを入力します</span></a> 。ArchivesSpaceリソースの階層ビューがペインに表示されます。</p></li>
+<li><p>デジタルオブジェクトコンポーネントを作成したいリソースまたはアーカイブオブジェクトの名前を選択し、 <strong>Add new digital object</strong> をクリックします。リソースまたはアーカイブオブジェクトの子として、デジタルオブジェクトレコードが表示されます。</p>
+<figure class="align-center" id="id9">
+<a class="reference internal image-reference" href="../../_images/archivesspace-add-digital-object.png"><img alt="画像の左側はBacklogペインです。画像の右側はArchivesSpaceペインで、&quot;の子として新しいデジタルオブジェクトレコードが追加されています。これは新しい子レコード、2005～2009&quot;です。" src="../../_images/archivesspace-add-digital-object.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">&quot;というタイトルのアーカイブオブジェクトの下に、新しいデジタルオブジェクトが追加されましたた。これは新しい子レコード&quot;です。</span><a class="headerlink" href="#id9" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>[バックログ]ペインから、デジタルオブジェクトを選択し、ArchivesSpaceペインの新しいデジタルオブジェクトのレコードにドラッグします。転送で一度に移動できるファイルまたはディレクトリは1つだけです。ファイルはArchivesSpaceリソース1に1回だけ追加できます。この手順を必要なだけ繰り返します。</p>
+<figure class="align-center" id="id10">
+<a class="reference internal image-reference" href="../../_images/archivesspace-drag-from-backlog.png"><img alt="バックログと分析ペイン" src="../../_images/archivesspace-drag-from-backlog.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Landing_zone.jpg ファイルがArchivesSpaceペインのデジタルオブジェクトレコードに添付されました。</span><a class="headerlink" href="#id10" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>すべてのファイルが追加され、配列に満足したら、素材が配列されたリソースまたはアーカイブオブジェクトの名前を選択し、 <strong>Finalize arrangement</strong> をクリックします。これで、ArchivematicaのインジェストタブでSIPが開始されます。</p></li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>ArchivesSpaceペインでSIPを開始する前に、ArchivesSpaceリソースに関連付けられたすべての必要なメタデータが配列されていること、特に配列の親レベルで配列されていることを確認します。ArchivesSpaceで、説明レコードがエージェントレコードにリンクされていることを確認します。</p>
+</div>
+</section>
+</section>
+<section id="arrangement">
+<span id="id3"></span><h2>配列<a class="headerlink" href="#arrangement" title="Link to this heading">¶</a></h2>
+<p>配列ペインでは、SIPにする前に、バックログに保存されている素材を整理できます。配列ペインでは、複数の転送素材を1つのSIPにまとめたり、選択したファイルをドラッグ＆ドロップするだけで、結果的に保存したいファイルだけをSIPに含めるように転送をウィードしたりすることができます。</p>
+<section id="arranging-materials-through-drag-and-drop">
+<span id="arrangement-drag-drop"></span><h3>ドラッグ＆ドロップで素材を配列<a class="headerlink" href="#arranging-materials-through-drag-and-drop" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>ページ上部の検索ボックスを使って空白検索を行うか、検索語句とパラメーターを入力して検索条件を絞り込んで、Backlogペインに入力します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>取り消し線が付いているファイルは、そのファイルがSIPに自動的に追加されるメタデータまたはログファイルであるか、またはファイルがすでに別のSIPに含まれているため、配列タブにドラッグできません。</p>
+</div>
+</li>
+<li><p>配列ペインで、 <strong>Add directory</strong> をクリックして、SIPの構造を作成します。別々のSIPディレクトリを作成したり、ネストしたサブディレクトリを作成したりするには、同じボタンを使用します。サブディレクトリを作成するには、 <strong>Add directory</strong> をクリックする前に、親ディレクトリの名前を選択します。</p></li>
+<li><p>配列したい転送ディレクトリや個々のオブジェクトを、[バックログ] ペインから [配列] ペインにドラッグ&amp;ドロップします。すべてのメタデータ、提出ドキュメント、およびその他の関連データもオブジェクトとともに配列ペインにコピーされることに注意してください。</p></li>
+<li><p>すべての関連ファイルを[バックログ]ペインから[配列]ペインのディレクトリにドラッグしたら、目的のSIPに対応する最上位ディレクトリを選択し、 <strong>SIPの作成</strong> ]をクリックします。これにより、[インジェスト]タブでSIPが開始されます。</p></li>
+</ol>
+<p>配列が完了し、SIPが長期保管用のAIPに変換されると、[バックログ]タブの <a class="reference internal" href="../backlog/backlog.html#backlog-delete"><span class="std std-ref">転送を削除</span></a> する手順に従って、転送に残っている破棄したいファイルを削除できます。</p>
+</section>
+<section id="adding-atom-levels-of-description">
+<span id="adding-atom-lod"></span><h3>AtoMの記述レベルを追加<a class="headerlink" href="#adding-atom-levels-of-description" title="Link to this heading">¶</a></h3>
+<p>DIP to <a class="reference internal" href="../access/access.html#upload-atom"><span class="std std-ref">Upload to AtoM</span></a> を作成する場合、ディレクトリやオブジェクトに記述レベルを追加できます。Archivematicaは、METSファイルに論理的なstructMAPを追加し、AtoMは、選択した記述レベルを適用して情報オブジェクトを作成します。デジタルオブジェクトに記述レベルを適用しない場合、AtoMは、自動的に&quot;item&quot;のレベルを割り当てます。</p>
+<p>この機能は、AtoM 2.2以降でサポートされています。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>AtoMの説明レベルを表示させるには、管理タブで <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-atom"><span class="std std-ref">AtoM統合</span></a> を設定する必要があります。</p>
+</div>
+<ol class="arabic">
+<li><p>Arrangeペインでディレクトリまたはオブジェクトを選択します。 <em>Edit metadata</em> ボタンをクリックして、説明のレベルを選択します。</p>
+<a class="reference internal image-reference" href="../../_images/choose_lod.png"><img alt="記述のAtoM レベルの選択" class="align-center" src="../../_images/choose_lod.png" style="width: 60%;" />
+</a>
+</li>
+<li><p>記述のレベルを追加すると、それらはSIPを確定する前に確認できるように配列ペインに表示されます。</p>
+<a class="reference internal image-reference" href="../../_images/view_arrangement.png"><img alt="SIPに適用される記述レベルの表示" class="align-center" src="../../_images/view_arrangement.png" style="width: 60%;" />
+</a>
+</li>
+<li><p>説明のレベルを追加したら、 <strong>Create SIP</strong> をクリックします。これにより、インジェストタブでSIPが開始されます。</p></li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>SIP配列でディレクトリに記述レベルを割り当てないことを選択した場合、AtoMは、すべてのデジタルオブジェクトがターゲット記述の子レベルの記述になるようにDIP をフラットにします。</p>
+<p>SIPに説明のレベルを追加した場合、Archivematicaのフォームから追加したメタデータはDIPに含まれません。</p>
+</div>
+</section>
+<section id="creating-a-sip-using-tags">
+<span id="creating-sips-tags"></span><h3>タグを使用したSIPの作成<a class="headerlink" href="#creating-a-sip-using-tags" title="Link to this heading">¶</a></h3>
+<p>また、新しいSIPを生成する素早い方法としてタグを使用もできます。タグの追加の詳細については、 <a class="reference internal" href="#adding-tags"><span class="std std-ref">ファイルのタグ付</span></a> を参照してください。</p>
+<ol class="arabic simple">
+<li><p>一つのSIPにまとめたいバックログのすべての素材にタグをつけます。</p></li>
+<li><p>[配列]ペインの上部で、ドロップダウンからタグを選択します。</p></li>
+<li><p><strong>Create SIP</strong> をクリックします。Archivematicaが自動的に新しいSIPを生成し、このタグを共有するすべてのファイルを使用して、タグをSIP名としてインジェストに送信します。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/create_sip_from_tag.png"><img alt="タグからSIPを作成" class="align-center" src="../../_images/create_sip_from_tag.png" style="width: 80%;" />
+</a>
+<p><a class="reference internal" href="#appraisal"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">評価</a><ul>
+<li><a class="reference internal" href="#backlog">Backlog</a><ul>
+<li><a class="reference internal" href="#tagging-files">ファイルのタグ付け</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#analysis">分析</a><ul>
+<li><a class="reference internal" href="#objects">オブジェクト</a></li>
+<li><a class="reference internal" href="#tags">タグ</a></li>
+<li><a class="reference internal" href="#examine-contents">内容検査</a></li>
+<li><a class="reference internal" href="#preview-file">ファイルのプレビュー</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#file-list">ファイルリスト</a></li>
+<li><a class="reference internal" href="#archivesspace">ArchivesSpace</a><ul>
+<li><a class="reference internal" href="#archivesspace-terms">ArchivesSpaceの用語</a></li>
+<li><a class="reference internal" href="#searching-for-archivesspace-resources">ArchivesSpaceリソースの検索</a></li>
+<li><a class="reference internal" href="#creating-and-editing-archival-objects">アーカイブオブジェクトの作成と編集</a></li>
+<li><a class="reference internal" href="#adding-rights-metadata">権利メタデータの追加</a></li>
+<li><a class="reference internal" href="#connecting-digital-objects-to-archivesspace-resources">デジタルオブジェクトをArchivesSpaceのリソースに接続</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#arrangement">配列</a><ul>
+<li><a class="reference internal" href="#arranging-materials-through-drag-and-drop">ドラッグ＆ドロップで素材を配列</a></li>
+<li><a class="reference internal" href="#adding-atom-levels-of-description">AtoMの記述レベルを追加</a></li>
+<li><a class="reference internal" href="#creating-a-sip-using-tags">タグを使用したSIPの作成</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../metadata/premis.html"
+                          title="前の章へ">Archivematica のPREMISメタデータ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../backlog/backlog.html"
+                          title="次の章へ">Backlog</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/appraisal/appraisal.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../backlog/backlog.html" title="Backlog"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../metadata/premis.html" title="Archivematica のPREMISメタデータ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">評価</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Archivematica 1.15 .xから 1.16.0 へのアップグレード &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="カスタマイズと自動化" href="../customization/customization.html" />
+    <link rel="prev" title="高度なインストールオプション" href="../installation/install-advanced.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../customization/customization.html" title="カスタマイズと自動化"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../installation/install-advanced.html" title="高度なインストールオプション"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematica 1.15 .xから 1.16.0 へのアップグレード</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="upgrade-from-archivematica-previous-version-x-to-release">
+<span id="upgrade"></span><h1>Archivematica 1.15 .xから 1.16.0 へのアップグレード<a class="headerlink" href="#upgrade-from-archivematica-previous-version-x-to-release" title="Link to this heading">¶</a></h1>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#completed-transfers"><span class="std std-ref">完了した転送監視ディレクトリをクリーンアップ</span></a></p></li>
+<li><p><a class="reference internal" href="#create-backup"><span class="std std-ref">バックアップの作成</span></a></p></li>
+<li><p><a class="reference internal" href="#upgrade-ubuntu"><span class="std std-ref">Ubuntuパッケージのアップグレード</span></a></p></li>
+<li><p><a class="reference internal" href="#upgrade-rocky"><span class="std std-ref">Rocky Linuxのアップグレード/Red Hatパッケージのインストール</span></a></p></li>
+<li><p><a class="reference internal" href="#upgrade-indexless"><span class="std std-ref">インデックスレスモードでのアップグレード</span></a></p></li>
+<li><p><a class="reference internal" href="#upgrade-no-output-capture"><span class="std std-ref">出力キャプチャを無効にしてアップグレード</span></a></p></li>
+<li><p><a class="reference internal" href="#update-search-indices"><span class="std std-ref">検索インデックスの更新</span></a></p></li>
+<li><p><a class="reference internal" href="#review-processing-configuration"><span class="std std-ref">処理設定の見直し</span></a></p></li>
+<li><p><a class="reference internal" href="#migrate-mysql"><span class="std std-ref">MySQL 5.xから8.xへの移行</span></a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ansibleを使ってGitHubベースのソースをアップグレードすることは可能ですが、この説明では、そのシナリオは扱いません。</p>
+</div>
+<section id="clean-up-completed-transfers-watched-directory">
+<span id="completed-transfers"></span><h2>完了した転送監視ディレクトリをクリーンアップ<a class="headerlink" href="#clean-up-completed-transfers-watched-directory" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematica 1.11以降からアップグレードする場合は、このセクションを読む必要はありません。</p>
+</div>
+<p>Archivematica 1.10.x またはそれ以前のバージョンからArchivematica 1.16.0 にアップグレードすると、Archivematicaのダッシュボードで完了した転送が失敗したと表示され、それに対応する失敗通知メールが送信されることがあります。これは実際の失敗ではなく、Archivematica 1.11でワークフローやメタデータファイルの保存方法、SIPへのコピー方法が変更されたことによる意図しない副反応です。</p>
+<p>Archivematica 1.10以前のバージョンからのアップグレード中に、このようなエラーが発生しないようにするには、以下の手順に従ってください：</p>
+<ol class="arabic">
+<li><p>すべての転送とインジェストが完了したことを確認します。</p>
+<p>[転送］タブと［インジェスト］タブに、処理中または決定待ちの転送またはSIPがないことを確認します。ある場合は、処理をする前に転送/インジェスト処理を終了します。</p>
+</li>
+<li><p>completedTransfersウォッチドディレクトリのすべてのコンテンツを削除します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/archivematica/sharedDirectory/watchedDirectories/SIPCreation/completedTransfers/*
+</pre></div>
+</div>
+</li>
+<li><p>以下の手順に従ってアップグレードを実行します。</p></li>
+</ol>
+</section>
+<section id="create-a-backup">
+<span id="create-backup"></span><h2>バックアップの作成<a class="headerlink" href="#create-a-backup" title="Link to this heading">¶</a></h2>
+<p>生産システムでアップグレード手順を開始する前に、システムのバックアップを取ることを強くお勧めします。仮想マシンを使用している場合は、変更を加える前にスナップショットを作成してください。あるいは、システムで使用されているファイルシステムをバックアップしてください。アップデートの正確な手順は、ローカルのインストールによって異なります。最低限、以下のバックアップを取る必要があります：</p>
+<ul class="simple">
+<li><p>Storage Service SQLite（またはMySQL）データベース</p></li>
+<li><p>ダッシュボードのMySQLデータベース</p></li>
+</ul>
+<p>これは、これら2つのデータベースをバックアップする簡単な例です：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>cp<span class="w"> </span>/var/archivematica/storage-service/storage.db<span class="w"> </span>~/storage_db_backup.db
+mysqldump<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p<span class="w"> </span>MCP<span class="w"> </span>&gt;<span class="w"> </span>~/am_backup.sql
+</pre></div>
+</div>
+<p>MySQLのrootユーザーにパスワードを設定していない場合は、このコマンドの「-p」部分を削除できます。アップグレード中に問題が発生した場合は、このバックアップからMySQLデータベースをリストアし、再度アップグレードを試みることができます。</p>
+<p>Archivematica 1.8以下から1.9以上にアップグレードする場合は、Elasticsearchのバージョンサポートが1.xから6.x に変更されていますので、Elasticsearchデータのバックアップを作成することをお勧めします。</p>
+<p>Elasticsearchのバックアップを作成するには、以下の手順に従ってください：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove and recreate the folder that stores the backup</span>
+sudo<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/lib/elasticsearch/backup-repo/
+sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/var/lib/elasticsearch/backup-repo/
+sudo<span class="w"> </span>chown<span class="w"> </span>elasticsearch:elasticsearch<span class="w"> </span>/var/lib/elasticsearch/backup-repo/
+<span class="c1"># Allow elasticsearch to write files to the backup</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;path.repo: [&quot;/var/lib/elasticsearch/backup-repo&quot;]&#39;</span><span class="w"> </span><span class="p">|</span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/elasticsearch/elasticsearch.yml
+<span class="c1"># Restart ElasticSearch and wait for it to start</span>
+sudo<span class="w"> </span>service<span class="w"> </span>elasticsearch<span class="w"> </span>restart
+sleep<span class="w"> </span>60s
+<span class="c1"># Configure the ES backup</span>
+curl<span class="w"> </span>-XPUT<span class="w"> </span><span class="s2">&quot;localhost:9200/_snapshot/backup-repo&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span><span class="se">\</span>
+<span class="s1">&#39;{</span>
+<span class="s1">     &quot;type&quot;: &quot;fs&quot;,</span>
+<span class="s1">     &quot;settings&quot;: {</span>
+<span class="s1">     &quot;location&quot;: &quot;./&quot;,</span>
+<span class="s1">     &quot;compress&quot;: true</span>
+<span class="s1">     }</span>
+<span class="s1"> }&#39;</span>
+<span class="c1"># Take the actual backup, and copy it to a safe place</span>
+curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span><span class="s2">&quot;localhost:9200/_snapshot/backup-repo/am_indexes_backup?wait_for_completion=true&quot;</span>
+cp<span class="w"> </span>/var/lib/elasticsearch/backup-repo<span class="w"> </span>elasticsearch-backup<span class="w"> </span>-rf
+</pre></div>
+</div>
+<p>詳細は、 <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.8/modules-snapshots.html">ElasticSearch 6.8 docs</a> を参照してください。</p>
+</section>
+<section id="upgrade-on-ubuntu-packages">
+<span id="upgrade-ubuntu"></span><h2>Ubuntuパッケージのアップグレード<a class="headerlink" href="#upgrade-on-ubuntu-packages" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>オペレーティングシステムを更新します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>upgrade
+</pre></div>
+</div>
+</li>
+<li><p>パッケージソースを更新します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;deb [arch=amd64] http://packages.archivematica.org/1.16.x/ubuntu jammy main&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/apt/sources.list
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;deb [arch=amd64] http://packages.archivematica.org/1.16.x/ubuntu-externals jammy main&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/apt/sources.list
+</pre></div>
+</div>
+<p>オプションとして、/etc/apt/sources.listからpackages.archivematica.org/ 1.15 .xを参照している行を削除できます。</p>
+</li>
+<li><p>Storage Serviceを更新します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>archivematica-storage-service
+</pre></div>
+</div>
+</li>
+<li><p>Archivematicaをアップデートします。アップデート中に、設定ファイルのアップデートについて尋ねられることがあります。メンテナンス担当者のバージョンに同意してください。データベースの更新についても尋ねられます。MySQLデータベースのrootユーザーにパスワードを設定している場合は、プロンプトが表示されたらパスワードを入力してください。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>archivematica-common
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>archivematica-dashboard
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>archivematica-mcp-server
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>archivematica-mcp-client
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>archivematica
+</pre></div>
+</div>
+</li>
+<li><p>サービスを再起動します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>service<span class="w"> </span>archivematica-storage-service<span class="w"> </span>restart
+sudo<span class="w"> </span>service<span class="w"> </span>gearman-job-server<span class="w"> </span>restart
+sudo<span class="w"> </span>service<span class="w"> </span>archivematica-mcp-server<span class="w"> </span>restart
+sudo<span class="w"> </span>service<span class="w"> </span>archivematica-mcp-client<span class="w"> </span>restart
+sudo<span class="w"> </span>service<span class="w"> </span>archivematica-dashboard<span class="w"> </span>restart
+sudo<span class="w"> </span>service<span class="w"> </span>nginx<span class="w"> </span>restart
+</pre></div>
+</div>
+</li>
+<li><p>ブラウザの設定によっては、ダッシュボードのページを正しく読み込むためにブラウザのキャッシュをクリアする必要があります。例えばFirefoxやChromeの場合、control-shift-Rまたはcommand-shift-F5でキャッシュをクリアできるはずです。</p></li>
+</ol>
+</section>
+<section id="upgrade-on-rocky-linux-red-hat-packages">
+<span id="upgrade-rocky"></span><h2>Rocky Linux/Red Hatパッケージのアップグレード<a class="headerlink" href="#upgrade-on-rocky-linux-red-hat-packages" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>1.16 のリポジトリをアップグレードします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/1.15.x/1.16.x/g&#39;</span><span class="w"> </span>/etc/yum.repos.d/archivematica*
+</pre></div>
+</div>
+</li>
+<li><p>現在インストールされているバージョンのghostscriptを削除します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>rpm<span class="w"> </span>-e<span class="w"> </span>--nodeps<span class="w"> </span>ghostscript<span class="w"> </span>ghostscript-x11<span class="w"> </span><span class="se">\</span>
+<span class="w">                     </span>ghostscript-core<span class="w"> </span>ghostscript-fonts
+</pre></div>
+</div>
+</li>
+<li><p>Archivematicaパッケージをアップグレードします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>yum<span class="w"> </span>update
+</pre></div>
+</div>
+</li>
+<li><p>Archivematicaデータベースの移行を適用します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python manage.py migrate --noinput</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Storage Serviceデータベース移行を適用します：</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>Archivematica 1.13以降では、新しいデフォルトのデータベースバックエンドはMySQLです。これらの移行が適用される前に、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/migration-sqlite-mysql/#migration-sqlite-mysql" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">移行ガイド</span></a> に従って、MySQLデータベースにデータを移行してください。</p>
+<p>SQLiteを使い続けたい場合は、 <code class="docutils literal notranslate"><span class="pre">/etc/sysconfig/archivematica-storage-service</span></code> にある環境設定を編集してください。 <code class="docutils literal notranslate"><span class="pre">SS_DB_URL</span></code> <code class="docutils literal notranslate"><span class="pre">SS_DB_NAME=/var/archivematica/storage-service/storage.db</span></code> をコメントアウトし、SQLiteデータベースのパスを <code class="docutils literal notranslate"><span class="pre">SS_DB_NAME</span></code> で指定してください。</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-storage-service || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-storage-service \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/lib/archivematica/storage-service</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica-storage-service/bin/python manage.py migrate</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Archivematica関連サービスを再起動し、システムの使用を続行します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-storage-service
+sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-dashboard
+sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-mcp-client
+sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-mcp-server
+</pre></div>
+</div>
+</li>
+<li><p>ブラウザの設定によっては、ダッシュボードのページを正しく読み込むためにブラウザのキャッシュをクリアする必要があります。例えばFirefoxやChromeの場合、control-shift-Rまたはcommand-shift-F5でキャッシュをクリアできるはずです。</p></li>
+</ol>
+</section>
+<section id="upgrade-on-vagrant-ansible">
+<span id="upgrade-ansible"></span><h2>Vagrant/Ansibleのアップグレード<a class="headerlink" href="#upgrade-on-vagrant-ansible" title="Link to this heading">¶</a></h2>
+<p>このアップグレード方法は、Vagrantマシンだけでなく、クラウドベースの仮想マシンや物理サーバーでも動作します。</p>
+<ol class="arabic">
+<li><p>Vagrantマシンまたはサーバーに接続</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vagrant<span class="w"> </span>ssh<span class="w"> </span><span class="c1"># Or ssh &lt;your user&gt;@&lt;host&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Ansibleをインストール</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">ansible</span><span class="o">==</span><span class="m">2</span>.9.10<span class="w"> </span>jmespath<span class="w"> </span><span class="nv">jinja2</span><span class="o">==</span><span class="m">3</span>.0.3
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>デプロイレポートをチェックアウトします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/artefactual/deploy-pub.git
+</pre></div>
+</div>
+</li>
+<li><p>適切なplaybookフォルダに入り、必要なロールをインストール</p>
+<p id="ubuntu-22-04">Ubuntu 22.04（Jammy）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>deploy-pub/playbooks/archivematica-jammy
+ansible-galaxy<span class="w"> </span>install<span class="w"> </span>-f<span class="w"> </span>-p<span class="w"> </span>roles/<span class="w"> </span>-r<span class="w"> </span>requirements.yml
+</pre></div>
+</div>
+<p>Rocky Linux 9：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>deploy-pub/playbooks/archivematica-rocky9
+ansible-galaxy<span class="w"> </span>install<span class="w"> </span>-f<span class="w"> </span>-p<span class="w"> </span>roles/<span class="w"> </span>-r<span class="w"> </span>requirements.yml
+</pre></div>
+</div>
+<p>以下の手順はすべて、お使いのオペレーティングシステムのそれぞれのplaybookフォルダから実行する必要があります。</p>
+</li>
+<li><p>vars-singlenode.ymlがElasticsearchとArchivematicaに適した内容であることを確認するか、独自の内容で更新してください</p></li>
+<li><p>hostsファイルを作成します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;am-local   ansible_connection=local&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>hosts
+</pre></div>
+</div>
+</li>
+<li><p>実行中のArchivematicaのアップグレード</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>hosts<span class="w"> </span>singlenode.yml<span class="w"> </span>--tags<span class="o">=</span>elasticsearch,archivematica-src
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="upgrade-in-indexless-mode">
+<span id="upgrade-indexless"></span><h2>インデックスレスモードでのアップグレード<a class="headerlink" href="#upgrade-in-indexless-mode" title="Link to this heading">¶</a></h2>
+<p>Archivematica 1.7以降、Archivematicaは、Elasticsearchを使用しないインデックスレスモードで実行できます。ArchivematicaをElasticsearchなしで、またはElasticsearchの機能を制限してインストールすることで、コンピュートリソースの消費を抑え、運用の複雑さを軽減できます。管理者は、 <code class="docutils literal notranslate"><span class="pre">archivematica_src_search_enabled</span></code> 設定属性を設定することで、Elasticsearchがインデックスを作成する件数を定義できます。これは複数の異なるダッシュボードページの検索に影響を与える可能性があります。</p>
+<ol class="arabic">
+<li><p>上記の手順に従って、既存のArchivematicaパイプラインをアップグレードします。</p></li>
+<li><p>関連する環境変数を <code class="docutils literal notranslate"><span class="pre">false</span></code> に設定する行を追加して、関連するsystemd EnvironmentFileファイルを修正します。</p>
+<p>Ubuntuを使用している場合は、以下のコマンドを実行します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_DASHBOARD_DASHBOARD_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/default/archivematica-dashboard&#39;</span>
+sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_MCPSERVER_MCPSERVER_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/default/archivematica-mcp-server&#39;</span>
+sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/default/archivematica-mcp-client&#39;</span>
+</pre></div>
+</div>
+<p>Rocky Linuxを使用している場合は、以下のコマンドを実行します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_DASHBOARD_DASHBOARD_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/sysconfig/archivematica-dashboard&#39;</span>
+sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_MCPSERVER_MCPSERVER_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/sysconfig/archivematica-mcp-server&#39;</span>
+sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/sysconfig/archivematica-mcp-client&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>サービスを再起動します。</p>
+<p>Ubuntuを使用している場合は、以下のコマンドを実行します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>service<span class="w"> </span>archivematica-dashboard<span class="w"> </span>restart
+sudo<span class="w"> </span>service<span class="w"> </span>archivematica-mcp-client<span class="w"> </span>restart
+sudo<span class="w"> </span>service<span class="w"> </span>archivematica-mcp-server<span class="w"> </span>restart
+</pre></div>
+</div>
+<p>Rocky Linuxを使用している場合は、以下のコマンドを実行します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-dashboard
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-mcp-client
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-mcp-server
+</pre></div>
+</div>
+</li>
+<li><p>以前Elasticsearchサービスをインストールして起動していた場合は、今すぐオフにできます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>elasticsearch
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>disable<span class="w"> </span>elasticsearch
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="upgrade-with-output-capturing-disabled">
+<span id="upgrade-no-output-capture"></span><h2>出力キャプチャを無効にしてアップグレード<a class="headerlink" href="#upgrade-with-output-capturing-disabled" title="Link to this heading">¶</a></h2>
+<p>Archivematica 1.7.1では、アップグレード時やその他のタイミングで出力キャプチャを無効にできます。これにより、保存タスクからの標準出力と標準エラー出力がキャプチャされなくなり、パフォーマンスが向上します。詳しくは、 <cite>タスク出力キャプチャ設定&lt;task-output-capturing-admin&gt;</cite> ページを参照してください。出力キャプチャを無効にするには、 <code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CAPTURE_CLIENT_SCRIPT_OUTPUT</span></code> 環境変数を <code class="docutils literal notranslate"><span class="pre">false</span></code> に設定し、MCPクライアント・プロセスを再起動します。環境変数を設定し、Archivematicaプロセスを再起動する方法の詳細については、各配備方法のインストール手順を参照してください。</p>
+<p><a class="reference internal" href="#upgrade"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+<section id="update-search-indices">
+<span id="id1"></span><h2>検索インデックスの更新<a class="headerlink" href="#update-search-indices" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>検索インデックスを使用せずにArchivematicaを実行する場合は、この部分を無視してください。</p>
+</div>
+<p>例えば、Archivematica v1.12.0では、検索インデックスに新しいフィールドが追加され、テキストフィールドの種類が変更されました。アップグレードを開始する前に、 <a class="reference external" href="https://wiki.archivematica.org/Release_Notes">リリースノート</a> をご確認ください。</p>
+<p>更新は2つの方法があります。好ましくは、 <a class="reference internal" href="#reindex-documents"><span class="std std-ref">文書のインデックスを再作成する</span></a> ことです。これは、すでにインデックスを作成した文書と同じ文書が再インデックスされるため、通常より速くなります。これがうまくいっていない場合は、 <a class="reference internal" href="#recreate-indices"><span class="std std-ref">インデックスを再作成する</span></a> ことが可能です。これは、元のデータ、例えばAIPにアクセスするため、完了までにかなり時間がかかります。</p>
+<section id="reindex-the-documents">
+<span id="reindex-documents"></span><h3>文書のインデックスを付け直す<a class="headerlink" href="#reindex-the-documents" title="Link to this heading">¶</a></h3>
+<p>Elasticsearchでは、検索インデックスに新しいフィールドを追加することは可能ですが、既存のフィールドを更新することはできません。推奨される方法は、希望するマッピングで新しいインデックスを作成し、文書のインデックスを再作成することです。これは <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html">Reindex API</a> に基づいています。</p>
+<p>これは、私たちがスクリプト： <a class="reference external" href="https://github.com/artefactual-labs/ops-helpers/blob/master/es-helpers/README.md#es-reindexsh-update-search-indices">es-reindex.sh</a> で自動化したマルチステップのプロセスです。リンクをたどって手順をよく読んでください。</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>続行する前に、Elasticsearchのデータをバックアップすることをお勧めします。手順については、公式文書をお読みください。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>より使いやすくするために、将来このスクリプトをDjangoコマンドとして実装するかもしれません。当面は、スクリプトをダウンロードして、必要に応じて微調整してください。</p>
+</div>
+</section>
+<section id="recreate-the-indices">
+<span id="recreate-indices"></span><h3>インデックスの再作成<a class="headerlink" href="#recreate-the-indices" title="Link to this heading">¶</a></h3>
+<p>この方法では、既存のElasticsearchインデックスを削除・再構築し、BacklogとArchival Storageのすべての列フィールドに、Archivematica 1.16.0 へのアップグレード前に取り込まれた転送とAIPを含め、完全に入力されるようにします。 <a class="reference internal" href="../../maintenance/maintenance.html#elasticsearch-indexes"><span class="std std-ref">Rebuild the indexes</span></a> に記載されているコマンドを実行し、インデックスを完全に削除して再構築します。</p>
+<p>実行例：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py rebuild_transfer_backlog --from-storage-service --no-prompt</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+
+sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py rebuild_aip_index_from_storage_service --delete-all</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>暗号化された、またはリモートのTransfer BacklogとAIP Storeのロケーションを使用する場合、ファイルシステムからではなく、Storage Service APIからインデックスを再構築するオプションを使用する必要があることに注意してください。現時点では、すべてのタイプのリモートロケーションのインデックスを再構築することはできません。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>このコマンドの実行は、特にパッケージが圧縮または暗号化されて保存されている場合や、サードパーティのサービスを使用している場合など、大きなAIPやTransfer Backlogの保存場所では時間がかかる可能性があることに注意してください。そのような場合は、代わりに <a class="reference internal" href="#reindex-documents"><span class="std std-ref">Elasticsearch文書</span></a> のインデックスを再作成してください。</p>
+</div>
+</section>
+</section>
+<section id="review-the-processing-configuration">
+<span id="review-processing-configuration"></span><h2>処理設定の見直し<a class="headerlink" href="#review-the-processing-configuration" title="Link to this heading">¶</a></h2>
+<p>Archivematicaをアップグレードした後は、 <a class="reference internal" href="../customization/dashboard-config.html#process-config"><span class="std std-ref">処理設定</span></a> のサニティチェックを行うことをお勧めします。例えば、Archivematica 1.13で新たに導入された&quot;Scan for viruses&quot;のように、デフォルトを設定したい新しい決定ポイントがないか確認してください。</p>
+<p><code class="docutils literal notranslate"><span class="pre">default</span></code> と <code class="docutils literal notranslate"><span class="pre">automated</span></code> のバンドル設定は、Archivematicaのデフォルトにリセットできます。</p>
+</section>
+<section id="migrate-from-mysql-5-x-to-8-x">
+<span id="migrate-mysql"></span><h2>MySQL 5.xから8.xへの移行<a class="headerlink" href="#migrate-from-mysql-5-x-to-8-x" title="Link to this heading">¶</a></h2>
+<p>ArchivematicaおよびStorage Service用のMySQLデータベースでは、MySQL 8 <code class="docutils literal notranslate"><span class="pre">utf8mb4</span></code> の文字セットとデフォルトの照合順序 <code class="docutils literal notranslate"><span class="pre">utf8mb4_0900_ai_ci</span></code> （MariaDBでは <code class="docutils literal notranslate"><span class="pre">utf8mb4_general_ci</span></code> ）を使用することをお勧めします。</p>
+<p>MySQL 5.xからデータベースを移行する場合、文字セットとテーブルのエンコーディングをチェックできます：</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+<span class="w">   </span><span class="n">t</span><span class="p">.</span><span class="n">table_schema</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="k">character_set_name</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">table_collation</span>
+<span class="k">FROM</span>
+<span class="w">   </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="w"> </span><span class="n">t</span><span class="p">,</span>
+<span class="w">   </span><span class="n">information_schema</span><span class="p">.</span><span class="n">collation_character_set_applicability</span><span class="w"> </span><span class="k">c</span>
+<span class="k">WHERE</span>
+<span class="w">   </span><span class="k">c</span><span class="p">.</span><span class="k">collation_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">table_collation</span>
+<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">table_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;BASE TABLE&#39;</span>
+<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;MCP&#39;</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;SS&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">utf8mb3</span></code> の文字セットと照合順序を使用してれば、このような潜在的な移行の衝突を避けるために、それらを更新する必要があります：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Running<span class="w"> </span>migrations:
+<span class="w">  </span>Applying<span class="w"> </span>admin.0003_logentry_add_action_flag_choices...<span class="w"> </span>OK
+<span class="w">  </span>Applying<span class="w"> </span>auth.0009_alter_user_last_name_max_length...<span class="w"> </span>OK
+<span class="w">  </span>Applying<span class="w"> </span>auth.0010_alter_group_name_max_length...<span class="w"> </span>OK
+<span class="w">  </span>Applying<span class="w"> </span>auth.0011_update_proxy_permissions...<span class="w"> </span>OK
+<span class="w">  </span>Applying<span class="w"> </span>auth.0012_alter_user_first_name_max_length...<span class="w"> </span>OK
+<span class="w">  </span>Applying<span class="w"> </span>locations.0031_rclone_space...Traceback<span class="w"> </span><span class="o">(</span>most<span class="w"> </span>recent<span class="w"> </span>call<span class="w"> </span>last<span class="o">)</span>:
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;/pyenv/data/versions/3.9.18/lib/python3.9/site-packages/django/db/backends/utils.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">84</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>_execute
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>self.cursor.execute<span class="o">(</span>sql,<span class="w"> </span>params<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;/pyenv/data/versions/3.9.18/lib/python3.9/site-packages/django/db/backends/mysql/base.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">73</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>execute
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>self.cursor.execute<span class="o">(</span>query,<span class="w"> </span>args<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;/pyenv/data/versions/3.9.18/lib/python3.9/site-packages/MySQLdb/cursors.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">179</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>execute
+<span class="w">    </span><span class="nv">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>self._query<span class="o">(</span>mogrified_query<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;/pyenv/data/versions/3.9.18/lib/python3.9/site-packages/MySQLdb/cursors.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">330</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>_query
+<span class="w">    </span>db.query<span class="o">(</span>q<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;/pyenv/data/versions/3.9.18/lib/python3.9/site-packages/MySQLdb/connections.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">255</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>query
+<span class="w">    </span>_mysql.connection.query<span class="o">(</span>self,<span class="w"> </span>query<span class="o">)</span>
+MySQLdb.OperationalError:<span class="w"> </span><span class="o">(</span><span class="m">3780</span>,<span class="w"> </span><span class="s2">&quot;Referencing column &#39;space_id&#39; and referenced column &#39;uuid&#39; in foreign key constraint &#39;locations_rclone_space_id_adb7fd1d_fk_locations_space_uuid&#39; are incompatible.&quot;</span><span class="o">)</span>
+
+django.db.utils.OperationalError:<span class="w"> </span><span class="o">(</span><span class="m">3780</span>,<span class="w"> </span><span class="s2">&quot;Referencing column &#39;space_id&#39; and referenced column &#39;uuid&#39; in foreign key constraint &#39;locations_rclone_space_id_adb7fd1d_fk_locations_space_uuid&#39; are incompatible.&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>以下のスクリプトは、データベースとそのテーブルの文字セットを更新する際の参考として使用できます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="nb">set</span><span class="w"> </span>-o<span class="w"> </span>errexit<span class="w">   </span><span class="c1"># abort on nonzero exitstatus</span>
+<span class="nb">set</span><span class="w"> </span>-o<span class="w"> </span>nounset<span class="w">   </span><span class="c1"># abort on unbound variable</span>
+<span class="nb">set</span><span class="w"> </span>-o<span class="w"> </span>pipefail<span class="w">  </span><span class="c1"># do not hide errors within pipes</span>
+
+<span class="c1"># Array of database names</span>
+<span class="nv">DATABASES</span><span class="o">=(</span>
+<span class="w">  </span>MCP
+<span class="w">  </span>SS
+<span class="o">)</span>
+
+<span class="c1"># Collation and CHARSET</span>
+<span class="nv">CHARSET</span><span class="o">=</span><span class="s2">&quot;utf8mb4&quot;</span>
+<span class="nv">COLLATION</span><span class="o">=</span><span class="s2">&quot;utf8mb4_0900_ai_ci&quot;</span>
+
+<span class="c1"># MySQL authentication (optional, default no auth)</span>
+<span class="nv">MYSQL_USE_AUTH</span><span class="o">=</span>False
+<span class="nv">MYSQL_USER</span><span class="o">=</span>root
+<span class="nv">MYSQL_PASSWORD</span><span class="o">=</span><span class="s2">&quot;THE_PASSWORD&quot;</span>
+
+<span class="c1"># Function to execute a query</span>
+execute_query<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">query</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">db_name</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">user_arg</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$MYSQL_USE_AUTH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;True&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nv">user_arg</span><span class="o">=</span><span class="s2">&quot;-u</span><span class="nv">$MYSQL_USER</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="nb">export</span><span class="w"> </span><span class="nv">MYSQL_PWD</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$MYSQL_PASSWORD</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">fi</span>
+
+<span class="w">    </span>mysql<span class="w"> </span>-N<span class="w"> </span>-B<span class="w"> </span><span class="nv">$user_arg</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$query</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$db_name</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+
+<span class="c1"># Function to fix database charset and collation</span>
+fix_database_charset<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">query</span><span class="o">=</span><span class="s2">&quot;ALTER DATABASE </span><span class="si">${</span><span class="nv">DB_NAME</span><span class="si">}</span><span class="s2"> CHARACTER SET </span><span class="nv">$CHARSET</span><span class="s2"> COLLATE </span><span class="nv">$COLLATION</span><span class="s2">;&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Fixing database charset and collation&quot;</span>
+<span class="w">    </span>execute_query<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$query</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DB_NAME</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Fixed database charset and collation&quot;</span>
+<span class="o">}</span>
+
+<span class="c1"># Function to fix tables charset and collation</span>
+fix_tables_charset<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">query</span><span class="o">=</span><span class="s2">&quot;SELECT CONCAT(&#39;ALTER TABLE \`&#39;,  table_name, &#39;\` CHARACTER SET </span><span class="nv">$CHARSET</span><span class="s2"> COLLATE </span><span class="nv">$COLLATION</span><span class="s2">;&#39;) \</span>
+<span class="s2">    FROM information_schema.TABLES AS T, information_schema.\`COLLATION_CHARACTER_SET_APPLICABILITY\` AS C \</span>
+<span class="s2">    WHERE C.collation_name = T.table_collation \</span>
+<span class="s2">    AND T.table_schema = &#39;</span><span class="nv">$DB_NAME</span><span class="s2">&#39; \</span>
+<span class="s2">    AND (C.CHARACTER_SET_NAME != &#39;</span><span class="nv">$CHARSET</span><span class="s2">&#39; OR C.COLLATION_NAME != &#39;</span><span class="nv">$COLLATION</span><span class="s2">&#39;);&quot;</span>
+
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">alter_table_queries</span><span class="o">=</span><span class="k">$(</span>execute_query<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$query</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DB_NAME</span><span class="s2">&quot;</span><span class="k">)</span>
+<span class="w">    </span><span class="nv">alter_table_queries_no_foreign_key_checks</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;SET FOREIGN_KEY_CHECKS=0;\n</span><span class="nv">$alter_table_queries</span><span class="s2">\nSET FOREIGN_KEY_CHECKS=1;&quot;</span><span class="k">)</span>
+<span class="w">    </span><span class="c1"># echo &quot;$alter_table_queries_no_foreign_key_checks&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Fixing tables charset and collation&quot;</span>
+<span class="w">    </span>execute_query<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$alter_table_queries_no_foreign_key_checks</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DB_NAME</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Fixed tables charset and collation&quot;</span>
+<span class="o">}</span>
+
+<span class="c1"># Function to fix column collation for varchar columns</span>
+fix_varchar_columns_collation<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">query</span><span class="o">=</span><span class="s2">&quot;SELECT CONCAT(&#39;ALTER TABLE \`&#39;, table_name, &#39;\` MODIFY \`&#39;, column_name, &#39;\` &#39;, DATA_TYPE, \</span>
+<span class="s2">    &#39;(&#39;, CHARACTER_MAXIMUM_LENGTH, &#39;) CHARACTER SET </span><span class="nv">$CHARSET</span><span class="s2"> COLLATE </span><span class="nv">$COLLATION</span><span class="s2">&#39;, \</span>
+<span class="s2">    (CASE WHEN IS_NULLABLE = &#39;NO&#39; THEN &#39; NOT NULL&#39; ELSE &#39;&#39; END), &#39;;&#39;) \</span>
+<span class="s2">    FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = &#39;</span><span class="nv">$DB_NAME</span><span class="s2">&#39; AND DATA_TYPE = &#39;varchar&#39; AND \</span>
+<span class="s2">    ( CHARACTER_SET_NAME != &#39;</span><span class="nv">$CHARSET</span><span class="s2">&#39; OR COLLATION_NAME != &#39;</span><span class="nv">$COLLATION</span><span class="s2">&#39;);&quot;</span>
+
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">alter_table_queries</span><span class="o">=</span><span class="k">$(</span>execute_query<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$query</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DB_NAME</span><span class="s2">&quot;</span><span class="k">)</span>
+<span class="w">    </span><span class="nv">alter_table_queries_no_foreign_key_checks</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;SET FOREIGN_KEY_CHECKS=0;\n</span><span class="nv">$alter_table_queries</span><span class="s2">\nSET FOREIGN_KEY_CHECKS=1;&quot;</span><span class="k">)</span>
+<span class="w">    </span><span class="c1"># echo &quot;$alter_table_queries_no_foreign_key_checks&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Fixing column collation for varchar columns&quot;</span>
+<span class="w">    </span>execute_query<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$alter_table_queries_no_foreign_key_checks</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DB_NAME</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Fixed column collation for varchar columns&quot;</span>
+<span class="o">}</span>
+
+<span class="c1"># Function to fix column collation for non-varchar columns</span>
+fix_non_varchar_columns_collation<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">query</span><span class="o">=</span><span class="s2">&quot;SELECT CONCAT(&#39;ALTER TABLE \`&#39;, table_name, &#39;\` MODIFY \`&#39;, column_name, &#39;\` &#39;, DATA_TYPE, &#39; \</span>
+<span class="s2">    CHARACTER SET </span><span class="nv">$CHARSET</span><span class="s2"> COLLATE </span><span class="nv">$COLLATION</span><span class="s2">&#39;, (CASE WHEN IS_NULLABLE = &#39;NO&#39; THEN &#39; NOT NULL&#39; ELSE &#39;&#39; END), &#39;;&#39;) \</span>
+<span class="s2">    FROM information_schema.COLUMNS \</span>
+<span class="s2">    WHERE TABLE_SCHEMA = &#39;</span><span class="nv">$DB_NAME</span><span class="s2">&#39; \</span>
+<span class="s2">    AND DATA_TYPE != &#39;varchar&#39; \</span>
+<span class="s2">    AND (CHARACTER_SET_NAME != &#39;</span><span class="nv">$CHARSET</span><span class="s2">&#39; OR COLLATION_NAME != &#39;</span><span class="nv">$COLLATION</span><span class="s2">&#39;);&quot;</span>
+
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">alter_table_queries</span><span class="o">=</span><span class="k">$(</span>execute_query<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$query</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DB_NAME</span><span class="s2">&quot;</span><span class="k">)</span>
+<span class="w">    </span><span class="nv">alter_table_queries_no_foreign_key_checks</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;SET FOREIGN_KEY_CHECKS=0;\n</span><span class="nv">$alter_table_queries</span><span class="s2">\nSET FOREIGN_KEY_CHECKS=1;&quot;</span><span class="k">)</span>
+<span class="w">    </span><span class="c1"># echo &quot;$alter_table_queries_no_foreign_key_checks&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Fixing column collation for non-varchar columns&quot;</span>
+<span class="w">    </span>execute_query<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$alter_table_queries_no_foreign_key_checks</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DB_NAME</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Fixed column collation for non-varchar columns&quot;</span>
+<span class="o">}</span>
+
+<span class="c1"># Loop through each database in the array</span>
+<span class="k">for</span><span class="w"> </span>DB_NAME<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">DATABASES</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Processing database: </span><span class="nv">$DB_NAME</span><span class="s2">&quot;</span>
+<span class="w">    </span>fix_database_charset
+<span class="w">    </span>fix_tables_charset
+<span class="w">    </span>fix_varchar_columns_collation
+<span class="w">    </span>fix_non_varchar_columns_collation
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Migration completed for </span><span class="nv">$DB_NAME</span><span class="s2">&quot;</span>
+<span class="k">done</span>
+
+<span class="c1"># Unset the MYSQL_PWD environment variable after executing the queries</span>
+<span class="nb">unset</span><span class="w"> </span>MYSQL_PWD
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Archivematica 1.15 .xから 1.16.0 へのアップグレード</a><ul>
+<li><a class="reference internal" href="#clean-up-completed-transfers-watched-directory">完了した転送監視ディレクトリをクリーンアップ</a></li>
+<li><a class="reference internal" href="#create-a-backup">バックアップの作成</a></li>
+<li><a class="reference internal" href="#upgrade-on-ubuntu-packages">Ubuntuパッケージのアップグレード</a></li>
+<li><a class="reference internal" href="#upgrade-on-rocky-linux-red-hat-packages">Rocky Linux/Red Hatパッケージのアップグレード</a></li>
+<li><a class="reference internal" href="#upgrade-on-vagrant-ansible">Vagrant/Ansibleのアップグレード</a></li>
+<li><a class="reference internal" href="#upgrade-in-indexless-mode">インデックスレスモードでのアップグレード</a></li>
+<li><a class="reference internal" href="#upgrade-with-output-capturing-disabled">出力キャプチャを無効にしてアップグレード</a></li>
+<li><a class="reference internal" href="#update-search-indices">検索インデックスの更新</a><ul>
+<li><a class="reference internal" href="#reindex-the-documents">文書のインデックスを付け直す</a></li>
+<li><a class="reference internal" href="#recreate-the-indices">インデックスの再作成</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#review-the-processing-configuration">処理設定の見直し</a></li>
+<li><a class="reference internal" href="#migrate-from-mysql-5-x-to-8-x">MySQL 5.xから8.xへの移行</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../installation/install-advanced.html"
+                          title="前の章へ">高度なインストールオプション</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../customization/customization.html"
+                          title="次の章へ">カスタマイズと自動化</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/admin-manual/installation-setup/upgrading/upgrading.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../customization/customization.html" title="カスタマイズと自動化"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../installation/install-advanced.html" title="高度なインストールオプション"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematica 1.15 .xから 1.16.0 へのアップグレード</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>アクセス &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="CONTENTdm" href="contentdm.html" />
+    <link rel="prev" title="アーカイブ情報コレクション（AICs）" href="../archival-storage/aic.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="contentdm.html" title="CONTENTdm"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../archival-storage/aic.html" title="アーカイブ情報コレクション（AICs）"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">アクセス</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="access">
+<span id="id1"></span><h1>アクセス<a class="headerlink" href="#access" title="Link to this heading">¶</a></h1>
+<p>インジェストの際、Archivematicaは、デジタルオブジェクトのアクセスコピーを生成し、DIP（Dissemination Information Package）にパッケージ化できます。DIPは、アクセスシステムにアップロードしたり、将来の使用のために保存したりできます。一般的なルールとして、保管スペースを節約するために、必要なときだけDIPを作成することをお勧めします。 <a class="reference internal" href="../ingest/ingest.html#reingest"><span class="std std-ref">AIP</span></a> を後日再インジェストすることで、オンデマンドでDIPを作成できます。</p>
+<p>DIPがアップロードおよび/または保存されると、uploadedDIPsディレクトリに移動します。このデータが不要になった場合、uploadedDIPsディレクトリを消去できます。詳細については、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-usage"><span class="std std-ref">処理ストレージ使用状況</span></a> を参照してください。</p>
+<p>Archivematica's Access tab displays DIPs that have been uploaded to AtoM.
+It does not display DIPs that have been sent to other access systems,
+like ArchivesSpace.</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#access-default"><span class="std std-ref">アクセスシステム</span></a></p></li>
+<li><p><a class="reference internal" href="#upload-atom"><span class="std std-ref">AtoMにDIPをアップロード</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#upload-metadata-atom"><span class="std std-ref">AtoMへのメタデータのみのアップロード</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#upload-as"><span class="std std-ref">ArchivesSpaceにDIPをアップロード</span></a></p></li>
+<li><p><a class="reference internal" href="#store-dip"><span class="std std-ref">DIPの保管</span></a></p></li>
+<li><p><a class="reference internal" href="#review-dip"><span class="std std-ref">DIPのレビューとダウンロード</span></a></p></li>
+<li><p><a class="reference internal" href="#access-tab"><span class="std std-ref">アクセスタブ</span></a></p></li>
+</ul>
+<section id="access-systems">
+<span id="access-default"></span><h2>アクセスシステム<a class="headerlink" href="#access-systems" title="Link to this heading">¶</a></h2>
+<p>正規化マイクロサービスで <code class="docutils literal notranslate"><span class="pre">Normalize</span> <span class="pre">for</span> <span class="pre">preservation</span> <span class="pre">and</span> <span class="pre">access</span></code> または <code class="docutils literal notranslate"><span class="pre">Normalize</span> <span class="pre">for</span> <span class="pre">access</span></code> のいずれかを選択して普及情報パッケージ（DIP）を作成した場合、アーカイブ素材へのアクセスを提供する方法として、コンテンツ管理ツールにアップロードできます。Archivematicaの正規化オプションの詳細については、 <a class="reference internal" href="../ingest/ingest.html#normalize"><span class="std std-ref">正規化</span></a> を参照してください。</p>
+<p>DIPには、Archivematicaの正規化ルールまたは手動正規化プロセスによって作成された、転送元のデジタルオブジェクトのアクセスコピーが含まれます。DIPには、DIP METSファイルと、オプションで各デジタルオブジェクトのサムネイルも含まれます。</p>
+<p>A content management tool called <a class="reference external" href="https://www.accesstomemory.org">AtoM</a> is Archivematica's default access
+system. AtoM is a web-based, open source application for standards-based
+archival description and access in a multilingual, multi-repository
+environment. Access integration workflows also exist for <a class="reference external" href="https://archivesspace.org/">ArchivesSpace</a> and
+<a class="reference external" href="https://www.oclc.org/en/contentdm.html">CONTENTdm</a>.</p>
+</section>
+<section id="upload-a-dip-to-atom">
+<span id="upload-atom"></span><h2>AtoMにDIPをアップロード<a class="headerlink" href="#upload-a-dip-to-atom" title="Link to this heading">¶</a></h2>
+<p>DIPをAtoMにアップロードするには、まずAtoMインスタンスが動作している必要があります。管理者は、AtoMインスタンスをArchivematicaと通信できるように設定する必要があります。AtoMとの統合の設定については、 <a class="reference internal" href="../../admin-manual/installation-setup/integrations/atom-setup.html#atom-setup"><span class="std std-ref">Using AtoM 2.x with Archivematica</span></a> を参照してください。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p><strong>DIPをアップロードする前に、AtoM</strong> でターゲット記述を作成する必要があります。DIPのアップロード中にDIPを適切な場所に送信するため、説明のURLの一部またはターゲットコレクションを指定する必要があります。</p>
+</div>
+<p>AtoMにアップロードされたデジタルオブジェクトは、ターゲット記述の子として追加され、デフォルトでは、 <code class="docutils literal notranslate"><span class="pre">item</span></code> の記述レベルが与えられます。他の記述レベルを割り当てるには、転送をバックログに送信し、 <a class="reference internal" href="../appraisal/appraisal.html#adding-atom-lod"><span class="std std-ref">鑑定タブでAtoM記述レベル</span></a> を追加します。</p>
+<p><a class="reference internal" href="../appraisal/appraisal.html#arrangement-drag-drop"><span class="std std-ref">「鑑定」タブの配列機能</span></a> を使用して、AtoMが認識できる階層を作成し、転送を配列することが可能です。</p>
+<p>また、 <a class="reference internal" href="../ingest/ingest.html#add-metadata"><span class="std std-ref">メタデータフォームまたはメタデータCSVファイルのいずれかを使用して、説明メタデータ</span></a> を転送に追加できます。この説明メタデータは、AtoMに渡されます。AtoM DIPアップロード統合は、ダブリンコアの説明メタデータのみをサポートしていることに注意してください。以下のDublin Coreフィールドは、AtoMのISAD（G）テンプレートにマッピングされています：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dublin Core</p></th>
+<th class="head"><p>ISAD（G）</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>タイトル</p></td>
+<td><p>タイトル</p></td>
+</tr>
+<tr class="row-odd"><td><p>識別子</p></td>
+<td><p>識別子</p></td>
+</tr>
+<tr class="row-even"><td><p>作成者</p></td>
+<td><p>作成者名</p></td>
+</tr>
+<tr class="row-odd"><td><p>日付</p></td>
+<td><p>作成日</p></td>
+</tr>
+<tr class="row-even"><td><p>タイプ</p></td>
+<td><p>サブジェクトアクセスポイント</p></td>
+</tr>
+<tr class="row-odd"><td><p>来歴</p></td>
+<td><p>直接の取得または転送元</p></td>
+</tr>
+<tr class="row-even"><td><p>説明</p></td>
+<td><p>範囲と内容</p></td>
+</tr>
+<tr class="row-odd"><td><p>範囲</p></td>
+<td><p>範囲と媒体</p></td>
+</tr>
+<tr class="row-even"><td><p>フォーマット</p></td>
+<td><p>範囲と媒体</p></td>
+</tr>
+<tr class="row-odd"><td><p>ソース</p></td>
+<td><p>オリジナルの所在</p></td>
+</tr>
+<tr class="row-even"><td><p>言語</p></td>
+<td><p>素材の言語</p></td>
+</tr>
+<tr class="row-odd"><td><p>権利</p></td>
+<td><p>アクセスを管理する条件</p></td>
+</tr>
+<tr class="row-even"><td><p>カバレッジ</p></td>
+<td><p>アクセスポイントを設置</p></td>
+</tr>
+<tr class="row-odd"><td><p>件名</p></td>
+<td><p>サブジェクトアクセスポイント</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematicaのフォームからメタデータを追加すると、AtoMに中間ディスクリプションが作成されます。ただし、転送がバックログに送信され、AtoM記述が適用された場合（ <a class="reference internal" href="../appraisal/appraisal.html#adding-atom-lod"><span class="std std-ref">AtoMの記述レベルを追加</span></a> を参照）、フォームを通して追加されたメタデータは、AtoMに存在しません。また、中間記述も存在しませんが、適用した記述レベルは、AtoMに存在します。</p>
+</div>
+<p>ターゲットの説明をArchivematicaに提供する方法は2つあります。1つ目は、DIPアップロードでマイクロサービス中にスラッグを提供する方法です。</p>
+<ol class="arabic simple">
+<li><p>Process your transfer. You must select <code class="docutils literal notranslate"><span class="pre">Normalize</span> <span class="pre">for</span> <span class="pre">preservation</span> <span class="pre">and</span>
+<span class="pre">access</span></code> or <code class="docutils literal notranslate"><span class="pre">Normalize</span> <span class="pre">for</span> <span class="pre">access</span></code> at the Normalization microservice. When
+you reach the Upload DIP microservice, select &quot;Upload DIP to AtoM&quot;
+from the drop-down menu.</p></li>
+<li><p>ダイアログボックスが表示されます。ダイアログボックスに説明のパーマリンクを入力します。例えば、アーカイブの説明のURLがhttp://myAtoM.ca/my-target-descriptionの場合、 <code class="docutils literal notranslate"><span class="pre">my-target-description</span></code> と入力します。詳しくは、 <a class="reference external" href="https://www.accesstomemory.org/docs/latest/user-manual/glossary/glossary/">AtoM用語集</a> の <code class="docutils literal notranslate"><span class="pre">slug</span></code> を参照してください。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/atom-dip-upload.png"><img alt="画像は、ユーザーがAtoMの説明のためのスラッグを入力できるポップアップウィンドウを示します" class="align-center" src="../../_images/atom-dip-upload.png" style="width: 60%;" />
+</a>
+<ol class="arabic simple" start="3">
+<li><p>青い&quot;アップロード&quot;ボタンをクリックします。デジタルオブジェクトは、ターゲット記述内の子項目としてアップロードされます。</p></li>
+<li><p>DIPのアップロードが完了したら、ダッシュボードの「アクセス」タブを開きます。このタブには、AIPとアップロードされたDIPが表示されます。既知の問題のため、提供されたリンクを使用してアップロードされたDIPに移動する場合は、手動でURLを編集して、 <code class="docutils literal notranslate"><span class="pre">/sword/deposit</span></code> を削除する必要があります。</p></li>
+<li><p>AtoMのターゲット記述を確認してください。デジタルオブジェクトは、レコードの子オブジェクトとして表示されるはずです。</p></li>
+</ol>
+<p>より自動化された環境では、転送を設定する際に、 <strong>Access system ID</strong> ボックスにスラッグを追加できます。Upload DIPマイクロサービスに到達すると、Archivematicaは、自動的にこの値を取得します。</p>
+<ol class="arabic simple">
+<li><p>新しい転送を作成します。 <code class="docutils literal notranslate"><span class="pre">Access</span> <span class="pre">system</span> <span class="pre">ID</span></code> ボックスに、ダイアログボックスの説明のパーマリンクを入力します。例えば、アーカイブ記述のURLがhttp://myAtoM.ca/my-target-descriptionの場合、 <code class="docutils literal notranslate"><span class="pre">my-target-description</span></code> と入力します。詳しくは <a class="reference external" href="https://www.accesstomemory.org/docs/latest/user-manual/glossary/glossary/">AtoM用語集</a> の <code class="docutils literal notranslate"><span class="pre">slug</span></code> を参照してください。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/atom-access-system-id.png"><img alt="画像は、アクセスシステム識別子として定義されたAtoMスラッグを持つ新しい転送を示します" class="align-center" src="../../_images/atom-access-system-id.png" style="width: 60%;" />
+</a>
+<ol class="arabic simple" start="2">
+<li><p>Process your transfer. You must select <code class="docutils literal notranslate"><span class="pre">Normalize</span> <span class="pre">for</span> <span class="pre">preservation</span> <span class="pre">and</span>
+<span class="pre">access</span></code> or <code class="docutils literal notranslate"><span class="pre">Normalize</span> <span class="pre">for</span> <span class="pre">access</span></code> at the Normalization microservice. When
+you reach the Upload DIP microservice, select &quot;Upload DIP to AtoM&quot;
+from the drop-down menu (or set this as the preconfigured choice in the
+processing configuration).</p></li>
+<li><p>AtoMのターゲット記述を確認してください。デジタルオブジェクトは、レコードの子オブジェクトとして表示されるはずです。</p></li>
+</ol>
+<section id="metadata-only-upload-to-atom">
+<span id="upload-metadata-atom"></span><h3>AtoMへのメタデータのみのアップロード<a class="headerlink" href="#metadata-only-upload-to-atom" title="Link to this heading">¶</a></h3>
+<p>Archivematica 1.6以降では、ファイルのアクセスコピーをアップロードすることなく、AIPオブジェクトのメタデータをAtoMに送信できます。これは、発見可能にしたいが、著作権やプライバシーの理由でオンラインに表示できないデジタルオブジェクトがある場合に便利なワークフローです。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>このワークフローを使用するには、AtoM 2.4以上が必要です。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>以下のAtoM-Archivematicaワークフローは、現在このワークフローではサポートされていません：</p>
+<ul class="simple">
+<li><p>説明メタデータ：説明メタデータがCSVまたはユーザーインターフェイスへの入力によって含まれている場合、メタデータは、このワークフローのAtoMには表示されません。</p></li>
+<li><p><a class="reference internal" href="../appraisal/appraisal.html#arrangement"><span class="std std-ref">arranging for AtoM</span></a> ワークフローを使用して、記述レベルが割り当てられたSIP - このワークフローでは、記述レベルは無視されます。</p></li>
+</ul>
+</div>
+<ol class="arabic simple">
+<li><p>Archival Storageに移動し、AIPを検索または閲覧します。AIPの名前をクリックするか、&quot;View&quot;します。</p></li>
+<li><p>&quot;Actionsの下、&quot;Upload DIPタブにアップロードしたいAtoMの説明のスラッグを入力します。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/metadata_only_upload.png"><img alt="メタデータをアップロードするAtoM記述のスラッグを入力" class="align-center" src="../../_images/metadata_only_upload.png" style="width: 80%;" />
+</a>
+<ol class="arabic simple" start="3">
+<li><p>アップロードに成功すると、AtoMは、AIPのファイルレベルの記述と各オブジェクトのアイテムレベルの記述を作成します。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/metadata_only_atom_1.png"><img alt="アップロードされたコンテンツを示すAtoMの記述" class="align-center" src="../../_images/metadata_only_atom_1.png" style="width: 90%;" />
+</a>
+<p>各アイテムには、それに関連付けられた一般的なサムネイルと、オリジナルのオブジェクトに関するデジタルオブジェクトメタデータがあり、ファイル名、ファイルサイズ、アップロード日、オブジェクトおよびAIP UUID、フォーマット名、フォーマットのバージョン、フォーマットのレジストリおよびキーが含まれます。</p>
+<a class="reference internal image-reference" href="../../_images/metadata_only_atom_2.png"><img alt="デジタルオブジェクトメタデータとともにアップロードされたアイテムを示すAtoMの記述" class="align-center" src="../../_images/metadata_only_atom_2.png" style="width: 90%;" />
+</a>
+</section>
+</section>
+<section id="upload-a-dip-to-archivesspace">
+<span id="upload-as"></span><h2>ArchivesSpaceにDIPをアップロード<a class="headerlink" href="#upload-a-dip-to-archivesspace" title="Link to this heading">¶</a></h2>
+<p>ArchivesSpaceインスタンスにDIPをアップロードするには、[管理]タブでArchivesSpaceの情報と資格情報を入力する必要があります。詳細については、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-as"><span class="std std-ref">ArchivesSpaceダッシュボードの設定</span></a> を参照してください。</p>
+<p>通常通り、 <a class="reference internal" href="../transfer/transfer.html#transfer"><span class="std std-ref">Transfer</span></a> 手順を使ってSIPを作成します。[正規化]で、アクセス用にパッケージを正規化するオプションのいずれかを選択します。DIPのアップロード]マイクロサービスで、[アーカイブスペースにDIPをアップロード]を選択します。[Match］ページが自動的に開きます。</p>
+<ol class="arabic simple">
+<li><p>DIP をアップロードするArchivesSpaceコレクションを見つけます。リソース名をクリックすると、コレクションをドリルダウンして、より低いレベルの記述でDIPをアップロードできます。</p></li>
+<li><p>DIPを保存する記述のレベルに移動したら、 <em>Assign DIP objects to this resource</em> を選択します。</p></li>
+<li><p>Assign Objects画面で、どのオブジェクトをどのリソースに割り当てるかを選択します。右上のフィルターボックスを使うと、特定のオブジェクトやリソースを名前で検索できます。</p></li>
+<li><p>オブジェクトとペアにしたいリソースを選択したら、右上の「 <em>Pair</em> 」をクリックします。必要に応じてステップ2～4を繰り返します。</p></li>
+<li><p>オブジェクトとリソースのペアリングが終わったら、 <em>Review matches</em> をクリックします。</p></li>
+<li><p>すべてのペアを削除して再起動するには、 <em>Restart matching</em> をクリックします。</p></li>
+<li><p>すべてが正しければ、 <em>Finish matching</em> をクリックします。</p></li>
+</ol>
+<p>これでインジェストタブに戻り、AIPのインジェストを終了できます。</p>
+<p>あるいは、マッチを手動で作成し、転送のメタデータフォルダに、 <cite>archivesspaceids.csv</cite> というファイル名で置くこともできます。たとえば、次のような転送ツリー::があるとします</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>pictures
+├── extra
+│   └── oakland03.jp2
+├── Landing zone.jpg
+├── MARBLES.TGA
+└── metadata
+  └── archivesspaceids.csv
+</pre></div>
+</div>
+<p>CSVファイルには2つのカラムが必要です。1つは転送ディレクトリ内のオリジナルファイルへの相対パス、もう1つはArchivesSpace Archival Objectの <cite>Ref ID</cite> です。Ref IDは、Archival Objectビューページの&quot;Basic information&quot;セクションから取得できます。例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Landing zone.jpg&quot;</span><span class="p">,</span><span class="mf">49807e9587</span><span class="n">de87dbafb459b34bd20b78</span>
+<span class="n">MARBLES</span><span class="o">.</span><span class="n">TGA</span><span class="p">,</span><span class="mi">468050</span><span class="n">a6add84d6d89d47a975ce5440f</span>
+<span class="n">extra</span><span class="o">/</span><span class="n">oakland03</span><span class="o">.</span><span class="n">jp2</span><span class="p">,</span><span class="mi">40</span><span class="n">caf1e2dd47675a92e25011c190fed5</span>
+</pre></div>
+</div>
+<p>作業処理設定で、 <cite>Upload DIP to ArchivesSpace</cite> オプションが選択されている場合、CSVファイルは、アップロードのマッチ作成に使用されます。そうでない場合は、インジェストタブで、 <cite>Upload DIP to ArchivesSpace</cite> を選択すると、Matchページに移動します。新しいマッチを作成する代わりに、CSVファイルから作成されたマッチを確認するには、 <cite>Review matches</cite> を直接クリックして、マッチングを確定または再開します。</p>
+</section>
+<section id="store-dip">
+<span id="id2"></span><h2>DIPの保管<a class="headerlink" href="#store-dip" title="Link to this heading">¶</a></h2>
+<p>Archivematicaでは、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/#index" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Storage Service</span></a> で設定した場所にDIPを保管するオプションも提供しています。これは、ローカルサーバー、NFSマウント、またはDuraCloudなどの他のストレージプロトコルに設定できます。</p>
+<p>DIPの保管：</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/#index" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Storage Service</span></a> で、少なくとも1つのDIP保存場所が構成されていることを確認します。</p></li>
+<li><p>[Archival保存]タブの[DIPアップロード]マイクロサービスの[DIP保存]ジョブで、[DIP保存]を選択します。</p></li>
+<li><p>DIP保管のロケーションで、設定されたオプションからDIPの保存場所を選択します。</p></li>
+</ol>
+</section>
+<section id="review-and-download-dips">
+<span id="review-dip"></span><h2>DIPのレビューとダウンロード<a class="headerlink" href="#review-and-download-dips" title="Link to this heading">¶</a></h2>
+<p>保存されているすべてのDIPは、<a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#packages-tab" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Storage Serviceのパッケージタブ</span></a> からダウンロードできます。これは、DIPをダウンロードするためのデフォルトの方法です。</p>
+<p>If you have used the Upload DIP functionality to send your DIP to AtoM,
+ArchivesSpace, or CONTENTdm, you will have the option to review the DIP from the
+Archivematica user interface. When the Upload DIP microservice is complete, a
+&quot;review&quot; link will appear:</p>
+<a class="reference internal image-reference" href="../../_images/review-dip.png"><img alt="Upload DIPマイクロサービスの&quot;review&quot;リンクをクリックします" class="align-center" src="../../_images/review-dip.png" style="width: 80%;" />
+</a>
+<p>これにより、 <cite>uploadedDIPs</cite> ディレクトリが新しいタブで開きます。黄色のフォルダアイコンをクリックしてディレクトリを移動できます。個々のDIPオブジェクト、サムネイル、またはMETSファイルをクリックして表示します。</p>
+<a class="reference internal image-reference" href="../../_images/download-dip.png"><img alt="DIPディレクトリが展開された状態を示すDIP画面をダウンロードします。" class="align-center" src="../../_images/download-dip.png" style="width: 80%;" />
+</a>
+<p>ファイルの種類とサイズによっては、別のタブで開くか、コンピューターにダウンロードされます。</p>
+</section>
+<section id="access-tab">
+<span id="id3"></span><h2>アクセスタブ<a class="headerlink" href="#access-tab" title="Link to this heading">¶</a></h2>
+<p>By clicking the Access tab in the Dashboard, you can see a table showing all
+DIPs upload to AtoM including the URL, the associated AIP, the upload
+date and status, and the option to delete from the Access tab. Note that this
+link will delete the record of the DIP in the Access tab, not the actual DIP.</p>
+<p>現時点では、[アクセス] タブには、AtoMにアップロードされた DIPへのリンクのみが提供され、他のアクセスシステムや保存されているDIPへのリンクは提供されません。</p>
+<p><a class="reference internal" href="#access"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">アクセス</a><ul>
+<li><a class="reference internal" href="#access-systems">アクセスシステム</a></li>
+<li><a class="reference internal" href="#upload-a-dip-to-atom">AtoMにDIPをアップロード</a><ul>
+<li><a class="reference internal" href="#metadata-only-upload-to-atom">AtoMへのメタデータのみのアップロード</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#upload-a-dip-to-archivesspace">ArchivesSpaceにDIPをアップロード</a></li>
+<li><a class="reference internal" href="#store-dip">DIPの保管</a></li>
+<li><a class="reference internal" href="#review-and-download-dips">DIPのレビューとダウンロード</a></li>
+<li><a class="reference internal" href="#access-tab">アクセスタブ</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../archival-storage/aic.html"
+                          title="前の章へ">アーカイブ情報コレクション（AICs）</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="contentdm.html"
+                          title="次の章へ">CONTENTdm</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/access/access.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="contentdm.html" title="CONTENTdm"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../archival-storage/aic.html" title="アーカイブ情報コレクション（AICs）"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">アクセス</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

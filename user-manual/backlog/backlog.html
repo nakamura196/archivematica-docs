@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Backlog &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="翻訳" href="../translations/translations.html" />
+    <link rel="prev" title="評価" href="../appraisal/appraisal.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../translations/translations.html" title="翻訳"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../appraisal/appraisal.html" title="評価"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Backlog</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="backlog">
+<span id="id1"></span><h1>Backlog<a class="headerlink" href="#backlog" title="Link to this heading">¶</a></h1>
+<p><a class="reference internal" href="../transfer/transfer.html#transfer-tab-microservices"><span class="std std-ref">Transferタブのマイクロサービス</span></a> の最後に、ユーザーには転送をバックログ保存スペースに置くオプションが与えられます。このバックログは、後日Archivematicaの外部や、 <a class="reference internal" href="../appraisal/appraisal.html#appraisal"><span class="std std-ref">[鑑定]タブ</span></a> の機能を使って、長期保存する前に素材の分析を行うために使用できます。</p>
+<p>バックログに置かれた転送は、基本的なデジタル保存マイクロサービスを受けています。たとえば、すべてのファイルに UUID が割り当てられ、チェックサムが生成され、ファイルのウイルススキャンが行われ、識別情報と妥当性確認情報がキャプチャされています。転送も <a class="reference external" href="https://tools.ietf.org/html/rfc8493">バッグ</a> に変換されました。</p>
+<p>バックログタブに移動すると、ユーザーは、バックログに送られた転送の表示、検索、削除を要求できます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><a class="reference internal" href="../../admin-manual/installation-setup/installation/installation.html#install-elasticsearch"><span class="std std-ref">Elasticsearch を使用せずに Archivematica</span></a> を実行している場合、または Elasticsearch の機能が制限されている場合、ダッシュボードに [バックログ] タブが表示されないことがあります。</p>
+</div>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#backlog-transfer-search"><span class="std std-ref">転送とファイルの検索</span></a></p></li>
+<li><p><a class="reference internal" href="#backlog-download"><span class="std std-ref">転送またはファイルのダウンロード</span></a></p></li>
+<li><p><a class="reference internal" href="#backlog-delete"><span class="std std-ref">バックログから転送を削除</span></a></p></li>
+<li><p><a class="reference internal" href="#backlog-retrieve"><span class="std std-ref">バックログからの転送の検索</span></a></p></li>
+</ul>
+<section id="searching-for-transfers-and-files">
+<span id="backlog-transfer-search"></span><h2>転送とファイルの検索<a class="headerlink" href="#searching-for-transfers-and-files" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>バックログタブには、バックログに送られたすべての転送のページ付きリストが表示されます。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/backlog-tab.png"><img alt="Archivematica のバックログタブに、バックログ内のすべての転送が表示されます" src="../../_images/backlog-tab.png" style="width: 80%;" />
+</a>
+</figure>
+</li>
+<li><p>バックログ転送の表形式リストで表示される列を変更するには、表の下部にある <strong>Select columns</strong> アイコンをクリックします。これにより、表で表示可能な列のリストが表示されます。青い行は、列が現在表示されていることを示します。白い行は、その列が現在表示されていないことを示します。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/backlog-select-columns.png"><img alt="列の選択オプションを示す Archivematica バックログタブ" src="../../_images/backlog-select-columns.png" style="width: 80%;" />
+</a>
+</figure>
+</li>
+<li><p>青または白の行をクリックして、列ごとにこの値を切り替えます。以下の例では、使用可能なすべての列が選択されています。列の選択内容は、ユーザー セッション間で保持され、同じ Archivematica インスタンスの他のユーザーに適用されることに注意してください。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/backlog-all-columns.png"><img alt="選択されたすべての列を示す Archivematicaバックログタブ" src="../../_images/backlog-all-columns.png" style="width: 80%;" />
+</a>
+</figure>
+</li>
+<li><p>列のヘッダーをクリックすると、昇順または降順に並べ替えることができます。上下のキャレット（矢印）が表示されます。（例：下記のファイル数を参照）</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/backlog-sort-columns.png"><img alt="ファイル数列でソートされたArchivematicaバックログタブ" src="../../_images/backlog-sort-columns.png" style="width: 80%;" />
+</a>
+</figure>
+</li>
+<li><p>なお、「ファイルを表示しますか？」オプションを有効にした場合も、同じように列を選択できます。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/backlog-show-files.png"><img alt="「ファイルを表示」 オプションを備えた 「Archivematica バックログ」 タブ" src="../../_images/backlog-show-files.png" style="width: 80%;" />
+</a>
+</figure>
+</li>
+<li><p>ページ上部の検索フィールドを使用して、バックログを検索できます。ファイル名、ファイル拡張子、アクセッション番号、インジェスト date、Transfer UUIDのいずれかに限定して検索できます。検索パラメーターを&quot;任意&quot;に設定したままにしておくと、転送名から検索結果を表示もできます。 <strong>Add new</strong> をクリックすると、検索クエリに2つ目のブーリアン文字列を追加できます。</p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="../../_images/backlog-search1.png"><img alt="転送の検索を表示する Archivematica バックログタブ。" src="../../_images/backlog-search1.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">&quot;バックログ&quot;を含む転送名を持つ転送の検索結果とファイル名に &quot;pepperbox-poppy&quot; というフレーズが完全に含まれるファイルが含まれる ダッシュAND転送。</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>検索結果で個々のファイルを表示するには、 <strong>ファイルを表示しますか?</strong> の横にあるチェックボックスをクリックします</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="../../_images/backlog-search-show-files.png"><img alt="転送の検索を表示する Archivematica バックログタブ。" src="../../_images/backlog-search-show-files.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><strong>ファイルを表示しますか?</strong> が選択され、上記と同じ検索結果が表示されます。</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+</ol>
+</section>
+<section id="downloading-transfers-or-files">
+<span id="backlog-download"></span><h2>転送またはファイルのダウンロード<a class="headerlink" href="#downloading-transfers-or-files" title="Link to this heading">¶</a></h2>
+<p>[アクション] 列の <strong>ダウンロード</strong> ボタンを選択すると、転送全体または個々のファイルをダウンロードできます。</p>
+<p>転送は、tarパッケージとしてダウンロードされます。個々のファイルはパッケージ化されずにダウンロードされます。</p>
+</section>
+<section id="deleting-transfers">
+<span id="backlog-delete"></span><h2>転送の削除<a class="headerlink" href="#deleting-transfers" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="../archival-storage/archival-storage.html#delete-aip"><span class="std std-ref">保存されたAIPの削除</span></a> と同様に、バックログの転送の削除は、2段階のプロセスで行われます。フロントエンドユーザーは、バックログにある転送の削除をリクエストできますが、管理者は、Archivematica Storage Serviceにログインして削除を確認する必要があります。</p>
+<ol class="arabic">
+<li><p>転送の削除を依頼するには、「アクション」列の赤い削除アイコンをクリックします。</p></li>
+<li><p>転送を削除する理由を入力するプロンプトが表示されます。理由を入力し、 <strong>Delete</strong> を選択します。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/backlog-delete.png"><img alt="転送を削除する理由を入力するようユーザーに求める画面。ユーザーはテキストボックスに&quot;と書き込みました。これはテキストボックスのテスト&quot;です。" src="../../_images/backlog-delete.png" style="width: 80%;" />
+</a>
+</figure>
+</li>
+<li><p>Storage Service管理者によって削除が確認されるまでは、転送はバックログタブに表示されたままとなり、まだダウンロード可能です。</p></li>
+</ol>
+</section>
+<section id="retrieving-transfers-from-the-backlog">
+<span id="backlog-retrieve"></span><h2>バックログからの転送の検索<a class="headerlink" href="#retrieving-transfers-from-the-backlog" title="Link to this heading">¶</a></h2>
+<p>バックログにある素材は、 <a class="reference internal" href="../appraisal/appraisal.html#appraisal"><span class="std std-ref">「鑑定」タブ</span></a> の機能を使用して、分析、鑑定、整理できます。バックログから転送し、長期保管のために処理する準備ができたら、「鑑定」タブ文書の <a class="reference internal" href="../appraisal/appraisal.html#arrangement-drag-drop"><span class="std std-ref">「ドラッグ＆ドロップでSIPを配列」</span></a> セクションの指示に従ってください。</p>
+<p><a class="reference internal" href="#backlog"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Backlog</a><ul>
+<li><a class="reference internal" href="#searching-for-transfers-and-files">転送とファイルの検索</a></li>
+<li><a class="reference internal" href="#downloading-transfers-or-files">転送またはファイルのダウンロード</a></li>
+<li><a class="reference internal" href="#deleting-transfers">転送の削除</a></li>
+<li><a class="reference internal" href="#retrieving-transfers-from-the-backlog">バックログからの転送の検索</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../appraisal/appraisal.html"
+                          title="前の章へ">評価</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../translations/translations.html"
+                          title="次の章へ">翻訳</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/backlog/backlog.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../translations/translations.html" title="翻訳"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../appraisal/appraisal.html" title="評価"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Backlog</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

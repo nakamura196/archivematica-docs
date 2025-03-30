@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Rocky Linux 9にArchivematicaをインストールする &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="Ansibleを使った自動インストール" href="install-ansible.html" />
+    <link rel="prev" title="UbuntuへのArchivematicaの手動インストール" href="install-ubuntu.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="install-ansible.html" title="Ansibleを使った自動インストール"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="install-ubuntu.html" title="UbuntuへのArchivematicaの手動インストール"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Rocky Linux 9にArchivematicaをインストールする</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="installing-archivematica-on-rocky-linux-9">
+<span id="install-pkg-rocky"></span><h1>Rocky Linux 9にArchivematicaをインストールする<a class="headerlink" href="#installing-archivematica-on-rocky-linux-9" title="Link to this heading">¶</a></h1>
+<p>Archivematicaバージョン1.15.0以降は、Rocky Linux 9へのインストールをサポートしています。</p>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#rocky-instructions"><span class="std std-ref">インストール方法</span></a></p></li>
+<li><p><a class="reference internal" href="#rocky-post-install-config"><span class="std std-ref">インストール後の設定</span></a></p></li>
+</ul>
+<section id="installation-instructions">
+<span id="rocky-instructions"></span><h2>インストール方法<a class="headerlink" href="#installation-instructions" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>前提条件</p>
+<p>システムの更新</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>yum<span class="w"> </span>-y<span class="w"> </span>update
+</pre></div>
+</div>
+<p>お使いの環境が SELinux を使用している場合、以下のコマンドを最低限実行する必要があります。自信のローカルセットアップには追加の設定が必要かもしれません。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allow Nginx to use ports 81 and 8001</span>
+sudo<span class="w"> </span>semanage<span class="w"> </span>port<span class="w"> </span>-m<span class="w"> </span>-t<span class="w"> </span>http_port_t<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span><span class="m">81</span>
+sudo<span class="w"> </span>semanage<span class="w"> </span>port<span class="w"> </span>-a<span class="w"> </span>-t<span class="w"> </span>http_port_t<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span><span class="m">8001</span>
+<span class="c1"># Allow Nginx to connect the MySQL server and Gunicorn backends</span>
+sudo<span class="w"> </span>setsebool<span class="w"> </span>-P<span class="w"> </span><span class="nv">httpd_can_network_connect_db</span><span class="o">=</span><span class="m">1</span>
+sudo<span class="w"> </span>setsebool<span class="w"> </span>-P<span class="w"> </span><span class="nv">httpd_can_network_connect</span><span class="o">=</span><span class="m">1</span>
+<span class="c1"># Allow Nginx to change system limits</span>
+sudo<span class="w"> </span>setsebool<span class="w"> </span>-P<span class="w"> </span>httpd_setrlimit<span class="w"> </span><span class="m">1</span>
+</pre></div>
+</div>
+</li>
+<li><p>インストール手順を完了するために、いくつかの追加リポジトリをインストールする必要があります。</p>
+<ul class="simple">
+<li><p>エンタープライズLinuxの追加パッケージ：</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>epel-release<span class="w"> </span>yum-utils
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>yum-config-manager<span class="w"> </span>--enable<span class="w"> </span>crb
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Elasticsearch（オプション）：</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><a class="reference internal" href="installation.html#install-elasticsearch"><span class="std std-ref">Elasticsearchを使用せずにArchivematicaを実行</span></a> する場合は、この手順をスキップしてください。</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>rpm<span class="w"> </span>--import<span class="w"> </span>https://artifacts.elastic.co/GPG-KEY-elasticsearch
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;cat &lt;&lt; EOF &gt; /etc/yum.repos.d/elasticsearch.repo</span>
+<span class="s1">[elasticsearch-6.x]</span>
+<span class="s1">name=Elasticsearch repository for 6.x packages</span>
+<span class="s1">baseurl=https://artifacts.elastic.co/packages/6.x/yum</span>
+<span class="s1">gpgcheck=1</span>
+<span class="s1">gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch</span>
+<span class="s1">enabled=1</span>
+<span class="s1">autorefresh=1</span>
+<span class="s1">type=rpm-md</span>
+<span class="s1">EOF&#39;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Archivematica - 以下のコマンドを使用してリポジトリをインストールします：</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;cat &lt;&lt; EOF &gt; /etc/yum.repos.d/archivematica.repo</span>
+<span class="s1">[archivematica]</span>
+<span class="s1">name=archivematica</span>
+<span class="s1">baseurl=https://packages.archivematica.org/1.16.x/rocky9/</span>
+<span class="s1">gpgcheck=1</span>
+<span class="s1">gpgkey=https://packages.archivematica.org/GPG-KEY-archivematica-sha512</span>
+<span class="s1">enabled=1</span>
+<span class="s1">EOF&#39;</span>
+
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;cat &lt;&lt; EOF &gt; /etc/yum.repos.d/archivematica-extras.repo</span>
+<span class="s1">[archivematica-extras]</span>
+<span class="s1">name=archivematica-extras</span>
+<span class="s1">baseurl=https://packages.archivematica.org/1.16.x/rocky9-extras</span>
+<span class="s1">gpgcheck=1</span>
+<span class="s1">gpgkey=https://packages.archivematica.org/GPG-KEY-archivematica-sha512</span>
+<span class="s1">enabled=1</span>
+<span class="s1">EOF&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Elasticsearch、MariaDB、Gearmand などの一般的なサービスは、Archivematica をインストールする前にインストールして有効にしておく必要があります。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematicaをインデックスレスモードで実行している場合は、Elasticsearchを有効にしないでください。</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>java-1.8.0-openjdk-headless<span class="w"> </span>mariadb-server<span class="w"> </span>gearmand
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>elasticsearch
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>elasticsearch
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>elasticsearch
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>mariadb
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>mariadb
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>gearmand
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>gearmand
+</pre></div>
+</div>
+</li>
+<li><p>MariaDBが起動したら、Archivematicaと Storage Serviceのデータベースを作成し、必要な認証情報を設定します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-H<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>mysql<span class="w"> </span>-hlocalhost<span class="w"> </span>-uroot<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;DROP DATABASE IF EXISTS MCP; CREATE DATABASE MCP CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;&quot;</span>
+sudo<span class="w"> </span>-H<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>mysql<span class="w"> </span>-hlocalhost<span class="w"> </span>-uroot<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;DROP DATABASE IF EXISTS SS; CREATE DATABASE SS CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;&quot;</span>
+sudo<span class="w"> </span>-H<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>mysql<span class="w"> </span>-hlocalhost<span class="w"> </span>-uroot<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;CREATE USER &#39;archivematica&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;demo&#39;;&quot;</span>
+sudo<span class="w"> </span>-H<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>mysql<span class="w"> </span>-hlocalhost<span class="w"> </span>-uroot<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GRANT ALL ON MCP.* TO &#39;archivematica&#39;@&#39;localhost&#39;;&quot;</span>
+sudo<span class="w"> </span>-H<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>mysql<span class="w"> </span>-hlocalhost<span class="w"> </span>-uroot<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GRANT ALL ON SS.* TO &#39;archivematica&#39;@&#39;localhost&#39;;&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Archivematica Storage Serviceのインストール</p>
+<ul>
+<li><p>まず、パッケージをインストールします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python-pip<span class="w"> </span>archivematica-storage-service
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">archivematica</span></code> ユーザーを使ってデータベース移行を適用します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">set -a -e -x</span>
+<span class="s2">source /etc/sysconfig/archivematica-storage-service</span>
+<span class="s2">cd /usr/lib/archivematica/storage-service</span>
+<span class="s2">/usr/share/archivematica/virtualenvs/archivematica-storage-service/bin/python manage.py migrate</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>次に、archivematica-storage-service、rngd（暗号化されたスペースに必要）、Nginxフロントエンドを有効にして起動します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>archivematica-storage-service
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>archivematica-storage-service
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>nginx
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>nginx
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>rngd
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>rngd
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Storage Serviceは、 <code class="docutils literal notranslate"><span class="pre">http://&lt;ip&gt;:8001</span></code> で利用可能になります。</p>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Archivematica DashboardとMCPServerのインストール</p>
+<p>Archivematicaが認識する環境変数には、設定方法を変更するために使用できるものが多数あります。全リストは、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/dashboard/install/README.md">Dashboard install README</a> 、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/MCPClient/install/README.md">MCPClient install README</a> 、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/MCPServer/install/README.md">MCPServer install README</a> を参照してください。</p>
+<ul>
+<li><p>まず、パッケージをインストールします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>archivematica-common<span class="w"> </span>archivematica-mcp-server<span class="w"> </span>archivematica-dashboard
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">archivematica</span></code> ユーザーを使ってデータベース移行を適用します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">set -a -e -x</span>
+<span class="s2">source /etc/sysconfig/archivematica-dashboard</span>
+<span class="s2">cd /usr/share/archivematica/dashboard</span>
+<span class="s2">/usr/share/archivematica/virtualenvs/archivematica/bin/python manage.py migrate</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>サービスを開始し、有効にします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>archivematica-mcp-server
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>archivematica-mcp-server
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>archivematica-dashboard
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>archivematica-dashboard
+</pre></div>
+</div>
+</li>
+<li><p>ダッシュボード設定ファイルを読み込むためにNginxを再起動します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>nginx
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ダッシュボードは、 <code class="docutils literal notranslate"><span class="pre">http://&lt;ip&gt;:81</span></code> で入手できます</p>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Archivematica MCPClientのインストール</p>
+<ul>
+<li><p>パッケージをインストールします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>archivematica-mcp-client
+</pre></div>
+</div>
+</li>
+<li><p>ClamAVの設定を微調整します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/^#TCPSocket/TCPSocket/g&#39;</span><span class="w"> </span>/etc/clamd.d/scan.conf
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/^Example//g&#39;</span><span class="w"> </span>/etc/clamd.d/scan.conf
+</pre></div>
+</div>
+</li>
+<li><p>インデックスレスモード：</p>
+<p>Archivematicaをインデックスレスモード（Elasticsearchを使用しないモード）で実行する場合は、関連する環境変数を <code class="docutils literal notranslate"><span class="pre">false</span></code> に設定する行を追加して、関連するsystemd EnvironmentFileファイルを変更します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_DASHBOARD_DASHBOARD_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/sysconfig/archivematica-dashboard&#39;</span>
+sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_MCPSERVER_MCPSERVER_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/sysconfig/archivematica-mcp-server&#39;</span>
+sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/sysconfig/archivematica-mcp-client&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>その後、サービスを有効にして開始/再起動できます</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>archivematica-mcp-client
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>archivematica-mcp-client
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>fits-nailgun
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>fits-nailgun
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>clamd@scan
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>clamd@scan
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-dashboard
+sudo<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-mcp-server
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>インストールの最終処理</p>
+<p><strong>設定</strong></p>
+<p>各サービスには、/etc/sysconfig/archivematica-packagenameに設定ファイルがあります</p>
+<p><strong>トラブルシューティング</strong></p>
+<p>IPv6が無効になっている場合、Nginxは起動を拒否するかもしれません。その場合は、/etc/nginxで使用するlistenディレクティブが[::]：80のようなIPv6アドレスを使っていないことを確認してください。</p>
+<p>Rocky Linuxは、firewalldをインストールし、ポート81と8001をブロックするデフォルトのルールを実行します。ダッシュボードとStorage Serviceにアクセスできない場合は、以下のコマンドを使用してfirewalldが実行されているかどうかを確認します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>firewalld
+</pre></div>
+</div>
+<p>firewalldが動作している場合、ファイアウォールのルールを変更して、自らの場所からポート81と8001へのアクセスを許可する必要があるでしょう：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>firewall-cmd<span class="w"> </span>--add-port<span class="o">=</span><span class="m">81</span>/tcp<span class="w"> </span>--permanent
+sudo<span class="w"> </span>firewall-cmd<span class="w"> </span>--add-port<span class="o">=</span><span class="m">8001</span>/tcp<span class="w"> </span>--permanent
+</pre></div>
+</div>
+</li>
+<li><p><a class="reference internal" href="#rocky-post-install-config"><span class="std std-ref">インストール後の設定</span></a> を完了します。</p></li>
+</ol>
+</section>
+<section id="post-install-configuration">
+<span id="rocky-post-install-config"></span><h2>インストール後の設定<a class="headerlink" href="#post-install-configuration" title="Link to this heading">¶</a></h2>
+<p>新規インストールが正常に完了したら、以下の手順に従って新しいサーバーの設定を完了します。</p>
+<ol class="arabic">
+<li><p>Storage Serviceは、Archivematicaダッシュボードとは別のWebアプリケーションとして実行されます。RPMパッケージを使用してデプロイする場合、Storage Serviceは、デフォルトでポート8001で公開されます。ウェブブラウザを使用して、インストール先のマシンのIPアドレス（例： <code class="docutils literal notranslate"><span class="pre">http://&lt;MY-IP-ADDR&gt;:8001</span></code> （ローカルで開発する場合は、 <code class="docutils literal notranslate"><span class="pre">http://localhost:8001</span></code> または <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8001</span></code> ）からStorage Serviceに移動します）。</p>
+<p>localhostの代わりにIPアドレスまたは完全修飾ドメイン名を使用している場合は、ファイアウォールのルールを設定し、Archivematicaを使用するためにポート81と8001のみへのアクセスを許可する必要があります。</p>
+</li>
+<li><p>Storage Serviceには独自のユーザーセットがあります。フル管理者権限を持つ新しいユーザーを作成してください:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">archivematica</span> <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot; </span><span class="se">\</span>
+<span class="s2">    set -a -e -x</span>
+    <span class="n">source</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">default</span><span class="o">/</span><span class="n">archivematica</span><span class="o">-</span><span class="n">storage</span><span class="o">-</span><span class="n">service</span> <span class="o">||</span> \
+        <span class="n">source</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">archivematica</span><span class="o">-</span><span class="n">storage</span><span class="o">-</span><span class="n">service</span> \
+            <span class="o">||</span> <span class="p">(</span><span class="n">echo</span> <span class="s1">&#39;Environment file not found&#39;</span><span class="p">;</span> <span class="n">exit</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">archivematica</span><span class="o">/</span><span class="n">storage</span><span class="o">-</span><span class="n">service</span>
+    <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">archivematica</span><span class="o">/</span><span class="n">virtualenvs</span><span class="o">/</span><span class="n">archivematica</span><span class="o">-</span><span class="n">storage</span><span class="o">-</span><span class="n">service</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
+  <span class="s2">&quot;;</span>
+</pre></div>
+</div>
+<p>このユーザーを作成すると、APIキーが自動的に生成され、そのキーでArchivematicaパイプラインをStorage Service APIに接続します。APIキーは、Webインターフェースから確認できます（ <strong>Administration &gt; Users</strong> ）。</p>
+</li>
+<li><p>インストールを完了するには、Webブラウザを使用してArchivematicaのダッシュボードに移動し、インストールを行ったマシンのIPアドレス（例： <code class="docutils literal notranslate"><span class="pre">http://&lt;MY-IP-ADDR&gt;:81</span></code> （ローカルで開発セットアップを行う場合は、 <code class="docutils literal notranslate"><span class="pre">http://localhost:81</span></code> または <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:81</span></code> ））を使用します。</p></li>
+<li><p>「ようこそ」ページで、組織名、組織識別子、ユーザー名、メールアドレス、パスワードを入力し、Archivematicaパイプラインの管理ユーザーを作成します。</p></li>
+<li><p>次の画面で、Storage ServiceのURLとユーザー名を入力し、ステップ（2）でコピーしたAPIキーを貼り付けて、パイプラインをStorage Serviceに接続します。</p>
+<ul class="simple">
+<li><p>Storage ServiceとArchivematicaダッシュボードが同じマシンにインストールされている場合は、この画面でStorage ServiceのURLとして <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8001</span></code> を与える必要があります。</p></li>
+<li><p>ストレージサービスと Archivematica ダッシュボードが異なるノード（サーバ）にインストールされている場合は、ストレージサービスインスタンスの IP アドレスまたは完全修飾ドメイン名（例： <code class="docutils literal notranslate"><span class="pre">http://&lt;MY-IP-ADDR&gt;:8001</span></code> * ）を使用する必要があります。ファイアウォールのルール（例：iptables、ufw、AWS セキュリティグループ）が、ダッシュボードの IP から適切なポートの ストレージサービスIP へのリクエストを許可するように設定されていることを確認しなければなりません。</p></li>
+</ul>
+</li>
+</ol>
+<p><a class="reference internal" href="#install-pkg-rocky"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Rocky Linux 9にArchivematicaをインストールする</a><ul>
+<li><a class="reference internal" href="#installation-instructions">インストール方法</a></li>
+<li><a class="reference internal" href="#post-install-configuration">インストール後の設定</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="install-ubuntu.html"
+                          title="前の章へ">UbuntuへのArchivematicaの手動インストール</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="install-ansible.html"
+                          title="次の章へ">Ansibleを使った自動インストール</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/admin-manual/installation-setup/installation/install-rocky.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="install-ansible.html" title="Ansibleを使った自動インストール"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="install-ubuntu.html" title="UbuntuへのArchivematicaの手動インストール"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Rocky Linux 9にArchivematicaをインストールする</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

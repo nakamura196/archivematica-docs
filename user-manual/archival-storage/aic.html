@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>アーカイブ情報コレクション（AICs） &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="アクセス" href="../access/access.html" />
+    <link rel="prev" title="AIPの構造" href="aip-structure.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../access/access.html" title="アクセス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="aip-structure.html" title="AIPの構造"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">アーカイブ情報コレクション（AICs）</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="archival-information-collections-aics">
+<span id="aic"></span><h1>アーカイブ情報コレクション（AICs）<a class="headerlink" href="#archival-information-collections-aics" title="Link to this heading">¶</a></h1>
+<p>データセットやデジタルオブジェクトのコレクションは、大規模で異質な場合があるため、1つのデータセットやデジタルオブジェクトのコレクションが複数のAIPに分割されることがあります。このような場合、これらのAIPを知的結合して1つのアーカイブ情報コレクション（AIC）とできます。OAIS参照モデルでは、&quot;コンテンツ情報が他のアーカイブ情報パッケージの集合体であるアーカイブ情報パッケージと定義されています。&quot;（OAIS、1-9）</p>
+<p>ArchivematicaでAICを作成する際、個々のAIPは、物理的に結合されません。AIC自体も別個のパッケージであり、メタデータ（具体的には、AICに属するすべてのAIPをリストした特殊なMETSファイル）のみを含んでいます。</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#create-aic"><span class="std std-ref">アーカイブ情報コレクションの作成</span></a></p></li>
+<li><p><a class="reference internal" href="#search-aic"><span class="std std-ref">AICの検索</span></a></p></li>
+<li><p><a class="reference internal" href="#update-aic"><span class="std std-ref">AICの更新</span></a></p></li>
+<li><p><a class="reference internal" href="#aic-contents"><span class="std std-ref">AICの内容</span></a></p></li>
+</ul>
+<section id="create-an-archival-information-collection">
+<span id="create-aic"></span><h2>アーカイブ情報コレクションの作成<a class="headerlink" href="#create-an-archival-information-collection" title="Link to this heading">¶</a></h2>
+<p>AICの作成は、2つのステップからなります。まず、AIPを作成しなければなりません。AICを作成する前に、必要なAIPをすべて作成できれば最も簡単ですが、必要であれば、 <a class="reference internal" href="#update-aic"><span class="std std-ref">AICを更新する</span></a> 方法についての情報が以下にあります。</p>
+<p>以下の方法は、AIPになる前に、各転送にAICに関するメタデータ（識別子）を追加します。これはオプションですが、AICを形成するAIPを検索するのに役立つ方法です。AIC識別子を使用しない場合は、AICに含まれるAIP（AIP名）を検索できる他の方法を使用する必要があります。AIC識別子を追加しない場合は、後でAICのコンポーネントAIPを <a class="reference internal" href="#search-aic"><span class="std std-ref">検索</span></a> するのが難しくなる可能性があることに注意してください。</p>
+<p>第2段階は、AIC識別子（または他の検索パラメーター）を使って、複数のAIPをAICに接続します。</p>
+<p>説明されている方法で、ユーザーは、転送処理中にAIC識別子を手動で入力する必要があります；しかし、 <a class="reference internal" href="../transfer/import-metadata.html#metadata-csv"><span class="std std-ref">メタデータCSV</span></a> を使って、AIC 識別子を追加することも可能です。この場合、CSV に <code class="docutils literal notranslate"><span class="pre">dcterms.isPartOf</span></code> というカラムを追加します。この方法では、ご希望の識別子を&quot;AIC#&quot;として付加する必要があります。これは、Archivematicaのメタデータフォームを使ってデータを入力する際に自動的に行われます。</p>
+<section id="step-1-create-your-aips">
+<span id="aic-step-1"></span><h3>ステップ1：AIP を作成<a class="headerlink" href="#step-1-create-your-aips" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="../transfer/transfer.html#transfer"><span class="std std-ref">転送</span></a> を作成します。この転送は、任意のデータで構成でき、任意の転送タイプを使用して作成できます。</p></li>
+<li><p>必要に応じて、転送のメタデータボタンをクリックして、転送にAIC識別子を追加します。これは、 <code class="docutils literal notranslate"><span class="pre">Microservice:</span> <span class="pre">Add</span> <span class="pre">final</span> <span class="pre">metadata</span></code> より前に行う必要があります。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/AIC-metadata-button.png"><img alt="転送のメタデータを編集するには、転送名の右側にあるメタデータボタンをクリックしてください" class="align-center" src="../../_images/AIC-metadata-button.png" style="width: 80%;" />
+</a>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematicaは、メタデータの追加を忘れないように設定できます。 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> で、フィールド <code class="docutils literal notranslate"><span class="pre">Reminder:</span> <span class="pre">add</span> <span class="pre">metadata</span> <span class="pre">if</span> <span class="pre">desired</span></code> を <code class="docutils literal notranslate"><span class="pre">None</span></code> に設定します。</p>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>メタデータボタンをクリックすると、転送のメタデータ情報画面が開いたはずです。メタデータの見出しの下で、 <strong>Add</strong> をクリックしてください。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/AIC-add-metadata.png"><img alt="メタデータの下の[追加]をクリック" class="align-center" src="../../_images/AIC-add-metadata.png" style="width: 80%;" />
+</a>
+<ol class="arabic simple" start="4">
+<li><p><strong>Part of AIC</strong> フィールドに、AIC識別子を入力します。必要であれば、転送のための他の説明メタデータを追加もできます。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/AIC-add-identifier.png"><img alt="メタデータの追加画面で、[AICの一部] フィールドに値を入力します。" class="align-center" src="../../_images/AIC-add-identifier.png" style="width: 80%;" />
+</a>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>AICの識別子は、文字と数字を自由に組み合わせることができます。</p>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>画面下部で、 <strong>作成</strong> をクリックします。</p></li>
+<li><p>AIPの処理を終了し、ストレージに置きます。</p></li>
+</ol>
+<p>ステップ1から6を繰り返して、必要な数のAIPを作成します。AIC識別子を使用してAIPを接続する予定の場合は、 <strong>AICの一部</strong> フィールドに同じ番号を入力してください。すべてのAIPを作成したら、ステップ2に進み、AICを作成します。</p>
+</section>
+<section id="step-2-create-the-aic">
+<span id="aic-step-2"></span><h3>ステップ2：AICの作成<a class="headerlink" href="#step-2-create-the-aic" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>すべてのAIPが保存されたら、Archival Storageタブをクリックします。</p></li>
+<li><p>AICに含まれるAIPを検索します。ここでAICの識別子が役に立ちます。 <strong>AICの一部</strong> に同じ値を持つすべてのAIPを検索するには、検索ボックスに <code class="docutils literal notranslate"><span class="pre">AIC#[identifier]</span></code> を入力し、 <code class="docutils literal notranslate"><span class="pre">[identifier]</span></code> を入力した識別子で置き換えます。検索パラメータとして <code class="docutils literal notranslate"><span class="pre">Part</span> <span class="pre">of</span> <span class="pre">AIC</span></code> を選択します。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/AIC-search.png"><img alt="アーカイブストレージでAIPを検索" class="align-center" src="../../_images/AIC-search.png" style="width: 80%;" />
+</a>
+<ol class="arabic simple" start="3">
+<li><p>AICに含めたいAIPのみが検索結果に含まれていることを確認したら、 <strong>AICを作成</strong> をクリックします。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/AIC-create.png"><img alt="[AICボタンの作成]ボタンをクリック" class="align-center" src="../../_images/AIC-create.png" style="width: 80%;" />
+</a>
+<ol class="arabic simple" start="4">
+<li><p>AICのメタデータ入力テンプレートが表示されます。最低限、AICに識別子を付ける必要があります。Archivematicaは、この識別子を、これから生成するAICパッケージの名前として使用します。必要であれば、このフォームを使ってAICに関するメタデータを追加もできます。入力が終わったら、メタデータ入力テンプレートの下にある <strong>Create</strong> をクリックします。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/AIC-package-metadata.png"><img alt="AICに関するメタデータを入力します。" class="align-center" src="../../_images/AIC-package-metadata.png" style="width: 80%;" />
+</a>
+<ol class="arabic simple" start="5">
+<li><p>インジェストタブに移動します。AICが新しいインジェストとして表示されます。それを承認します。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/AIC-approve.png"><img alt="[インジェスト]タブで[AIC]を承認" class="align-center" src="../../_images/AIC-approve.png" style="width: 80%;" />
+</a>
+<ol class="arabic simple" start="6">
+<li><p>AICの処理を続け、アーカイブストレージに入れます。</p></li>
+</ol>
+</section>
+</section>
+<section id="search-for-aics">
+<span id="search-aic"></span><h2>AICの検索<a class="headerlink" href="#search-for-aics" title="Link to this heading">¶</a></h2>
+<p>AICまたはAICを構成するAIPのいずれかを取り出す必要がある場合は、Archival Storageタブで取り出すことができます。</p>
+<p>Archival Storageタブを閲覧中にAIC情報を見るには、結果表の下にある <strong>Select columns</strong> をクリックし、 <code class="docutils literal notranslate"><span class="pre">AIC</span></code> 行をハイライトします。検索結果には、AIPがAICに含まれるかどうか（あるいはそれ自体がAICであるかどうか）の情報を提供する列 <code class="docutils literal notranslate"><span class="pre">AIC</span></code> が含まれるようになりました。</p>
+<a class="reference internal image-reference" href="../../_images/AIC-show.png"><img alt="AIC列はAIC識別子を示します" class="align-center" src="../../_images/AIC-show.png" style="width: 80%;" />
+</a>
+<p>上のスクリーンショットでは、最初の4つのAIPがAICの一部であるのに対し、5番目の結果はAIC自体であることに注意してください。最後の2つの結果はAICでもAICの一部でもありません。これはワイルドカード検索であり、現在アーカイブストレージにあるものをすべて表示します。</p>
+<p>特定のAICに属するAIPを検索するには、検索ボックスに <code class="docutils literal notranslate"><span class="pre">AIC#[identifier]</span></code> を入力し、 <code class="docutils literal notranslate"><span class="pre">[identifier]</span></code> をAIP作成時に入力した識別子で置き換えます（上記の <a class="reference internal" href="#aic-step-1"><span class="std std-ref">ステップ1</span></a> を参照）。検索パラメーターとして <code class="docutils literal notranslate"><span class="pre">Part</span> <span class="pre">of</span> <span class="pre">AIC</span></code> を選択します。</p>
+<a class="reference internal image-reference" href="../../_images/AIC-find-AIPs.png"><img alt="アーカイブストレージでAIPを検索" class="align-center" src="../../_images/AIC-find-AIPs.png" style="width: 80%;" />
+</a>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>上記の <a class="reference internal" href="#aic-step-1"><span class="std std-ref">ステップ 1</span></a> で説明したように、各 AIP に AIC 識別子を追加して AIC を作成しなかった場合、AIC のコンポーネント AIP を見つけるのがより困難になる可能性があります。AIC パッケージをダウンロードし、その中に含まれる METSファイルを確認して、AIC を構成するAIPを確認する必要がある場合があります。</p>
+</div>
+<p>AICの識別子を使って特定のAICを検索できます。検索ボックスに <code class="docutils literal notranslate"><span class="pre">AIC#[identifier]</span></code> と入力し、 <code class="docutils literal notranslate"><span class="pre">[identifier]</span></code> をAICの識別子に置き換えます。検索パラメーターとして <code class="docutils literal notranslate"><span class="pre">AIC</span> <span class="pre">identifier</span></code> を選択します。</p>
+<a class="reference internal image-reference" href="../../_images/AIC-find-by-identifier.png"><img alt="AIC識別子を使ってAICを検索" class="align-center" src="../../_images/AIC-find-by-identifier.png" style="width: 80%;" />
+</a>
+<p>AICとそれに属するAIPの両方を見たい場合は、ブール検索を行うことができます。</p>
+<ol class="arabic simple">
+<li><p>検索ボックスに <code class="docutils literal notranslate"><span class="pre">AIC#[identifier]</span></code> を入力し、 <code class="docutils literal notranslate"><span class="pre">[identifier]</span></code> をAIP作成時に入力した識別子に置き換えて、AIPを検索します。検索パラメーターとして <code class="docutils literal notranslate"><span class="pre">Part</span> <span class="pre">of</span> <span class="pre">AIC</span></code> を選択します。</p></li>
+<li><p>検索ボックスの下にある <strong>新規追加</strong> をクリックして2番目の検索クエリを追加します</p></li>
+<li><p>ブーリアン演算子を <code class="docutils literal notranslate"><span class="pre">OR</span></code> に変更します。</p></li>
+<li><p>2行目のクエリ行で、検索ボックスに <code class="docutils literal notranslate"><span class="pre">AIC#[identifier]</span></code> と入力し、 <code class="docutils literal notranslate"><span class="pre">[identifier]</span></code> をAICの識別子に置き換えます。検索パラメーターとして <code class="docutils literal notranslate"><span class="pre">AIC</span> <span class="pre">identifier</span></code> を選択します。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/AIC-find-all.png"><img alt="AIC識別子を使ってAICを検索" class="align-center" src="../../_images/AIC-find-all.png" style="width: 80%;" />
+</a>
+</section>
+<section id="update-an-aic">
+<span id="update-aic"></span><h2>AICの更新<a class="headerlink" href="#update-an-aic" title="Link to this heading">¶</a></h2>
+<p>AICを更新する最も一般的な理由は、AIPを追加することです。そのためには、オリジナルのAICを削除し、新しいAICを作成しなければなりません。</p>
+<p>AIC の削除は、AIP の削除と同じ方法で行います。AIP の削除の詳細については、 <a class="reference internal" href="archival-storage.html#delete-aip"><span class="std std-ref">AIP の削除</span></a> を参照してください。</p>
+<p>新しい AIC を作成するには、上記の手順に従って、 <a class="reference internal" href="#create-aic"><span class="std std-ref">AIC を作成</span></a> します。</p>
+</section>
+<section id="aic-contents">
+<span id="id1"></span><h2>AICの内容<a class="headerlink" href="#aic-contents" title="Link to this heading">¶</a></h2>
+<p>AIC は AIP に似たパッケージですが、メタデータのみを含めます。基本的な AIC は、::と同じ構造になります</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>my_aic-ea0f2429-7d9f-49df-8e5a-2e6db0fb5fce/
+  ├── bag-info.txt
+  ├── bagit.txt
+  ├── data
+  │   ├── metadata
+  │   │   └── METS.7a3a0b11-fbdd-484d-a58c-7d66273c3f23.xml
+  │   └── METS.ea0f2429-7d9f-49df-8e5a-2e6db0fb5fce.xml
+  ├── manifest-sha256.txt
+  └── tagmanifest-md5.txt
+</pre></div>
+</div>
+<p>AIP と同様に、AIC も BagIt の仕様に従ってバッグされます。Archivematica が BagIt をどのように実装しているかについては、 <a class="reference internal" href="aip-structure.html#aip-structure"><span class="std std-ref">AIP 構造</span></a> を参照してください。</p>
+<p>AIC には 2 つの METS ファイルが含まれています。最初のものは <code class="docutils literal notranslate"><span class="pre">data</span></code> サブディレクトリにあり、AICパッケージ自体のMETSファイルで、AIP METSファイルに類似しています。</p>
+<p><code class="docutils literal notranslate"><span class="pre">data/metadata</span></code> 内にある2番目のMETSファイルには、AICとそのコンポーネントAIPに関する情報が含まれています。AICの説明メタデータセクション (dmdSec) には、AICの作成時に追加されたDublin Coreが含まれています。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;DC&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;dcterms:dublincore</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xmlns:dcterms=</span><span class="s">&quot;http://purl.org/dc/terms/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://purl.org/dc/terms/ http://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:title&gt;</span>My<span class="w"> </span>AIC<span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:type&gt;</span>Archival<span class="w"> </span>Information<span class="w"> </span>Collection<span class="nt">&lt;/dc:type&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:identifier&gt;</span>AIC#1995-01-Council-Reports<span class="nt">&lt;/dc:identifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dcterms:extent&gt;</span>3<span class="w"> </span>AIPs<span class="nt">&lt;/dcterms:extent&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/dcterms:dublincore&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+<p>METSファイルは、どのAIPがこのAICに含まれているかも示しています。AIC のコンポーネント AIP は、METS ファイルの fileSec です.</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:fileSec&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:fileGrp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;aic-part2-d6fcffe4-5eef-4ae8-a0b8-b848ed7d7851&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;aic-part1-b7de7bb6-e263-4a6f-8ae6-d0c9bff04365&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;aic-part3-16f43cd7-4b2d-4a32-bee3-138adade4399&quot;</span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:fileGrp&gt;</span>
+<span class="nt">&lt;/mets:fileSec&gt;</span>
+</pre></div>
+</div>
+<p>この情報は、METS の論理構造マップ（logical structMap）にも表示されます。論理 structMap は AIC の階層表示であり、記述される項目間の関係（すなわち、コンポーネント AIP がこの AIC の一部であること）を示すことを意図しています。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:structMap</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;logical&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;Archival Information Collection&quot;</span><span class="w"> </span><span class="na">DMDID=</span><span class="s">&quot;dmdSec_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;aic-part2&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;aic-part2-d6fcffe4-5eef-4ae8-a0b8-b848ed7d7851&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;aic-part1&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;aic-part1-b7de7bb6-e263-4a6f-8ae6-d0c9bff04365&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;aic-part3&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;aic-part3-16f43cd7-4b2d-4a32-bee3-138adade4399&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="nt">&lt;/mets:structMap&gt;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#aic"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">アーカイブ情報コレクション（AICs）</a><ul>
+<li><a class="reference internal" href="#create-an-archival-information-collection">アーカイブ情報コレクションの作成</a><ul>
+<li><a class="reference internal" href="#step-1-create-your-aips">ステップ1：AIP を作成</a></li>
+<li><a class="reference internal" href="#step-2-create-the-aic">ステップ2：AICの作成</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#search-for-aics">AICの検索</a></li>
+<li><a class="reference internal" href="#update-an-aic">AICの更新</a></li>
+<li><a class="reference internal" href="#aic-contents">AICの内容</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="aip-structure.html"
+                          title="前の章へ">AIPの構造</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../access/access.html"
+                          title="次の章へ">アクセス</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/archival-storage/aic.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../access/access.html" title="アクセス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="aip-structure.html" title="AIPの構造"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">アーカイブ情報コレクション（AICs）</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

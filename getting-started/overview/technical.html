@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>技術アーキテクチャ &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="マイクロサービス" href="microservices.html" />
+    <link rel="prev" title="ウェブベースのダッシュボード" href="dashboard.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="microservices.html" title="マイクロサービス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="dashboard.html" title="ウェブベースのダッシュボード"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">技術アーキテクチャ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="technical-architecture">
+<span id="technical-arch"></span><h1>技術アーキテクチャ<a class="headerlink" href="#technical-architecture" title="Link to this heading">¶</a></h1>
+<figure class="align-center" id="id1" style="width: 40%">
+<a class="reference internal image-reference" href="../../_images/AMarch.png"><img alt="Archivematica技術概要図" src="../../_images/AMarch.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Archivematicaの技術概要</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>このページでは、Archivematicaの技術アーキテクチャの概要を説明します。</p>
+<section id="microservices-design-pattern">
+<span id="technical-microservices"></span><h2>マイクロサービス設計パターン<a class="headerlink" href="#microservices-design-pattern" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、デジタル保存のためのマイクロサービス・アプローチを実装しています。Archivematicaのマイクロサービスは、OAISの情報パッケージに相当する概念的なエンティティ上で動作する粒度の細かいシステムタスク：投稿情報パッケージ（SIP）、アーカイブ情報パッケージ（AIP）、普及情報パッケージ（DIP）です。情報パッケージの物理的な構造には、ファイル、チェックサム、ログ、提出文書、XMLメタデータなどが含まれます。</p>
+<p>詳細は、 <a class="reference internal" href="microservices.html#microservices"><span class="std std-ref">マイクロサービス</span></a> を参照してください。</p>
+</section>
+<section id="external-tools">
+<span id="technical-external-tools"></span><h2>外部ツール<a class="headerlink" href="#external-tools" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、オープンソースのフレームワークやサービスを利用して構築されています。</p>
+<p>詳細は、 <a class="reference internal" href="external-tools.html#external-tools"><span class="std std-ref">外部ツール</span></a> を参照してください。</p>
+</section>
+<section id="web-based-dashboard">
+<span id="technical-dashboard"></span><h2>ウェブベースのダッシュボード<a class="headerlink" href="#web-based-dashboard" title="Link to this heading">¶</a></h2>
+<p>The web dashboard allow users to process, monitor, and control the Archivematica
+workflow processes. It is developed using the Python-based Django MVC framework. The
+Dashboard provides a multi-user interface that will report on the status of
+system events and make it simpler to control and trigger specific microservices.
+This interface allows users to easily add or edit metadata, coordinate AIP and
+DIP storage, and provide preservation planning information. Notifications
+include error reports, monitoring of MCP tasks, and manual approvals in the
+workflow.</p>
+<p>詳細については、 <a class="reference internal" href="dashboard.html#web-dashboard"><span class="std std-ref">ウェブベースのダッシュボード</span></a> を参照してください。</p>
+</section>
+<section id="format-policies">
+<span id="technical-fpr"></span><h2>フォーマットのポリシー<a class="headerlink" href="#format-policies" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、移行やエミュレーション戦略をサポートするために、インジェストされたすべてのファイルのオリジナルフォーマットを保持します。しかし、主な保存戦略は、インジェスト時にファイルを保存形式とアクセス形式に正規化することです。Archivematicaは、ファイルフォーマットをフォーマットポリシー（テキスト、オーディオ、ビデオ、ラスターイメージ、ベクターイメージなど）にグループ化します。Archivematicaの保存形式は、すべてオープンスタンダードでなければなりません。さらに、フォーマットの選択は、コミュニティのベストプラクティス、フリーでオープンソースの正規化ツールの利用可能性、各メディアタイプの重要な特性の分析に基づいています。アクセスフォーマットの選択は、主にファイルフォーマット用のWebベースのビューアが普及しているかどうかに基づいています。</p>
+<p>1.0 製品リリース以降、Archivematica フォーマットポリシーは、構造化されたオンラインフォーマットポリシーレジストリ (FPR) に移動されました。FPR は、フォーマット識別情報と重要な特性分析、リスク評価、正規化ツール情報を組み合わせて、Archivematica のデフォルトの保存フォーマットとアクセスフォーマットポリシーを決定します。</p>
+<p>詳しくは、 <a class="reference internal" href="../../user-manual/preservation/preservation-planning.html#preservation-planning"><span class="std std-ref">保存計画</span></a> を参照してください。</p>
+</section>
+<section id="from-transfer-to-sip-to-aip-and-dip">
+<span id="technical-dip"></span><h2>転送からSIP、AIP、DIPへ<a class="headerlink" href="#from-transfer-to-sip-to-aip-and-dip" title="Link to this heading">¶</a></h2>
+<p>Archivematicaの主な機能は、 <a class="reference external" href="http://www.loc.gov/standards/mets/">METS</a> 、 <a class="reference external" href="http://www.loc.gov/standards/premis/">PREMIS</a> 、 <a class="reference external" href="https://confluence.ucop.edu/download/attachments/16744580/BagItSpec.pdf?version=1">Bagit</a> を使用して、デジタル転送（アクセションされたデジタルオブジェクト）を処理し、SIPに変換し、フォーマットポリシーを適用し、高品質でリポジトリに依存しないアーカイブ情報パッケージ（AIP）を作成することです。Archivematicaは、 <a class="reference external" href="https://www.accesstomemory.org/">AtoM</a> とバンドルできますが、説明メタデータとウェブ対応アクセスコピーを含む普及情報パッケージ（DIP）を、あらゆるアクセスシステム（DSpace、ContentDMなど）にアップロードするように設計されています。</p>
+</section>
+<section id="single-install">
+<span id="technical-install"></span><h2>シングルインストール<a class="headerlink" href="#single-install" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、Linuxベースのオペレーティングシステム、仮想マシン、または専用ハードウェアにインストールできます。一度のインストールで、デジタル保存ツールの全機能を利用できます。Archivematicaのクライアント／サーバ処理アーキテクチャにより、マルチノード、分散処理設定で導入でき、大規模でリソース集約型のプロダクション環境をサポートします。</p>
+<p>詳細については、 <a class="reference internal" href="../../admin-manual/installation-setup/installation/installation.html#installation"><span class="std std-ref">Archivematicaのインストール</span></a> を参照してください。</p>
+<p><a class="reference internal" href="#technical-arch"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">技術アーキテクチャ</a><ul>
+<li><a class="reference internal" href="#microservices-design-pattern">マイクロサービス設計パターン</a></li>
+<li><a class="reference internal" href="#external-tools">外部ツール</a></li>
+<li><a class="reference internal" href="#web-based-dashboard">ウェブベースのダッシュボード</a></li>
+<li><a class="reference internal" href="#format-policies">フォーマットのポリシー</a></li>
+<li><a class="reference internal" href="#from-transfer-to-sip-to-aip-and-dip">転送からSIP、AIP、DIPへ</a></li>
+<li><a class="reference internal" href="#single-install">シングルインストール</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="dashboard.html"
+                          title="前の章へ">ウェブベースのダッシュボード</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="microservices.html"
+                          title="次の章へ">マイクロサービス</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/getting-started/overview/technical.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="microservices.html" title="マイクロサービス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="dashboard.html" title="ウェブベースのダッシュボード"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">技術アーキテクチャ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ダッシュボード管理タブ &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="アンチウイルス管理" href="antivirus-admin.html" />
+    <link rel="prev" title="カスタマイズと自動化" href="customization.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="antivirus-admin.html" title="アンチウイルス管理"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="customization.html" title="カスタマイズと自動化"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ダッシュボード管理タブ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="dashboard-administration-tab">
+<span id="dashboard-config"></span><h1>ダッシュボード管理タブ<a class="headerlink" href="#dashboard-administration-tab" title="Link to this heading">¶</a></h1>
+<p>ダッシュボードの「管理」タブにあるArchivematicaの管理ページでは、アプリケーションコンポーネントの設定やユーザーの管理を行うことができます。</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#process-config"><span class="std std-ref">処理設定</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-dashboard-general"><span class="std std-ref">一般</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-dashboard-failures"><span class="std std-ref">障害</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-dashboard-transfer-source"><span class="std std-ref">転送元の場所</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-dashboard-aip-stor"><span class="std std-ref">AIPの保存場所</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-dashboard-usage"><span class="std std-ref">処理ストレージ使用状況</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-dashboard-dip-upload"><span class="std std-ref">DIPアップロード</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#admin-dashboard-atom"><span class="std std-ref">AtoM DIP upload</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-dashboard-as"><span class="std std-ref">ArchivesSpace DIPアップロード</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#admin-dashboard-premis"><span class="std std-ref">PREMISエージェント</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-dashboard-rest"><span class="std std-ref">REST API</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-dashboard-users"><span class="std std-ref">ユーザー</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-handlenet"><span class="std std-ref">サーバー設定の処理</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-language-choice"><span class="std std-ref">言語</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-version"><span class="std std-ref">バージョン</span></a></p></li>
+</ul>
+<section id="processing-configuration">
+<span id="process-config"></span><h2>処理設定<a class="headerlink" href="#processing-configuration" title="Link to this heading">¶</a></h2>
+<p>ダッシュボードの処理設定管理ページでは、転送やインジェストの際にArchivematicaが提示するジョブの決定ポイントを設定できます。Archivematicaをインストールした場合、2つのデフォルトの処理設定があります：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Default</span></code> は、 <a class="reference internal" href="../../../user-manual/transfer/transfer.html#create-transfer"><span class="std std-ref">転送タブ</span></a> から手動で開始される転送、 <a class="reference external" href="https://github.com/artefactual/automation-tools">自動化ツール</a> から自動的に開始される転送、または他の処理設定が指定されていないその他のコンテキストで使用されます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Automated</span></code> は、Jisc RDSS環境から自動的に開始される転送に使用されます（Jiscユーザーでない場合は、この設定を削除できます）。</p></li>
+</ul>
+<a class="reference internal image-reference" href="../../../_images/processing-config.png"><img alt="ダッシュボードに処理設定ページを示す画像" class="align-center" src="../../../_images/processing-config.png" style="width: 80%;" />
+</a>
+<p><strong>編集</strong> をクリックすると、これらの決定を管理するデフォルトのprocessingMCP.xmlを設定できるフォームが表示されます。 <strong>追加</strong> をクリックすると、新しい処理設定を作成できます。ウェブ・インターフェースを使用してオプションを変更すると、必要なXMLが裏で書き込まれます。</p>
+<a class="reference internal image-reference" href="../../../_images/processing-config-choices.png"><img alt="ダッシュボードに処理設定編集ページを示す画像" class="align-center" src="../../../_images/processing-config-choices.png" style="width: 80%;" />
+</a>
+<p>Archivematicaダッシュボードでの処理決定の設定については、ユーザーマニュアルの <a class="reference internal" href="../../../user-manual/administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> ページを参照してください。処理設定ページには、すべての決定ポイントとそのオプションのリストがあります。</p>
+<p><strong>リセット</strong> をクリックすることで、デフォルトおよび自動処理設定をプリセットに戻すこともできます。デフォルト処理設定のプリセットは、ユーザーマニュアルの <a class="reference internal" href="../../../user-manual/administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> に記載されています。</p>
+<p>このフォームへの変更は、 <code class="docutils literal notranslate"><span class="pre">processingMCP.xml</span></code> と名前のファイルに書き込まれます。Archivematicaダッシュボードで転送を開始すると、自動的にデフォルトのprocessingMCP.xmlが使用されます。</p>
+<section id="using-a-custom-processing-configuration-file">
+<span id="processingmcp-file"></span><h3>カスタム処理設定ファイルの使用<a class="headerlink" href="#using-a-custom-processing-configuration-file" title="Link to this heading">¶</a></h3>
+<p>より高度なワークフローで、複数の処理コンフィギュレーションを作成したい場合は、例えば、デフォルトのコンフィギュレーションに加えて、ビデオファイルに特化したコンフィギュレーションを作成したい場合があります。ユーザーインターフェイスから、 <strong>追加</strong> ボタンをクリックして、新しい処理設定を追加できます。</p>
+<p>カスタム処理設定を作成したら、 <strong>ダウンロード</strong> をクリックしてXMLファイルをダウンロードできます。このファイルの名前を <code class="docutils literal notranslate"><span class="pre">processingMCP.xml</span></code> に変更します。このファイルを転送のルートディレクトリに置きます。Archivematicaは、デフォルトの設定ではなく、このファイルを使用して処理を決定します。</p>
+<p>processingMCP.xmlは、特定のXMLフォーマットに従っています：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;processingMCP&gt;</span>
+<span class="w"> </span><span class="nt">&lt;preconfiguredChoices&gt;</span>
+<span class="w">     </span><span class="cm">&lt;!-- Display metadata reminder --&gt;</span>
+<span class="w">     </span><span class="nt">&lt;preconfiguredChoice&gt;</span>
+<span class="w">         </span><span class="nt">&lt;appliesTo&gt;</span>eeb23509-57e2-4529-8857-9d62525db048<span class="nt">&lt;/appliesTo&gt;</span>
+<span class="w">         </span><span class="nt">&lt;goToChain&gt;</span>5727faac-88af-40e8-8c10-268644b0142d<span class="nt">&lt;/goToChain&gt;</span>
+<span class="w">     </span><span class="nt">&lt;/preconfiguredChoice&gt;</span>
+<span class="w">     </span><span class="cm">&lt;!-- Extract packages --&gt;</span>
+<span class="w">     </span><span class="nt">&lt;preconfiguredChoice&gt;</span>
+<span class="w">         </span><span class="nt">&lt;appliesTo&gt;</span>dec97e3c-5598-4b99-b26e-f87a435a6b7f<span class="nt">&lt;/appliesTo&gt;</span>
+<span class="w">         </span><span class="nt">&lt;goToChain&gt;</span>01d80b27-4ad1-4bd1-8f8d-f819f18bf685<span class="nt">&lt;/goToChain&gt;</span>
+<span class="w">     </span><span class="nt">&lt;/preconfiguredChoice&gt;</span>
+<span class="w">     </span><span class="cm">&lt;!-- Delete extracted packages --&gt;</span>
+<span class="w">     </span><span class="nt">&lt;preconfiguredChoice&gt;</span>
+<span class="w">         </span><span class="nt">&lt;appliesTo&gt;</span>f19926dd-8fb5-4c79-8ade-c83f61f55b40<span class="nt">&lt;/appliesTo&gt;</span>
+<span class="w">         </span><span class="nt">&lt;goToChain&gt;</span>85b1e45d-8f98-4cae-8336-72f40e12cbef<span class="nt">&lt;/goToChain&gt;</span>
+<span class="w">     </span><span class="nt">&lt;/preconfiguredChoice&gt;</span>
+<span class="w">     </span><span class="cm">&lt;!-- Select pre-normalize file format identification command --&gt;</span>
+<span class="w">     </span><span class="nt">&lt;preconfiguredChoice&gt;</span>
+<span class="w">         </span><span class="nt">&lt;appliesTo&gt;</span>7a024896-c4f7-4808-a240-44c87c762bc5<span class="nt">&lt;/appliesTo&gt;</span>
+<span class="w">         </span><span class="nt">&lt;goToChain&gt;</span>3c1faec7-7e1e-4cdd-b3bd-e2f05f4baa9b<span class="nt">&lt;/goToChain&gt;</span>
+<span class="w">     </span><span class="nt">&lt;/preconfiguredChoice&gt;</span>
+<span class="w">     </span><span class="cm">&lt;!-- Select compression algorithm --&gt;</span>
+<span class="w">     </span><span class="nt">&lt;preconfiguredChoice&gt;</span>
+<span class="w">         </span><span class="nt">&lt;appliesTo&gt;</span>01d64f58-8295-4b7b-9cab-8f1b153a504f<span class="nt">&lt;/appliesTo&gt;</span>
+<span class="w">         </span><span class="nt">&lt;goToChain&gt;</span>9475447c-9889-430c-9477-6287a9574c5b<span class="nt">&lt;/goToChain&gt;</span>
+<span class="w">     </span><span class="nt">&lt;/preconfiguredChoice&gt;</span>
+<span class="w">     </span><span class="cm">&lt;!-- Select compression level --&gt;</span>
+<span class="w">     </span><span class="nt">&lt;preconfiguredChoice&gt;</span>
+<span class="w">         </span><span class="nt">&lt;appliesTo&gt;</span>01c651cb-c174-4ba4-b985-1d87a44d6754<span class="nt">&lt;/appliesTo&gt;</span>
+<span class="w">         </span><span class="nt">&lt;goToChain&gt;</span>414da421-b83f-4648-895f-a34840e3c3f5<span class="nt">&lt;/goToChain&gt;</span>
+<span class="w">     </span><span class="nt">&lt;/preconfiguredChoice&gt;</span>
+<span class="w">   </span><span class="nt">&lt;/preconfiguredChoices&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/processingMCP&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">appliesTo</span></code> は、ダッシュボードに表示されるマイクロサービスのジョブに関連するUUIDです。 <code class="docutils literal notranslate"><span class="pre">goToChain</span></code> は、希望する選択のUUIDであることに注意してください。</p>
+</section>
+</section>
+<section id="general">
+<span id="admin-dashboard-general"></span><h2>一般<a class="headerlink" href="#general" title="Link to this heading">¶</a></h2>
+<p>一般設定ページでは、ArchivematicaインスタンスをStorage Serviceに接続し、処理で使用するデフォルトのチェックサムアルゴリズムを設定します。</p>
+<figure class="align-center" id="id2" style="width: 70%">
+<a class="reference internal image-reference" href="../../../_images/generalConfig.png"><img alt="ダッシュボードの「管理」タブにある一般設定オプション" src="../../../_images/generalConfig.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">ダッシュボードの「管理」タブにある一般設定オプション</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="general-configuration">
+<h3>一般設定<a class="headerlink" href="#general-configuration" title="Link to this heading">¶</a></h3>
+<p>フィールド：</p>
+<ul class="simple">
+<li><p><strong>サイトURL</strong> ：Archivematicaダッシュボードの公開URLです。このフィールドはオプションです。</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematicaは、Storage Serviceに登録しようとします。Archivematicaを固定URLまたはIPアドレスでインストールした場合は、ここでサイトURLを設定する必要はありません。ただし、URLまたはIPアドレスが変更されることが予想される場合は、時間が経っても変更されないURLを使用する必要があります。</p>
+</div>
+</section>
+<section id="storage-service-options">
+<h3>Storage Serviceオプション<a class="headerlink" href="#storage-service-options" title="Link to this heading">¶</a></h3>
+<p>Archivematicaのストレージスペースとロケーションは、Storage Serviceと呼ばれるバックエンドアプリケーションによって制御されます。Storage Serviceの詳細については、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/#index" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Storage Service文書</span></a> を参照してください。</p>
+<p>フィールド：</p>
+<ul class="simple">
+<li><p><strong>Storage Service URL</strong> ：Storage Serviceの完全なURL。例https://192.168.168.192:8000</p></li>
+<li><p><strong>Storage Serviceユーザー</strong> ：認証するStorage Serviceのユーザー。Storage Serviceの認証情報をStorage Serviceの管理タブから取得します。</p></li>
+<li><p><strong>APIキー</strong> ：Storage ServiceユーザーのAPIキー。Storage Serviceの管理タブからStorage Serviceの認証情報を取得します。</p></li>
+<li><p><strong>デフォルト構成を使用</strong> ：デフォルトのスペースと場所の構成を使用してStorage Serviceをデプロイした場合は、このボックスにチェックを入れます。カスタム構成を設定した場合は、チェックを外します。</p></li>
+</ul>
+</section>
+<section id="checksum-algorithm">
+<h3>チェックサムアルゴリズム<a class="headerlink" href="#checksum-algorithm" title="Link to this heading">¶</a></h3>
+<p>転送における <em>Assign UUIDs and checksums</em> マイクロサービスで、Archivematicaがどのチェックサムアルゴリズムを使用するかを選択できます。MD5、SHA-1、SHA-256、SHA-512から選択します。</p>
+</section>
+<section id="elasticsearch-indexing">
+<h3>Elasticsearchインデックス作成<a class="headerlink" href="#elasticsearch-indexing" title="Link to this heading">¶</a></h3>
+<p>Archivematica 1.7では、Elasticsearchのインストールはオプションです。Elasticsearchは、 <a class="reference internal" href="../../../user-manual/backlog/backlog.html#backlog"><span class="std std-ref">Backlog</span></a> 、 <a class="reference internal" href="../../../user-manual/appraisal/appraisal.html#appraisal"><span class="std std-ref">Appraisal</span></a> 、 <a class="reference internal" href="../../../user-manual/archival-storage/archival-storage.html#archival-storage"><span class="std std-ref">Archival Storage</span></a> の検索に使用されるインデックスを生成します。Elasticsearchを使用せずにArchivematicaをインストールすると、コンピューティングリソースの消費量が削減され、運用の複雑さが軽減されます。Elasticsearchを無効にすると、ユーザーインターフェースにBacklog、Appraisal、Archival Storageのタブが表示されなくなり、これらの機能が利用できなくなります。</p>
+<p>一般設定のこのセクションは、Elasticsearchが有効か無効かを示します。</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="../../../_images/elasticsearch-indexing.png"><img alt="Elasticsearchインデックス作成セクションの読み取り&quot;転送関連のインデックスが有効で&quot;、&quot;AIPs関連のインデックスが有効です&quot;。" src="../../../_images/elasticsearch-indexing.png" style="width: 30%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">この例では、転送とAIPの両方でインデックスが有効です。</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>転送（「Backlog」と「Appraisal」タブ）、AIP（「Archival Storage」タブ）、またはその両方のインデックス作成を無効にすることが可能です。Elasticsearchの無効化に関する詳細は、管理者マニュアルの <a class="reference internal" href="../installation/installation.html#install-elasticsearch"><span class="std std-ref">Elasticsearch</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="failures">
+<span id="admin-dashboard-failures"></span><h2>障害<a class="headerlink" href="#failures" title="Link to this heading">¶</a></h2>
+<p>このページは、処理中に障害が発生したパッケージを表示します。</p>
+<figure class="align-center" id="id4" style="width: 70%">
+<a class="reference internal image-reference" href="../../../_images/failuresAdmin.png"><img alt="ダッシュボードの障害レポート" src="../../../_images/failuresAdmin.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">ダッシュボードの障害レポート</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>日付、名前、またはUUIDをクリックすると、障害レポートが表示されます：</p>
+<a class="reference internal image-reference" href="../../../_images/failReport.png"><img alt="転送に失敗した場合の障害レポート" class="align-center" src="../../../_images/failReport.png" style="width: 70%;" />
+</a>
+<p>障害レポートは、削除をクリックすることでダッシュボードから削除できます。</p>
+</section>
+<section id="transfer-source-location">
+<span id="admin-dashboard-transfer-source"></span><h2>転送元の場所<a class="headerlink" href="#transfer-source-location" title="Link to this heading">¶</a></h2>
+<p>Archivematicaでは、オペレーティングシステムのファイルブラウザまたはWebインターフェイスを使用して転送を開始できます。ただし、ウェブインターフェースを使用してアップロードすることはできません。これらは、Archivematica MCPサーバーにアクセス可能なボリューム上に存在し、Storage Serviceを介して設定されなければなりません。</p>
+<p>転送を開始するときは、転送に追加するファイルの1つまたは複数のディレクトリを選択する必要があります。</p>
+</section>
+<section id="aip-storage-locations">
+<span id="admin-dashboard-aip-stor"></span><h2>AIPの保存場所<a class="headerlink" href="#aip-storage-locations" title="Link to this heading">¶</a></h2>
+<p>AIP保管ディレクトリは、完成したAIPが保管されるディレクトリです。ストレージディレクトリは、Storage Serviceを使用して、転送元ディレクトリと同様の方法で指定できます。</p>
+<p>&quot;AIPストレージ場所&quot;の下にあるダッシュボードの管理タブで、転送元ディレクトリを表示できます。</p>
+</section>
+<section id="processing-storage-usage">
+<span id="admin-dashboard-usage"></span><h2>処理ストレージ使用状況<a class="headerlink" href="#processing-storage-usage" title="Link to this heading">¶</a></h2>
+<p>この管理ページのセクションは、利用可能なスペースの現在の使用状況とともに、様々な処理場所を表示します。</p>
+<a class="reference internal image-reference" href="../../../_images/ProcessingUsage.png"><img alt="管理ページの処理ストレージ使用状況" class="align-center" src="../../../_images/ProcessingUsage.png" style="width: 80%;" />
+</a>
+<p>管理者は、&quot;clear&quot;ボタンを使用して、これらの処理場所のコンテンツを削除し、サーバーの空き容量を増やすことができます。</p>
+</section>
+<section id="dip-upload">
+<span id="admin-dashboard-dip-upload"></span><h2>DIPアップロード<a class="headerlink" href="#dip-upload" title="Link to this heading">¶</a></h2>
+<p>Archivematica has access integrations with two access platforms: AtoM and
+ArchivesSpace.</p>
+<section id="atom-dip-upload">
+<span id="admin-dashboard-atom"></span><h3>AtoM DIPアップロード<a class="headerlink" href="#atom-dip-upload" title="Link to this heading">¶</a></h3>
+<p>Archivematica can upload DIPs directly to an <a class="reference external" href="https://www.accesstomemory.org">AtoM</a> website so that the
+contents can be accessed online.</p>
+<p>The AtoM DIP upload configuration page is where you specify the details
+of the AtoM installation you'd like the DIPs uploaded to (and, if
+using Rsync to transfer the DIP files, Rsync transfer details).</p>
+<p>Before setting these details, please ensure that you have a working AtoM
+site that is properly connected to Archivematica. See <a class="reference internal" href="../integrations/atom-setup.html#atom-setup"><span class="std std-ref">Using AtoM
+2.x with Archivematica</span></a> for more information.</p>
+<a class="reference internal image-reference" href="../../../_images/AtoMDIPConfig.png"><img alt="Configuration screen for AtoM DIP uploads" class="align-center" src="../../../_images/AtoMDIPConfig.png" style="width: 80%;" />
+</a>
+<p>フィールド：</p>
+<ul class="simple">
+<li><p><strong>Upload URL</strong>: the URL of the destination AtoM website.</p></li>
+<li><p><strong>Login email</strong>: the email address used to log in to AtoM.</p></li>
+<li><p><strong>Login password</strong>: the password used to log in to AtoM.</p></li>
+<li><p><strong>AtoM version</strong>: the version of the destination AtoM website.</p></li>
+<li><p><strong>Rsync target</strong>: if you'd like to send the DIP with Rsync before it is
+deposited in AtoM, enter the destination value for rsync, e.g.
+<code class="docutils literal notranslate"><span class="pre">foobar.com:/dips</span></code>. This field is optional.</p></li>
+<li><p><strong>Rsyncコマンド</strong> ：Rsyncターゲットを入力した場合に、リモート・シェルを手動で指定します（例： <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-p</span> <span class="pre">22222</span> <span class="pre">-l</span> <span class="pre">user</span></code> ）。このフィールドはオプションです。</p></li>
+<li><p><strong>デバッグモード</strong> ：障害レポートに詳細を追加したい場合は、&quot;はい&quot;を選択して、デバッグモードも有効にします。</p></li>
+</ul>
+<section id="id1">
+<h4>AtoM DIPアップロード<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<p>AtoMがリモートサーバーにインストールされている場合、Archivematicaは、SSHとrsyncを使用してDIPをAtoMサーバーの一時ディレクトリにコピーします。ArchivematicaとAtoMが共通のファイルシステム（共有ネットワークディレクトリなど）を共有している場合、このステップは不要です。</p>
+<p>Archivematicaは、RESTリクエストをAtoMに送信し、DIPのターゲットとなるアーカイブ記述をAtoMに伝えます。DIPターゲットの記述は、記述の&quot;スラッグ&quot;によって識別されます。AtoMへのDIPコンテンツの実際のアップロードは、バックグラウンドジョブを介して行われ、大規模なDIPがアップロードされる場合、処理に時間がかかることがあります。</p>
+<p>AtoMのバックグラウンドワーカーは、一時ディレクトリからDIPメタデータ（METSファイル）とデジタルオブジェクトをAtoMにアップロードし、それらをターゲット記述にリンクした後、一時ファイルを削除します。</p>
+<p>また、AtoMのユーザーインターフェイスにも変更を加える必要があります：</p>
+<ul class="simple">
+<li><p>AtoMがアップロードされたDIPを受信するには、SWORDプラグイン（Admin --&gt; Plugins --&gt; qtSwordPlugin）を有効にする必要があります。</p></li>
+<li><p>バージョン2.1以下では、ジョブスケジューリング（Admin --&gt; Settings --&gt;ジョブスケジューリング）を有効にすることも推奨されます。</p></li>
+<li><p><cite>/tmp</cite> 以外の場所にSWORDデポジットを使用する場合、この場所はグローバル設定（Admin --&gt; Settings --&gt; Global --&gt; SWORDデポジットディレクトリ）で設定する必要があります。</p></li>
+</ul>
+<p>AtoM DIPアップロードは、転送メカニズムとしてRsyncを使用できます。Rsyncは、ファイルを効率的に転送するためのオープンソースユーティリティです。rsync-targetパラメーターは、Rsyncスタイルのターゲットホスト/ディレクトリのペアを指定するために使用します（例えば、 <code class="docutils literal notranslate"><span class="pre">foobar.com:~/dips/</span></code> ）。rsync-commandパラメーターは、rsync接続オプションを指定するために使用します（例えば、 <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-p</span> <span class="pre">22222</span> <span class="pre">-l</span> <span class="pre">user</span></code> ）。rsyncオプションを使用する場合は、以下のAtoMサーバー設定を参照してください。</p>
+<p>AtoM DIPアップロードのパラメーターを設定するには、 <code class="docutils literal notranslate"><span class="pre">Command</span> <span class="pre">arguments</span></code> フィールドで、指定されている既存の形式を保持したまま値を変更し、&quot;保存&quot;をクリックします。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><a class="reference internal" href="../../../user-manual/access/access.html#upload-metadata-atom"><span class="std std-ref">メタデータのみのAtoMへのDIPアップロード</span></a> 機能を使用する場合は、<a class="reference external" href="https://www.accesstomemory.org/en/docs/2.8/dev-manual/api/api-intro/#api-intro" title="(in AtoM v2.8)"><span class="xref std std-ref">AtoMのAPIプラグイン</span></a> を有効にし、APIキーを生成し、それに応じて <code class="docutils literal notranslate"><span class="pre">REST</span> <span class="pre">API</span> <span class="pre">key</span></code> フィールドを更新することを忘れないでください。メタデータのみのDIPアップロードは、AtoM 2.4以上を使用している場合のみ利用可能です。</p>
+</div>
+</section>
+<section id="atom-server-configuration">
+<h4>AtoMサーバーの設定<a class="headerlink" href="#atom-server-configuration" title="Link to this heading">¶</a></h4>
+<p>このサーバー設定手順は、ArchivematicaがパスワードなしでAtoMサーバーにログインできるようにするために必要であり、ユーザーが上記のAtoM DIPアップロードセクションで説明したrsyncオプションを展開している場合にのみ必要です。</p>
+<p>ArchivematicaからAtoMサーバーへのDIP送信を有効にします：</p>
+<p>ArchivematicaユーザーのSSHキーを生成します。パスフレーズ欄は空白のままにします。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>ssh-keygen
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">/var/lib/archivematica/.ssh/id_rsa.pub</span></code> の内容を手近な場所にコピーしておいてください。後で必要になります。</p>
+<p>次に、ArchivematicaがSSH/rsyncを使用してDIPを送信できるようにAtoMサーバーを設定します。そのために、 <code class="docutils literal notranslate"><span class="pre">archivematica</span></code> というユーザーを作成し、そのユーザーにrsyncのみにアクセスできる制限付きシェルを割り当てます：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>rssh
+$<span class="w"> </span>sudo<span class="w"> </span>useradd<span class="w"> </span>-d<span class="w"> </span>/home/archivematica<span class="w"> </span>-m<span class="w"> </span>-s<span class="w"> </span>/usr/bin/rssh<span class="w"> </span>archivematica
+$<span class="w"> </span>sudo<span class="w"> </span>passwd<span class="w"> </span>-l<span class="w"> </span>archivematica
+$<span class="w"> </span>sudo<span class="w"> </span>vim<span class="w"> </span>/etc/rssh.conf<span class="w"> </span>//<span class="w"> </span>Make<span class="w"> </span>sure<span class="w"> </span>that<span class="w"> </span>allowrsync<span class="w"> </span>is<span class="w"> </span>uncommented!
+</pre></div>
+</div>
+<p>先ほど生成したSSHキーを追加します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>mkdir<span class="w"> </span>/home/archivematica/.ssh
+$<span class="w"> </span>chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>/home/archivematica/.ssh/
+$<span class="w"> </span>sudo<span class="w"> </span>vim<span class="w"> </span>/home/archivematica/.ssh/authorized_keys<span class="w"> </span>//<span class="w"> </span>Paste<span class="w"> </span>here<span class="w"> </span>the<span class="w"> </span>contents<span class="w"> </span>of<span class="w"> </span>id_dsa.pub
+$<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>archivematica:archivematica<span class="w"> </span>/home/archivematica
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>AtoM 2.7では、DIPをAtoMにアップロードした後にSWORDデポジットからDIPディレクトリを削除する新機能が追加されました。AtoMがこのディレクトリを削除するには、AtoMユーザー（デフォルトでは <cite>www-data</cite> または <cite>nginx</cite> ）がこのディレクトリへの書き込み権限を持っている必要があります。最も簡単な方法は、setfaclコマンドを使用することです。</p>
+<p>UbuntuまたはRocky Linuxに <cite>acl</cite> パッケージをインストールします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>acl<span class="w"> </span><span class="c1"># Ubuntu</span>
+sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>acl<span class="w">  </span><span class="c1"># Rocky Linux</span>
+</pre></div>
+</div>
+<p>新しいSWORDデポジット・ディレクトリを作成します（Rocky Linuxでは、 <cite>www-data</cite> の代わりに、 <cite>nginx</cite> グループを使用します）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>mkdir<span class="w"> </span>/home/archivematica/atom_sword_deposit
+sudo<span class="w"> </span>chown<span class="w"> </span>archivematica:www-data<span class="w"> </span>/home/archivematica/atom_sword_deposit
+sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">770</span><span class="w"> </span>/home/archivematica/atom_sword_deposit
+</pre></div>
+</div>
+<p>新しいディレクトリにACLを設定します（Rocky Linuxでは、 <cite>www-data</cite> の代わりに、 <cite>nginx</cite> ユーザーを使用します）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>setfacl<span class="w"> </span>-d<span class="w"> </span>-m<span class="w"> </span>u:www-data:rwX<span class="w"> </span>/home/archivematica/atom_sword_deposit
+
+The<span class="w"> </span>ACL<span class="w"> </span>sets<span class="w"> </span><span class="sb">`</span>rw-<span class="sb">`</span><span class="w"> </span>permissions<span class="w"> </span><span class="k">for</span><span class="w"> </span>files<span class="w"> </span>and<span class="w"> </span><span class="sb">`</span>rwx<span class="sb">`</span><span class="w"> </span>permissions<span class="w"> </span><span class="k">for</span>
+directories<span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>nginx<span class="w"> </span>user<span class="w"> </span>and<span class="w"> </span><span class="k">then</span><span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>www-data<span class="sb">`</span><span class="w"> </span><span class="o">(</span>or<span class="w"> </span><span class="sb">`</span>nginx<span class="sb">`</span><span class="o">)</span><span class="w"> </span>user<span class="w"> </span>can
+delete<span class="w"> </span>the<span class="w"> </span>temporay<span class="w"> </span>DIP<span class="w"> </span>directory.
+</pre></div>
+</div>
+</div>
+<p>Archivematicaで、 <code class="docutils literal notranslate"><span class="pre">--rsync-target</span></code> を適宜更新してください。これらは、upload-qubitマイクロサービスに渡すパラメーターです。ダッシュボードでAdministration &gt; Upload DIPページに移動します。</p>
+<p>一般的なパラメーター：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>--url<span class="o">=</span><span class="s2">&quot;http://atom-hostname/index.php&quot;</span><span class="w"> </span><span class="se">\</span>
+--email<span class="o">=</span><span class="s2">&quot;demo@example.com&quot;</span><span class="w"> </span><span class="se">\</span>
+--password<span class="o">=</span><span class="s2">&quot;demo&quot;</span><span class="w"> </span><span class="se">\</span>
+--uuid<span class="o">=</span><span class="s2">&quot;%SIPUUID%&quot;</span><span class="w"> </span><span class="se">\</span>
+--rsync-target<span class="o">=</span><span class="s2">&quot;archivematica@atom-hostname:/tmp&quot;</span><span class="w"> </span><span class="se">\</span>
+--debug
+</pre></div>
+</div>
+</section>
+</section>
+<section id="archivesspace-dip-upload">
+<span id="admin-dashboard-as"></span><h3>ArchivesSpace DIPアップロード<a class="headerlink" href="#archivesspace-dip-upload" title="Link to this heading">¶</a></h3>
+<p>ArchivesSpaceにデジタルオブジェクトをインジェストする前に、ダッシュボードの管理タブにあるArchivesSpace DIPアップロード設定が設定されていることを確認してください。</p>
+<p>これらの設定は、ArchivesSpaceにアップロードするデジタルオブジェクトを処理する前に作成し、保存する必要があります。これらの設定は一度設定すれば、何度でも転送処理に使用できることに注意してください（つまり、転送ごとに再設定する必要はありません）。</p>
+<a class="reference internal image-reference" href="../../../_images/ASDIPConfig.png"><img alt="ArchivesSpaceの構成設定" class="align-right" src="../../../_images/ASDIPConfig.png" style="width: 45%;" />
+</a>
+<p>フィールド：</p>
+<ul class="simple">
+<li><p><strong>ArchivesSpaceホスト</strong> ：ホストデータベースのURL。 <code class="docutils literal notranslate"><span class="pre">https://</span></code> や <code class="docutils literal notranslate"><span class="pre">www.</span></code> を含めないでください <code class="docutils literal notranslate"><span class="pre">aspace.test.org</span></code> 。</p></li>
+<li><p><strong>ArchivesSpaceバックエンドポート</strong> ：データベースのポート（例： <code class="docutils literal notranslate"><span class="pre">8089</span></code> ）。</p></li>
+<li><p><strong>ArchivesSpace管理ユーザー</strong> ：ArchivesSpaceの管理者権限を持つユーザーのユーザー名。</p></li>
+<li><p><strong>ArchivesSpace管理ユーザーパスワード</strong> ：上記で設定したユーザーのパスワード。この設定を変更した場合は、パスワードを再入力する必要があります。</p></li>
+<li><p><strong>制限の適用</strong> ： <em>はい</em> を選択すると、ArchivesSpaceにアップロードされたすべてのコンテンツにアクセス制限が適用されます。 <em>いいえ</em> を選択すると、すべてのコンテンツが制限なしでAchievemeticaからArchivesSpaceに送信されます。PREMISベースの制限機能を有効にするには、 <em>Base on PREMIS</em> を選択します。</p></li>
+<li><p><strong>XLink表示</strong> ：ArchivesSpaceに表示されるデジタルオブジェクトへのリンクの動作を指定します。</p>
+<ul>
+<li><p><em>埋め込み</em> ：デジタルオブジェクト画面が現在のウィンドウに埋め込まれます。</p></li>
+<li><p><em>新規</em> ：デジタルオブジェクトの画面が新しいウィンドウで開きます。</p></li>
+<li><p><em>なし</em> ：特定の振る舞いはリンクに渡されません。</p></li>
+<li><p><em>その他</em> ：特定の振る舞いはリンクに渡されません。</p></li>
+<li><p><em>置き換え</em> ：デジタルオブジェクト画面が現在のウィンドウで開きます。</p></li>
+</ul>
+</li>
+<li><p><strong>XLinkアクチュエート</strong> ：デジタルオブジェクトがArchivesSpaceに表示されるタイミングを示します（例：リンクが自動的に行われるか、ユーザーが要求しなければならないか）。XLink Show属性と組み合わせて使用します。</p>
+<ul>
+<li><p><em>なし</em> ：特定の振る舞いはリンクに渡されません。</p></li>
+<li><p><em>onLoad</em> ：文書が読み込まれたときにリンクがアクティブになります（Show = Embedのときに使用します）。</p></li>
+<li><p><em>その他</em> ：特定の振る舞いはリンクに渡されません。</p></li>
+<li><p><em>onRequest</em> ：ユーザーがリンクを選択すると、リンクがアクティブになります。</p></li>
+</ul>
+</li>
+<li><p><strong>オブジェクトタイプ</strong> ：ArchivesSpaceが管理するオブジェクトタイプのリストから値を入力すると、この値がすべてのオブジェクトに適用されます。このフィールドはオプションです。</p></li>
+<li><p><strong>使用ステートメント</strong> ：ArchivesSpaceの使用ステートメントの管理リストから値を入力すると、この値がすべてのオブジェクトに適用されます。このフィールドはオプションです。</p></li>
+<li><p><strong>URL prefix</strong> ：ArchivesSpaceレコードに表示したいDIPオブジェクトサーバーのURL。（例： <code class="docutils literal notranslate"><span class="pre">http://example.com</span></code> ）</p></li>
+<li><p><strong>アクセスを管理する条件</strong> ：このフィールドに値を入力すると、ArchivesSpaceのアクセスを管理する条件メモにすべてのオブジェクトの値が入力されます。</p></li>
+<li><p><strong>ユーザーを管理する条件</strong> ：このフィールドに値を入力すると、ArchivesSpaceのすべてのオブジェクトのユーザーを管理する条件メモに入力されます。</p></li>
+<li><p><strong>ArchivesSpaceリポジトリ番号</strong> ：DIPをアップロードするArchivesSpaceリポジトリの識別子。単一リポジトリArchivesSpaceインスタンスのデフォルト識別子は <em>2</em> です。</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ArchivesSpace DIPアップロード設定の変更を保存するには、保存をクリックする前にパスワードを入力する必要があります。パスワードが入力されていない場合、Archivematicaは、エラーを表示 <em>しません</em> のでご注意ください。</p>
+</div>
+</section>
+</section>
+<section id="premis-agent">
+<span id="admin-dashboard-premis"></span><h2>PREMISエージェント<a class="headerlink" href="#premis-agent" title="Link to this heading">¶</a></h2>
+<p>PREMISエージェント名とコードは、管理インターフェイスを通じてここで設定できます。</p>
+<a class="reference internal image-reference" href="../../../_images/PREMISAdmin.png"><img alt="管理タブでのPREMISエージェント設定" class="align-center" src="../../../_images/PREMISAdmin.png" style="width: 80%;" />
+</a>
+<p>PREMISエージェント情報は、Archivematicaが作成するMETSファイルで、デジタル保存イベントを実行するエージェンシーを特定するために使用されます。</p>
+</section>
+<section id="rest-api">
+<span id="admin-dashboard-rest"></span><h2>Rest API<a class="headerlink" href="#rest-api" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">processingMCP.xml</span></code> ファイルを使用した自動化に加え、Archivematicaには転送承認を自動化するためのREST APIが用意されています。このAPIを使用すると、転送を適切なディレクトリにコピーするカスタムスクリプトを作成し、curlコマンドなどを使用して、Archivematicaにコピーの完了を知らせることができます。</p>
+<section id="api-keys">
+<h3>APIキー<a class="headerlink" href="#api-keys" title="Link to this heading">¶</a></h3>
+<p>REST APIを使用するには、APIキーの使用が必要です。APIキーは特定のユーザーに関連付けられています。ユーザーのAPIキーを生成するには：</p>
+<ul class="simple">
+<li><p>administration/accounts/list/にアクセスしてください。</p></li>
+<li><p>APIキーを生成したいユーザーの&quot;編集&quot;ボタンをクリック</p></li>
+<li><p>&quot;API keyの再生成&quot;チェックボックスをクリック</p></li>
+<li><p>&quot;保存&quot;をクリック</p></li>
+</ul>
+<p>APIキーを生成した後、そのユーザーの&quot;編集&quot;ボタンをクリックすると、APIキーが表示されます。</p>
+</section>
+<section id="ip-whitelist">
+<h3>IPホワイトリスト<a class="headerlink" href="#ip-whitelist" title="Link to this heading">¶</a></h3>
+<p>APIキーは常に必要ですが、管理者がさらにセキュリティ対策を追加したい場合もあります。IPホワイトリストを使用すると、APIにアクセスできる信頼できるIPアドレスのリストを作成できます。</p>
+<p>IPホワイトリストは、管理インターフェイスの <code class="docutils literal notranslate"><span class="pre">/administration/api/</span></code> で編集できます。ホワイトリストが空の場合、すべてのリクエストが許可されます。</p>
+</section>
+<section id="approving-a-transfer">
+<h3>転送の承認<a class="headerlink" href="#approving-a-transfer" title="Link to this heading">¶</a></h3>
+<p>REST APIを使用して転送を承認できます。転送はまず、適切なウォッチディレクトリにコピーされなければなりません。適切なウォッチディレクトリの場所を特定するには、まず <code class="docutils literal notranslate"><span class="pre">/etc/archivematica/MCPServer/serverConfig.conf</span></code> のwatchDirectoryPath値から共有ディレクトリの場所を特定します。そのディレクトリ内には、サブディレクトリactiveTransfersがあります。このサブディレクトリには、様々な転送タイプのウォッチディレクトリがあります。</p>
+<p>REST APIを使用して転送を承認する際に、転送タイプが指定されていなければ、転送は標準転送とみなされます。</p>
+<p><strong>HTTPメソッド</strong> ：POST</p>
+<p><strong>URL</strong> ：/api/transfer/approve</p>
+<p><strong>パラメーター</strong> ：</p>
+<p><code class="docutils literal notranslate"><span class="pre">directory</span></code> ：転送先のディレクトリ名</p>
+<p><code class="docutils literal notranslate"><span class="pre">type</span></code> （オプション）：転送タイプ[標準 | dspace | アンジップしたバッグ | ジップしたバッグ]</p>
+<p><code class="docutils literal notranslate"><span class="pre">api_key</span></code> ：API キー</p>
+<p><code class="docutils literal notranslate"><span class="pre">username</span></code> ：APIキーに関連付けられたユーザー名</p>
+<p>curlコマンドの例：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>--data<span class="w"> </span><span class="s2">&quot;username=rick&amp;api_key=f12d6b323872b3cef0b71be64eddd52f87b851a6&amp;type=standard&amp;directory=MyTransfer&quot;</span><span class="w"> </span>http://127.0.0.1/api/transfer/approve
+</pre></div>
+</div>
+<p>結果の例：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span><span class="s2">&quot;message&quot;</span>:<span class="w"> </span><span class="s2">&quot;Approval successful.&quot;</span><span class="o">}</span>
+</pre></div>
+</div>
+</section>
+<section id="listing-unapproved-transfers">
+<h3>未承認転送のリストアップ<a class="headerlink" href="#listing-unapproved-transfers" title="Link to this heading">¶</a></h3>
+<p>REST APIを使用すると、未承認転送のリストを取得できます。各転送のディレクトリ名とタイプが返されます。</p>
+<p><strong>メソッド</strong> ： <code class="docutils literal notranslate"><span class="pre">GET</span></code></p>
+<p><strong>URL</strong> ： <code class="docutils literal notranslate"><span class="pre">/api/transfer/unapproved</span></code></p>
+<p><strong>パラメーター</strong> ：</p>
+<p><code class="docutils literal notranslate"><span class="pre">api_key</span></code> ：API キー</p>
+<p><code class="docutils literal notranslate"><span class="pre">username</span></code> ：APIキーに関連付けられたユーザー名</p>
+<p>curlコマンドの例：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span><span class="s2">&quot;http://127.0.0.1/api/transfer/unapproved?username=rick&amp;api_key=f12d6b323872b3cef0b71be64eddd52f87b851a6&quot;</span>
+</pre></div>
+</div>
+<p>結果の例：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;message&quot;</span>:<span class="w"> </span><span class="s2">&quot;Fetched unapproved transfers successfully.&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;results&quot;</span>:<span class="w"> </span><span class="o">[{</span>
+<span class="w">            </span><span class="s2">&quot;directory&quot;</span>:<span class="w"> </span><span class="s2">&quot;MyTransfer&quot;</span>,
+<span class="w">           </span><span class="s2">&quot;type&quot;</span>:<span class="w"> </span><span class="s2">&quot;standard&quot;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">]</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="users">
+<span id="admin-dashboard-users"></span><h2>ユーザー<a class="headerlink" href="#users" title="Link to this heading">¶</a></h2>
+<p>ダッシュボードは、 <a class="reference external" href="https://django.readthedocs.io/en/1.4.X/topics/auth.html">Django認証フレームワーク</a> を使った、シンプルなクッキーベースのユーザー認証システムを提供します。ダッシュボードへのアクセスはログインユーザーのみに制限され、ユーザーが認識されない場合はログインページが表示されます。アプリケーションがデータベースでユーザーを見つけられない場合は、代わりにユーザー作成ページが表示され、管理者アカウントを作成できます。</p>
+<p>「管理」タブからユーザーを作成、変更、削除することも可能です。管理者であるユーザーのみがユーザーアカウントを作成および編集できます。</p>
+<p>ユーザー管理ページの&quot;新規追加&quot;ボタンをクリックすると、新しいユーザーを追加できます。ユーザーを追加することで、ユーザー名とパスワードの組み合わせでArchivematicaにアクセスできるようになります。ユーザーのユーザー名またはパスワードを変更する必要がある場合は、管理ページで該当するユーザーの&quot;編集&quot;ボタンをクリックします。ユーザーのアクセス権を取り消す必要がある場合は、対応する&quot;削除&quot;ボタンをクリックします。</p>
+<section id="cli-creation-of-administrative-users">
+<h3>CLIによる管理ユーザーの作成<a class="headerlink" href="#cli-creation-of-administrative-users" title="Link to this heading">¶</a></h3>
+<p>追加の管理者ユーザーが必要な場合は、コマンドラインで以下のコマンドを実行してください：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python manage.py createsuperuser</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="cli-password-resetting">
+<h3>CLIパスワードのリセット<a class="headerlink" href="#cli-password-resetting" title="Link to this heading">¶</a></h3>
+<p>管理者ユーザーやその他のユーザーのパスワードを忘れてしまった場合は、コマンドラインから変更できます：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python manage.py changepassword &lt;username&gt;</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="cli-configuration-pipeline-and-registration-on-the-storage-service">
+<h3>CLI設定パイプラインとStorage Serviceへの登録<a class="headerlink" href="#cli-configuration-pipeline-and-registration-on-the-storage-service" title="Link to this heading">¶</a></h3>
+<p>新規インストールでは、GUIの代わりにコマンドラインを使用して、スーパーユーザーを設定し、Storage Serviceにパイプラインを登録できます。これらのコマンドは、初期設定画面のGUIとまったく同じように、パイプラインを設定し、Storage Serviceに登録します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/python/archivematica-dashboard/bin/python manage.py install \</span>
+<span class="s2">        --username=&lt;username&gt; \</span>
+<span class="s2">        --password=&lt;password&gt; \</span>
+<span class="s2">        --email=&lt;email-address&gt; \</span>
+<span class="s2">        --org-name=&lt;org-name&gt; \</span>
+<span class="s2">        --org-id=&lt;org-id&gt; \</span>
+<span class="s2">        --api-key=&lt;api-key&gt;\</span>
+<span class="s2">        --ss-url=&lt;ss-ulr&gt; \</span>
+<span class="s2">        --ss-user=&lt;ss-username&gt; \</span>
+<span class="s2">        --ss-api-key=&lt;ss-api-key&gt; \</span>
+<span class="s2">        --whitelist=&lt;whitelist&gt;</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>ここでは：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">api-key</span></code> ：ユーザー名&lt;username&gt;に追加されるAPIキー。例：&quot;test&quot;,&quot;4e5f32ab2aefd3577e1b19a2de5d4dd65f90101a&quot;.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ss-url</span></code> ：Archivematica Storage ServiceのURL。例：<a class="reference external" href="http://example.archivematica.org:8000">http://example.archivematica.org:8000</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ss-user</span></code> ：パイプラインの登録に使用するStorage Serviceのユーザー名。このユーザー名はすでにStorage Serviceに存在している必要があります。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ss-api-key</span></code> ：&lt;ss-username&gt;APIキー。このキーは、ユーザー&lt;ss-username&gt;のStorage Serviceに既に存在していなければなりません。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">whitelist</span></code> ：APIの使用を許可するIPアドレスまたはホスト名の空白区切りリスト。ホワイトリストを空にすると、すべてのIPアドレスとホスト名が許可されます。例：&quot;192.168.1.3 example.archivematica.org 127.0.0.1&quot;または&quot;&quot;.</p></li>
+</ul>
+<p>このコマンドは、Ansibleを使用してデプロイする場合など、自動化されたインストールで使用するのに最も適しています。手動でインストールする場合は、インストール後の設定のセクションで説明されているウェブ設定を使用してください：</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../installation/install-ubuntu.html#ubuntu-post-install-config"><span class="std std-ref">Ubuntuインストール後の設定</span></a> .</p></li>
+<li><p><a class="reference internal" href="../installation/install-rocky.html#rocky-post-install-config"><span class="std std-ref">Rocky Linuxインストール後の設定</span></a> .</p></li>
+</ul>
+</section>
+<section id="security">
+<h3>セキュリティ<a class="headerlink" href="#security" title="Link to this heading">¶</a></h3>
+<p>Archivematicaは、 <a class="reference external" href="https://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a> をデフォルトのアルゴリズムとしてパスワードを保存します。ほとんどのユーザーにとってはこれで十分でしょう。このアルゴリズムは非常に安全で、破るには膨大な計算時間が必要となります。しかし、以下の文書が説明しているように、他のアルゴリズムも使えます： <a class="reference external" href="https://django.readthedocs.io/en/1.4.X/topics/auth.html#how-django-stores-passwords">Djangoがパスワードを保存する方法</a> .</p>
+<p>私たちの計画では、将来的にこの機能を拡張し、グループときめ細かなパーミッションのサポートを追加する予定です。</p>
+</section>
+</section>
+<section id="handle-server-config">
+<span id="admin-handlenet"></span><h2>サーバー設定の処理<a class="headerlink" href="#handle-server-config" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、設定された <a class="reference external" href="https://www.handle.net/index.html">Handle.Net</a> レジストリにPIDを定義することで、デジタルオブジェクト、ディレクトリ、またはAIPの永続識別子（PID）を作成できます。Handle.Netは、PIDから永続URL（PURL）を作成し、永続URLへのリクエストをHandle.Netで設定されたターゲットURLにリルートできます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Handle.Net設定を使用するには、利用可能なウェブサービスを提供する必要があります。互換性のあるウェブサービスの例として、 <a class="reference external" href="https://github.com/IISH/PID-webservice">IISHで使用されているPIDウェブサービス</a> を参照してください。</p>
+</div>
+<a class="reference internal image-reference" href="../../../_images/handlenet-config.png"><img alt="Handle.Netコンフィギュレーション設定" class="align-right" src="../../../_images/handlenet-config.png" style="width: 45%;" />
+</a>
+<p>フィールド：</p>
+<ul>
+<li><p><strong>ウェブサービスのエンドポイント</strong> ：PIDの作成と解決のための（POST）リクエスト用URL。</p></li>
+<li><p><strong>Webサービスキー</strong> ：PIDウェブサービスエンドポイントへのPIDバインディングリクエストの認証に必要なウェブサービスキー。</p></li>
+<li><p><strong>命名権</strong> ：ハンドル命名権（例：12345）</p></li>
+<li><p><strong>リゾルバURL</strong> ：該当するresolve URLに解決する（潜在的に修飾された）PURL（永続的なURL）を作成するために、生成されたPIDを付加するURL。&quot;リゾルバ&quot;の2番目の&quot;r&quot;に注意！</p></li>
+<li><p><strong>AIP PIDソース</strong> ：AIPの永続的識別子のソース。事実上一意であることが保証されているため、AIPのUUIDがデフォルトです。ただし、ユーザーが転送とAIPの間の1対1の関係を保証できるのであれば、転送のアクセッション番号を使用できます。</p></li>
+<li><p><strong>SSL証明書の妥当性確認</strong> ：このボックスを選択すると、ArchivematicaがPIDをバインドするリクエストの際にSSL証明書を妥当性確認します。</p></li>
+<li><p><strong>Archive解決URLテンプレート</strong> ：ユニットのPURLが解決すべきURLのテンプレート（DjangoまたはJinja2）。 <code class="docutils literal notranslate"><span class="pre">pid</span></code> と <code class="docutils literal notranslate"><span class="pre">naming_authority</span></code> 変数にアクセスできます。例： <code class="docutils literal notranslate"><span class="pre">https://access.myinstitution.org/dip/{{</span> <span class="pre">naming_authority</span> <span class="pre">}}/{{</span> <span class="pre">pid</span> <span class="pre">}}</span></code></p></li>
+<li><p><strong>METS解決URLテンプレート</strong> ：&quot;mets&quot;修飾子を持つユニットのPURLが解決すべきURLのテンプレート（DjangoまたはJinja2）。&quot;pid&quot;と&quot;naming_authority&quot;変数にアクセスできます。例： <code class="docutils literal notranslate"><span class="pre">https://access.myinstitution.org/mets/{{</span> <span class="pre">naming_authority</span> <span class="pre">}}/{{</span> <span class="pre">pid</span> <span class="pre">}}</span></code></p></li>
+<li><p><strong>ファイル解決URLテンプレート</strong> ：ファイルのPURLが解決すべきURLのテンプレート（DjangoまたはJinja2）。&quot;pid&quot;と&quot;naming_authority&quot;変数にアクセスできます。例： <code class="docutils literal notranslate"><span class="pre">https://access.myinstitution.org/access/{{</span> <span class="pre">naming_authority</span> <span class="pre">}}/{{</span> <span class="pre">pid</span> <span class="pre">}}</span></code></p></li>
+<li><p><strong>アクセス派生解決URLテンプレート</strong> ：&quot;access&quot;修飾子を持つファイルのPURLが解決すべきURLのテンプレート（DjangoまたはJinja2）。&quot;pid&quot;と&quot;naming_authority&quot;変数にアクセスできます。例： <code class="docutils literal notranslate"><span class="pre">https://access.myinstitution.org/access/{{</span> <span class="pre">naming_authority</span> <span class="pre">}}/{{</span> <span class="pre">pid</span> <span class="pre">}}</span></code></p></li>
+<li><p><strong>保存派生解決URLテンプレート</strong> ：&quot;保存&quot;修飾子を持つファイルのPURLが解決すべきURLのテンプレート（DjangoまたはJinja2）。&quot;pid&quot;と&quot;naming_authority&quot;変数にアクセスできます。例： <code class="docutils literal notranslate"><span class="pre">https://access.myinstitution.org/preservation/{{</span> <span class="pre">naming_authority</span> <span class="pre">}}/{{</span> <span class="pre">pid</span> <span class="pre">}}</span></code></p></li>
+<li><p><strong>オリジナルファイル解決URLテンプレート</strong> ：&quot;オリジナル&quot;修飾子を持つファイルのPURLが解決すべきURLのテンプレート（DjangoまたはJinja2）。&quot;pid&quot;と&quot;naming_authority&quot;変数にアクセスできます。例： <code class="docutils literal notranslate"><span class="pre">https://access.myinstitution.org/original/{{</span> <span class="pre">naming_authority</span> <span class="pre">}}/{{</span> <span class="pre">pid</span> <span class="pre">}}</span></code></p></li>
+<li><p><strong>PID/handleリクエストボディテンプレート</strong> ：上記のレンダリングされたURLテンプレートを使ってHTTPリクエストボディを構築するテンプレート（DjangoまたはJinja2）。以下の変数にアクセスできます。&quot;pid&quot;,&quot;naming_authority&quot;、&quot;base_resolve_url&quot;、&quot;qualified_resolve_urls&quot;。最後は、&quot;url&quot;と&quot;qualifier&quot;をキーとするdictsのリストです。例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
+&lt;soapenv:Envelope
+  xmlns:soapenv=&#39;http://schemas.xmlsoap.org/soap/envelope/&#39;
+  xmlns:pid=&#39;http://pid.myinstitution.org/&#39;&gt;
+  &lt;soapenv:Body&gt;
+    &lt;pid:UpsertPidRequest&gt;
+      &lt;pid:na&gt;{{ naming_authority }}&lt;/pid:na&gt;
+      &lt;pid:handle&gt;
+        &lt;pid:pid&gt;{{ naming_authority }}/{{ pid }}&lt;/pid:pid&gt;
+        &lt;pid:locAtt&gt;
+          &lt;pid:location weight=&#39;1&#39; href=&#39;{{ base_resolve_url }}&#39;/&gt;
+          {% for qrurl in qualified_resolve_urls %}
+            &lt;pid:location
+              weight=&#39;0&#39;
+              href=&#39;{{ qrurl.url }}&#39;
+              view=&#39;{{ qrurl.qualifier }}&#39;/&gt;
+          {% endfor %}
+        &lt;/pid:locAtt&gt;
+      &lt;/pid:handle&gt;
+    &lt;/pid:UpsertPidRequest&gt;
+  &lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="language">
+<span id="admin-language-choice"></span><h2>言語<a class="headerlink" href="#language" title="Link to this heading">¶</a></h2>
+<p>言語メニューでは、選択した言語から選択できます。</p>
+<p>Archivematicaは、 <a class="reference external" href="https://www.transifex.com/artefactual/archivematica/">Transifex</a> を通じてボランティアによって翻訳されています。言語の完全性は、Transifexで翻訳された文字列の数により異なります。Archivematicaプロジェクトへの翻訳の貢献については、 <a class="reference internal" href="../../../user-manual/translations/translations.html#translations"><span class="std std-ref">翻訳</span></a> を参照してください。</p>
+</section>
+<section id="version">
+<span id="admin-version"></span><h2>バージョン<a class="headerlink" href="#version" title="Link to this heading">¶</a></h2>
+<p>このタブには、使用しているArchivematicaのバージョンが表示されます。</p>
+<p><a class="reference internal" href="#dashboard-config"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">ダッシュボード管理タブ</a><ul>
+<li><a class="reference internal" href="#processing-configuration">処理設定</a><ul>
+<li><a class="reference internal" href="#using-a-custom-processing-configuration-file">カスタム処理設定ファイルの使用</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#general">一般</a><ul>
+<li><a class="reference internal" href="#general-configuration">一般設定</a></li>
+<li><a class="reference internal" href="#storage-service-options">Storage Serviceオプション</a></li>
+<li><a class="reference internal" href="#checksum-algorithm">チェックサムアルゴリズム</a></li>
+<li><a class="reference internal" href="#elasticsearch-indexing">Elasticsearchインデックス作成</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#failures">障害</a></li>
+<li><a class="reference internal" href="#transfer-source-location">転送元の場所</a></li>
+<li><a class="reference internal" href="#aip-storage-locations">AIPの保存場所</a></li>
+<li><a class="reference internal" href="#processing-storage-usage">処理ストレージ使用状況</a></li>
+<li><a class="reference internal" href="#dip-upload">DIPアップロード</a><ul>
+<li><a class="reference internal" href="#atom-dip-upload">AtoM DIPアップロード</a><ul>
+<li><a class="reference internal" href="#id1">AtoM DIPアップロード</a></li>
+<li><a class="reference internal" href="#atom-server-configuration">AtoMサーバーの設定</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#archivesspace-dip-upload">ArchivesSpace DIPアップロード</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#premis-agent">PREMISエージェント</a></li>
+<li><a class="reference internal" href="#rest-api">Rest API</a><ul>
+<li><a class="reference internal" href="#api-keys">APIキー</a></li>
+<li><a class="reference internal" href="#ip-whitelist">IPホワイトリスト</a></li>
+<li><a class="reference internal" href="#approving-a-transfer">転送の承認</a></li>
+<li><a class="reference internal" href="#listing-unapproved-transfers">未承認転送のリストアップ</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#users">ユーザー</a><ul>
+<li><a class="reference internal" href="#cli-creation-of-administrative-users">CLIによる管理ユーザーの作成</a></li>
+<li><a class="reference internal" href="#cli-password-resetting">CLIパスワードのリセット</a></li>
+<li><a class="reference internal" href="#cli-configuration-pipeline-and-registration-on-the-storage-service">CLI設定パイプラインとStorage Serviceへの登録</a></li>
+<li><a class="reference internal" href="#security">セキュリティ</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#handle-server-config">サーバー設定の処理</a></li>
+<li><a class="reference internal" href="#language">言語</a></li>
+<li><a class="reference internal" href="#version">バージョン</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="customization.html"
+                          title="前の章へ">カスタマイズと自動化</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="antivirus-admin.html"
+                          title="次の章へ">アンチウイルス管理</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/admin-manual/installation-setup/customization/dashboard-config.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="antivirus-admin.html" title="アンチウイルス管理"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="customization.html" title="カスタマイズと自動化"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ダッシュボード管理タブ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

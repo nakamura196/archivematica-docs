@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Archivematica のPREMISメタデータ &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="評価" href="../appraisal/appraisal.html" />
+    <link rel="prev" title="Archivematicaのダブリンコア" href="dublincore.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../appraisal/appraisal.html" title="評価"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="dublincore.html" title="Archivematicaのダブリンコア"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematica のPREMISメタデータ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="premis-metadata-in-archivematica">
+<span id="premis-template"></span><h1>Archivematica のPREMISメタデータ<a class="headerlink" href="#premis-metadata-in-archivematica" title="Link to this heading">¶</a></h1>
+<p>Archivematica は、 <a class="reference external" href="http://www.loc.gov/standards/premis/">PREMIS</a> メタデータをサポートしており、現在は <a class="reference external" href="https://www.loc.gov/standards/premis/v3/index.html">バージョン 3</a> を実装しています。オブジェクトに関する広範な技術メタデータをキャプチャし、エージェントがオブジェクトに対して実行したアクション (イベントと呼ばれる) を記録します。PREMIS Rights メタデータの追加もサポートします。このページでは、PREMIS が AIP METS ファイルにどのように実装されるかについて説明します。</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#premis-events"><span class="std std-ref">PREMISイベントメタデータ</span></a></p></li>
+<li><p><a class="reference internal" href="#event-list"><span class="std std-ref">PREMISイベントリスト</span></a></p></li>
+<li><p><a class="reference internal" href="#premis-agent"><span class="std std-ref">PREMISエージェントのメタデータ</span></a></p></li>
+<li><p><a class="reference internal" href="#premis-rights"><span class="std std-ref">PREMIS権利メタデータ</span></a></p></li>
+</ul>
+<section id="premis-events-metadata">
+<span id="premis-events"></span><h2>PREMISイベントメタデータ<a class="headerlink" href="#premis-events-metadata" title="Link to this heading">¶</a></h2>
+<p>PREMIS イベントは、METS の個別の digiprovMD セクションに記録されます。(詳細については、 <a class="reference internal" href="METS.html#mets-schema"><span class="std std-ref">Archivematica の METS</span></a> を参照してください)。METS に記録される PREMIS イベントには、次のセマンティックユニットおよびセマンティックコンポーネントの <em>ほとんど</em> のメタデータが含まれます (該当する場合のみ)：</p>
+<ul class="simple">
+<li><p>eventIdentifier - eventIdentifierType</p></li>
+<li><p>eventIdentifier - eventIdentifierValue</p></li>
+<li><p>eventType</p></li>
+<li><p>eventDateTime</p></li>
+<li><p>eventDetail</p></li>
+<li><p>eventOutcomeInformation - eventOutcome</p></li>
+<li><p>eventOutcomeDetail - eventOutcomeDetailNote</p></li>
+<li><p>linkingAgentIdentifier - linkingAgentIdentifierType</p></li>
+<li><p>linkingAgentIdentifier - linkingAgentIdentifierValue</p></li>
+</ul>
+<p>PREMIS のセマンティックユニットとセマンティックコンポーネントの詳細については、 <a class="reference external" href="https://www.loc.gov/standards/premis/v3/premis-3-0-final.pdf">Data Dictionary</a> を参照してください。以下は、ファイルフォーマット識別のための PREMIS イベントの例です。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nt">&lt;mets:digiprovMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;digiprovMD_54&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:EVENT&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:event</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:eventIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:eventIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:eventIdentifierValue&gt;</span>b0d7f0ce-1c47-42b9-b2f1-941ca8f90bfe<span class="nt">&lt;/premis:eventIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:eventIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventType&gt;</span>format<span class="w"> </span>identification<span class="nt">&lt;/premis:eventType&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventDateTime&gt;</span>2019-11-14T11:05:37.729651+00:00<span class="nt">&lt;/premis:eventDateTime&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventDetailInformation&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:eventDetail&gt;</span>program=&quot;Siegfried&quot;;<span class="w"> </span>version=&quot;1.7.10&quot;<span class="nt">&lt;/premis:eventDetail&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:eventDetailInformation&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventOutcomeInformation&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:eventOutcome&gt;</span>Positive<span class="nt">&lt;/premis:eventOutcome&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:eventOutcomeDetail&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:eventOutcomeDetailNote&gt;</span>fmt/353<span class="nt">&lt;/premis:eventOutcomeDetailNote&gt;</span>
+<span class="w">              </span><span class="nt">&lt;/premis:eventOutcomeDetail&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:eventOutcomeInformation&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:linkingAgentIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierType&gt;</span>preservation<span class="w"> </span>system<span class="nt">&lt;/premis:linkingAgentIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierValue&gt;</span>Archivematica-1.10<span class="nt">&lt;/premis:linkingAgentIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:linkingAgentIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:linkingAgentIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierType&gt;</span>repository<span class="w"> </span>code<span class="nt">&lt;/premis:linkingAgentIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierValue&gt;</span>12345<span class="nt">&lt;/premis:linkingAgentIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:linkingAgentIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:linkingAgentIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierType&gt;</span>Archivematica<span class="w"> </span>user<span class="w"> </span>pk<span class="nt">&lt;/premis:linkingAgentIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierValue&gt;</span>1<span class="nt">&lt;/premis:linkingAgentIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:linkingAgentIdentifier&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">linkingAgentIdentifier</span></code> セマンティックユニットの下にリストアップされた [イベント] ごとに、3つの [エージェント] があることに注意してください。これは、3 つの <code class="docutils literal notranslate"><span class="pre">linkingAgentIdentifierType</span></code> と 3 つの <code class="docutils literal notranslate"><span class="pre">linkingAgentIdentifierValue</span></code> セマンティックコンポーネントも存在することを意味します。PREMIS イベントに適用される各エージェントには、METS 内に独自の digiprovMD セクションもあります ( <a class="reference internal" href="#premis-agent"><span class="std std-ref">PREMIS エージェントメタデータ</span></a> を参照)。</p>
+</section>
+<section id="premis-events-list">
+<span id="event-list"></span><h2>PREMISイベントリスト<a class="headerlink" href="#premis-events-list" title="Link to this heading">¶</a></h2>
+<p>PREMISイベントには、オリジナルファイルに適用されるものと、正規化ファイルに適用されるものがあります。以下はそのリストであり、Archivematica で特定のマイクロサービスが実行されたときに発生するイベントのリストが続きます。</p>
+<p>次にスキップ：</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#event-default"><span class="std std-ref">オリジナルファイルのデフォルトイベント</span></a></p></li>
+<li><p><a class="reference internal" href="#event-normalize"><span class="std std-ref">正規化ファイル</span></a></p></li>
+<li><p><a class="reference internal" href="#event-filename-change"><span class="std std-ref">ファイル名の変更</span></a></p></li>
+<li><p><a class="reference internal" href="#event-identification"><span class="std std-ref">フォーマットの識別</span></a></p></li>
+<li><p><a class="reference internal" href="#event-extract"><span class="std std-ref">パッケージの抽出</span></a></p></li>
+<li><p><a class="reference internal" href="#event-ocr"><span class="std std-ref">OCRテキスト変換</span></a></p></li>
+<li><p><a class="reference internal" href="#event-reingest"><span class="std std-ref">AIPの再インジェスト</span></a></p></li>
+<li><p><a class="reference internal" href="#event-backlog"><span class="std std-ref">バックログへの転送の送信</span></a></p></li>
+</ul>
+<section id="default-events-for-original-files">
+<span id="event-default"></span><h3>オリジナルファイルのデフォルトイベント<a class="headerlink" href="#default-events-for-original-files" title="Link to this heading">¶</a></h3>
+<p>以下のマイクロサービスは、Archivematicaにインジェストされたすべての <em>オリジナル</em> オブジェクト（投稿文書を含む）に対して実行されます：</p>
+<ul class="simple">
+<li><p>インジェスト</p></li>
+<li><p>メッセージダイジェスト計算</p></li>
+<li><p>ウイルスチェック</p></li>
+</ul>
+<p>チェックサムマニフェストを持つバッグまたは転送がインジェストされる場合、各ファイルは以下を含みます：</p>
+<ul class="simple">
+<li><p>fixity チェック</p></li>
+</ul>
+</section>
+<section id="normalized-files">
+<span id="event-normalize"></span><h3>正規化ファイル<a class="headerlink" href="#normalized-files" title="Link to this heading">¶</a></h3>
+<p>以下のマイクロサービスは、すべての <em>正規化</em> ファイルに対して実行されます：</p>
+<ul class="simple">
+<li><p>作成</p></li>
+<li><p>メッセージダイジェスト計算</p></li>
+<li><p>妥当性確認（識別されたフォーマットに利用可能な妥当性確認ツールがある場合）</p></li>
+</ul>
+<p>正規化された派生物を含む <em>オリジナル</em> ファイルの場合、正規化 PREMIS イベントが追加されることに注意してください。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:digiprovMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;digiprovMD_17&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:EVENT&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:event</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:eventIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventIdentifierValue&gt;</span>d7746761-d98c-4a78-80e0-2e91e4c187d4<span class="nt">&lt;/premis:eventIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:eventIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventType&gt;</span>normalization<span class="nt">&lt;/premis:eventType&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventDateTime&gt;</span>2019-11-14T11:11:29.620854+00:00<span class="nt">&lt;/premis:eventDateTime&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventDetailInformation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventDetail&gt;</span>ArchivematicaFPRCommandID=&quot;a34ddc9b-c922-4bb6-8037-bbe713332175&quot;;<span class="w"> </span>program=&quot;convert&quot;;<span class="w"> </span>version=&quot;Version:<span class="w"> </span>ImageMagick<span class="w"> </span>6.9.7-4<span class="w"> </span>Q16<span class="w"> </span>x86_64<span class="w"> </span>20170114<span class="w"> </span>http://www.imagemagick.org&quot;
+<span class="nt">&lt;/premis:eventDetail&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:eventDetailInformation&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventOutcomeInformation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventOutcome&gt;&lt;/premis:eventOutcome&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventOutcomeDetail&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventOutcomeDetailNote&gt;</span>%SIPDirectory%objects/View_from_lookout_over_Queenstown_towards_the_Remarkables_in_spring-d8717b3a-d12c-408a-9c37-732425331f44.tif<span class="nt">&lt;/premis:eventOutcomeDetailNote&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:eventOutcomeDetail&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:eventOutcomeInformation&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="filename-change">
+<span id="event-filename-change"></span><h3>ファイル名の変更<a class="headerlink" href="#filename-change" title="Link to this heading">¶</a></h3>
+<p>このマイクロサービスがファイル上で実行される場合、次の PREMIS イベントとして入力され、オリジナルのファイル名も記録されます：</p>
+<ul class="simple">
+<li><p>ファイル名の変更</p></li>
+</ul>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:digiprovMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;digiprovMD_11&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:EVENT&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:event</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:eventIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventIdentifierValue&gt;</span>842774e2-7eeb-49a2-99ee-eade80f6bd1f<span class="nt">&lt;/premis:eventIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:eventIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventType&gt;</span>filename<span class="w"> </span>change<span class="nt">&lt;/premis:eventType&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventDateTime&gt;</span>2020-01-06T15:01:52.881142+00:00<span class="nt">&lt;/premis:eventDateTime&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventDetailInformation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventDetail&gt;</span>prohibited<span class="w"> </span>characters<span class="w"> </span>removed:<span class="w"> </span>program=&quot;sanitize_names&quot;;<span class="w"> </span>version=&quot;1.10.db4f6aca278e6daf2af160ed40349baf7c6f53af&quot;<span class="nt">&lt;/premis:eventDetail&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:eventDetailInformation&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventOutcomeInformation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventOutcome&gt;&lt;/premis:eventOutcome&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventOutcomeDetail&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventOutcomeDetailNote&gt;</span>Original<span class="w"> </span>name=&quot;%transferDirectory%objects/(brackets)/@at.txt&quot;;<span class="w"> </span>new<span class="w"> </span>name=&quot;%transferDirectory%objects/(brackets)/_at.txt&quot;<span class="nt">&lt;/premis:eventOutcomeDetailNote&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:eventOutcomeDetail&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:eventOutcomeInformation&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="format-identification">
+<span id="event-identification"></span><h3>フォーマットの識別<a class="headerlink" href="#format-identification" title="Link to this heading">¶</a></h3>
+<p>このマイクロサービスが実行されると、以下のPREMISイベントが記録されることがあります：</p>
+<ul class="simple">
+<li><p>フォーマットの識別</p></li>
+<li><p>妥当性確認（識別されたフォーマットに利用可能な妥当性確認ツールがある場合）</p></li>
+</ul>
+</section>
+<section id="extract-packages">
+<span id="event-extract"></span><h3>パッケージの抽出<a class="headerlink" href="#extract-packages" title="Link to this heading">¶</a></h3>
+<p>このPREMISイベントは、抽出されたすべてのファイルに記録されます：</p>
+<ul class="simple">
+<li><p>開梱</p></li>
+</ul>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:digiprovMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;digiprovMD_54&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:EVENT&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:event</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:eventIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventIdentifierValue&gt;</span>bfeecc68-855c-41ad-a628-37c2a1fb2142<span class="nt">&lt;/premis:eventIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:eventIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventType&gt;</span>unpacking<span class="nt">&lt;/premis:eventType&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventDateTime&gt;</span>2020-03-05T18:02:26.966342+00:00<span class="nt">&lt;/premis:eventDateTime&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventDetailInformation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventDetail&gt;</span>Unpacked<span class="w"> </span>from:<span class="w"> </span>%transferDirectory%objects/Project.zip<span class="w"> </span>(63706dd1-6f8f-4460-a5a5-546bac061d91)<span class="nt">&lt;/premis:eventDetail&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:eventDetailInformation&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventOutcomeInformation&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="ocr-transcription">
+<span id="event-ocr"></span><h3>OCRテキスト変換<a class="headerlink" href="#ocr-transcription" title="Link to this heading">¶</a></h3>
+<p>[インジェスト] タブでOCRが実行された場合、そのファイルには以下のPREMISイベントが含まれます：</p>
+<ul class="simple">
+<li><p>テキスト変換</p></li>
+</ul>
+</section>
+<section id="aip-reingest">
+<span id="event-reingest"></span><h3>AIPの再インジェスト<a class="headerlink" href="#aip-reingest" title="Link to this heading">¶</a></h3>
+<p>AIPの一部または全部が再インジェストされた場合、 <strong>objects</strong> ディレクトリのすべてのファイルに対してPREMISイベントが発生します：</p>
+<ul class="simple">
+<li><p>再インジェスト</p></li>
+</ul>
+</section>
+<section id="sending-transfers-to-backlog">
+<span id="event-backlog"></span><h3>バックログへの転送の送信<a class="headerlink" href="#sending-transfers-to-backlog" title="Link to this heading">¶</a></h3>
+<p>転送がバックログに送られた場合、PREMIS イベントが発生します：</p>
+<ul class="simple">
+<li><p>バックログからの削除</p></li>
+</ul>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:digiprovMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;digiprovMD_11&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:EVENT&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:event</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:eventIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventIdentifierValue&gt;</span>de7463a9-1ecd-4499-b692-b61034290452<span class="nt">&lt;/premis:eventIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:eventIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventType&gt;</span>removal<span class="w"> </span>from<span class="w"> </span>backlog<span class="nt">&lt;/premis:eventType&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventDateTime&gt;</span>2019-11-18T12:24:38.892676+00:00<span class="nt">&lt;/premis:eventDateTime&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventDetailInformation&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="premis-agent-metadata">
+<span id="premis-agent"></span><h2>PREMISエージェントのメタデータ<a class="headerlink" href="#premis-agent-metadata" title="Link to this heading">¶</a></h2>
+<p>PREMIS イベントにリンクされている PREMIS エージェントも、独自の digiprovMD セクションに配列されます。各エージェントのデフォルトのセマンティック単位は次のとおりです：</p>
+<ul class="simple">
+<li><p>agentIdentifier</p></li>
+<li><p>agentName</p></li>
+<li><p>agentType</p></li>
+</ul>
+<p>すべての PREMIS イベントには、3 種類のエージェントが関連付けられています。これらは <code class="docutils literal notranslate"><span class="pre">agentType</span></code> の下に以下の3つのオプションとしてリストされます（METS XML の例を含む）：</p>
+<section id="software">
+<h3>ソフトウェア<a class="headerlink" href="#software" title="Link to this heading">¶</a></h3>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nt">&lt;mets:digiprovMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;digiprovMD_57&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:AGENT&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:agent</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:agentIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:agentIdentifierType&gt;</span>preservation<span class="w"> </span>system<span class="nt">&lt;/premis:agentIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:agentIdentifierValue&gt;</span>Archivematica-1.10<span class="nt">&lt;/premis:agentIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:agentIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:agentName&gt;</span>Archivematica<span class="nt">&lt;/premis:agentName&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:agentType&gt;</span>software<span class="nt">&lt;/premis:agentType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:agent&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="organization">
+<h3>組織<a class="headerlink" href="#organization" title="Link to this heading">¶</a></h3>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nt">&lt;mets:digiprovMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;digiprovMD_58&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:AGENT&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:agent</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:agentIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:agentIdentifierType&gt;</span>repository<span class="w"> </span>code<span class="nt">&lt;/premis:agentIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:agentIdentifierValue&gt;</span>12345<span class="nt">&lt;/premis:agentIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:agentIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:agentName&gt;</span>XYZ<span class="w"> </span>Library<span class="nt">&lt;/premis:agentName&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:agentType&gt;</span>organization<span class="nt">&lt;/premis:agentType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:agent&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="archivematica-user">
+<h3>Archivematicaユーザー<a class="headerlink" href="#archivematica-user" title="Link to this heading">¶</a></h3>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nt">&lt;mets:digiprovMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;digiprovMD_59&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:AGENT&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:agent</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:agentIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:agentIdentifierType&gt;</span>Archivematica<span class="w"> </span>user<span class="w"> </span>pk<span class="nt">&lt;/premis:agentIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:agentIdentifierValue&gt;</span>1<span class="nt">&lt;/premis:agentIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:agentIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:agentName&gt;</span>username=&quot;analyst&quot;,<span class="w"> </span>first_name=&quot;Jane&quot;,<span class="w"> </span>last_name=&quot;Smith&quot;<span class="nt">&lt;/premis:agentName&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:agentType&gt;</span>Archivematica<span class="w"> </span>user<span class="nt">&lt;/premis:agentType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:agent&gt;</span>
+</pre></div>
+</div>
+<p>各タイプのAgentは、METS AIPファイルのdigiprovMDとして各amdSecに1つずつ含まれます（<a class="reference internal" href="METS.html#mets-schema"><span class="std std-ref">ArchivematicaのMETS</span></a> を参照）。</p>
+</section>
+</section>
+<section id="premis-rights-metadata">
+<span id="premis-rights"></span><h2>PREMIS権利メタデータ<a class="headerlink" href="#premis-rights-metadata" title="Link to this heading">¶</a></h2>
+<p>PREMISの権利メタデータは、 <a class="reference internal" href="../transfer/transfer.html#transfer"><span class="std std-ref">転送</span></a> または <a class="reference internal" href="../ingest/ingest.html#ingest"><span class="std std-ref">インジェスト</span></a> に追加できます。GUIインターフェースから入力し、SIPまたは転送全体に適用できます。また、rights.csvファイルに記述し、 <a class="reference internal" href="../transfer/import-metadata.html#import-metadata"><span class="std std-ref">Import metadata</span></a> 機能を使用することで、オブジェクトレベルで権利を入力もできます。</p>
+<p>以下では、各権利ベースで表示されるエントリーテンプレートと、その後に付与／制限される行為について説明します。</p>
+<p>次にスキップ：</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#basis-copyight"><span class="std std-ref">根拠：著作権</span></a></p></li>
+<li><p><a class="reference internal" href="#basis-statute"><span class="std std-ref">根拠：法令</span></a></p></li>
+<li><p><a class="reference internal" href="#basis-license"><span class="std std-ref">根拠：ライセンス</span></a></p></li>
+<li><p><a class="reference internal" href="#basis-donor"><span class="std std-ref">根拠：ドナー</span></a></p></li>
+<li><p><a class="reference internal" href="#basis-policy"><span class="std std-ref">根拠：ポリシー</span></a></p></li>
+<li><p><a class="reference internal" href="#basis-other"><span class="std std-ref">根拠：その他</span></a></p></li>
+<li><p><a class="reference internal" href="#acts-granted"><span class="std std-ref">許可または制限される行為</span></a></p></li>
+</ul>
+<section id="basis-copyright">
+<span id="basis-copyight"></span><h3>根拠：著作権<a class="headerlink" href="#basis-copyright" title="Link to this heading">¶</a></h3>
+<p>以下は、テンプレートフィールドと関連するルールのリストです。この例には、結果として得られる METS XMLのブロックも含まれています。</p>
+<p>PREMIS in METS XML： <code class="docutils literal notranslate"><span class="pre">&lt;premis:rightsBasis&gt;Copyright&lt;/premis:rightsBasis&gt;</span></code></p>
+<section id="copyright-status">
+<h4>著作権の状況<a class="headerlink" href="#copyright-status" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;権利ステータスが記録される時点でのオブジェクトの著作権ステータスのコード化された指定。例えば、 著作権で保護されており、パブリックドメインであり、不明です。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+    &lt;premis:copyrightInformation&gt;
+       &lt;premis:copyrightStatus&gt;Under copyright&lt;/premis:copyrightStatus&gt;
+</pre></div>
+</div>
+</section>
+<section id="copyright-jurisdiction">
+<h4>著作権の管轄<a class="headerlink" href="#copyright-jurisdiction" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;著作権法が適用される国&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:copyrightInformation&gt;
+       &lt;premis:copyrightJurisdiction&gt;ca&lt;/premis:copyrightJurisdiction&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> 値は、管理された語彙から取られるべきです。推奨：ISO 3166。</p>
+</section>
+<section id="copyright-determination-date">
+<h4>著作権確定日<a class="headerlink" href="#copyright-determination-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;copyrightStatusに記録された著作権ステータスが決定された日付。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+    &lt;premis:copyrightInformation&gt;
+         &lt;premis:copyrightStatusDeterminationDate&gt;2011-09-16&lt;/premis:copyrightStatusDeterminationDate&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> ISO 8061を使用。</p>
+</section>
+<section id="copyright-start-date">
+<h4>著作権開始日<a class="headerlink" href="#copyright-start-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;特定の著作権がコンテンツに適用される、またはコンテンツに適用される日付。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:copyrightInformation&gt;
+      &lt;premis:copyrightApplicableDates&gt;
+         &lt;premis:startDate&gt;2015-01-01&lt;/premis:startDate&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> ISO 8061を使用します。</p>
+</section>
+<section id="copyright-end-date">
+<h4>著作権終了日<a class="headerlink" href="#copyright-end-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;特定の著作権がコンテンツに適用されなくなった、または適用される日付。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:copyrightInformation&gt;
+      &lt;premis:copyrightApplicableDates&gt;
+         &lt;premis:endDate&gt;2065-01-01&lt;/premis:endDate&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> ISO 8061 を使用します。&quot;終了日を開く&quot; をクリックすると、終了日を開いたままにすることができます。</p>
+</section>
+<section id="copyright-documentation-identifier-type">
+<h4>著作権文書識別子 - タイプ<a class="headerlink" href="#copyright-documentation-identifier-type" title="Link to this heading">¶</a></h4>
+<p><strong>規則</strong> &quot;著作権文書識別子が一意であるドメインの指定。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:copyrightInformation&gt;
+      &lt;premis:copyrightDocumentationIdentifier&gt;
+         &lt;premis:copyrightDocumentationIdentifierType&gt; Donor form &lt;/premis:copyrightDocumentationIdentifierType&gt;
+</pre></div>
+</div>
+</section>
+<section id="copyright-documentation-identifier-value">
+<h4>著作権文書識別子 - 値<a class="headerlink" href="#copyright-documentation-identifier-value" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;copyrightDocumentationIdentifierの値。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:copyrightInformation&gt;
+      &lt;premis:copyrightDocumentationIdentifier&gt;
+         &lt;premis:copyrightDocumentationIdentifierValue&gt;CCA-2009-67&lt;/premis:copyrightDocumentationIdentifierValue&gt;
+</pre></div>
+</div>
+</section>
+<section id="copyright-documentation-identifier-role">
+<h4>著作権文書識別子 - 役割<a class="headerlink" href="#copyright-documentation-identifier-role" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;識別される文書の目的または予想される用途を示す値。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:copyrightInformation&gt;
+      &lt;premis:copyrightDocumentationIdentifier&gt;
+         &lt;premis:copyrightDocumentationIdentifierRole&gt;Copyright holder statement&lt;/premis:copyrightDocumentationIdentifierRole&gt;
+</pre></div>
+</div>
+</section>
+<section id="copyright-note">
+<h4>著作権に関する注意事項<a class="headerlink" href="#copyright-note" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;オブジェクトの著作権状態に関する追加情報&quot;.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:copyrightInformation&gt;
+      &lt;premis:copyrightNote&gt;Copyright held by donor&lt;/premis:copyrightNote&gt;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="basis-statute">
+<span id="id1"></span><h3>根拠：法令<a class="headerlink" href="#basis-statute" title="Link to this heading">¶</a></h3>
+<p>PREMIS in METS XML： <code class="docutils literal notranslate"><span class="pre">&lt;premis:rightsBasis&gt;Statute&lt;/premis:rightsBasis&gt;</span></code></p>
+<section id="statute-jurisdiction">
+<h4>法令の管轄<a class="headerlink" href="#statute-jurisdiction" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;法令を制定した国またはその他の政治団体。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:statuteInformation&gt;
+      &lt;premis:statuteJurisdiction&gt;ca&lt;/premis:statuteJurisdiction&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> 値は管理された語彙から取られるべきです。推奨：ISO ISO 3166。</p>
+</section>
+<section id="statute-citation">
+<h4>法令引用<a class="headerlink" href="#statute-citation" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;法令を識別するための名称。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:statuteInformation&gt;
+      &lt;premis:statuteCitation&gt;Freedom of Information and Protection of Privacy Act [RBSC 1996] Chapter 165&lt;/premis:statuteCitation&gt;
+</pre></div>
+</div>
+</section>
+<section id="statute-determination-date">
+<h4>法令確定日<a class="headerlink" href="#statute-determination-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;決定が下された日付、法律による認可、記載された許可事項。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:statuteInformation&gt;
+      &lt;premis:statuteInformationDeterminationDate&gt;2015-07-02&lt;/premis:statuteInformationDeterminationDate&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> ISO 8061 を採用</p>
+</section>
+<section id="statute-start-date">
+<h4>法令の開始日<a class="headerlink" href="#statute-start-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;法令の施行日、または内容に適用される日。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:statuteApplicableDates&gt;
+      &lt;premis:startDate&gt;2015-01-01&lt;/premis:startDate&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> ISO 8061 を採用</p>
+</section>
+<section id="statute-end-date">
+<h4>法令終了日<a class="headerlink" href="#statute-end-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;法令が適用されなくなる日、または内容に適用される日。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:statuteApplicableDates&gt;
+      &lt;premis:endDate&gt;2020-01-01&lt;/premis:endDate&gt;
+</pre></div>
+</div>
+<p><strong>注</strong> ISO 8061を使用しています。&quot;Open End Date&quot;をクリックすることで、終了日を開いたままにできます。</p>
+</section>
+<section id="statute-documentation-identifier-type">
+<h4>法令文書識別子 - タイプ<a class="headerlink" href="#statute-documentation-identifier-type" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;制定文書識別子が一意であるドメインの指定。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:statuteDocumentationIdentifier&gt;
+      &lt;premis:statuteDocumentationIdentifierType&gt;Acts&lt;/premis:statuteDocumentationIdentifierType&gt;
+</pre></div>
+</div>
+</section>
+<section id="statute-documentation-identifier-value">
+<h4>法令文書識別子 - 値<a class="headerlink" href="#statute-documentation-identifier-value" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;statuteDocumentationIdentifier の値。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:statuteDocumentationIdentifier&gt;
+      &lt;premis:statuteDocumentationIdentifierValue&gt;RBSC 1996&lt;/premis:statuteDocumentationIdentifierValue&gt;
+</pre></div>
+</div>
+</section>
+<section id="statute-documentation-identifier-role">
+<h4>法令文書識別子- 役割<a class="headerlink" href="#statute-documentation-identifier-role" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;識別される文書の目的または予想される用途を示す値。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:statuteDocumentationIdentifier&gt;
+      &lt;premis:statuteDocumentationIdentifierRole&gt;Law&lt;/premis:statuteDocumentationIdentifierRole&gt;
+</pre></div>
+</div>
+</section>
+<section id="statute-note">
+<h4>法令に関する注意事項<a class="headerlink" href="#statute-note" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;法令に関する追加情報。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:statuteInformation&gt;
+      &lt;premis:statuteNote&gt;Social insurance numbers, health information covered by personal privacy provisions&lt;/premis:statuteNote&gt;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="basis-license">
+<span id="id2"></span><h3>根拠：ライセンス<a class="headerlink" href="#basis-license" title="Link to this heading">¶</a></h3>
+<p>以下は、テンプレートフィールドと関連するルールのリストです。この例には、結果として得られる METS XMLのブロックも含まれています。</p>
+<p>PREMIS in METS XML： <code class="docutils literal notranslate"><span class="pre">&lt;premis:rightsBasis&gt;License&lt;/premis:rightsBasis&gt;</span></code></p>
+<section id="license-terms">
+<h4>ライセンス条項<a class="headerlink" href="#license-terms" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;許可が付与されたライセンスまたは契約を説明するテキスト。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:licenseInformation&gt;
+      &lt;premis:licenseTerms&gt;This file is licensed under the Creative Commons Attribution-Share Alike 3.0 Unported license&lt;/premis:licenseTerms&gt;
+</pre></div>
+</div>
+</section>
+<section id="license-start-date">
+<h4>ライセンス開始日<a class="headerlink" href="#license-start-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;ライセンスが最初に適用される日付、またはコンテンツに適用される日付。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:licenseInformation&gt;
+      &lt;premis:licenseApplicableDates&gt;
+         &lt;premis:startDate&gt;2015-01-01&lt;/premis:startDate&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> ISO 8061を使用。</p>
+</section>
+<section id="license-end-date">
+<h4>ライセンス終了日<a class="headerlink" href="#license-end-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;ライセンスが内容に適用されなくなる、または適用される日付。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:licenseInformation&gt;
+      &lt;premis:licenseApplicableDates&gt;
+         &lt;premis:endDate&gt;OPEN&lt;/premis:endDate&gt;
+</pre></div>
+</div>
+<dl class="simple">
+<dt><strong>注意</strong> ISO 8061を使用します。&quot;終了日を開く&quot; をクリックすると、終了日を開いたままにすることができます</dt><dd><p>上に示します。</p>
+</dd>
+</dl>
+</section>
+<section id="license-documentation-identifier-type">
+<h4>ライセンス文書識別子 - タイプ<a class="headerlink" href="#license-documentation-identifier-type" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;ライセンス文書識別子が固有であるドメインの指定。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:licenseInformation&gt;
+      &lt;premis:licenseDocumentationIdentifier&gt;
+         &lt;premis:licenseDocumentationIdentifierType&gt;Accession form number&lt;/premis:licenceDocumentationIdentifierType&gt;
+</pre></div>
+</div>
+</section>
+<section id="license-documentation-identifier-value">
+<h4>ライセンス文書識別子 - 値<a class="headerlink" href="#license-documentation-identifier-value" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;licenseDocumentationIdentifier の値。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:licenseInformation&gt;
+      &lt;premis:licenseDocumentationIdentifier&gt;
+         &lt;premis:licenseDocumentationIdentifierValue&gt;CCA-2011-29&lt;/premis:licenseDocumentationIdentifierValue&gt;
+</pre></div>
+</div>
+</section>
+<section id="license-documentation-identifier-role">
+<h4>ライセンス文書識別子 - 役割<a class="headerlink" href="#license-documentation-identifier-role" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;識別される文書の目的または予想される用途を示す値。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:licenseInformation&gt;
+      &lt;premis:licenseDocumentationIdentifier&gt;
+         &lt;premis:licenseDocumentationRole&gt;Accession form license area&lt;/premis:licenseDocumentationRole&gt;
+</pre></div>
+</div>
+</section>
+<section id="license-note">
+<h4>ライセンスに関する注意事項<a class="headerlink" href="#license-note" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;ライセンスに関する追加情報。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:licenseInformation&gt;
+      &lt;premis:licenseNote&gt;Donors are prompted to choose a Creative Commons license on accession form&lt;/premis:licenseNote&gt;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="basis-donor">
+<span id="id3"></span><h3>根拠：ドナー<a class="headerlink" href="#basis-donor" title="Link to this heading">¶</a></h3>
+<p>以下は、テンプレートフィールドと関連するルールのリストです。この例には、結果として得られる METS XMLのブロックも含まれています。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematicaは、寄贈者の権利のテンプレートを提供しており、PREMIS では&quot;その他&quot; として翻訳されています。 METSファイルでは、rightsMD <code class="docutils literal notranslate"><span class="pre">&lt;premis:rightsBasis&gt;Other&lt;/premisrightsBasis&gt;</span></code> の中にDonor rightsがあります。</p>
+</div>
+<section id="donor-agreement-start-date">
+<h4>ドナー契約開始日<a class="headerlink" href="#donor-agreement-start-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;他方の権利がコンテンツに適用される、または適用される日付。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatment&gt;
+   &lt;premis:otherRightsInformation&gt;
+     &lt;premis:otherRightsApplicableDates&gt;
+        &lt;premis:startDate&gt;2015-01-01&lt;/premis:startDate&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> ISO 8061を使用。</p>
+</section>
+<section id="donor-agreement-end-date">
+<h4>ドナー契約終了日<a class="headerlink" href="#donor-agreement-end-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;他の権利が適用されなくなった、またはコンテンツに適用される日付。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+     &lt;premis:otherRightsApplicableDates&gt;
+        &lt;premis:endDate&gt;2025-01-01&lt;/premis:endDate&gt;
+</pre></div>
+</div>
+<p><strong>注</strong> ISO 8061を使用しています。&quot;Open End Date&quot;をクリックすることで、終了日を開いたままにできます。</p>
+</section>
+<section id="donor-documentation-identifier-type">
+<h4>ドナー文書識別子 -タイプ<a class="headerlink" href="#donor-documentation-identifier-type" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;権利説明文書識別子が一意であるドメインの指定。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsDocumentationIdentifier&gt;
+         &lt;premis:otherRightsDocumentationIdentifierType&gt;Donor form number&lt;/premis:otherRightsDocumentationIdentifierType&gt;
+</pre></div>
+</div>
+</section>
+<section id="donor-documentation-identifier-value">
+<h4>ドナー文書識別子 - 値<a class="headerlink" href="#donor-documentation-identifier-value" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> otherRightsDocumentationIdentifier の値。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsDocumentationIdentifier&gt;
+         &lt;premis:otherRightsDocumentationIdentifierValue&gt;CCA-2011-89&lt;/premis:otherRightsDocumentationIdentifierValue&gt;
+</pre></div>
+</div>
+</section>
+<section id="donor-documentation-identifier-role">
+<h4>ドナー文書識別子 - 役割<a class="headerlink" href="#donor-documentation-identifier-role" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;識別される文書の目的または予想される用途を示す値。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsDocumentationIdentifier&gt;
+         &lt;premis:otherRightsDocumentationIdentifierRole&gt;Agreement&lt;/premis:otherRightsDocumentationIdentifierRole&gt;
+</pre></div>
+</div>
+</section>
+<section id="donor-agreement-note">
+<h4>ドナー同意書に関する注意事項<a class="headerlink" href="#donor-agreement-note" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;オブジェクトの権利に関する追加情報&quot;.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsNote&gt;Ten-year restriction on access by donor request&lt;/premis:otherRightsNote&gt;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="basis-policy">
+<span id="id4"></span><h3>根拠：ポリシー<a class="headerlink" href="#basis-policy" title="Link to this heading">¶</a></h3>
+<p>以下は、テンプレートフィールドと関連するルールのリストです。この例には、結果として得られる METS XMLのブロックも含まれています。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematica は、ポリシー権限のテンプレートを提供します。これは、PREMIS では&quot;その他&quot;として変換されます。METS ファイルでは、ポリシー権限が、rightsMD <code class="docutils literal notranslate"><span class="pre">&lt;premis:rightsBasis&gt;Other&lt;/premisrightsBasis&gt;</span></code> にあります。</p>
+</div>
+<section id="policy-start-date">
+<h4>ポリシーの開始日<a class="headerlink" href="#policy-start-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;他方の権利がコンテンツに適用される、または適用される日付。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatment&gt;
+   &lt;premis:otherRightsInformation&gt;
+     &lt;premis:otherRightsApplicableDates&gt;
+        &lt;premis:startDate&gt;2015-01-01&lt;/premis:startDate&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> ISO 8061を使用。</p>
+</section>
+<section id="policy-end-date">
+<h4>ポリシーの終了日<a class="headerlink" href="#policy-end-date" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;他の権利が適用されなくなった、またはコンテンツに適用される日付。&quot;</p>
+<p><strong>METS XML</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+     &lt;premis:otherRightsApplicableDates&gt;
+        &lt;premis:endDate&gt;2025-01-01&lt;/premis:endDate&gt;
+</pre></div>
+</div>
+<p><strong>注</strong> ISO 8061を使用しています。&quot;Open End Date&quot;をクリックすることで、終了日を開いたままにできます。</p>
+</section>
+<section id="policy-documentation-identifier-type">
+<h4>ポリシー文書識別子 -タイプ<a class="headerlink" href="#policy-documentation-identifier-type" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;権利説明文書識別子が一意であるドメインの指定。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsDocumentationIdentifier&gt;
+         &lt;premis:otherRightsDocumentationIdentifierType&gt;RFA policy number&lt;/premis:otherRightsDocumentationIdentifierType&gt;
+</pre></div>
+</div>
+</section>
+<section id="policy-documentation-identifier-value">
+<h4>ポリシー文書識別子 - 値<a class="headerlink" href="#policy-documentation-identifier-value" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> otherRightsDocumentationIdentifier の値</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsDocumentationIdentifier&gt;
+         &lt;premis:otherRightsDocumentationIdentifierValue&gt;RFA-P-1992/040&lt;/premis:otherRightsDocumentationIdentifierValue&gt;
+</pre></div>
+</div>
+</section>
+<section id="policy-documentation-identifier-role">
+<h4>ポリシー文書の識別子 - 役割<a class="headerlink" href="#policy-documentation-identifier-role" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;識別される文書の目的または予想される用途を示す値。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsDocumentationIdentifier&gt;
+         &lt;premis:otherRightsDocumentationIdentifierRole&gt;Policy&lt;/premis:otherRightsDocumentationIdentifierRole&gt;
+</pre></div>
+</div>
+</section>
+<section id="policy-note">
+<h4>ポリシーに関する注意事項メモ<a class="headerlink" href="#policy-note" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;オブジェクトの権利に関する追加情報&quot;.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsNote&gt;Thirty-year closure rule: Executive Office records available only to Richards Foundation staff and BoD&lt;/premis:otherRightsNote&gt;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="basis-other">
+<span id="id5"></span><h3>根拠：その他<a class="headerlink" href="#basis-other" title="Link to this heading">¶</a></h3>
+<p>以下は、テンプレートフィールドと関連するルールのリストです。この例には、結果として得られる METS XMLのブロックも含まれています。</p>
+<p>PREMIS in METS XML： <code class="docutils literal notranslate"><span class="pre">&lt;premis:rightsBasis&gt;Other&lt;/premisrightsBasis&gt;</span></code></p>
+<section id="other-rights-basis">
+<h4>その他の権利の根拠<a class="headerlink" href="#other-rights-basis" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;rightsStatementIdentifier に記述されている他の権利または許可の根拠の指定。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsBasis&gt;Agreements&lt;/premis:otherRightsBasis&gt;
+</pre></div>
+</div>
+</section>
+<section id="other-start-date">
+<h4>その他の開始日<a class="headerlink" href="#other-start-date" title="Link to this heading">¶</a></h4>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatment&gt;
+   &lt;premis:otherRightsInformation&gt;
+     &lt;premis:otherRightsApplicableDates&gt;
+        &lt;premis:startDate&gt;2015-01-01&lt;/premis:startDate&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> ISO 8061を使用。</p>
+</section>
+<section id="other-end-date">
+<h4>その他の終了日<a class="headerlink" href="#other-end-date" title="Link to this heading">¶</a></h4>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+     &lt;premis:otherRightsApplicableDates&gt;
+        &lt;premis:endDate&gt;2025-01-01&lt;/premis:endDate&gt;
+</pre></div>
+</div>
+<p><strong>注</strong> ISO 8061を使用しています。&quot;Open End Date&quot;をクリックすることで、終了日を開いたままにできます。</p>
+</section>
+<section id="other-documentation-identifier-type">
+<h4>その他の文書識別子 -タイプ<a class="headerlink" href="#other-documentation-identifier-type" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;権利説明文書識別子が一意であるドメインの指定。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsDocumentationIdentifier&gt;
+         &lt;premis:otherRightsDocumentationIdentifierType&gt;MOU number&lt;/premis:otherRightsDocumentationIdentifierType&gt;
+</pre></div>
+</div>
+</section>
+<section id="other-documentation-identifier-value">
+<h4>その他の文書識別子 - 値<a class="headerlink" href="#other-documentation-identifier-value" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> otherRightsDocumentationIdentifier の値。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsDocumentationIdentifier&gt;
+         &lt;premis:otherRightsDocumentationIdentifierValue&gt;MOU-F-89&lt;/premis:otherRightsDocumentationIdentifierValue&gt;
+</pre></div>
+</div>
+</section>
+<section id="other-documentation-identifier-role">
+<h4>その他の文書識別子 -役割<a class="headerlink" href="#other-documentation-identifier-role" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;識別される文書の目的または予想される用途を示す値。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsDocumentationIdentifier&gt;
+         &lt;premis:otherRightsDocumentationIdentifierRole&gt;Agreement number&lt;/premis:otherRightsDocumentationIdentifierRole&gt;
+</pre></div>
+</div>
+</section>
+<section id="note">
+<h4>注意<a class="headerlink" href="#note" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;オブジェクトの権利に関する追加情報&quot;.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:otherRightsInformation&gt;
+      &lt;premis:otherRightsNote&gt;Terms of MOU with depositor include 10-year embargo for access&lt;/premis:otherRightsNote&gt;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="acts-granted-or-restricted">
+<span id="acts-granted"></span><h3>許可または制限される行為<a class="headerlink" href="#acts-granted-or-restricted" title="Link to this heading">¶</a></h3>
+<p>以下は、テンプレートフィールドと関連するルールのリストです。この例には、結果として得られる METS XMLのブロックも含まれています。</p>
+<section id="act">
+<h4>行為<a class="headerlink" href="#act" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;保存リポジトリが取ることを許されたアクション。例えば、複製、移行、修正、使用、普及、削除など。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:rightsGranted&gt;
+      &lt;premis:act&gt;Delete&lt;/premis:act&gt;
+</pre></div>
+</div>
+</section>
+<section id="grant-restriction">
+<h4>付与/制限<a class="headerlink" href="#grant-restriction" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> ドロップダウンフィールド：許可、不許可、条件付きから選択</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:rightsGranted&gt;
+      &lt;premis:restriction&gt;Disallow&lt;/premis:restriction&gt;
+</pre></div>
+</div>
+</section>
+<section id="start">
+<h4>開始<a class="headerlink" href="#start" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;付与された権利または制限の開始日。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:rightsGranted&gt;
+      &lt;premis:termOfRestriction&gt;
+         &lt;premis:startDate&gt;2015-01-01&lt;/premis:startDate&gt;
+</pre></div>
+</div>
+<p><strong>注意</strong> ISO 8061を使用。</p>
+</section>
+<section id="end">
+<h4>終了<a class="headerlink" href="#end" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;付与された権利または制限の終了日。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:rightsGranted:
+      &lt;premis:termofRestriction&gt;
+         &lt;premis:endDate&gt;2025-01-01&lt;/premis:endDate&gt;
+</pre></div>
+</div>
+<p><strong>注</strong> ISO 8061を使用しています。&quot;Open End Date&quot;をクリックすることで、終了日を開いたままにできます。</p>
+</section>
+<section id="grant-restriction-note">
+<h4>付与／制限の注意事項<a class="headerlink" href="#grant-restriction-note" title="Link to this heading">¶</a></h4>
+<p><strong>ルール</strong> &quot;与えられた権利に関する追加情報。&quot;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;premis:rightsStatement&gt;
+   &lt;premis:rightsGranted&gt;
+      &lt;premis:rightsGrantedNote&gt;Publication restricted until copyright expires.&lt;/premis:rightsGrantedNote&gt;
+</pre></div>
+</div>
+<p><a class="reference internal" href="#premis-template"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Archivematica のPREMISメタデータ</a><ul>
+<li><a class="reference internal" href="#premis-events-metadata">PREMISイベントメタデータ</a></li>
+<li><a class="reference internal" href="#premis-events-list">PREMISイベントリスト</a><ul>
+<li><a class="reference internal" href="#default-events-for-original-files">オリジナルファイルのデフォルトイベント</a></li>
+<li><a class="reference internal" href="#normalized-files">正規化ファイル</a></li>
+<li><a class="reference internal" href="#filename-change">ファイル名の変更</a></li>
+<li><a class="reference internal" href="#format-identification">フォーマットの識別</a></li>
+<li><a class="reference internal" href="#extract-packages">パッケージの抽出</a></li>
+<li><a class="reference internal" href="#ocr-transcription">OCRテキスト変換</a></li>
+<li><a class="reference internal" href="#aip-reingest">AIPの再インジェスト</a></li>
+<li><a class="reference internal" href="#sending-transfers-to-backlog">バックログへの転送の送信</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#premis-agent-metadata">PREMISエージェントのメタデータ</a><ul>
+<li><a class="reference internal" href="#software">ソフトウェア</a></li>
+<li><a class="reference internal" href="#organization">組織</a></li>
+<li><a class="reference internal" href="#archivematica-user">Archivematicaユーザー</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#premis-rights-metadata">PREMIS権利メタデータ</a><ul>
+<li><a class="reference internal" href="#basis-copyright">根拠：著作権</a><ul>
+<li><a class="reference internal" href="#copyright-status">著作権の状況</a></li>
+<li><a class="reference internal" href="#copyright-jurisdiction">著作権の管轄</a></li>
+<li><a class="reference internal" href="#copyright-determination-date">著作権確定日</a></li>
+<li><a class="reference internal" href="#copyright-start-date">著作権開始日</a></li>
+<li><a class="reference internal" href="#copyright-end-date">著作権終了日</a></li>
+<li><a class="reference internal" href="#copyright-documentation-identifier-type">著作権文書識別子 - タイプ</a></li>
+<li><a class="reference internal" href="#copyright-documentation-identifier-value">著作権文書識別子 - 値</a></li>
+<li><a class="reference internal" href="#copyright-documentation-identifier-role">著作権文書識別子 - 役割</a></li>
+<li><a class="reference internal" href="#copyright-note">著作権に関する注意事項</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#basis-statute">根拠：法令</a><ul>
+<li><a class="reference internal" href="#statute-jurisdiction">法令の管轄</a></li>
+<li><a class="reference internal" href="#statute-citation">法令引用</a></li>
+<li><a class="reference internal" href="#statute-determination-date">法令確定日</a></li>
+<li><a class="reference internal" href="#statute-start-date">法令の開始日</a></li>
+<li><a class="reference internal" href="#statute-end-date">法令終了日</a></li>
+<li><a class="reference internal" href="#statute-documentation-identifier-type">法令文書識別子 - タイプ</a></li>
+<li><a class="reference internal" href="#statute-documentation-identifier-value">法令文書識別子 - 値</a></li>
+<li><a class="reference internal" href="#statute-documentation-identifier-role">法令文書識別子- 役割</a></li>
+<li><a class="reference internal" href="#statute-note">法令に関する注意事項</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#basis-license">根拠：ライセンス</a><ul>
+<li><a class="reference internal" href="#license-terms">ライセンス条項</a></li>
+<li><a class="reference internal" href="#license-start-date">ライセンス開始日</a></li>
+<li><a class="reference internal" href="#license-end-date">ライセンス終了日</a></li>
+<li><a class="reference internal" href="#license-documentation-identifier-type">ライセンス文書識別子 - タイプ</a></li>
+<li><a class="reference internal" href="#license-documentation-identifier-value">ライセンス文書識別子 - 値</a></li>
+<li><a class="reference internal" href="#license-documentation-identifier-role">ライセンス文書識別子 - 役割</a></li>
+<li><a class="reference internal" href="#license-note">ライセンスに関する注意事項</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#basis-donor">根拠：ドナー</a><ul>
+<li><a class="reference internal" href="#donor-agreement-start-date">ドナー契約開始日</a></li>
+<li><a class="reference internal" href="#donor-agreement-end-date">ドナー契約終了日</a></li>
+<li><a class="reference internal" href="#donor-documentation-identifier-type">ドナー文書識別子 -タイプ</a></li>
+<li><a class="reference internal" href="#donor-documentation-identifier-value">ドナー文書識別子 - 値</a></li>
+<li><a class="reference internal" href="#donor-documentation-identifier-role">ドナー文書識別子 - 役割</a></li>
+<li><a class="reference internal" href="#donor-agreement-note">ドナー同意書に関する注意事項</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#basis-policy">根拠：ポリシー</a><ul>
+<li><a class="reference internal" href="#policy-start-date">ポリシーの開始日</a></li>
+<li><a class="reference internal" href="#policy-end-date">ポリシーの終了日</a></li>
+<li><a class="reference internal" href="#policy-documentation-identifier-type">ポリシー文書識別子 -タイプ</a></li>
+<li><a class="reference internal" href="#policy-documentation-identifier-value">ポリシー文書識別子 - 値</a></li>
+<li><a class="reference internal" href="#policy-documentation-identifier-role">ポリシー文書の識別子 - 役割</a></li>
+<li><a class="reference internal" href="#policy-note">ポリシーに関する注意事項メモ</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#basis-other">根拠：その他</a><ul>
+<li><a class="reference internal" href="#other-rights-basis">その他の権利の根拠</a></li>
+<li><a class="reference internal" href="#other-start-date">その他の開始日</a></li>
+<li><a class="reference internal" href="#other-end-date">その他の終了日</a></li>
+<li><a class="reference internal" href="#other-documentation-identifier-type">その他の文書識別子 -タイプ</a></li>
+<li><a class="reference internal" href="#other-documentation-identifier-value">その他の文書識別子 - 値</a></li>
+<li><a class="reference internal" href="#other-documentation-identifier-role">その他の文書識別子 -役割</a></li>
+<li><a class="reference internal" href="#note">注意</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#acts-granted-or-restricted">許可または制限される行為</a><ul>
+<li><a class="reference internal" href="#act">行為</a></li>
+<li><a class="reference internal" href="#grant-restriction">付与/制限</a></li>
+<li><a class="reference internal" href="#start">開始</a></li>
+<li><a class="reference internal" href="#end">終了</a></li>
+<li><a class="reference internal" href="#grant-restriction-note">付与／制限の注意事項</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="dublincore.html"
+                          title="前の章へ">Archivematicaのダブリンコア</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../appraisal/appraisal.html"
+                          title="次の章へ">評価</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/metadata/premis.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../appraisal/appraisal.html" title="評価"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="dublincore.html" title="Archivematicaのダブリンコア"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematica のPREMISメタデータ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ユーザーマニュアル &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=def86cc0" />
+    
+    <script src="../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="転送" href="transfer/transfer.html" />
+    <link rel="prev" title="よくあるご質問" href="../getting-started/troubleshooting/faq.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="transfer/transfer.html" title="転送"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../getting-started/troubleshooting/faq.html" title="よくあるご質問"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Archivematica文書</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ユーザーマニュアル</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="user-manual">
+<span id="id1"></span><h1>ユーザーマニュアル<a class="headerlink" href="#user-manual" title="Link to this heading">¶</a></h1>
+<p>以下に、ユーザーマニュアルの各章の概要と、各章の主なセクションへのリンクを示します。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="transfer/transfer.html">転送</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transfer/transfer.html#the-transfer-tab">転送タブ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/transfer.html#preparing-digital-objects-for-transfer">デジタルオブジェクトの転送準備</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#permissions">許可</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#transfer-types">転送の種類</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#basic-transfers">基本的な転送</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#transfers-with-descriptive-rights-and-or-event-metadata">説明、権利、および/またはイベントメタデータを伴う転送</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="transfer/transfer.html#adding-metadata-to-a-bag">バッグにメタデータを追加</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#transfers-with-submission-documentation">提出書類を伴う転送</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="transfer/transfer.html#adding-submission-documentation-to-a-bag">バッグに提出書類を追加</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#create-a-transfer-with-existing-checksums">既存のチェックサムを使用して転送を作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#transfers-with-existing-persistent-identifiers">既存の永続的識別子による転送</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#transferring-material-with-preservation-or-access-derivatives-manual-normalization">保存またはアクセス派生物を含む素材の転送 （手動正規化）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#transferring-material-with-access-derivatives-only">アクセス派生物のみを使用した素材の転送</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#transferring-material-with-service-mezzanine-files">サービス（メザニン）ファイルで素材を転送</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/transfer.html#processing-a-transfer">転送処理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#start-a-transfer">転送を開始</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#choose-a-processing-configuration">処理設定を選択</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#transfer-tab-microservices">転送タブマイクロサービス</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/transfer.html#cleaning-up-the-transfer-dashboard">転送ダッシュボードのクリーンアップ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#remove-a-single-transfer">単一転送の削除</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/transfer.html#remove-all-completed-transfers">完了した転送をすべて削除</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transfer/import-metadata.html">メタデータのインポート</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transfer/import-metadata.html#importing-descriptive-metadata-with-metadata-csv">metadata.csv を使用した説明メタデータのインポート</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer/import-metadata.html#adding-descriptive-metadata-to-individual-objects">個々のオブジェクトへの説明メタデータの追加</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/import-metadata.html#adding-descriptive-metadata-to-a-directory">ディレクトリへの説明メタデータの追加</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/import-metadata.html#adding-non-dublin-core-descriptive-metadata">Dublin Core 以外の説明メタデータの追加</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/import-metadata.html#adding-metadata-using-json-files">JSON ファイルを使ったメタデータの追加</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/import-metadata.html#importing-and-validating-xml-metadata-with-source-metadata-csv">source-metadata.csv による XML メタデータのインポートと妥当性確認</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer/import-metadata.html#setting-up">設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/import-metadata.html#adding-and-validating-metadata">メタデータの追加と妥当性確認</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/import-metadata.html#updating-metadata-through-metadata-reingests">メタデータの再インジェストによるメタデータの更新</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/import-metadata.html#deleting-metadata-through-metadata-reingests">メタデータの再インジェストによるメタデータの削除</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/import-metadata.html#importing-rights-metadata-with-rights-csv">rights.csvを使った権利メタデータのインポート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/import-metadata.html#importing-event-metadata-with-premis-xml">premis.xml によるイベントメタデータのインポート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/import-metadata.html#adding-metadata-to-bags">バッグにメタデータを追加</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/import-metadata.html#importing-other-types-of-metadata">他のタイプのメタデータのインポート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/import-metadata.html#importing-structural-metadata-with-mets-structmap-xml">mets_structmap.xml を使った構造メタデータのインポート</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transfer/bags.html">圧縮バッグと解凍バッグ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transfer/bags.html#bag-structure-requirements">バッグ構造の要件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/bags.html#configuring-bags">バッグの設定</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer/bags.html#unzipped-bags">解凍されたバッグ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/bags.html#zipped-bags">圧縮されたバッグ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/bags.html#adding-descriptive-rights-metadata-and-submission-documentation-to-bags">説明/権利メタデータと提出文書をバッグに追加</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/bags.html#other-ways-to-configure-bags">バッグを設定するその他の方法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/bags.html#index-and-search-bag-metadata">バッグのメタデータを索引付けして検索</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transfer/forensic.html">フォレンジックディスクイメージ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transfer/forensic.html#workflow-configuration-options">ワークフロー設定オプション</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer/forensic.html#extract-packages">パッケージの抽出</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/forensic.html#delete-packages-after-extraction">抽出後にパッケージを削除します</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/forensic.html#examine-contents">内容検査</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/forensic.html#using-the-disk-image-transfer-type">ディスクイメージ転送タイプの使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer/forensic.html#compound-disk-images">複合ディスクイメージ</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transfer/dspace.html">DSpaceエクスポート</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transfer/dspace.html#dspace-version-compatibility">DSpaceバージョンの互換性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/dspace.html#dspace-export-structure">DSpaceエクスポート構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/dspace.html#processing-dspace-exports">DSpaceエクスポートの処理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/dspace.html#dspace-aip-mets-files">DSpace AIP METSファイル</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transfer/scan-for-viruses.html">ウイルスのスキャン</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transfer/scan-for-viruses.html#exploring-clamav-settings">ClamAV 設定を探る</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer/scan-for-viruses.html#clamscan">Clamscan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer/scan-for-viruses.html#clamdscan">Clamdscan</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transfer/change-filenames.html">ファイル名の変更</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transfer/dataverse.html">Dataverseの統合</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transfer/dataverse.html#overview">概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/dataverse.html#selecting-datasets-for-preservation">保存するデータセットの選択</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/dataverse.html#dataset-contents">データセットの内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/dataverse.html#processing-dataverse-datasets">Dataverseのデータセットを処理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/dataverse.html#dataverse-mets-file">Dataverse METSファイル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/dataverse.html#aip-mets-file">AIP METSファイル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer/dataverse.html#configuration">設定</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ingest/ingest.html">インジェスト</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ingest/ingest.html#create-a-sip">SIPの作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/ingest.html#add-descriptive-metadata">説明メタデータを追加</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ingest/ingest.html#adding-metadata-using-the-user-interface-form">ユーザーインターフェイスフォームを使用したメタデータの追加</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ingest/ingest.html#uploading-metadata-csv-files-through-the-user-interface">ユーザーインターフェースによるメタデータCSVファイルのアップロード</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/ingest.html#add-premis-rights">PREMISの権利を追加</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/ingest.html#normalize">正規化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/ingest.html#bind-pids">Bind PID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/ingest.html#transcribe-sip-contents">SIPコンテンツのテキスト変換</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/ingest.html#store-aip">AIPの保存</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/ingest.html#upload-dip">DIPのアップロード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/ingest.html#re-ingest-aip">AIPの再インジェスト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ingest/ingest.html#metadata-only">1. メタデータのみ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ingest/ingest.html#partial-re-ingest">2. 部分再インジェスト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ingest/ingest.html#full-re-ingest">3. 完全再インジェスト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ingest/ingest.html#how-to-tell-in-the-mets-file-if-an-aip-has-been-re-ingested">AIP が再インジェストされたかどうかを METS ファイルで確認する方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ingest/ingest.html#where-to-start-the-re-ingest-process">再インジェストプロセスはどこから始めるべきか</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ingest/ingest.html#archival-storage-tab-on-the-dashboard">ダッシュボードのアーカイブストレージタブ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ingest/ingest.html#storage-service">Storage Service</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ingest/ingest.html#api">API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/ingest.html#clean-up-the-ingest-dashboard">インジェストダッシュボードのクリーンアップ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ingest/ingest.html#remove-a-single-ingest">単一のインジェストを削除</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ingest/ingest.html#remove-all-completed-ingests">完了したインジェストをすべて削除</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ingest/manual-normalization.html">マニュアル正規化</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ingest/manual-normalization.html#workflow-1-manual-normalization-prior-to-transfer-to-archivematica">ワークフロー1：Archivematicaに転送する前の手動正規化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/manual-normalization.html#workflow-2-manual-normalization-during-ingest">ワークフロー 2：インジェスト中の手動正規化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/manual-normalization.html#adding-premis-eventdetail-for-manual-normalization">手動正規化のためのPREMIS eventDetailの追加</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingest/manual-normalization.html#normalizing-files-with-the-same-name">同じ名前のファイルの正規化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="archival-storage/archival-storage.html">アーカイブストレージ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="archival-storage/archival-storage.html#browsing-the-aip-store">AIPストアの閲覧</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="archival-storage/archival-storage.html#downloading-all-aip-metadata-in-a-csv-file">すべてのAIPメタデータをCSVファイルでダウンロード</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="archival-storage/archival-storage.html#searching-the-aip-store">AIPストアの検索</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="archival-storage/archival-storage.html#conducting-a-search">検索の実施</a></li>
+<li class="toctree-l3"><a class="reference internal" href="archival-storage/archival-storage.html#searching-for-archival-information-collections-aics">アーカイブ情報コレクション（AIC）の検索</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="archival-storage/archival-storage.html#aip-information-page">AIP情報ページ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="archival-storage/archival-storage.html#downloading-an-aip">AIPのダウンロード</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="archival-storage/archival-storage.html#downloading-the-mets-file">METSファイルのダウンロード</a></li>
+<li class="toctree-l4"><a class="reference internal" href="archival-storage/archival-storage.html#downloading-the-pointer-file">ポインターファイルのダウンロード</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="archival-storage/archival-storage.html#metadata-only-upload-to-atom">AtoMへのメタデータのみのアップロード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="archival-storage/archival-storage.html#re-ingest-aip">AIPの再インジェスト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="archival-storage/archival-storage.html#delete-aip">AIPの削除</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="archival-storage/archival-storage.html#aip-encryption">AIP暗号化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archival-storage/archival-storage.html#aip-storage-structure">AIPストレージ構造</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="archival-storage/aip-structure.html">AIPの構造</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="archival-storage/aip-structure.html#name">名前</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archival-storage/aip-structure.html#aip-contents">AIPの内容</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="archival-storage/aip-structure.html#bagit-files">BagItファイル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="archival-storage/aip-structure.html#data-directory">データディレクトリ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="archival-storage/aip-structure.html#aip-mets-file">AIP METSファイル</a></li>
+<li class="toctree-l4"><a class="reference internal" href="archival-storage/aip-structure.html#readme-file">READMEファイル</a></li>
+<li class="toctree-l4"><a class="reference internal" href="archival-storage/aip-structure.html#logs">ログ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="archival-storage/aip-structure.html#objects">オブジェクト</a></li>
+<li class="toctree-l4"><a class="reference internal" href="archival-storage/aip-structure.html#thumbnails">サムネイル</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="archival-storage/aic.html">アーカイブ情報コレクション（AICs）</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="archival-storage/aic.html#create-an-archival-information-collection">アーカイブ情報コレクションの作成</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="archival-storage/aic.html#step-1-create-your-aips">ステップ1：AIP を作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="archival-storage/aic.html#step-2-create-the-aic">ステップ2：AICの作成</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="archival-storage/aic.html#search-for-aics">AICの検索</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archival-storage/aic.html#update-an-aic">AICの更新</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archival-storage/aic.html#aic-contents">AICの内容</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="access/access.html">アクセス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="access/access.html#access-systems">アクセスシステム</a></li>
+<li class="toctree-l2"><a class="reference internal" href="access/access.html#upload-a-dip-to-atom">AtoMにDIPをアップロード</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="access/access.html#metadata-only-upload-to-atom">AtoMへのメタデータのみのアップロード</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="access/access.html#upload-a-dip-to-archivesspace">ArchivesSpaceにDIPをアップロード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="access/access.html#store-dip">DIPの保管</a></li>
+<li class="toctree-l2"><a class="reference internal" href="access/access.html#review-and-download-dips">DIPのレビューとダウンロード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="access/access.html#access-tab">アクセスタブ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="access/contentdm.html">CONTENTdm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="access/contentdm.html#preparing-a-transfer-for-contentdm">CONTENTdmへの転送準備</a></li>
+<li class="toctree-l2"><a class="reference internal" href="access/contentdm.html#controlling-the-file-order">ファイルの順序の制御</a></li>
+<li class="toctree-l2"><a class="reference internal" href="access/contentdm.html#create-dip-for-contentdm">CONTENTdmのDIPを作成</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="preservation/preservation-planning.html">保存計画</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="preservation/preservation-planning.html#preservation-planning-policies">保存計画ポリシー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preservation/preservation-planning.html#definitions">定義</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#format">フォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#format-group">フォーマットグループ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#purpose">目的</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#tools">ツール</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#commands">コマンド</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#rules">ルール</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preservation/preservation-planning.html#altering-commands-and-rules">コマンドとルールの変更</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#writing-commands">コマンドを書く</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#changing-rules">ルールの変更</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preservation/preservation-planning.html#identification">識別</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#identification-tools">識別ツール</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#identification-commands">識別コマンド</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#identification-rules">識別ルール</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preservation/preservation-planning.html#characterization">特性化</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#characterization-tools">特性化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#characterization-commands">特性化コマンド</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#characterization-rules">特性化ルール</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preservation/preservation-planning.html#event-detail">イベント詳細</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#event-detail-tools">イベント詳細ツール</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#event-detail-commands">イベント詳細コマンド</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#event-detail-rules">イベント詳細ルール</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preservation/preservation-planning.html#extraction">抽出</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#extraction-tools">抽出ツール</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#extraction-commands">抽出コマンド</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#extraction-rules">抽出ルール</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preservation/preservation-planning.html#normalization">正規化</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#normalization-tools">正規化ツール</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#normalization-commands">正規化コマンド</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="preservation/preservation-planning.html#normalization-command-variables-and-arguments">正規化コマンドの変数と引数</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#normalization-rules">正規化ルール</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preservation/preservation-planning.html#transcription">テキスト変換</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#transcription-tools">テキスト変換ツール</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#transcription-commands">テキスト変換コマンド</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#transcription-rules">テキスト変換ルール</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preservation/preservation-planning.html#validation">妥当性確認</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#validation-commands">妥当性確認コマンド</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#validation-rules">妥当性確認ルール</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#jhove">JHOVE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="preservation/preservation-planning.html#mediaconch">MediaConch</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preservation/preservation-planning.html#verification">妥当性確認</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="administer/dashboard-admin.html">ダッシュボード管理タブ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#processing-configuration">処理設定</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="administer/dashboard-admin.html#processing-configuration-fields">設定フィールドの処理</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#name">名前</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#assign-uuids-to-directories">ディレクトリにUUIDを割り当てる</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#generate-transfer-structure-report">転送構造レポートの作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#perform-file-identification-transfer">ファイル識別の実行（転送）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#extract-packages">パッケージの抽出</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#delete-packages-after-extraction">抽出後にパッケージを削除します</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#perform-policy-checks-on-originals">オリジナルのポリシーチェックを実行</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#examine-contents">内容検査</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#create-sip-s">SIPの作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#select-file-format-identification-command-ingest">ファイルフォーマット識別コマンドの選択（インジェスト）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#normalize">正規化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#approve-normalization">正規化を承認</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#generate-thumbnails">サムネイルの生成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#perform-policy-checks-on-preservation-derivatives">保存派生物のポリシーチェックを実行</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#perform-policy-checks-on-access-derivatives">アクセス派生物のポリシーチェックを実行</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#bind-pids">Bind PID</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#document-empty-directories">空のディレクトリを文書化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#reminder-add-metadata-if-desired">備考：必要に応じてメタデータを追加します</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#transcribe-files-ocr">ファイルのテキスト変換（OCR）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#select-file-format-identification-command-submission-documentation-metadata">ファイル形式識別コマンドの選択（提出文書とメタデータ）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#select-compression-algorithm">圧縮アルゴリズムの選択</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#select-compression-level">圧縮レベルを選択</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#store-aip">AIPの保存</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#store-aip-location">[AIPの保存]の場所</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#upload-dip">DIPのアップロード</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#store-dip">DIPの保管</a></li>
+<li class="toctree-l4"><a class="reference internal" href="administer/dashboard-admin.html#store-dip-location">DIPの保存の場所</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#general">一般</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="administer/dashboard-admin.html#storage-service-options">Storage Serviceオプション</a></li>
+<li class="toctree-l3"><a class="reference internal" href="administer/dashboard-admin.html#checksum-algorithm">チェックサムアルゴリズム</a></li>
+<li class="toctree-l3"><a class="reference internal" href="administer/dashboard-admin.html#elasticsearch-indexing">Elasticsearchインデックス作成</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#failures">障害</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#storage-locations">保存場所</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#processing-storage-usage">処理ストレージ使用状況</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#dip-upload">DIPアップロード</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="administer/dashboard-admin.html#atom-dip-upload">AtoM DIP upload</a></li>
+<li class="toctree-l3"><a class="reference internal" href="administer/dashboard-admin.html#archivesspace-dip-upload">ArchivesSpace DIPアップロード</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#premis-agent">PREMISエージェント</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#rest-api">REST API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#users">ユーザー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#handle-server-config">サーバー設定の処理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#language">言語</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administer/dashboard-admin.html#version">バージョン</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metadata/METS.html">ArchivematicaのMETS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metadata/METS.html#general-description">概要</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="metadata/METS.html#metshdr">&lt;metsHdr&gt;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/METS.html#dmdsec">&lt;dmdSec&gt;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/METS.html#amdsec">&lt;amdSec&gt;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/METS.html#filesec">&lt;fileSec&gt;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/METS.html#structmap">&lt;structMap&gt;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metadata/dublincore.html">Archivematicaのダブリンコア</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metadata/dublincore.html#general-description">概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metadata/dublincore.html#metadata-handling">メタデータの取り扱い</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metadata/premis.html">Archivematica のPREMISメタデータ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metadata/premis.html#premis-events-metadata">PREMISイベントメタデータ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metadata/premis.html#premis-events-list">PREMISイベントリスト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#default-events-for-original-files">オリジナルファイルのデフォルトイベント</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#normalized-files">正規化ファイル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#filename-change">ファイル名の変更</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#format-identification">フォーマットの識別</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#extract-packages">パッケージの抽出</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#ocr-transcription">OCRテキスト変換</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#aip-reingest">AIPの再インジェスト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#sending-transfers-to-backlog">バックログへの転送の送信</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="metadata/premis.html#premis-agent-metadata">PREMISエージェントのメタデータ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#software">ソフトウェア</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#organization">組織</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#archivematica-user">Archivematicaユーザー</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="metadata/premis.html#premis-rights-metadata">PREMIS権利メタデータ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#basis-copyright">根拠：著作権</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#copyright-status">著作権の状況</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#copyright-jurisdiction">著作権の管轄</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#copyright-determination-date">著作権確定日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#copyright-start-date">著作権開始日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#copyright-end-date">著作権終了日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#copyright-documentation-identifier-type">著作権文書識別子 - タイプ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#copyright-documentation-identifier-value">著作権文書識別子 - 値</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#copyright-documentation-identifier-role">著作権文書識別子 - 役割</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#copyright-note">著作権に関する注意事項</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#basis-statute">根拠：法令</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#statute-jurisdiction">法令の管轄</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#statute-citation">法令引用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#statute-determination-date">法令確定日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#statute-start-date">法令の開始日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#statute-end-date">法令終了日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#statute-documentation-identifier-type">法令文書識別子 - タイプ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#statute-documentation-identifier-value">法令文書識別子 - 値</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#statute-documentation-identifier-role">法令文書識別子- 役割</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#statute-note">法令に関する注意事項</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#basis-license">根拠：ライセンス</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#license-terms">ライセンス条項</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#license-start-date">ライセンス開始日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#license-end-date">ライセンス終了日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#license-documentation-identifier-type">ライセンス文書識別子 - タイプ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#license-documentation-identifier-value">ライセンス文書識別子 - 値</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#license-documentation-identifier-role">ライセンス文書識別子 - 役割</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#license-note">ライセンスに関する注意事項</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#basis-donor">根拠：ドナー</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#donor-agreement-start-date">ドナー契約開始日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#donor-agreement-end-date">ドナー契約終了日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#donor-documentation-identifier-type">ドナー文書識別子 -タイプ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#donor-documentation-identifier-value">ドナー文書識別子 - 値</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#donor-documentation-identifier-role">ドナー文書識別子 - 役割</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#donor-agreement-note">ドナー同意書に関する注意事項</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#basis-policy">根拠：ポリシー</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#policy-start-date">ポリシーの開始日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#policy-end-date">ポリシーの終了日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#policy-documentation-identifier-type">ポリシー文書識別子 -タイプ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#policy-documentation-identifier-value">ポリシー文書識別子 - 値</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#policy-documentation-identifier-role">ポリシー文書の識別子 - 役割</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#policy-note">ポリシーに関する注意事項メモ</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#basis-other">根拠：その他</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#other-rights-basis">その他の権利の根拠</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#other-start-date">その他の開始日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#other-end-date">その他の終了日</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#other-documentation-identifier-type">その他の文書識別子 -タイプ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#other-documentation-identifier-value">その他の文書識別子 - 値</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#other-documentation-identifier-role">その他の文書識別子 -役割</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#note">注意</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="metadata/premis.html#acts-granted-or-restricted">許可または制限される行為</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#act">行為</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#grant-restriction">付与/制限</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#start">開始</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#end">終了</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metadata/premis.html#grant-restriction-note">付与／制限の注意事項</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="appraisal/appraisal.html">評価</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="appraisal/appraisal.html#backlog">Backlog</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#tagging-files">ファイルのタグ付け</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="appraisal/appraisal.html#analysis">分析</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#objects">オブジェクト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#tags">タグ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#examine-contents">内容検査</a></li>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#preview-file">ファイルのプレビュー</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="appraisal/appraisal.html#file-list">ファイルリスト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appraisal/appraisal.html#archivesspace">ArchivesSpace</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#archivesspace-terms">ArchivesSpaceの用語</a></li>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#searching-for-archivesspace-resources">ArchivesSpaceリソースの検索</a></li>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#creating-and-editing-archival-objects">アーカイブオブジェクトの作成と編集</a></li>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#adding-rights-metadata">権利メタデータの追加</a></li>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#connecting-digital-objects-to-archivesspace-resources">デジタルオブジェクトをArchivesSpaceのリソースに接続</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="appraisal/appraisal.html#arrangement">配列</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#arranging-materials-through-drag-and-drop">ドラッグ＆ドロップで素材を配列</a></li>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#adding-atom-levels-of-description">AtoMの記述レベルを追加</a></li>
+<li class="toctree-l3"><a class="reference internal" href="appraisal/appraisal.html#creating-a-sip-using-tags">タグを使用したSIPの作成</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="backlog/backlog.html">Backlog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="backlog/backlog.html#searching-for-transfers-and-files">転送とファイルの検索</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backlog/backlog.html#downloading-transfers-or-files">転送またはファイルのダウンロード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backlog/backlog.html#deleting-transfers">転送の削除</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backlog/backlog.html#retrieving-transfers-from-the-backlog">バックログからの転送の検索</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="translations/translations.html">翻訳</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="translations/translations.html#join-the-archivematica-project">Archivematica プロジェクトに参加</a></li>
+<li class="toctree-l2"><a class="reference internal" href="translations/translations.html#start-translating">翻訳開始</a></li>
+<li class="toctree-l2"><a class="reference internal" href="translations/translations.html#finding-the-context-of-a-string">文字列のコンテキストを見つける</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="translations/translations.html#archivematica-documentation">Archivematica文書</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="translations/translations.html#editing-translated-strings">翻訳された文字列の編集</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../getting-started/troubleshooting/faq.html"
+                          title="前の章へ">よくあるご質問</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="transfer/transfer.html"
+                          title="次の章へ">転送</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user-manual/index.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="transfer/transfer.html" title="転送"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../getting-started/troubleshooting/faq.html" title="よくあるご質問"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Archivematica文書</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ユーザーマニュアル</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

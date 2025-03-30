@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>インジェスト &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="マニュアル正規化" href="manual-normalization.html" />
+    <link rel="prev" title="Dataverseの統合" href="../transfer/dataverse.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="manual-normalization.html" title="マニュアル正規化"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../transfer/dataverse.html" title="Dataverseの統合"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">インジェスト</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="ingest">
+<span id="id1"></span><h1>インジェスト<a class="headerlink" href="#ingest" title="Link to this heading">¶</a></h1>
+<p>インジェスト中、デジタルオブジェクトは、SIPにパッケージ化され、正規化、AIPへのパッケージ化、DIPの生成など、いくつかのマイクロサービスを介して実行されます。</p>
+<p>デフォルトの決定ポイントのいくつかをスキップしたり、希望するワークフローに対して事前に設定された選択を行いたい場合は、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">ユーザー管理 - 処理設定</span></a> を参照してください。</p>
+<p>インジェスト中にエラーが発生した場合は、 <a class="reference internal" href="../../getting-started/troubleshooting/error-handling.html#error-handling"><span class="std std-ref">エラー処理</span></a> を参照してください。</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#create-sip"><span class="std std-ref">SIPの作成</span></a></p></li>
+<li><p><a class="reference internal" href="#add-metadata"><span class="std std-ref">説明メタデータを追加</span></a></p></li>
+<li><p><a class="reference internal" href="#add-rights"><span class="std std-ref">PREMISの権利を追加</span></a></p></li>
+<li><p><a class="reference internal" href="#normalize"><span class="std std-ref">正規化</span></a></p></li>
+<li><p><a class="reference internal" href="#bind-pids"><span class="std std-ref">Bind PID</span></a></p></li>
+<li><p><a class="reference internal" href="#transcribe-contents"><span class="std std-ref">SIPコンテンツのテキスト変換</span></a></p></li>
+<li><p><a class="reference internal" href="#store-aip"><span class="std std-ref">AIPの保存</span></a></p></li>
+<li><p><a class="reference internal" href="#upload-dip"><span class="std std-ref">DIPのアップロード</span></a></p></li>
+<li><p><a class="reference internal" href="#reingest"><span class="std std-ref">AIPの再インジェスト</span></a></p></li>
+<li><p><a class="reference internal" href="#cleanup-ingest"><span class="std std-ref">インジェストダッシュボードのクリーンアップ</span></a></p></li>
+</ul>
+<section id="create-a-sip">
+<span id="create-sip"></span><h2>SIPの作成<a class="headerlink" href="#create-a-sip" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p><a class="reference internal" href="../transfer/transfer.html#transfer"><span class="std std-ref">転送</span></a> の説明に従って転送を処理します。[転送] タブで&quot;単一の SIP を作成して処理を続ける&quot; を選択した場合、SIP が作成され、Archivematica は インジェスト タスクの実行を開始します。[インジェスト] タブをクリックして、SIP の処理を続けます。</p></li>
+<li><p>単一の SIP は、多数のマイクロサービスを介して移動します。そのように Archivematica を事前設定している場合、処理は決定ポイントで停止し、ファイル識別を再度実行するか、転送中に取得された既存のファイル識別情報を使用することができます。Archivematica のデフォルトでは、既存のデータが使用されます。このオプションの詳細については、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">構成の処理</span></a> を参照してください。</p></li>
+<li><p>SIP が&quot;正規化&quot; に達すると、Archivematica が SIP をどのように正規化するか、いくつかのオプションが表示されます。ワークフローに最も適したオプションを選択してください。</p>
+<figure class="align-center" id="id6" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/choose-normalize-option.png"><img alt="Archivematica正規化マイクロサービス" src="../../_images/choose-normalize-option.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">正規化マイクロサービス</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>説明メタデータを追加するには、 <a class="reference internal" href="#add-metadata"><span class="std std-ref">メタデータを追加</span></a> を参照してください。</p></li>
+<li><p>PREMIS権利情報を追加するには、下記の <a class="reference internal" href="#add-rights"><span class="std std-ref">PREMIS権利の追加</span></a> を参照してください。</p></li>
+<li><p>正規化オプションの選択については、下記の <a class="reference internal" href="#normalize"><span class="std std-ref">正規化</span></a> を参照してください。</p></li>
+</ol>
+<p>[インジェスト]タブで実行されるマイクロサービスには、次のものが含まれます：</p>
+<ul class="simple">
+<li><p><strong>Verify SIP compliance</strong> ：SIP が Archivematica の処理に必要なフォルダ構造に適合していることを確認します。</p></li>
+<li><p><strong>SIP UUIDでSIPディレクトリ名を変更</strong> ：SIPディレクトリ名にSIP UUIDを付加することで、SIPとそのメタデータを関連付け、SIPがMaildir転送タイプであるかどうかをチェックし、ワークフローを決定します。転送（transfer）UUIDとSIP UUIDの両方が最終的なAIPに取り込まれます。</p></li>
+<li><p><strong>Normalize</strong> ： <a class="reference internal" href="#normalize"><span class="std std-ref">正規化</span></a> は、<a class="reference internal" href="../preservation/preservation-planning.html#preservation-planning"><span class="std std-ref">保存計画</span></a> のルールを使用して、インジェストされたデジタルオブジェクトを、ユーザーの好みに応じて、望ましい保存形式および/またはアクセス形式に変換します。正規化に関する選択は、サービス実行時に行うことも、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> で自動化もできます。</p></li>
+<li><p><strong>手動で正規化されたファイルを処理</strong> ：転送前に正規化されたファイルを処理するか、 <a class="reference internal" href="manual-normalization.html#manual-norm"><span class="std std-ref">インジェスト中に手動で正規化</span></a> を許可します。</p></li>
+<li><p><strong>派生物のポリシーチェック</strong> ：正規化中に作成された派生物へのアクセスと保存を、 <a class="reference internal" href="../preservation/preservation-planning.html#preservation-planning"><span class="std std-ref">フォーマットポリシーレジストリ</span></a> と照らし合わせてチェックします。</p></li>
+<li><p><strong>Add final metadata</strong> ：必要に応じて、ユーザーがUIを通じて <a class="reference internal" href="#add-metadata"><span class="std std-ref">メタデータ</span></a> を追加できるようにします。</p></li>
+<li><p><strong>SIPの内容を書き写す</strong> ： <a class="reference internal" href="../preservation/preservation-planning.html#transcription"><span class="std std-ref">Tesseract</span></a> OCRツールをSIPのJPGまたはTIFF画像上で実行します。</p></li>
+<li><p><strong>提出書類の処理</strong> ：SIPに含まれる提出書類を処理し、 <code class="docutils literal notranslate"><span class="pre">objects</span></code> ディレクトリに追加します。</p></li>
+<li><p><strong>Bind PIDs</strong> ：この <a class="reference internal" href="#bind-pids"><span class="std std-ref">マイクロサービス</span></a> は、永続的な識別子を作成するためにHandle.Netレジストリとの統合を使用します。</p></li>
+<li><p><strong>AIP METS の生成</strong> ：Archivematica <a class="reference internal" href="../archival-storage/aip-structure.html#aip-structure"><span class="std std-ref">AIP METS.xml ファイル</span></a> を生成します。</p></li>
+<li><p><strong>Prepare DIP</strong> ：アクセス用に正規化する場合、オブジェクトのアクセスコピー、サムネイル、METS.xmlファイルのコピーを含むDIPを作成します。</p></li>
+<li><p><strong>Prepare AIP</strong> ： <a class="reference internal" href="../archival-storage/aip-structure.html#aip-structure"><span class="std std-ref">AIPをBagitフォーマットで作成</span></a> ; AIPポインターファイルを作成 ; AIPにインデックスを付け、可逆圧縮します。</p></li>
+<li><p><strong>Review AIP</strong> ：Prepare AIP microserviceの一部で、AIPを進める前にAIPの構造と内容を確認できます。</p></li>
+<li><p><strong>DIP のアップロード</strong> ：DIP が作成されると、ユーザーは、 必要に応じて、接続されたアクセスオプションに <a class="reference internal" href="#upload-dip"><span class="std std-ref">DIP をアップロードできます</span></a> 。[リンク］</p></li>
+<li><p><strong>Store DIP</strong> ：Storage Serviceにあらかじめ設定された場所にDIPを保存することを選択できます。</p></li>
+<li><p><strong>Store AIP</strong> ： <a class="reference internal" href="#store-aip"><span class="std std-ref">AIP</span></a> を <code class="docutils literal notranslate"><span class="pre">sharedDirectoryStructure/www/AIPsStore</span></code> または他の指定されたディレクトリに移動します。AIPが格納される前に、そのコピーがローカルのtempディレクトリに展開され、そこでBagItの標準的なチェックが行われます：verifyvalid、checkpayloadoxum、verifycomplete、verifypayloadmanifests、verifytagmanifests。</p></li>
+</ul>
+</section>
+<section id="add-descriptive-metadata">
+<span id="add-metadata"></span><h2>説明メタデータを追加<a class="headerlink" href="#add-descriptive-metadata" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、デジタルオブジェクトに関する説明メタデータを受け入れることができます。転送を開始する前に説明メタデータを含める方法については、 <a class="reference internal" href="../transfer/transfer.html#transfers-with-metadata"><span class="std std-ref">説明メタデータや権利メタデータを含む転送</span></a> を参照してください。このセクションでは、Archivematica で処理を開始した後に、素材に説明メタデータを追加する方法について説明します。</p>
+<p>Archivematicaは、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> フィールド <code class="docutils literal notranslate"><span class="pre">Reminder:</span> <span class="pre">add</span> <span class="pre">metadata</span> <span class="pre">if</span> <span class="pre">desired</span></code> を <code class="docutils literal notranslate"><span class="pre">None</span></code> に設定することで、メタデータを追加するリマインダを表示するように設定できます。このリマインダは、メタデータを追加できる最後の瞬間に表示されます。インジェストがこのポイントを過ぎると、SIPにメタデータを追加することはできなくなります。</p>
+<p>素材の処理中にメタデータを追加するには、 <a class="reference internal" href="#metadata-form-ui"><span class="std std-ref">フォーム</span></a> に入力するか、 <a class="reference internal" href="#metadata-csv-ui"><span class="std std-ref">CSV ファイルをアップロード</span></a> の2つの方法があります。</p>
+<p>説明メタデータを AtoM に渡す予定の場合、利用可能なDublin Core要素については、 <a class="reference external" href="https://www.accesstomemory.org/en/docs/2.8/user-manual/data-templates/dc-template/#dc-template" title="(in AtoM v2.8)"><span class="xref std std-ref">AtoM Dublin Core</span></a> を参照してください。</p>
+<section id="adding-metadata-using-the-user-interface-form">
+<span id="metadata-form-ui"></span><h3>ユーザーインターフェイスフォームを使用したメタデータの追加<a class="headerlink" href="#adding-metadata-using-the-user-interface-form" title="Link to this heading">¶</a></h3>
+<p>この方法は、転送レベルのメタデータを処理時に作成するユーザーや、メタデータを Archivematica にアップロードするためにCSVを準備する余分な作業をしたくないユーザーに最適です。メタデータフォームは、 <a class="reference external" href="https://dublincore.org/documents/dces/">Dublin Core Metadata Element Set</a> を実装しています。</p>
+<p>この方法では、転送全体に説明メタデータを追加することしかできないことに注意してください。項目ごとにメタデータを追加するには、 <a class="reference internal" href="../transfer/import-metadata.html#import-metadata"><span class="std std-ref">CSV ファイルを使用してメタデータをインポート</span></a> し、転送前に <a class="reference internal" href="../transfer/transfer.html#transfers-with-metadata"><span class="std std-ref">転送に CSV を含める</span></a> か、 <a class="reference internal" href="#metadata-csv-ui"><span class="std std-ref">ユーザー インターフェースから CSV をアップロード</span></a> します。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>** マイクロサービス <code class="docutils literal notranslate"><span class="pre">Reminder:</span> <span class="pre">add</span> <span class="pre">metadata</span> <span class="pre">if</span> <span class="pre">desired</span></code> が完了する前に、以下のステップ** を実行する必要があります。この時点以降では、入力されたメタデータは、SIPに正しく添付されないか、METSに入力されません。</p>
+</div>
+<ol class="arabic">
+<li><p>転送またはインジェストタブで、転送名の右側にあるメタデータテンプレートのアイコンをクリックします。</p>
+<figure class="align-center" id="id7" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/metadata-icon.png"><img alt="テンプレートアイコンの位置" src="../../_images/metadata-icon.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">メタデータを追加するには、テンプレートのアイコンをクリックします</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>これでSIP詳細ページに移動します。 <em>メタデータ</em> の見出しの下で、 <strong>追加</strong> をクリックします。</p>
+<figure class="align-center" id="id8" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/sip-detail-panel.png"><img alt="SIP情報ページ" src="../../_images/sip-detail-panel.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">SIP情報ページ</span><a class="headerlink" href="#id8" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>必要に応じてメタデータを追加し、画面下部の <strong>作成</strong> をクリックして保存します。フィールドをクリックしてカーソルを合わせると、要素を定義するツールチップが表示され、 <a class="reference external" href="https://dublincore.org/documents/dces/">Dublin Core Metadata Element Set</a> へのリンクが表示されます。</p>
+<figure class="align-center" style="width: 60%">
+<a class="reference internal image-reference" href="../../_images/descriptive-metadata-entry-form.png"><img alt="メタデータ入力フォーム" src="../../_images/descriptive-metadata-entry-form.png" style="width: 100%;" />
+</a>
+</figure>
+<p>メタデータ入力フォーム</p>
+</li>
+<li><p><strong>作成</strong> をクリックすると、リストページにメタデータエントリーが表示されます。さらに編集するには、右側の <strong>編集</strong> をクリックします。削除するには、 <strong>削除</strong> をクリックします。さらに説明メタデータを追加するには、リストの下にある <strong>追加</strong> ボタンをクリックします。</p>
+<figure class="align-center" id="id9" style="width: 60%">
+<a class="reference internal image-reference" href="../../_images/descriptive-metadata-list.png"><img alt="SIPメタデータリスト" src="../../_images/descriptive-metadata-list.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">SIPメタデータリスト</span><a class="headerlink" href="#id9" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>[転送] または [インジェスト] タブに戻り、SIPの処理を続けます。</p></li>
+</ol>
+</section>
+<section id="uploading-metadata-csv-files-through-the-user-interface">
+<span id="metadata-csv-ui"></span><h3>ユーザーインターフェースによるメタデータCSVファイルのアップロード<a class="headerlink" href="#uploading-metadata-csv-files-through-the-user-interface" title="Link to this heading">¶</a></h3>
+<p>説明メタデータのCSVファイルは、階層的メタデータを作成する場合、個々のオブジェクトにメタデータを適用する場合、または Dublin Core Metadata Element Set で利用可能なフィールド以外のメタデータフィールドを使用する場合に最適です。</p>
+<p>CSVファイルをアップロードするには、デジタルオブジェクトと同じように、Archivematicaに接続された転送元ロケーションで利用可能である必要があります。転送元ロケーションの詳細については、 <a class="reference internal" href="../../admin-manual/installation-setup/customization/dashboard-config.html#admin-dashboard-transfer-source"><span class="std std-ref">転送元ロケーション</span></a> を参照してください。</p>
+<p>メタデータ CSV ファイルの構成方法など、Archivematicaへのメタデータのインポートに関する詳細については、 <a class="reference internal" href="../transfer/import-metadata.html#import-metadata"><span class="std std-ref">メタデータのインポート</span></a> を参照してください。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>マイクロサービス <code class="docutils literal notranslate"><span class="pre">Reminder:</span> <span class="pre">add</span> <span class="pre">metadata</span> <span class="pre">if</span> <span class="pre">desired</span></code> を実行する <strong>前</strong> に、次の手順を実行する必要があります。この時点を過ぎると、入力されたメタデータは SIP に適切に添付されなくなり、METS に入力されなくなります。</p>
+</div>
+<ol class="arabic">
+<li><p>[インジェスト] タブで、転送名の右側にあるメタデータテンプレートのアイコンをクリックします。</p>
+<figure class="align-center" id="id10" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/metadata-icon.png"><img alt="テンプレートアイコンの位置" src="../../_images/metadata-icon.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">メタデータを追加するには、テンプレートのアイコンをクリックします</span><a class="headerlink" href="#id10" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>これにより、SIP の詳細ページが表示されます。 <em>メタデータ</em> 見出しの下で、 <strong>メタデータ ファイルを追加</strong> をクリックします。</p>
+<figure class="align-center" id="id11" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/sip-detail-panel.png"><img alt="SIP情報ページ" src="../../_images/sip-detail-panel.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">SIP情報ページ</span><a class="headerlink" href="#id11" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>転送元の場所を選択し、 <strong>ブラウズ</strong> をクリックします。フォルダを移動してCSVファイルを見つけます。CSV ファイルを見つけたら、ファイル名の右側にある <strong>追加</strong> をクリックして、必要に応じて繰り返します。</p></li>
+<li><p>すべてのファイルを追加したら、 <strong>ファイルを追加</strong> をクリックします。回転するホイールが、ファイルがアップロード中であることを示します。それが消えたら、[インジェスト] タブに戻り、SIPの処理を続けます。</p></li>
+</ol>
+</section>
+</section>
+<section id="add-premis-rights">
+<span id="add-rights"></span><h2>PREMISの権利を追加<a class="headerlink" href="#add-premis-rights" title="Link to this heading">¶</a></h2>
+<p>Archivematica は、デジタルオブジェクトに関するPREMIS 権利メタデータを受け入れ、この情報を解析して METS ファイルに書き込むことができます。転送を開始する前にメタデータを含める方法については、 <a class="reference internal" href="../transfer/transfer.html#transfers-with-metadata"><span class="std std-ref">説明メタデータや権利メタデータを含む転送</span></a> を参照してください。このセクションでは、Archivematica で処理を開始した後に、素材に権利メタデータを追加する方法について説明します。</p>
+<p>Archivematicaは、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> フィールド <code class="docutils literal notranslate"><span class="pre">Reminder:</span> <span class="pre">add</span> <span class="pre">metadata</span> <span class="pre">if</span> <span class="pre">desired</span></code> を <code class="docutils literal notranslate"><span class="pre">None</span></code> に設定することで、メタデータを追加するリマインダを表示するように設定できます。このリマインダは、メタデータを追加できる最後の瞬間に表示されます。インジェストがこのポイントを過ぎると、SIPにメタデータを追加することはできなくなります。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>権利フォームは 2 ページで構成されており、1 つは権利の根拠に関するページ、もう 1 つは行為に関するページです。Archivematica の PREMIS 権利の実装の詳細については、 <a class="reference internal" href="../metadata/premis.html#premis-template"><span class="std std-ref">PREMIS テンプレート</span></a> を参照してください。</p>
+</div>
+<ol class="arabic">
+<li><p>転送またはインジェストタブで、転送名の右側にあるメタデータテンプレートのアイコンをクリックします。</p>
+<figure class="align-center" id="id12" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/metadata-icon.png"><img alt="テンプレートアイコンの位置" src="../../_images/metadata-icon.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">権利を追加するには、テンプレートのアイコンをクリックします。</span><a class="headerlink" href="#id12" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>これでSIP詳細パネルが表示されます。左側で、 <em>権利</em> の下にある、 <strong>追加</strong> をクリックします。</p>
+<figure class="align-center" id="id13" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/sip-detail-panel.png"><img alt="SIP詳細パネル" src="../../_images/sip-detail-panel.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">SIP詳細パネル</span><a class="headerlink" href="#id13" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>権利根拠情報を追加し、画面下部の <strong>保存</strong> ボタンをクリックしてデータを保存するか、データ入力が終了して2ページ目に進む準備ができた場合は <strong>次へ</strong> をクリックします。</p>
+<figure class="align-center" id="id14" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/rights-form-1.png"><img alt="SIP権利テンプレート - 最初のページ" src="../../_images/rights-form-1.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">SIP権利テンプレート - 最初のページ</span><a class="headerlink" href="#id14" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>行為の情報と関連する許可/制限を入力し、 <strong>保存</strong> をクリックしてデータを保存します。</p>
+<figure class="align-center" id="id15" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/rights-form-2.png"><img alt="SIP権利テンプレート - 2ページ目" src="../../_images/rights-form-2.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">SIP権利テンプレート - 2ページ目</span><a class="headerlink" href="#id15" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>行為のページで <strong>保存</strong> をクリックすると、別の行為を追加し、さらに許可／制限を追加するオプションが表示されます。</p>
+<figure class="align-center" id="id16" style="width: 60%">
+<a class="reference internal image-reference" href="../../_images/create-new-grant.png"><img alt="権利テンプレートで行為を繰り返すボタン" src="../../_images/create-new-grant.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">権利テンプレートで繰り返し可能な行為</span><a class="headerlink" href="#id16" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>アクトの追加が完了したら、 <strong>Done</strong> をクリックします。リストページに権利エントリが表示されます。 <strong>「追加」</strong> を再度クリックして権利を追加したり、このページから既存の権利を編集または削除したりできます。</p>
+<figure class="align-center" id="id17" style="width: 75%">
+<a class="reference internal image-reference" href="../../_images/rights-metadata-list.png"><img alt="権限のある SIP 詳細パネル" src="../../_images/rights-metadata-list.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">権限のある SIP 詳細パネル</span><a class="headerlink" href="#id17" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+</ol>
+<ol class="arabic simple" start="6">
+<li><p>[転送] または [インジェスト] タブに戻り、SIPの処理を続けます。</p></li>
+</ol>
+</section>
+<section id="normalize">
+<span id="id2"></span><h2>正規化<a class="headerlink" href="#normalize" title="Link to this heading">¶</a></h2>
+<p>正規化とは、インジェストされたデジタルオブジェクトを、好ましい保存形式および/またはアクセス形式に変換するプロセスです。</p>
+<p>オリジナルのオブジェクトは、常に正規化されたバージョンと共に保存されます。Archivematicaの保存戦略の詳細については、マニュアルの <a class="reference internal" href="../preservation/preservation-planning.html#preservation-planning"><span class="std std-ref">保存計画</span></a> セクションを参照してください。</p>
+<ol class="arabic">
+<li><p>正規化マイクロサービスでは、SIPがダッシュボードに表示され、その横にベルのアイコンが表示されます。[アクション] ドロップダウンメニューから正規化オプションを1つ選択します：</p>
+<figure class="align-center" id="id18" style="width: 50%">
+<a class="reference internal image-reference" href="../../_images/choose-normalize-option.png"><img alt="正規化オプションの選択" src="../../_images/choose-normalize-option.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">正規化オプションの選択</span><a class="headerlink" href="#id18" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p><strong>保存とアクセスのために正規化</strong> - オブジェクトの保存コピーと、DIPの生成に使用されるアクセスコピーを作成します。</p></li>
+<li><p><strong>保存のために正規化</strong> - 保存用コピーのみを作成します。アクセスコピーは作成されず、DIPも生成されません。</p></li>
+<li><p><strong>アクセス用に正規化</strong> - AIPは、オリジナルのみを含みます。保存コピーは作成されません。DIPの生成に使用されるアクセスコピーが作成されます。</p></li>
+<li><p><strong>アクセス用のサービスファイルを正規化</strong> - 詳細は、 <a class="reference internal" href="../transfer/transfer.html#transfer-service-files"><span class="std std-ref">サービス（メザニン）ファイルで素材を転送</span></a> を参照してください。</p></li>
+<li><p><strong>手動で正規化</strong> - 詳細は、 <a class="reference internal" href="manual-normalization.html#manual-norm"><span class="std std-ref">手動正規化</span></a> を参照してください。</p></li>
+<li><p><strong>正規化しない</strong> - AIPには、原本のみが含まれます。保存用コピーやアクセス用コピーは生成されず、DIPも生成されません。</p></li>
+<li><p><strong>Reject SIP</strong> - インジェストはキャンセルされます。</p></li>
+</ul>
+<p>転送の設定によっては、上記のオプションがすべて表示されない場合があります。</p>
+</li>
+<li><p>正規化が完了したら、正規化レポートで結果を確認できます。[アクション]ドロップダウンメニューの横にあるレポートアイコンをクリックします。</p>
+<figure class="align-center" id="id19" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/normalization-report-icon.png"><img alt="正規化レポートを開くレポートアイコンの場所" src="../../_images/normalization-report-icon.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">正規化レポートを開くには、レポートアイコンをクリックします</span><a class="headerlink" href="#id19" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>このレポートには、正規化が試みられたかどうか、どのような目的で行われたかについての詳細情報が記載されています。ピンク色の網掛けは、ファイルが保存またはアクセスに適したフォーマットに正規化されていないことを示します。</p>
+<a class="reference internal image-reference" href="../../_images/normalization-report.png"><img alt="正規化レポート" class="align-center" src="../../_images/normalization-report.png" style="width: 80%;" />
+</a>
+</li>
+<li><p>[見直し] をクリックすると、新しいタブで正規化結果を確認できます。</p>
+<figure class="align-center" id="id20" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/review-normalized-files.png"><img alt="新しいタブで正規化結果を確認" src="../../_images/review-normalized-files.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">新しいタブで正規化結果を確認</span><a class="headerlink" href="#id20" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>ブラウザにファイルを表示するためのプラグインがある場合は、クリックすると別のタブで開くことができます。ファイルをクリックしてもブラウザで開けない場合は、ファイルがローカルにダウンロードされるため、お使いのマシン上の適切なソフトウェアを使用して表示できます。</p>
+<figure class="align-center" id="id21" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/review-normalization.png"><img alt="新しいタブで正規化結果を確認" src="../../_images/review-normalization.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">新しいタブで正規化結果を確認</span><a class="headerlink" href="#id21" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>SIP の処理を続けるには、[アクション] ドロップダウンメニューで正規化を承認します。SIP を拒否したり、正規化をやり直したりすることもできます。正規化でエラーが発生した場合は、「エラー処理」の手順に従って問題の詳細を確認してください。</p></li>
+</ol>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="manual-normalization.html#manual-norm"><span class="std std-ref">マニュアル正規化</span></a></p>
+</div>
+</section>
+<section id="bind-pids">
+<span id="id3"></span><h2>Bind PID<a class="headerlink" href="#bind-pids" title="Link to this heading">¶</a></h2>
+<p>PID のバインドとは、情報リソースに永続的な識別子またはハンドルを割り当てるレジストリである Handle.Net と Archivematica の統合を利用することを指します。Handle.Net を使用しない場合は、このマイクロサービスのデフォルトの <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">ダッシュボード処理</span></a> 構成設定を &quot;いいえ&quot; に設定することを検討してください。</p>
+<p>Handle.Netを使用する場合、設定されたHandle.NetレジストリにPIDを定義することで、デジタルオブジェクト、ディレクトリ、またはAIPの永続識別子（PID）を作成するようにArchivematicaを設定できます。Handle.Netは、PIDから永続URL（PURL）を作成し、永続URLへのリクエストをHandle.Netで設定されたターゲットURLにリルートできます。</p>
+<p>ArchivematicaとHandle.Netを設定するには、まず [管理] タブの <a class="reference internal" href="../../admin-manual/installation-setup/customization/dashboard-config.html#admin-handlenet"><span class="std std-ref">サーバー設定の処理</span></a> の設定を入力します。</p>
+<p>処理中、Bind PID決定ポイントで <em>はい</em> を選択すると、Handle.Net HTTP REST APIサーバーにPIDをミントする要求が送信されます。デフォルトでは、PIDはオブジェクトのUUIDに基づいています。転送画面でアクセッション番号を入力した場合は、アクセッション番号を使用することもできます。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>AIP 全体の PID を生成する場合、他の AIP が同じアクセッション番号を使用しないことが保証できる場合にのみ、PID のベースとしてアクセッション番号を使用してください。同じアクセッション番号を持つ複数の AIP を作成する場合は、AIP PID ソースを UUID に設定します。</p>
+<p>ファイルやディレクトリは、常にそのファイルやディレクトリの UUID を PID の基礎として使用することに注意してください。</p>
+</div>
+</section>
+<section id="transcribe-sip-contents">
+<span id="transcribe-contents"></span><h2>SIPコンテンツのテキスト変換<a class="headerlink" href="#transcribe-sip-contents" title="Link to this heading">¶</a></h2>
+<p>Archivematica では、 <a class="reference external" href="https://github.com/tesseract-ocr/">Tesseract</a> OCR ツールを使用して SIP コンテンツをテキスト変換するオプションがユーザーに提供されます。このマイクロサービス中にユーザーが [はい] を選択すると、OCR ファイルが DIP に含まれ、AIP に保存されます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Tesseract は、単一の画像（例えば、画像ファイルとしてスキャンされた書籍の個々のページ）からテキスト変換します。複数ページのオブジェクトやワープロファイル、PDF ファイルなどのテキスト変換には対応していません。</p>
+</div>
+</section>
+<section id="store-aip">
+<span id="id4"></span><h2>AIPの保存<a class="headerlink" href="#store-aip" title="Link to this heading">¶</a></h2>
+<p>正規化が完了した後、SIPは、提出ドキュメンテーションとメタデータ処理、METSファイル生成、インデックス作成、DIP生成、AIPパッケージングを含む多くのマイクロサービスを介して実行されます。AIP がパッケージングされると、それを保存する準備ができます。</p>
+<p>Archivematica は多くのAIP保存場所を設定できます。ユーザーは、Archivematica インターフェイスのドロップダウンメニューを使用して、各 AIP に適切な保存場所を選択できます。AIP 保存場所を設定するには、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#administrators" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Storage Service 文書</span></a> を参照してください。</p>
+<figure class="align-center" id="id22" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/StoreAIP.png"><img alt="Archivematica の [インジェスト] タブ。[AIPの保存]決定ポイントでユーザー入力を待機している AIP を表示します。" src="../../_images/StoreAIP.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Archivematicaは、AIPを保存する準備ができています</span><a class="headerlink" href="#id22" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<ol class="arabic">
+<li><p>AIPを保存する前に、 <strong>Review</strong> をクリックして、AIPの内容を確認できます。（ここで、AIPをを閲できる新タブ開きます。AIPの個々のオブジェクトを確認するには、7zファイルをクリックしてダウンロードします。METSファイル（ <code class="docutils literal notranslate"><span class="pre">METS-uuid.xml</span></code> という名前のファイル）をクリックして表示もできます。</p>
+<figure class="align-center" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/AIP-review.png"><img alt="拡張された AIP ファイル構造を示す AIP レビューページ" src="../../_images/AIP-review.png" style="width: 100%;" />
+</a>
+</figure>
+<p>Archivematica の AIP 構造と METS ファイルの詳細については、 <a class="reference internal" href="../archival-storage/aip-structure.html#aip-structure"><span class="std std-ref">AIP 構造</span></a> を参照してください。</p>
+</li>
+<li><p>AIPを保存する準備ができたら、アクションドロップダウンメニューから <strong>AIPの保存</strong> を選択します。必要であれば、AIPを拒否もできます。</p></li>
+<li><p>プロンプトが表示されたら、AIP を保存する保存場所を選択します。</p></li>
+<li><p>AIP が保存されると、 <a class="reference internal" href="../archival-storage/archival-storage.html#archival-storage"><span class="std std-ref">アーカイブストレージ</span></a> タブで表示および管理できます。</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#administrators" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Storage Service</span></a> において、1つのストレージ場所をAIPストレージのデフォルトの場所として指定することが可能です。デフォルトの保存場所は、AIP保存場所ドロップダウンメニューで <code class="docutils literal notranslate"><span class="pre">Default</span> <span class="pre">location</span></code> と表示されますが、保存場所は、他の保存場所オプションと一緒に名前でも表示されます。</p>
+<p>AIPの保存場所が1つしかない場合は、自動的にデフォルトの場所に設定され、 <code class="docutils literal notranslate"><span class="pre">Default</span> <span class="pre">location</span></code> と保存場所自体がドロップダウンメニューに表示されます。</p>
+</div>
+</section>
+<section id="upload-dip">
+<span id="id5"></span><h2>DIPのアップロード<a class="headerlink" href="#upload-dip" title="Link to this heading">¶</a></h2>
+<p>Archivematica supports DIP uploads to AtoM, ArchivesSpace, and
+CONTENTdm. For information about uploading DIPs to your access system, see
+<a class="reference internal" href="../access/access.html#access"><span class="std std-ref">Access</span></a>.</p>
+<p>DIPは、AIPと同様に保存できますが、AIPの部分的な <a class="reference internal" href="#reingest"><span class="std std-ref">再インジェスト</span></a> 実行により、必要なときにDIPを生成もできます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>DIPをアップロードする前にAIPを保管することをお勧めします。保存中にAIPに問題が発生し、DIPがすでにアップロードされている場合は、アップロード場所からDIPを削除する必要があります。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#administrators" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Storage Service</span></a> で、1つの保存場所をDIP保管のデフォルトの場所として指定することが可能です。デフォルトの場所は、「Store DIP location（DIP保存場所）」ドロップダウンメニューで「 <code class="docutils literal notranslate"><span class="pre">Default</span> <span class="pre">location</span></code> 」と表示されますが、保存場所は、他の保存場所オプションと一緒に名前でも表示されます。DIP保存場所が1つしかない場合、その場所は、自動的にデフォルトの場所として設定され、 <code class="docutils literal notranslate"><span class="pre">Default</span> <span class="pre">location</span></code> と保存場所自体の両方がドロップダウンメニューに表示されます。</p>
+</div>
+</section>
+<section id="re-ingest-aip">
+<span id="reingest"></span><h2>AIPの再インジェスト<a class="headerlink" href="#re-ingest-aip" title="Link to this heading">¶</a></h2>
+<p>AIPの再インジェストには3種類あります：</p>
+<section id="metadata-only">
+<h3>1. メタデータのみ<a class="headerlink" href="#metadata-only" title="Link to this heading">¶</a></h3>
+<p>このメソッドは、説明メタデータおよび/または権利メタデータを追加または更新するためのものです。そうすることで、AIPのMETSファイルのdmdSecが更新されます。 オリジナルのメタデータはまだ存在しますが、下にスクロールすると、STATUS=&quot;更新&quot; のような別の dmdSec も表示されることに注意してください：</p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;mets:dmdSec</span> <span class="pre">ID=&quot;dmdSec_792149&quot;</span> <span class="pre">CREATED=&quot;2017-10-17T20:32:36&quot;</span> <span class="pre">STATUS=&quot;updated&quot;&gt;</span></code></p>
+<p>メタデータのみのAIP再インジェストを選択すると、インジェストタブに戻ります。</p>
+</section>
+<section id="partial-re-ingest">
+<h3>2. 部分再インジェスト<a class="headerlink" href="#partial-re-ingest" title="Link to this heading">¶</a></h3>
+<p>この方法は通常、AIPを作成した後にDIPを作成したい機関が使用します。その後、DIPをアクセスシステムに送信するか、保存できます。</p>
+<p>部分的な再インジェストを選択すると、インジェストタブに戻ります。</p>
+</section>
+<section id="full-re-ingest">
+<h3>3. 完全再インジェスト<a class="headerlink" href="#full-re-ingest" title="Link to this heading">¶</a></h3>
+<p>この方法は、すべての主要なマイクロサービス（必要に応じて保存のための再正規化を含む）を実行できるようにしたい機関向けの方法です。完全な再インジェストのユースケースとして考えられるのは、新しいファイルの特性化や妥当性確認ツールが開発され、Archivematicaの将来のバージョンに統合された場合です。これらの更新されたツールでマイクロサービスを実行すると、更新されたより良いAIPになります。</p>
+<p>完全な再インジェストを使用してメタデータを更新し、アクセスのために再正規化することもできます。</p>
+<p>完全な再インジェストを行う場合、使用したい処理設定の名前を入力する必要があります。新しい処理設定を追加するには、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> を参照してください。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>次のワークフローは、完全な AIP 再インジェストではサポート <strong>されません</strong> ：</p>
+<ul class="simple">
+<li><p>初回インジェスト時に実施しなかった場合は、内容検査します</p></li>
+<li><p>最初のインジェストで実行されなかった場合、構造レポートを転送します</p></li>
+<li><p>AIP内のパッケージを抽出し、削除します</p></li>
+<li><p>再インジェスト中に再配列するために AIP をバックログに送信します</p></li>
+</ul>
+</div>
+<p>完全な再インジェストを選択すると、[転送] タブに戻ります。</p>
+</section>
+<section id="how-to-tell-in-the-mets-file-if-an-aip-has-been-re-ingested">
+<h3>AIP が再インジェストされたかどうかを METS ファイルで確認する方法<a class="headerlink" href="#how-to-tell-in-the-mets-file-if-an-aip-has-been-re-ingested" title="Link to this heading">¶</a></h3>
+<p>1. Look at the Header of the METS file, which will display a <code class="docutils literal notranslate"><span class="pre">CREATEDATE</span></code> and
+a <code class="docutils literal notranslate"><span class="pre">LASTMODDATE</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;mets:metsHdr</span> <span class="pre">CREATEDATE=&quot;2017-10-17T20:29:21&quot;</span>
+<span class="pre">LASTMODDATE=&quot;2017-10-17T20:32:36&quot;/&gt;</span></code></p>
+<p>2. You can also search for the re-ingest premis:event
+<code class="docutils literal notranslate"><span class="pre">&lt;premis:eventType&gt;reingestion&lt;/premis:eventType&gt;</span></code></p>
+<p>3. If you've updated the descriptive or rights metadata you will find an updated
+dmdSec: <code class="docutils literal notranslate"><span class="pre">&lt;mets:dmdSec</span> <span class="pre">ID=&quot;dmdSec_792149&quot;</span> <span class="pre">CREATED=&quot;2017-10-17T20:32:36&quot;</span>
+<span class="pre">STATUS=&quot;updated&quot;&gt;</span></code></p>
+</section>
+<section id="where-to-start-the-re-ingest-process">
+<span id="reingest-dashboard"></span><h3>再インジェストプロセスはどこから始めるべきか<a class="headerlink" href="#where-to-start-the-re-ingest-process" title="Link to this heading">¶</a></h3>
+<p>ダッシュボードのArchival Storageタブ、Storage Service、またはAPIから再インジェスト処理を開始できます。</p>
+<section id="archival-storage-tab-on-the-dashboard">
+<h4>ダッシュボードのアーカイブストレージタブ<a class="headerlink" href="#archival-storage-tab-on-the-dashboard" title="Link to this heading">¶</a></h4>
+<p>[アーカイブストレージ] タブに移動し、検索または参照して再インジェストしたい AIP を見つけます。</p>
+<p>1. Click on the name of the AIP or View to open that AIP's view page. Under
+Actions, click on Re-ingest.</p>
+<a class="reference internal image-reference" href="../../_images/storage_reingest.png"><img alt="AIP の横にある [再インジェスト] をクリックします" class="align-center" src="../../_images/storage_reingest.png" style="width: 80%;" />
+</a>
+<ol class="arabic simple" start="2">
+<li><p>再インジェストのタイプ（メタデータ、部分的または完全）を選択します。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/reingest_type2.png"><img alt="再インジェストの種類と処理設定名を選択します" class="align-center" src="../../_images/reingest_type2.png" style="width: 80%;" />
+</a>
+<ol class="arabic simple" start="3">
+<li><p><strong>再インジェスト</strong> をクリックします。Archivematicaは、AIPが再試験のためにパイプラインに送信されたことを通知します。</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>パイプラインで既に再インジェストされているAIPを再インジェストしようとすると、Archivematicaはエラーで警告します。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematica はパッケージを抽出して削除できるように見えます。しかし、でき上がった AIP にはまだパッケージが含まれており、METS ファイルでは再インジェストイベントが正しく関連付けられていません。これは:issue: <cite>10699</cite> として文書化されています。</p>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>転送またはインジェストタブに進み、AIPの再インジェストを承認します。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/reingest_approve2.png"><img alt="インジェストタブでAIPの再インジェストを承認します。" class="align-center" src="../../_images/reingest_approve2.png" style="width: 80%;" />
+</a>
+<ol class="arabic" start="5">
+<li><p>正規化マイクロサービスでは、選択した AIP 再インジェストの種類に応じてさまざまな選択を行います。</p>
+<p><strong>メタデータのみの再インジェスト</strong></p>
+<ol class="arabic simple">
+<li><p>正規化を承認する <em>前</em> にメタデータを追加または更新して、メタデータがデータベースに確実に書き込まれるようにします。つまり、メタデータは、AIP METS ファイルに書き込まれます。メタデータを追加または更新するには、次の 2 つの方法があります：</p>
+<ol class="upperalpha simple">
+<li><p>Archivematica に直接メタデータを追加</p>
+<ol class="loweralpha simple">
+<li><p>SIP の名前と同じ行にある紙と鉛筆のアイコンをクリックすると、&quot;メタデータの追加&quot; ページが表示されます。</p></li>
+<li><p>追加する権利関連のメタデータがある場合は、&quot;権利&quot; の下にある&quot;追加&quot; をクリックします。</p></li>
+<li><p>追加する設定メタデータがある場合は、&quot;メタデータ&quot; の下にある&quot;追加&quot; をクリックします。</p></li>
+<li><p>メタデータを入力します。</p></li>
+<li><p>&quot;インジェスト&quot; （左上隅）をクリックすると、[インジェスト] タブに戻ります。</p></li>
+</ol>
+</li>
+<li><p>メタデータファイルの追加</p>
+<ol class="loweralpha simple">
+<li><p>SIPの名前と同じ行のメタデータレポートアイコンをクリックすると、&quot;メタデータの追加&quot;ページが表示されます。</p></li>
+<li><p>&quot;メタデータ&quot; の下にある &quot;メタデータファイルを追加&quot; をクリックします</p></li>
+<li><p>&quot;ブラウズ&quot;をクリックします</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata.csv</span></code> ファイルを選択します。ファイル名は正確に <code class="docutils literal notranslate"><span class="pre">metadata.csv</span></code> である必要があり、ファイルは <a class="reference internal" href="../transfer/import-metadata.html#import-metadata"><span class="std std-ref">メタデータのインポート</span></a> で説明されている構造に従っている必要があることに注意してください。また、ファイルは、Archivematica に転送するオブジェクトをステージングするのと同じ転送元の場所にステージングする必要があります。</p></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>メタデータの追加が完了したら、&quot;正規化しない&quot; を選択します。</p></li>
+<li><p>通常通りSIPの処理を続けます。</p></li>
+</ol>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>メタデータのみの再インジェストを行う場合、レビュー段階ではAIP内にオブジェクトはありません。Archivematicaは、保存時に既存のAIPのMETSファイルを置き換えます。</p>
+<p><strong>部分再インジェスト</strong></p>
+<ol class="arabic simple">
+<li><p>必要であればメタデータを追加します。手順については、 <strong>メタデータのみの再インジェスト</strong> を参照してください</p></li>
+<li><p>&quot;アクセス用に正規化&quot; を選択します。</p></li>
+<li><p>通常通りSIPの処理を続けます。</p></li>
+</ol>
+<p><strong>フル再インジェスト</strong></p>
+<ol class="arabic simple">
+<li><p>必要であればメタデータを追加します。手順については、 <strong>メタデータのみの再インジェスト</strong> を参照してください。</p></li>
+<li><p>希望の正規化パスを選択します。</p></li>
+<li><p>通常通りSIPの処理を続けます。</p></li>
+</ol>
+</div>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>すべての正規化オプションは、正規化されるすべてのSIPと同様に表示されますが、メタデータのみ、または部分的な再インジェストを実行する場合 <strong>のみ</strong> 、上記の正規化パスがサポートされます。</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>メタデータの追加や更新は、正規化の前でも後でも可能ですが、AIP METSが準備される前にメタデータがデータベースに書き込まれるようにするには、正規化の前にメタデータを追加するか、処理設定でメタデータのリマインダーをチェックなしに設定することをお勧めします。</p>
+</div>
+</section>
+<section id="storage-service">
+<span id="re-ingest-storage-service"></span><h4>Storage Service<a class="headerlink" href="#storage-service" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>ストレージサービスの [Packages] タブで、再インストールしたいAIPの横の [再インジェスト] をクリックします。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/reingest_ss.png"><img alt="ストレージサービスパッケージタブの再インジェストリンク" class="align-center" src="../../_images/reingest_ss.png" style="width: 80%;" />
+</a>
+<ol class="arabic simple" start="2">
+<li><p>Storage Serviceは、パイプライン、再インジェストのタイプ（それぞれの詳細な説明は上記を参照）、完全再インジェストの場合は処理設定名を選択するよう求めます。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/reingest_ss_2.png"><img alt="再インジェストのパイプラインとタイプを選択する画面" class="align-center" src="../../_images/reingest_ss_2.png" style="width: 80%;" />
+</a>
+<ol class="arabic simple" start="3">
+<li><p>Storage Serviceは、AIPが再インジェストのためにパイプラインに送信されたことを確認します。パイプラインの[転送]または[インジェスト]タブに進み、上記のステップ3～6に従います。</p></li>
+</ol>
+</section>
+<section id="api">
+<span id="re-ingest-api"></span><h4>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h4>
+<p>文書は後ほど。</p>
+</section>
+</section>
+</section>
+<section id="clean-up-the-ingest-dashboard">
+<span id="cleanup-ingest"></span><h2>インジェストダッシュボードのクリーンアップ<a class="headerlink" href="#clean-up-the-ingest-dashboard" title="Link to this heading">¶</a></h2>
+<p>[インジェスト] タブのダッシュボードは、時々クリーンアップする必要があります。SIPのリストが増えるにつれて、Archivematicaがこれらの情報を解析するのに時間がかかり、ブラウザのタイムアウト問題が発生する可能性があります。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>これは、SIPまたは関連するエンティティを削除しません。単にダッシュボードからそれらを削除するだけです。</p>
+</div>
+<section id="remove-a-single-ingest">
+<h3>単一のインジェストを削除<a class="headerlink" href="#remove-a-single-ingest" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>削除するSIPがユーザー入力を必要としないことを確認します。ダッシュボードからSIPを削除する前に、すべてのユーザー入力を完了し、SIPを完了するか（つまり、AIP/DIPが作成され、保存/アップロードされる）、SIPを拒否する必要があります。</p></li>
+<li><p>ダッシュボードからSIPを削除する準備ができたら、SIP名の右にあるメタデータ追加アイコンの隣にある赤い丸のアイコンをクリックします。</p></li>
+<li><p>ダッシュボードからSIPを削除するには、［確認］ボタンをクリックします。</p></li>
+</ol>
+</section>
+<section id="remove-all-completed-ingests">
+<h3>完了したインジェストをすべて削除<a class="headerlink" href="#remove-all-completed-ingests" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>削除したいSIPが完了していることを確認します（例：AIP/DIPが作成され、保存/アップロードされる）。この機能は完了したSIPに対してのみ機能します。拒否されたSIPは1つずつ削除する必要があることに注意してください。</p></li>
+<li><p>完了したSIPをすべて削除する準備ができたら、SIPリストのテーブルヘッダーにある赤丸のアイコンをクリックします。</p></li>
+<li><p>[確認］ボタンをクリックして、完了したすべてのSIPをダッシュボードから削除します。</p></li>
+</ol>
+<p><a class="reference internal" href="#ingest"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">インジェスト</a><ul>
+<li><a class="reference internal" href="#create-a-sip">SIPの作成</a></li>
+<li><a class="reference internal" href="#add-descriptive-metadata">説明メタデータを追加</a><ul>
+<li><a class="reference internal" href="#adding-metadata-using-the-user-interface-form">ユーザーインターフェイスフォームを使用したメタデータの追加</a></li>
+<li><a class="reference internal" href="#uploading-metadata-csv-files-through-the-user-interface">ユーザーインターフェースによるメタデータCSVファイルのアップロード</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#add-premis-rights">PREMISの権利を追加</a></li>
+<li><a class="reference internal" href="#normalize">正規化</a></li>
+<li><a class="reference internal" href="#bind-pids">Bind PID</a></li>
+<li><a class="reference internal" href="#transcribe-sip-contents">SIPコンテンツのテキスト変換</a></li>
+<li><a class="reference internal" href="#store-aip">AIPの保存</a></li>
+<li><a class="reference internal" href="#upload-dip">DIPのアップロード</a></li>
+<li><a class="reference internal" href="#re-ingest-aip">AIPの再インジェスト</a><ul>
+<li><a class="reference internal" href="#metadata-only">1. メタデータのみ</a></li>
+<li><a class="reference internal" href="#partial-re-ingest">2. 部分再インジェスト</a></li>
+<li><a class="reference internal" href="#full-re-ingest">3. 完全再インジェスト</a></li>
+<li><a class="reference internal" href="#how-to-tell-in-the-mets-file-if-an-aip-has-been-re-ingested">AIP が再インジェストされたかどうかを METS ファイルで確認する方法</a></li>
+<li><a class="reference internal" href="#where-to-start-the-re-ingest-process">再インジェストプロセスはどこから始めるべきか</a><ul>
+<li><a class="reference internal" href="#archival-storage-tab-on-the-dashboard">ダッシュボードのアーカイブストレージタブ</a></li>
+<li><a class="reference internal" href="#storage-service">Storage Service</a></li>
+<li><a class="reference internal" href="#api">API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#clean-up-the-ingest-dashboard">インジェストダッシュボードのクリーンアップ</a><ul>
+<li><a class="reference internal" href="#remove-a-single-ingest">単一のインジェストを削除</a></li>
+<li><a class="reference internal" href="#remove-all-completed-ingests">完了したインジェストをすべて削除</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../transfer/dataverse.html"
+                          title="前の章へ">Dataverseの統合</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="manual-normalization.html"
+                          title="次の章へ">マニュアル正規化</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/ingest/ingest.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="manual-normalization.html" title="マニュアル正規化"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../transfer/dataverse.html" title="Dataverseの統合"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">インジェスト</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

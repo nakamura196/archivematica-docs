@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>カスタマイズと自動化 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="ダッシュボード管理タブ" href="dashboard-config.html" />
+    <link rel="prev" title="Archivematica 1.15 .xから 1.16.0 へのアップグレード" href="../upgrading/upgrading.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="dashboard-config.html" title="ダッシュボード管理タブ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../upgrading/upgrading.html" title="Archivematica 1.15 .xから 1.16.0 へのアップグレード"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">カスタマイズと自動化</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="customization-and-automation">
+<span id="customization"></span><h1>カスタマイズと自動化<a class="headerlink" href="#customization-and-automation" title="Link to this heading">¶</a></h1>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#config-admin-tab"><span class="std std-ref">管理タブ</span></a></p></li>
+<li><p><a class="reference internal" href="#config-using-dashboard"><span class="std std-ref">ダッシュボードを使ったマイクロサービスの意思決定の自動化</span></a></p></li>
+<li><p><a class="reference internal" href="#config-using-fpr"><span class="std std-ref">保存計画の設定</span></a></p></li>
+<li><p><a class="reference internal" href="#antivirus-config"><span class="std std-ref">アンチウイルスの設定</span></a></p></li>
+<li><p><a class="reference internal" href="#development-config"><span class="std std-ref">開発設定用リソース</span></a></p></li>
+<li><p><a class="reference internal" href="#task-config"><span class="std std-ref">タスク出力キャプチャ設定</span></a></p></li>
+<li><p><a class="reference internal" href="#customize-scalability"><span class="std std-ref">スケーラビリティとパフォーマンスのためのカスタマイズ</span></a></p></li>
+</ul>
+<section id="administration-tab">
+<span id="config-admin-tab"></span><h2>管理タブ<a class="headerlink" href="#administration-tab" title="Link to this heading">¶</a></h2>
+<p>Archivematicaの「管理」タブでは、ユーザーや管理者がユーザーを作成したり、インターフェイスの言語を変更したり、ストレージの場所を確認したり、DIPアップロードの統合やPREMISエージェント情報などの設定の詳細を設定したりできます。管理タブの詳細については、 <a class="reference internal" href="dashboard-config.html#dashboard-config"><span class="std std-ref">[ダッシュボード管理]タブ</span></a> を参照してください。</p>
+</section>
+<section id="automating-microservice-decisions-using-the-dashboard">
+<span id="config-using-dashboard"></span><h2>ダッシュボードを使ったマイクロサービスの意思決定の自動化<a class="headerlink" href="#automating-microservice-decisions-using-the-dashboard" title="Link to this heading">¶</a></h2>
+<p>管理者またはエンドユーザーは、Administrationタブからデフォルトの処理設定を変更することで、Archivematicaのほぼすべてのワークフロー決定ポイントを自動化できます。詳しくは、 <a class="reference internal" href="dashboard-config.html#process-config"><span class="std std-ref">処理設定</span></a> を参照してください。</p>
+<p>また、 <code class="docutils literal notranslate"><span class="pre">processingMCP.xml</span></code> ファイルを転送のルートディレクトリに配置することで、ワークフローの自動化もできます。processingMCPファイルとその使用方法の詳細については、 <a class="reference internal" href="dashboard-config.html#processingmcp-file"><span class="std std-ref">カスタム処理設定ファイルの使用</span></a> を参照してください。</p>
+</section>
+<section id="preservation-planning-configuration">
+<span id="config-using-fpr"></span><h2>保存計画の設定<a class="headerlink" href="#preservation-planning-configuration" title="Link to this heading">¶</a></h2>
+<p>保存計画タブでは、同定、特徴づけ、正規化、妥当性確認、妥当性確認など、さまざまな保存作業のコマンドを、編集、追加、無効化できます。詳しくは、 <a class="reference internal" href="../../../user-manual/preservation/preservation-planning.html#preservation-planning"><span class="std std-ref">PreservationPlanning</span></a> 文書を参照してください。</p>
+</section>
+<section id="antivirus-configuration">
+<span id="antivirus-config"></span><h2>アンチウイルスの設定<a class="headerlink" href="#antivirus-configuration" title="Link to this heading">¶</a></h2>
+<p>Archivematicaのアンチウイルス機能は、オペレーティングシステムの環境変数を編集することでカスタマイズできます。詳しくは、 <a class="reference internal" href="antivirus-admin.html#antivirus-admin"><span class="std std-ref">アンチウイルス管理</span></a> を参照してください。</p>
+</section>
+<section id="email-notification-configuration">
+<span id="email-config"></span><h2>電子メール通知の設定<a class="headerlink" href="#email-notification-configuration" title="Link to this heading">¶</a></h2>
+<p>ArchivematicaのMCPClientは、2種類の電子メールレポートを送信します：</p>
+<ul class="simple">
+<li><p>正規化レポートは、正規化プロセスで少なくとも1つのエラーが発生した場合に送信されます。</p></li>
+<li><p>ワークフローが予期せず失敗した場合、失敗レポートが送信されます。</p></li>
+</ul>
+<p>Eメールレポートは、パイプラインにアカウントを持つすべてのユーザーに送信されます。現在のところ、メールを受け取るユーザーを設定する方法はありません。メールを受信したくないユーザーがいる場合、これを無効にする最も簡単な方法は、そのユーザーに関連付けられているメールアドレスを無効に変更することです。</p>
+<p>QA環境をご利用の場合、登録ユーザーが <code class="docutils literal notranslate"><span class="pre">demo&#64;example.com</span></code> のみである可能性があります。Archivematicaは、このアドレスを無視し、通知を送信しませんのでご注意ください。メールレポート機能をテストする場合は、必ず機能するメールアドレスを登録してください。</p>
+<p>現在、電子メールはMCPClientによってのみ送信されます。つまり、電子メールのバックエンド設定を行うには、MCPClientサービスの設定を変更する必要があります。例えば、Postfix::のようなローカルMTA経由でメールを送信するには、次の環境文字列を使用できます</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ARCHIVEMATICA_MCPCLIENT_EMAIL_BACKEND</span><span class="o">=</span><span class="n">django</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">smtp</span><span class="o">.</span><span class="n">EmailBackend</span>
+<span class="n">ARCHIVEMATICA_MCPCLIENT_EMAIL_HOST</span><span class="o">=</span><span class="mf">127.0.0.1</span>
+<span class="n">ARCHIVEMATICA_MCPCLIENT_EMAIL_PORT</span><span class="o">=</span><span class="mi">25</span>
+</pre></div>
+</div>
+<p>MCPClientの設定の詳細については、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/qa/1.x/src/MCPClient/install/README.md">MCPClient設定文書</a> を参照してください。</p>
+<p>Archivematicaは、Django Web Frameworkを使用してメールを送信します。 <code class="docutils literal notranslate"><span class="pre">django-ses</span></code> のようなサードパーティのパッケージをインストールすることで、追加のメールバックエンドをサポートできます。パッケージは、MCPClientのPython環境にインストールする必要があります。</p>
+</section>
+<section id="resources-for-development-configuration">
+<span id="development-config"></span><h2>開発設定用リソース<a class="headerlink" href="#resources-for-development-configuration" title="Link to this heading">¶</a></h2>
+<p>お客様がArchivematicaの開発に取り組んでいるのであれば、以下が役に立つでしょう</p>
+<p>開発作業でよく使われるのがMCP（マスターコントロールプログラム）です。MCPは、Archivematicaの中核であり、Archivematicaが保存タスクを実行するために使用する様々なマイクロサービスを制御します。MCPの設定を変更したい開発者は、Archivematica wikiの以下のリソースを参照してください：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.archivematica.org/MCP">MCP</a></p></li>
+<li><p><a class="reference external" href="https://wiki.archivematica.org/MCPServer#Config_File">基本的なMCP設定</a></p></li>
+</ul>
+<p>その他の開発リソースについては、Archivematica wikiの <a class="reference external" href="https://wiki.archivematica.org/Development">開発</a> セクションを参照してください。</p>
+</section>
+<section id="task-output-capturing-configuration">
+<span id="task-config"></span><h2>タスク出力キャプチャ設定<a class="headerlink" href="#task-output-capturing-configuration" title="Link to this heading">¶</a></h2>
+<p>ArchivematicaのMCPクライアント（Gearmanワーカー）が保存タスク（例えば、1つのファイルの正規化など）を実行するためにクライアントスクリプトを実行すると、そのクライアントスクリプトは、標準ストリーム、つまり標準出力（stdout）や標準エラー（stderr）にデータを書き込むことがあります。デフォルトでは、ワーカーは、これらの出力をシリアライズしてMCPサーバー（タスクマネージャー）に送り返し、その時点でデータベース（ <code class="docutils literal notranslate"><span class="pre">Tasks</span></code> テーブル）に保存されます。しかし、場合によってはこれらの出力が非常に大きくなり、シリアライズや移動の作業がパフォーマンスに顕著な影響を与えることがあります。このため、Archivematicaでは、これらの出力ストリームをキャプチャするかどうかを制御するために、MCPクライアントを設定できます。詳細については、 <a class="reference internal" href="task-config.html#task-output-capturing-admin"><span class="std std-ref">タスク出力キャプチャ設定</span></a> を参照してください。</p>
+</section>
+<section id="customizing-for-scalability-and-performance">
+<span id="customize-scalability"></span><h2>スケーラビリティとパフォーマンスのためのカスタマイズ<a class="headerlink" href="#customizing-for-scalability-and-performance" title="Link to this heading">¶</a></h2>
+<p>Archivematicaには、スケーラビリティとパフォーマンスを向上させるための多くの機能とオプションがあります。デフォルトの設定オプションは、&quot;典型的な&quot;ユースケースに対応したものであり、多くのユーザーは変更する必要はありません。しかし、ユーザーによっては、保存のニーズや利用可能なコンピューティングリソースに応じて、設定オプションを最適化することで、メリットを得ることができます。</p>
+<p>スケーリングと最適化のための3つのアプローチと、それぞれのアプローチで利用できる具体的なテクニックについては、 <a class="reference internal" href="scaling-archivematica.html#scaling-archivematica"><span class="std std-ref">Archivematicaのスケーリング</span></a> を参照してください。</p>
+<p><a class="reference internal" href="#customization"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">カスタマイズと自動化</a><ul>
+<li><a class="reference internal" href="#administration-tab">管理タブ</a></li>
+<li><a class="reference internal" href="#automating-microservice-decisions-using-the-dashboard">ダッシュボードを使ったマイクロサービスの意思決定の自動化</a></li>
+<li><a class="reference internal" href="#preservation-planning-configuration">保存計画の設定</a></li>
+<li><a class="reference internal" href="#antivirus-configuration">アンチウイルスの設定</a></li>
+<li><a class="reference internal" href="#email-notification-configuration">電子メール通知の設定</a></li>
+<li><a class="reference internal" href="#resources-for-development-configuration">開発設定用リソース</a></li>
+<li><a class="reference internal" href="#task-output-capturing-configuration">タスク出力キャプチャ設定</a></li>
+<li><a class="reference internal" href="#customizing-for-scalability-and-performance">スケーラビリティとパフォーマンスのためのカスタマイズ</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../upgrading/upgrading.html"
+                          title="前の章へ">Archivematica 1.15 .xから 1.16.0 へのアップグレード</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="dashboard-config.html"
+                          title="次の章へ">ダッシュボード管理タブ</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/admin-manual/installation-setup/customization/customization.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="dashboard-config.html" title="ダッシュボード管理タブ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../upgrading/upgrading.html" title="Archivematica 1.15 .xから 1.16.0 へのアップグレード"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">カスタマイズと自動化</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

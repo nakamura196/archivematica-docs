@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>セキュリティ &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="開発者マニュアル" href="../../dev-manual/index.html" />
+    <link rel="prev" title="メンテナンス" href="../maintenance/maintenance.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../../dev-manual/index.html" title="開発者マニュアル"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../maintenance/maintenance.html" title="メンテナンス"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">セキュリティ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="security">
+<span id="id1"></span><h1>セキュリティ<a class="headerlink" href="#security" title="Link to this heading">¶</a></h1>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>Archivematicaをセットアップしたら、セキュリティのためにデフォルトのパスワードを変更することをお勧めします。</p>
+</div>
+<p>このページでは、Archivematicaの様々なセキュリティ設定と構成について説明します。</p>
+<section id="elasticsearch-access-control">
+<span id="elasticsearch-security"></span><h2>Elasticsearchのアクセス制御<a class="headerlink" href="#elasticsearch-access-control" title="Link to this heading">¶</a></h2>
+<p>現在のところ、Elasticsearchへのアクセスを制限する唯一の方法は、サーバーのファイアウォール設定を使用することです。ElasticsearchのTCP/IPポート（9200）へのアクセスを制限するようにサーバのファイアウォールを設定することをお勧めします。127.0.0.1(サーバー自体) と、それにアクセスできる他のサーバーまたはワークステーションのIPによるアクセスのみを許可することをお勧めします。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>アクセスシステムとしてAtoMを使用している場合は、AtoM Elasticsearchインデックスに対してこのタスクを忘れずに実行してください。AtoMサイトは一般公開IPである可能性が高いため、これは重要な手順となります。</p>
+</div>
+<p>より高度なElasticsearchのインストールについては、 <a class="reference external" href="https://www.elastic.co/guide/en/x-pack/current/elasticsearch-security.html">セキュリティ文書</a> に従ってください。 <code class="docutils literal notranslate"><span class="pre">archivematica_src_elasticsearch_host</span></code> 設定属性は、RFC-1738フォーマットのURLを受け付けます（例： <code class="docutils literal notranslate"><span class="pre">https://user:secret&#64;host:443</span></code> ）。</p>
+</section>
+<section id="mysql">
+<span id="mysql-security"></span><h2>MySQL<a class="headerlink" href="#mysql" title="Link to this heading">¶</a></h2>
+<p>新しいMySQLユーザーを作成するか、デフォルトの <code class="docutils literal notranslate"><span class="pre">archivematica</span></code> MySQLユーザーのパスワードを変更する必要があります。デフォルトユーザーのパスワードを変更するには、コマンドラインに次のように入力します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p&lt;your<span class="w"> </span>MyQL<span class="w"> </span>root<span class="w"> </span>password&gt;<span class="w"> </span>-D<span class="w"> </span>mysql<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>-e<span class="w"> </span><span class="s2">&quot;SET PASSWORD FOR &#39;archivematica&#39;@&#39;localhost&#39; = PASSWORD(&#39;&lt;new password&gt;&#39;); \</span>
+<span class="s2">   FLUSH PRIVILEGES;&quot;</span>
+</pre></div>
+</div>
+<p>この後、システムファイルを編集し、以下の各コンポーネントの値を変更することで、ArchivematicaのMySQLデータベースアクセス認証情報を変更できます。</p>
+<p>コンポーネントは、オペレーティングシステムによって異なる場所にあります。</p>
+<p>Ubuntuシステムの場合：</p>
+<ul class="simple">
+<li><p>/etc/default/archivematica-dashboard</p></li>
+<li><p>/etc/default/archivematica-mcp-client</p></li>
+<li><p>/etc/default/archivematica-mcp-server</p></li>
+<li><p>/etc/default/archivematica-storage-service</p></li>
+</ul>
+<p>Rocky Linux/Red Hatシステムの場合：</p>
+<ul class="simple">
+<li><p>/etc/sysconfig/archivematica-dashboard</p></li>
+<li><p>/etc/sysconfig/archivematica-mcp-client</p></li>
+<li><p>/etc/sysconfig/archivematica-mcp-server</p></li>
+<li><p>/etc/sysconfig/archivematica-storage-service</p></li>
+</ul>
+<p>変数はコンポーネントによって異なります。コンポーネントごとに変更する変数は以下の通りです：</p>
+<p><strong>ダッシュボード：</strong></p>
+<ul class="simple">
+<li><p>ARCHIVEMATICA_DASHBOARD_CLIENT_DATABASE</p></li>
+<li><p>ARCHIVEMATICA_DASHBOARD_CLIENT_HOST</p></li>
+<li><p>ARCHIVEMATICA_DASHBOARD_CLIENT_PASSWORD</p></li>
+<li><p>ARCHIVEMATICA_DASHBOARD_CLIENT_USER</p></li>
+</ul>
+<p><strong>MCPClient：</strong></p>
+<ul class="simple">
+<li><p>ARCHIVEMATICA_MCPCLIENT_CLIENT_DATABASE</p></li>
+<li><p>ARCHIVEMATICA_MCPCLIENT_CLIENT_HOST</p></li>
+<li><p>ARCHIVEMATICA_MCPCLIENT_CLIENT_PASSWORD</p></li>
+<li><p>ARCHIVEMATICA_MCPCLIENT_CLIENT_USER</p></li>
+</ul>
+<p><strong>MCPServer：</strong></p>
+<ul class="simple">
+<li><p>ARCHIVEMATICA_MCPSERVER_CLIENT_DATABASE</p></li>
+<li><p>ARCHIVEMATICA_MCPSERVER_CLIENT_HOST</p></li>
+<li><p>ARCHIVEMATICA_MCPSERVER_CLIENT_PASSWORD</p></li>
+<li><p>ARCHIVEMATICA_MCPSERVER_CLIENT_USER</p></li>
+</ul>
+<p><strong>sqlite3使用時のStorage Service：</strong></p>
+<ul class="simple">
+<li><p>SS_DB_NAME</p></li>
+<li><p>SS_DB_HOST</p></li>
+<li><p>SS_DB_PASSWORD</p></li>
+<li><p>SS_DB_USER</p></li>
+</ul>
+<p><strong>MySQLを使用する場合のStorage Service：</strong></p>
+<ul class="simple">
+<li><p>SS_DB_URL</p></li>
+</ul>
+<p>Storage ServiceのMySQLデータベースの場合は、 <a class="reference external" href="https://github.com/artefactual/archivematica-storage-service/blob/stable/0.22.x/install/README.md">Storage Serviceアプリケーション固有の環境変数</a> を参照してください。</p>
+</section>
+<section id="atom">
+<span id="atom-security"></span><h2>AtoM<a class="headerlink" href="#atom" title="Link to this heading">¶</a></h2>
+<p>MySQL認証情報の変更に加えて、AtoMもインストールしている場合は、そのパスワードも設定します。AtoMの認証情報を変更した後は、 <a class="reference internal" href="../installation-setup/customization/dashboard-config.html#admin-dashboard-atom"><span class="std std-ref">AtoM DIPアップロード管理ページ</span></a> の認証情報も更新してください。</p>
+</section>
+<section id="gearman">
+<span id="gearman-security"></span><h2>Gearman<a class="headerlink" href="#gearman" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、実行する必要のある作業をキューイングするためにGermanサーバに依存しています。Gearmanは、現在セキュアな接続をサポートしていないので、Gearmanはローカルか、セキュアで隔離されたネットワーク上で実行する必要があります。issue： <cite>1345</cite> を参照してください。</p>
+</section>
+<section id="authentication-backends">
+<span id="authentication-security"></span><h2>認証バックエンド<a class="headerlink" href="#authentication-backends" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、複数の認証バックエンドをサポートしています：LDAP、Shibboleth、OIDC、CASです。認証バックエンドは、ユーザーモデルで保存された <code class="docutils literal notranslate"><span class="pre">username</span></code> と <code class="docutils literal notranslate"><span class="pre">password</span></code> を、デフォルトとは異なるサービスで認証する必要がある場合に、拡張可能なシステムを提供します。</p>
+<p>この機能は、Django Webフレームワークが提供する <a class="reference external" href="https://docs.djangoproject.com/en/3.2/topics/auth/customizing/#authentication-backends">認証基盤</a> に依存しています。詳しくはDjangoの文書を参照してください！</p>
+<section id="ldap-setup">
+<span id="id2"></span><h3>LDAPの設定<a class="headerlink" href="#ldap-setup" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol">LDAP</a> は、ディレクトリサービスプロトコルで、特に認証と認可に使用されます。この機能により、管理者は、Archivematica Dashboard DjangoアプリケーションをLDAP認証でデプロイできます。</p>
+<p>この機能は、Storage Serviceではまだ利用可能になっていません。</p>
+<section id="ldap-backend-configuration">
+<h4>LDAPバックエンドの設定<a class="headerlink" href="#ldap-backend-configuration" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>環境変数 <code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_DASHBOARD_DASHBOARD_LDAP_AUTHENTICATION</span></code> を使用して、認証バックエンドを有効にします。この環境文字列の詳細については、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/dashboard/install/README.md">の設定文書</a> を参照してください。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ldap_auth.py</span></code> 設定モジュールを必要に応じてカスタマイズします。ファイルを開いて、既存の環境変数ルックアップが何かを見つけてください。環境文字列を介して設定を注入するか、手動で設定モードを変更できます。</p></li>
+<li><p>Archivematica Dashboardを再起動します。</p></li>
+</ol>
+</section>
+</section>
+<section id="shibboleth-setup">
+<span id="id3"></span><h3>Shibbolethの設定<a class="headerlink" href="#shibboleth-setup" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://www.shibboleth.net/">Shibboleth</a> は、シングルサインオン認証と認可を提供する統合IDソリューションです。この機能により、管理者は、Archivematica DashboardとStorage Service Djangoアプリケーションの両方をShibboleth認証でデプロイできます。</p>
+<section id="shibboleth-backend-configuration-in-archivematica-dashboard">
+<h4>ArchivematicaダッシュボードでのShibbolethバックエンド設定<a class="headerlink" href="#shibboleth-backend-configuration-in-archivematica-dashboard" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>環境変数 <code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_DASHBOARD_DASHBOARD_SHIBBOLETH_AUTHENTICATION</span></code> を使用して、認証バックエンドを有効にします。この環境文字列の詳細については、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/dashboard/install/README.md">の設定文書</a> を参照してください。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shibboleth_auth.py</span></code> 設定モジュールを必要に応じてカスタマイズします。</p></li>
+<li><p>Archivematica Dashboardを再起動します。</p></li>
+</ol>
+</section>
+<section id="shibboleth-backend-configuration-in-storage-service">
+<h4>Storage Serviceにおける Shibbolethバックエンドの設定<a class="headerlink" href="#shibboleth-backend-configuration-in-storage-service" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>環境変数 <code class="docutils literal notranslate"><span class="pre">SS_SHIBBOLETH_AUTHENTICATION</span></code> を使って認証バックエンドを有効にします。文字列値 <code class="docutils literal notranslate"><span class="pre">true</span></code> を代入して有効にします。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">base.py</span></code> 設定モジュールを必要に応じてカスタマイズします。</p></li>
+<li><p>Storage Serviceを再起動します。</p></li>
+</ol>
+</section>
+</section>
+<section id="oidc-setup">
+<span id="id4"></span><h3>OIDCのセットアップ<a class="headerlink" href="#oidc-setup" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://openid.net/connect/">OIDC</a> （OpenID Connect）は、OAuth 2.0上のIDレイヤであり、IDの確認、認証、エンドユーザーの基本情報を示します。この機能により、管理者は、Archivematica DashboardとStorage Service Djangoアプリケーションの両方をOIDC認証でデプロイできます。</p>
+<p>これは、 <a class="reference external" href="https://mozilla-django-oidc.readthedocs.io/en/stable/">mozilla-django-oidc</a> をベースにしています。以下の説明に加えて、詳細について、その文書を参照してください。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>OIDCバックエンドは、テストのために有効にすることができる実験的な機能です (以下の手順を参照)。ご意見をお聞かせください！</p>
+</div>
+<section id="oidc-backend-configuration-in-archivematica-dashboard">
+<h4>ArchivematicaダッシュボードでのOIDCバックエンド設定<a class="headerlink" href="#oidc-backend-configuration-in-archivematica-dashboard" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>環境変数 <code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_DASHBOARD_DASHBOARD_OIDC_AUTHENTICATION</span></code> を使用して、認証バックエンドを有効にします。この環境文字列の詳細については、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/dashboard/install/README.md">の設定文書</a> を参照してください。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">oidc_auth.py</span></code> 設定モジュールを必要に応じてカスタマイズします。</p></li>
+<li><p>Archivematica Dashboardを再起動します。</p></li>
+</ol>
+</section>
+<section id="oidc-backend-configuration-in-storage-service">
+<h4>Storage ServiceのOIDCバックエンド設定<a class="headerlink" href="#oidc-backend-configuration-in-storage-service" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>環境変数 <code class="docutils literal notranslate"><span class="pre">SS_OIDC_AUTHENTICATION</span></code> を使って認証バックエンドを有効にします。文字列値 <code class="docutils literal notranslate"><span class="pre">true</span></code> を代入して有効にします。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">base.py</span></code> 設定モジュールを必要に応じてカスタマイズします。</p></li>
+<li><p>Storage Serviceを再起動します。</p></li>
+</ol>
+</section>
+</section>
+<section id="cas-setup">
+<span id="id5"></span><h3>CASのセットアップ<a class="headerlink" href="#cas-setup" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://www.apereo.org/projects/cas">CAS</a> （Central Authentication Service）は、Webアプリケーション認証のためのエンタープライズ向け多言語シングルサインオンソリューションです。この機能により、管理者は、Archivematica DashboardとStorage Service Djangoアプリケーションの両方にCAS認証を導入できます。</p>
+<section id="cas-backend-configuration-in-archivematica-dashboard">
+<h4>ArchivematicaダッシュボードでのCASバックエンド設定<a class="headerlink" href="#cas-backend-configuration-in-archivematica-dashboard" title="Link to this heading">¶</a></h4>
+<ol class="arabic">
+<li><p>環境変数 <cite>ARCHIVEMATICA_DASHBOARD_DASHBOARD_CAS_AUTHENTICATION `を使用して、認証バックエンドを有効にします。この環境文字列の詳細については、</cite> 設定文書 &lt;<a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/dashboard/install/README.md">am-dashboard-config</a>&gt;`_ を参照してください。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cas_auth.py</span></code> 設定モジュールを必要に応じてカスタマイズします。</p></li>
+<li><p>Archivematica Dashboardを再起動します。</p></li>
+<li><p>以下を用いてデータベース移行を適用します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py migrate \</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="cas-backend-configuration-in-storage-service">
+<h4>Storage ServiceのCASバックエンド設定<a class="headerlink" href="#cas-backend-configuration-in-storage-service" title="Link to this heading">¶</a></h4>
+<ol class="arabic">
+<li><p>環境変数 <code class="docutils literal notranslate"><span class="pre">SS_SHIBBOLETH_AUTHENTICATION</span></code> を使って認証バックエンドを有効にします。文字列値 <code class="docutils literal notranslate"><span class="pre">true</span></code> を代入して有効にします。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">base.py</span></code> 設定モジュールを必要に応じてカスタマイズします。</p></li>
+<li><p>Storage Serviceを再起動します。</p></li>
+<li><p>以下を用いてデータベース移行を適用します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-storage-service || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-storage-service \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/lib/archivematica/storage-service</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica-storage-service/bin/python \</span>
+<span class="s2">        manage.py migrate</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</section>
+<section id="password-validation">
+<span id="id6"></span><h2>パスワード認証<a class="headerlink" href="#password-validation" title="Link to this heading">¶</a></h2>
+<p>強力なパスワードポリシーは、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/dashboard/install/README.md">Archivematica</a> と <a class="reference external" href="https://github.com/artefactual/archivematica-storage-service/blob/stable/0.22.x/install/README.md">Storage Service</a> の両方で利用可能なパスワード妥当性確認レイヤを有効にすることで導入できます。</p>
+<p>利用可能なさまざまなオプションの詳細については、上記のリンクをたどってください。例えば、ユーザーパスワードの最小長さは、コンポーネントによって <code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_DASHBOARD_PASSWORD_MINIMUM_LENGTH</span></code> と <code class="docutils literal notranslate"><span class="pre">SS_AUTH_PASSWORD_MINIMUM_LENGTH</span></code> で調整できます。</p>
+</section>
+<section id="cookie-and-session-security">
+<span id="cookie-session-security"></span><h2>クッキーとセッションのセキュリティ<a class="headerlink" href="#cookie-and-session-security" title="Link to this heading">¶</a></h2>
+<p>HTTPSを使う場合、&quot;セキュア&quot;クッキーを有効にし、さらにセキュリティを強化する他のDjango設定も有効にすることをお勧めします。詳しくは、Djangoドキュメンテーションサイトの <a class="reference external" href="https://docs.djangoproject.com/en/3.2/topics/security/#ssl-https">SSL/HTTPS</a> セクションを参照してください。</p>
+<p>さらに、 <a class="reference external" href="https://docs.djangoproject.com/en/3.2/topics/http/sessions/#settings">セッション管理</a> に関連するいくつかのDjango設定を調整することも可能です。例えば、セッションクッキーの長さや、セッションクッキーに関連する他の属性などです。例えば、 <code class="docutils literal notranslate"><span class="pre">SESSION_COOKIE_SECURE</span></code> は、セッションクッキーを&quot;secure&quot;としてマークします。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>生産環境をターゲットにした最後のDjango設定モジュールは <code class="docutils literal notranslate"><span class="pre">production.py</span></code> です。当社のリポジトリでは、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/dashboard/src/settings/production.py">ここ</a> と <a class="reference external" href="https://github.com/artefactual/archivematica-storage-service/blob/stable/0.22.x/storage_service/storage_service/settings/production.py">ここ</a> にあります。現在、追加設定モジュールのサポートはありませんが、将来追加されるかもしれません。</p>
+</div>
+</section>
+<section id="content-security-policy-csp">
+<span id="csp-security"></span><h2>コンテンツセキュリティポリシー（CSP）<a class="headerlink" href="#content-security-policy-csp" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">CSP</a> （Content Security Policy）は、クロスサイトスクリプティング（XSS）やデータインジェクション攻撃など、特定のタイプの攻撃を検出し、軽減するのに役立つセキュリティの追加レイヤです。この機能により、管理者は、Archivematica DashboardとStorage Service Djangoアプリケーションの両方をCSPヘッダ付きでデプロイできます。</p>
+<p><a class="reference external" href="https://django-csp.readthedocs.io/en/latest/">django-csp</a> パッケージをベースにしています。以下の説明に加えて、詳細は、その文書を参照してください。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>CSPサポートは実験的な機能であり、テストするためにオンにできます（下記の説明を参照してください）。フィードバックをお寄せください！</p>
+</div>
+<section id="csp-configuration-in-archivematica-dashboard">
+<h3>Archivematica DashboardでのCSP構成<a class="headerlink" href="#csp-configuration-in-archivematica-dashboard" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>環境変数 <code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_DASHBOARD_DASHBOARD_CSP_ENABLED</span></code> を使用して、CSPサポートを有効にします。この環境文字列の詳細については、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/dashboard/install/README.md">構成文書</a> を参照してください。</p></li>
+<li><p>ヘッダポリシーの小さなセットは、 <code class="docutils literal notranslate"><span class="pre">settings.components.csp</span></code> モジュールから読み込まれますが、Pythonモジュールで独自のオーバーライドを提供し、 <code class="docutils literal notranslate"><span class="pre">CSP_SETTINGS_FILE</span></code> Django設定でそのパスを設定できます。</p></li>
+<li><p>Archivematica Dashboardを再起動します。</p></li>
+</ol>
+</section>
+<section id="csp-backend-configuration-in-storage-service">
+<h3>Storage ServiceのCSPバックエンド構成<a class="headerlink" href="#csp-backend-configuration-in-storage-service" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>環境変数 <code class="docutils literal notranslate"><span class="pre">SS_CSP_ENABLED</span></code> を使用して、CSPサポートを有効にします。文字列値 <code class="docutils literal notranslate"><span class="pre">true</span></code> を代入して有効にします。</p></li>
+<li><p>ヘッダポリシーの小さなセットは、 <code class="docutils literal notranslate"><span class="pre">settings.components.csp</span></code> モジュールから読み込まれますが、Pythonモジュールで独自のオーバーライドを提供し、 <code class="docutils literal notranslate"><span class="pre">CSP_SETTINGS_FILE</span></code> Django設定でそのパスを設定できます。</p></li>
+<li><p>Storage Serviceを再起動します。</p></li>
+</ol>
+</section>
+</section>
+<section id="ca-certificates">
+<span id="ca-root-certificates"></span><h2>CA証明書<a class="headerlink" href="#ca-certificates" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、 <a class="reference external" href="https://requests.readthedocs.io/en/master/">Requests</a> というHTTPライブラリを使用しています。ルートCAセットの更新を処理するには、 <a class="reference external" href="https://requests.readthedocs.io/en/master/user/advanced/#ca-certificates">2つの主なアプローチ</a> があります：</p>
+<section id="upgrade-the-certifi-package-frequently">
+<h3><code class="docutils literal notranslate"><span class="pre">certifi</span></code> パッケージは頻繁にアップグレードしてください<a class="headerlink" href="#upgrade-the-certifi-package-frequently" title="Link to this heading">¶</a></h3>
+<p>このようにして、仮想環境内で <code class="docutils literal notranslate"><span class="pre">certifi</span></code> をアップグレードできます：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>/usr/share/archivematica/virtualenvs/archivematica/bin/pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>certifi
+</pre></div>
+</div>
+<p>例えば systemd を使用している場合は、アップデート後にサービスを再起動する必要があります：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-dashboard
+$<span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-mcp-client
+$<span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>archivematica-storage-service
+</pre></div>
+</div>
+</section>
+<section id="use-the-environment-string-requests-ca-bundle">
+<h3>環境文字列REQUESTS_CA_BUNDLEを使用<a class="headerlink" href="#use-the-environment-string-requests-ca-bundle" title="Link to this heading">¶</a></h3>
+<p>Requestsは、環境文字列 <code class="docutils literal notranslate"><span class="pre">REQUESTS_CA_BUNDLE</span></code> を重視して、管理者がシステムのCAバンドルとなるカスタムバンドルを指定できるようにします。</p>
+<ul class="simple">
+<li><p>UbuntuシステムのCAバンドルファイル:file: <cite>/etc/ssl/certs/ca-certificates.crt</cite> 。</p></li>
+<li><p>Rocky LinuxシステムのCAバンドルファイル:file: <cite>/etc/pki/tls/certs/ca-bundle.crt</cite> 。</p></li>
+</ul>
+<p>Ubuntuでは、行:file: <cite>/etc/default/archivematica-*</cite> をファイルに追加し、システムのCAバンドルを使用するようにします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">REQUESTS_CA_BUNDLE</span><span class="o">=</span>/etc/ssl/certs/ca-certificates.crt
+</pre></div>
+</div>
+<p>Rocky Linuxでは、行:file: <cite>/etc/default/archivematica-*</cite> をファイルに追加して、システムのCAバンドルを使用します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">REQUESTS_CA_BUNDLE</span><span class="o">=</span>/etc/pki/tls/certs/ca-bundle.crt
+</pre></div>
+</div>
+<section id="trusting-additional-cas">
+<h4>追加のCAを信頼する<a class="headerlink" href="#trusting-additional-cas" title="Link to this heading">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">REQUESTS_CA_BUNDLE</span></code> を使用している場合は、さらにCAを信頼したい場合があります。</p>
+<p>Rocky Linuxでは：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.crt</span></code> ファイルをロッキーLinuxマシンの <code class="docutils literal notranslate"><span class="pre">/etc/pki/ca-trust/source/anchors</span></code> にコピーします。</p></li>
+<li><p><cite>update-ca-trust extract</cite> コマンドを実行します。</p></li>
+</ul>
+<p>file： <cite>/etc/pki/tls/certs/ca-bundle.crt</cite> ファイルは、 <code class="docutils literal notranslate"><span class="pre">update-ca-trust</span></code> コマンドで作成された連結出力を参照するシンボリックリンクです。</p>
+<p>Ubuntuで：</p>
+<ul class="simple">
+<li><p>.crtファイルをUbuntuマシンの:file: <cite>/usr/local/share/ca-certificates</cite> にコピーします。</p></li>
+<li><p><cite>update-ca-certificates</cite> コマンドを実行します。</p></li>
+</ul>
+<p>これで新しい:file: <cite>/etc/ssl/certs/ca-certificates.crt</cite> ファイルが作成されます。</p>
+<p><a class="reference internal" href="#security"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">セキュリティ</a><ul>
+<li><a class="reference internal" href="#elasticsearch-access-control">Elasticsearchのアクセス制御</a></li>
+<li><a class="reference internal" href="#mysql">MySQL</a></li>
+<li><a class="reference internal" href="#atom">AtoM</a></li>
+<li><a class="reference internal" href="#gearman">Gearman</a></li>
+<li><a class="reference internal" href="#authentication-backends">認証バックエンド</a><ul>
+<li><a class="reference internal" href="#ldap-setup">LDAPの設定</a><ul>
+<li><a class="reference internal" href="#ldap-backend-configuration">LDAPバックエンドの設定</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#shibboleth-setup">Shibbolethの設定</a><ul>
+<li><a class="reference internal" href="#shibboleth-backend-configuration-in-archivematica-dashboard">ArchivematicaダッシュボードでのShibbolethバックエンド設定</a></li>
+<li><a class="reference internal" href="#shibboleth-backend-configuration-in-storage-service">Storage Serviceにおける Shibbolethバックエンドの設定</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#oidc-setup">OIDCのセットアップ</a><ul>
+<li><a class="reference internal" href="#oidc-backend-configuration-in-archivematica-dashboard">ArchivematicaダッシュボードでのOIDCバックエンド設定</a></li>
+<li><a class="reference internal" href="#oidc-backend-configuration-in-storage-service">Storage ServiceのOIDCバックエンド設定</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cas-setup">CASのセットアップ</a><ul>
+<li><a class="reference internal" href="#cas-backend-configuration-in-archivematica-dashboard">ArchivematicaダッシュボードでのCASバックエンド設定</a></li>
+<li><a class="reference internal" href="#cas-backend-configuration-in-storage-service">Storage ServiceのCASバックエンド設定</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#password-validation">パスワード認証</a></li>
+<li><a class="reference internal" href="#cookie-and-session-security">クッキーとセッションのセキュリティ</a></li>
+<li><a class="reference internal" href="#content-security-policy-csp">コンテンツセキュリティポリシー（CSP）</a><ul>
+<li><a class="reference internal" href="#csp-configuration-in-archivematica-dashboard">Archivematica DashboardでのCSP構成</a></li>
+<li><a class="reference internal" href="#csp-backend-configuration-in-storage-service">Storage ServiceのCSPバックエンド構成</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ca-certificates">CA証明書</a><ul>
+<li><a class="reference internal" href="#upgrade-the-certifi-package-frequently"><code class="docutils literal notranslate"><span class="pre">certifi</span></code> パッケージは頻繁にアップグレードしてください</a></li>
+<li><a class="reference internal" href="#use-the-environment-string-requests-ca-bundle">環境文字列REQUESTS_CA_BUNDLEを使用</a><ul>
+<li><a class="reference internal" href="#trusting-additional-cas">追加のCAを信頼する</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../maintenance/maintenance.html"
+                          title="前の章へ">メンテナンス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../../dev-manual/index.html"
+                          title="次の章へ">開発者マニュアル</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/admin-manual/security/security.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../../dev-manual/index.html" title="開発者マニュアル"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../maintenance/maintenance.html" title="メンテナンス"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">セキュリティ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

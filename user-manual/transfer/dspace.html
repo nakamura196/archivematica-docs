@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>DSpaceエクスポート &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="ウイルスのスキャン" href="scan-for-viruses.html" />
+    <link rel="prev" title="フォレンジックディスクイメージ" href="forensic.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="scan-for-viruses.html" title="ウイルスのスキャン"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="forensic.html" title="フォレンジックディスクイメージ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">DSpaceエクスポート</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="dspace-exports">
+<span id="dspace"></span><h1>DSpaceエクスポート<a class="headerlink" href="#dspace-exports" title="Link to this heading">¶</a></h1>
+<p>Archivematica を使用すると、DSpace リポジトリの&quot;ダークアーカイブ&quot;を構築できます。つまり、DSpace がユーザーのデポジットおよびアクセスシステムのままである一方で、バックエンド保存機能を提供できます。DSpace からエクスポートされた素材は、Archivematica パイプラインがアクセスできる <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#id13" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">転送元の場所</span></a> に配列する必要があります。</p>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#dspace-version"><span class="std std-ref">DSpaceバージョンの互換性</span></a></p></li>
+<li><p><a class="reference internal" href="#dspace-export-structure"><span class="std std-ref">DSpaceエクスポート構造</span></a></p></li>
+<li><p><a class="reference internal" href="#processing-dspace-exports"><span class="std std-ref">DSpaceエクスポートの処理</span></a></p></li>
+</ul>
+<section id="dspace-version-compatibility">
+<span id="dspace-version"></span><h2>DSpaceバージョンの互換性<a class="headerlink" href="#dspace-version-compatibility" title="Link to this heading">¶</a></h2>
+<p>Archivematica は、DSpace 1.7.x からのエクスポートを使用してテストされます。インジェストは、DSpace 1.8.x からのエクスポートではテストされません。ただし、1.7.x と 1.8.x の間で DSpace AIP エクスポート構造に変更はありませんでした。したがって、パフォーマンスは同一であることが予想されます。</p>
+</section>
+<section id="dspace-export-structure">
+<span id="id1"></span><h2>DSpaceエクスポート構造<a class="headerlink" href="#dspace-export-structure" title="Link to this heading">¶</a></h2>
+<p>Archivematica は、各 DSpace アイテムが ZIP ファイルとしてパッケージ化される標準の DSpace エクスポートを想定しています。通常、DSpace アイテムの ZIP ファイルには、アップロードされたオブジェクトに加えて、ライセンスファイル、METS ファイル、および場合によっては OCR テキストファイルが含まれます。</p>
+<a class="reference internal image-reference" href="../../_images/dspace-item-contents.png"><img alt="解凍された DSpace エクスポートパッケージであり、アイテムを構成する 4 つのファイルが表示されます。" class="align-center" src="../../_images/dspace-item-contents.png" style="width: 80%;" />
+</a>
+<p>上の写真の例では、DSpace アイテムは4つのファイルを含んでいます：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bitstream_39691.txt</span></code> OCR テキストファイル。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bitstream_8272.pdf</span></code> ：DSpaceに寄託されたオリジナルのオブジェクト。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bitstream_8273</span></code> ：ライセンスファイル。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mets.xml</span></code> ：アイテムの METS ファイル。</p></li>
+</ul>
+<p>Archivematica は、DSpace METS ファイルの一部を再利用して、AIP 用に生成された METS ファイルを設定します。</p>
+<p>アイテムを1つずつ転送するか、ディレクトリ内に配列して一度に複数のアイテムを転送できます。DSpaceインスタンスのセットアップとエクスポートパラメーターによって、エクスポートは以下の例のように、コレクションレベルの説明だけでなく、複数の個々のアイテムを含めることができます。</p>
+</section>
+<section id="processing-dspace-exports">
+<span id="id2"></span><h2>DSpaceエクスポートの処理<a class="headerlink" href="#processing-dspace-exports" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>エクスポートした素材を、Archivematica パイプラインがアクセスできる <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#id13" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">転送元の場所</span></a> に配列します。</p></li>
+<li><p>Archivematica の [転送] タブで、 <strong>転送タイプ</strong> ドロップダウンメニューにより DSpace 転送タイプを選択します。</p>
+<a class="reference internal image-reference" href="../../_images/dspace-select-transfer-type.png"><img alt="Archivematica の転送タブで、転送タイプとして&quot;DSpace&quot; が選択されています。" class="align-center" src="../../_images/dspace-select-transfer-type.png" style="width: 80%;" />
+</a>
+</li>
+<li><p><strong>ブラウズ</strong> ボタンを使用して DSpace エクスポートを見つけ、個々のアイテムまたはアイテムのコレクションを選択します。以下のスクリーンショットでは、アイテムのコレクションが選択されています。 <strong>追加</strong> をクリックします。</p>
+<a class="reference internal image-reference" href="../../_images/dspace-select-items.png"><img alt="&quot;DSpaceExport&quot; というフォルダーが表示されている Archivematica の転送タブであり、転送用に選択された多くの DSpace アイテムが含まれています。" class="align-center" src="../../_images/dspace-select-items.png" style="width: 80%;" />
+</a>
+</li>
+<li><p>アイテムのコレクションを選択した場合は、 <strong>転送名</strong> ボックスに転送名を入力します。</p>
+<p>個々の DSpace アイテムを選択した場合は、転送名は必要ありません。アイテム名 (例： <code class="docutils literal notranslate"><span class="pre">ITEM&#64;2429-1521.zip</span></code> ) が転送名として使用されます。</p>
+</li>
+<li><p><strong>転送開始</strong> をクリックし、必要に応じて処理します。</p></li>
+</ol>
+</section>
+<section id="dspace-aip-mets-files">
+<span id="dspace-mets"></span><h2>DSpace AIP METSファイル<a class="headerlink" href="#dspace-aip-mets-files" title="Link to this heading">¶</a></h2>
+<p>AIPの各オブジェクトには、2つのDSpace固有の説明メタデータセクション（dmdSec）があります。最初のセクションは、DSpaceからエクスポートされたオリジナルのmets.xmlファイルの説明メタデータと権利メタデータへのXポインタを含んでいます。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_2&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:mdRef</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;mets.xml-Group-2f7c645f-a0b0-4d36-9933-0c8d9e47784b&quot;</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/ITEM_2429-2700.zip-2020-02-07T00_26_40.346055_00_00/mets.xml&quot;</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="w"> </span><span class="na">XPTR=</span><span class="s">&quot;xpointer(id(&#39;dmdSec_366 dmdSec_367&#39;))&quot;</span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+<p>2 番目の dmdSec は、ハンドルを識別子として使用して、DSpace オブジェクトとそのコレクションの間の親子関係を反映します：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_3&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;DC&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dcterms:dublincore</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xmlns:dcterms=</span><span class="s">&quot;http://purl.org/dc/terms/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://purl.org/dc/terms/ https://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dcterms:isPartOf&gt;</span>hdl:2429/1314<span class="nt">&lt;/dcterms:isPartOf&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:identifier&gt;</span>hdl:2429/2700<span class="nt">&lt;/dc:identifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/dcterms:dublincore&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+<p>AIP METSファイルのファイルセクション（ <code class="docutils literal notranslate"><span class="pre">fileSec</span></code> ）では、AIPに含まれる様々な種類のDSpaceファイルに関する情報を見ることができます。それらはファイルグループ（ <code class="docutils literal notranslate"><span class="pre">fileGrp</span></code> ）でソートされています： <code class="docutils literal notranslate"><span class="pre">original</span></code> <code class="docutils literal notranslate"><span class="pre">submissionDocumentation</span></code> （オリジナルのDSpace mets.xmlファイル）、 <code class="docutils literal notranslate"><span class="pre">preservation</span></code> （保存のために素材が正規化された場合）、 <code class="docutils literal notranslate"><span class="pre">license</span></code> 、 <code class="docutils literal notranslate"><span class="pre">text/ocr</span></code> 。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">&lt;mets:fileSec&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:fileGrp</span><span class="w"> </span><span class="na">USE=</span><span class="s">&quot;original&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-2f7c645f-a0b0-4d36-9933-0c8d9e47784b&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-2f7c645f-a0b0-4d36-9933-0c8d9e47784b&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_2&quot;</span><span class="w"> </span><span class="na">DMDID=</span><span class="s">&quot;dmdSec_2 dmdSec_3&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/ITEM_2429-2700.zip-2020-02-07T00_26_40.346055_00_00/bitstream_8266.pdf&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:fileGrp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:fileGrp</span><span class="w"> </span><span class="na">USE=</span><span class="s">&quot;submissionDocumentation&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-2f7c645f-a0b0-4d36-9933-0c8d9e47784b&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-6aeb8547-e866-4d47-ad11-35a1b85fe8e8&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_4&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/ITEM_2429-2700.zip-2020-02-07T00_26_40.346055_00_00/mets.xml&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-bd549305-08b7-4173-b594-d1acf2f23bdd&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-bd549305-08b7-4173-b594-d1acf2f23bdd&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_5&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/submissionDocumentation/transfer-ITEM_2429-2700-6c06573d-069d-4092-a98a-fbfbc29ee5fa/METS.xml&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:fileGrp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:fileGrp</span><span class="w"> </span><span class="na">USE=</span><span class="s">&quot;license&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-2f7c645f-a0b0-4d36-9933-0c8d9e47784b&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-06ce97e6-edfe-4a51-bec3-5cc7bed9e0b1&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_3&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/ITEM_2429-2700.zip-2020-02-07T00_26_40.346055_00_00/bitstream_8267&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:fileGrp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:fileGrp</span><span class="w"> </span><span class="na">USE=</span><span class="s">&quot;text/ocr&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-2f7c645f-a0b0-4d36-9933-0c8d9e47784b&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-e20b2cb6-71b4-4323-b6c7-84c431c5e88f&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/ITEM_2429-2700.zip-2020-02-07T00_26_40.346055_00_00/bitstream_40314.txt&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:fileGrp&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:fileSec&gt;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#dspace"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">DSpaceエクスポート</a><ul>
+<li><a class="reference internal" href="#dspace-version-compatibility">DSpaceバージョンの互換性</a></li>
+<li><a class="reference internal" href="#dspace-export-structure">DSpaceエクスポート構造</a></li>
+<li><a class="reference internal" href="#processing-dspace-exports">DSpaceエクスポートの処理</a></li>
+<li><a class="reference internal" href="#dspace-aip-mets-files">DSpace AIP METSファイル</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="forensic.html"
+                          title="前の章へ">フォレンジックディスクイメージ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="scan-for-viruses.html"
+                          title="次の章へ">ウイルスのスキャン</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/transfer/dspace.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="scan-for-viruses.html" title="ウイルスのスキャン"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="forensic.html" title="フォレンジックディスクイメージ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">DSpaceエクスポート</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

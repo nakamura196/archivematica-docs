@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>タスク出力キャプチャ設定 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="Archivematicaのスケーリング" href="scaling-archivematica.html" />
+    <link rel="prev" title="アンチウイルス管理" href="antivirus-admin.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="scaling-archivematica.html" title="Archivematicaのスケーリング"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="antivirus-admin.html" title="アンチウイルス管理"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">タスク出力キャプチャ設定</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="task-output-capturing-configuration">
+<span id="task-output-capturing-admin"></span><h1>タスク出力キャプチャ設定<a class="headerlink" href="#task-output-capturing-configuration" title="Link to this heading">¶</a></h1>
+<p>Archivematicaでは、クライアントスクリプトからの出力ストリーム（stdoutとstderr）をキャプチャして、タスクワーカーからタスクマネージャ（MCPサーバ）に渡すかどうかを制御するために、MCPクライアントを設定できます。</p>
+<p>デフォルトの構成では、これらの出力ストリーム <em>が</em> キャプチャされます。この状態で、ユーザーがマイクロサービスの歯車アイコンをクリックして実行されたタスクを表示すると、各タスクの表現には <code class="docutils literal notranslate"><span class="pre">Standard</span> <span class="pre">streams</span></code> というセクションが含まれ、 <code class="docutils literal notranslate"><span class="pre">Standard</span> <span class="pre">output</span> <span class="pre">(stdout)</span></code> というサブセクションにはクライアントスクリプトからのstdoutが含まれ、 <code class="docutils literal notranslate"><span class="pre">Standard</span> <span class="pre">error</span> <span class="pre">(stderr)</span></code> というサブセクションにはstderrが含まれます。</p>
+<p>しかし、場合によっては、これらの出力ストリームを直列化し、移動させる（ <em>capturing</em> ）ことで、自明でないパフォーマンス・コストが発生することがあります（出力キャプチャを無効にすると、一部の転送で処理時間が6%短縮されることが確認されています）。Archivematicaは、出力ストリームのキャプチャを無効にすることで、このコストを回避するように設定できます。このトレードオフは、保存タスクの実行を記録する標準出力と標準エラーがデータベースに保存されなくなり、タスクインターフェースに表示されなくなることです。</p>
+<p>Archivematicaが出力ストリームのキャプチャを停止するように設定するには、MCPクライアントプロセスを起動（または再スタート）する前に、環境変数 <code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CAPTURE_CLIENT_SCRIPT_OUTPUT</span></code> を <code class="docutils literal notranslate"><span class="pre">false</span></code> に設定する必要があります。Archivematica環境変数の設定方法は、使用するデプロイ方法によって異なります。出力キャプチャを無効にしたい場合は、使用するデプロイ方法の関連文書を参照してください。</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../installation/install-rocky.html#install-pkg-rocky"><span class="std std-ref">Rocky Linuxパッケージ・ベースのインストールにおける環境変数の設定</span></a></p></li>
+<li><p><a class="reference internal" href="../installation/install-ubuntu.html#install-pkg-ubuntu"><span class="std std-ref">Ubuntuパッケージベースのインストールにおける環境変数の設定</span></a></p></li>
+<li><p><a class="reference internal" href="../installation/install-ansible.html#install-ansible"><span class="std std-ref">Ubuntu Ansibleベースのインストールにおける環境変数の設定</span></a></p></li>
+<li><p><a class="reference external" href="https://github.com/artefactual/archivematica/tree/qa/1.x/hack">Docker Composeインストール用の環境変数設定</a></p></li>
+</ul>
+<p>出力キャプチャを無効にすると、stdoutは <em>決して</em> キャプチャされませんが、 <em>stderr</em> は、保存タスクがゼロ以外の終了コードを返したとき（つまり失敗したとき）だけキャプチャされることに注意してください。これにより、ユーザーは、タスクが失敗した場合に有用なデバッグ情報を得ながら、パフォーマンス上の利点を得ることができます。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>また、既存の限界をさらに押し広げるために、データベースサーバーの設定を微調整することも可能です。これは、MySQLストレージエンジンに精通しているユーザーにとっては良い解決策となります。特に、InnoDBのログファイルサイズ（ <code class="docutils literal notranslate"><span class="pre">innodb_log_file_size</span></code> ）を増やすことに成功しています。 <a class="reference external" href="https://www.percona.com/blog/2011/11/21/should-mysql-update-the-default-innodb_log_file_size/">MySQLがデフォルトのinnodb_log_file_sizeを更新すべきかは、</a> を参照してください。長期的には、タスクの結果を保存するためのより良い方法が見つかると期待しています。もし興味があれば、 <a class="reference external" href="https://github.com/archivematica/Issues/issues/314">issue #314</a> を参照してください。</p>
+</div>
+<p><a class="reference internal" href="#task-output-capturing-admin"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="antivirus-admin.html"
+                          title="前の章へ">アンチウイルス管理</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="scaling-archivematica.html"
+                          title="次の章へ">Archivematicaのスケーリング</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/admin-manual/installation-setup/customization/task-config.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="scaling-archivematica.html" title="Archivematicaのスケーリング"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="antivirus-admin.html" title="アンチウイルス管理"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">タスク出力キャプチャ設定</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

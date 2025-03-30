@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ダッシュボード管理タブ &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="ArchivematicaのMETS" href="../metadata/METS.html" />
+    <link rel="prev" title="保存計画" href="../preservation/preservation-planning.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../metadata/METS.html" title="ArchivematicaのMETS"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../preservation/preservation-planning.html" title="保存計画"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ダッシュボード管理タブ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="dashboard-administration-tab">
+<span id="dashboard-admin"></span><h1>ダッシュボード管理タブ<a class="headerlink" href="#dashboard-administration-tab" title="Link to this heading">¶</a></h1>
+<p>このページでは、Archivematicaのダッシュボードによるユーザー管理について説明します。より高度で技術的な管理文書については、 <a class="reference internal" href="../../index.html#home"><span class="std std-ref">管理者マニュアル</span></a> を参照してください。</p>
+<p>ダッシュボードの「管理」タブにあるArchivematicaの管理ページでは、アプリケーションの様々な部分を設定し、統合やユーザーを管理できます。</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#dashboard-processing"><span class="std std-ref">処理設定</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#processing-config-fields"><span class="std std-ref">フィールドとオプション</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#dashboard-general"><span class="std std-ref">一般</span></a></p></li>
+<li><p><a class="reference internal" href="#dashboard-failures"><span class="std std-ref">障害</span></a></p></li>
+<li><p><a class="reference internal" href="#dashboard-storage-locations"><span class="std std-ref">保存場所</span></a></p></li>
+<li><p><a class="reference internal" href="#dashboard-usage"><span class="std std-ref">処理ストレージ使用状況</span></a></p></li>
+<li><p><a class="reference internal" href="#dashboard-dip-upload"><span class="std std-ref">DIPアップロード</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#dashboard-atom"><span class="std std-ref">AtoM DIP upload</span></a></p></li>
+<li><p><a class="reference internal" href="#dashboard-as"><span class="std std-ref">ArchivesSpace DIPアップロード</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#dashboard-premis"><span class="std std-ref">PREMISエージェント</span></a></p></li>
+<li><p><a class="reference internal" href="#dashboard-rest"><span class="std std-ref">REST API</span></a></p></li>
+<li><p><a class="reference internal" href="#dashboard-users"><span class="std std-ref">ユーザー</span></a></p></li>
+<li><p><a class="reference internal" href="#handle-server"><span class="std std-ref">サーバー設定の処理</span></a></p></li>
+<li><p><a class="reference internal" href="#language-choice"><span class="std std-ref">言語</span></a></p></li>
+<li><p><a class="reference internal" href="#version"><span class="std std-ref">バージョン</span></a></p></li>
+</ul>
+<section id="processing-configuration">
+<span id="dashboard-processing"></span><h2>処理設定<a class="headerlink" href="#processing-configuration" title="Link to this heading">¶</a></h2>
+<p>ダッシュボードの処理設定管理ページでは、転送やインジェスト時にArchivematicaが提示するジョブの決定ポイントを設定できます。インストール時に2つの処理設定が利用可能です：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Default</span></code> は、 <a class="reference internal" href="../transfer/transfer.html#create-transfer"><span class="std std-ref">転送タブ</span></a> から手動で開始される転送、 <a class="reference external" href="https://github.com/artefactual/automation-tools">自動化ツール</a> から自動的に開始される転送、または他の処理設定が指定されていないその他のコンテキストで使用されます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Automated</span></code> は、一部の外部環境（Jisc RDSSなど）から自動的に開始される転送に使用され、転送タブでユーザーが選択もできます。</p></li>
+</ul>
+<a class="reference internal image-reference" href="../../_images/processing-config1.png"><img alt="デフォルトと自動の2つの設定を表す処理設定画面" class="align-center" src="../../_images/processing-config1.png" style="width: 60%;" />
+</a>
+<p>既存の処理設定ファイルを編集するには、処理設定名の右にある <strong>Edit</strong> ボタンをクリックします。</p>
+<p>複数の処理コンフィギュレーションを作成するには、処理コンフィギュレーション画面の <strong>追加</strong> ボタンを使用します。オーディオビジュアル素材用、画像用、テキスト記録用など、異なるタイプのコンテンツ用に複数のコンフィギュレーションを作成することがよくあります。</p>
+<p>また、 <strong>Reset</strong> をクリックすることで、デフォルトおよび自動処理設定をプリセットに戻すことができます。デフォルト処理設定のプリセットは、以下の <a class="reference internal" href="#processing-config-fields"><span class="std std-ref">処理設定フィールド</span></a> セクションに記載されていることに注意してください。</p>
+<p>代わりの処理設定（例：デフォルト以外）は、2つの方法で使用されることに注意してください：</p>
+<ol class="arabic simple">
+<li><p>AIPを再インジェストする際、どの処理設定を使用するかを選択する機会が与えられます。</p></li>
+<li><p><strong>Download</strong> をクリックして、processingMCP.xmlファイルをダウンロードできます。次に、ファイル名を <code class="docutils literal notranslate"><span class="pre">processingMCP.xml</span></code> に変更し、転送のトップレベルに含めます。Archivematicaは、デフォルトの設定ではなく、このファイルを使用して転送の選択を自動化します。processingMCP.xmlファイルの詳細については、 <a class="reference internal" href="../../admin-manual/installation-setup/customization/dashboard-config.html#processingmcp-file"><span class="std std-ref">Creating a custom config with processingMCP.xml</span></a> を参照してください。</p></li>
+</ol>
+<p>他のすべての転送では、デフォルトの処理設定を使用します。</p>
+<p>選択項目を編集するには、ジョブ名の右側にあるドロップダウンメニューから選択します。すべての選択を終えたら、処理設定を保存してください。フィールドについては、次のセクションで説明します。</p>
+<a class="reference internal image-reference" href="../../_images/ProcessingConfig.png"><img alt="ダッシュボードの処理設定画面" class="align-center" src="../../_images/ProcessingConfig.png" style="width: 60%;" />
+</a>
+<section id="processing-configuration-fields">
+<span id="processing-config-fields"></span><h3>設定フィールドの処理<a class="headerlink" href="#processing-configuration-fields" title="Link to this heading">¶</a></h3>
+<p>[Archivematica 転送] と [インジェスト] タブにある多くのジョブには、設定可能な決定ポイントがあります。これらの決定を自動化することで、特に同じ決定を何度も選択している場合、転送とインジェストのプロセスを大幅に短縮することができます。以下は、処理設定フォーム フィールドのリストと、それらの機能と各フィールドのドロップダウンオプションに関する簡単な説明です。</p>
+<p>アスタリスクでマークされたオプションは、デフォルト処理設定の事前設定値です。デフォルト設定を変更した場合は、 <strong>リセット</strong> をクリックして、すべての変更をインストール前の設定に戻すことができます。</p>
+<section id="name">
+<h4>名前<a class="headerlink" href="#name" title="Link to this heading">¶</a></h4>
+<p>編集するprocessingMCP.xmlの名前。</p>
+</section>
+<section id="assign-uuids-to-directories">
+<h4>ディレクトリにUUIDを割り当てる<a class="headerlink" href="#assign-uuids-to-directories" title="Link to this heading">¶</a></h4>
+<p>ディレクトリにはfileSecのエントリが与えられ、一意のユニバーサル識別子（UUID）が割り当てられます。転送中のデジタルオブジェクトには常にUUIDが割り当てられることに注意してください。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>はい</strong> - UUID が割り当てられます。</p></li>
+<li><p><strong>いいえ</strong> - UUID は割り当てられません。*</p></li>
+</ol>
+</section>
+<section id="generate-transfer-structure-report">
+<h4>転送構造レポートの作成<a class="headerlink" href="#generate-transfer-structure-report" title="Link to this heading">¶</a></h4>
+<p>オリジナルの転送構造のディレクトリツリーを示すテキストファイルが生成されます。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>はい</strong> - 構造レポートが作成されます。*</p></li>
+<li><p><strong>いいえ</strong> - 構造レポートは作成されません。</p></li>
+</ol>
+</section>
+<section id="perform-file-identification-transfer">
+<h4>ファイル識別の実行（転送）<a class="headerlink" href="#perform-file-identification-transfer" title="Link to this heading">¶</a></h4>
+<p>転送するファイルのフォーマットを識別するかどうかを選択します。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>はい</strong> - 有効なファイル識別コマンドを使用します。詳細は、 <a class="reference internal" href="../preservation/preservation-planning.html#identification"><span class="std std-ref">識別</span></a> を参照してください。</p></li>
+<li><p><strong>いいえ</strong> - ファイルは特定されません。</p></li>
+</ol>
+</section>
+<section id="extract-packages">
+<h4>パッケージの抽出<a class="headerlink" href="#extract-packages" title="Link to this heading">¶</a></h4>
+<p>パッケージ（.zipファイルなど）は解凍され、ディレクトリに展開されます。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>はい</strong> - パッケージの中身が抽出されます。</p></li>
+<li><p><strong>いいえ</strong> - パッケージは現状のままです。</p></li>
+</ol>
+</section>
+<section id="delete-packages-after-extraction">
+<h4>抽出後にパッケージを削除します<a class="headerlink" href="#delete-packages-after-extraction" title="Link to this heading">¶</a></h4>
+<p>前のステップで抽出されたパッケージは、抽出後に削除できます。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>はい</strong> - パッケージは削除されます。</p></li>
+<li><p><strong>いいえ</strong> - パッケージは、抽出されたコンテンツとともに保存されます。</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#dataverse" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Dataverse</span></a> 転送を処理する場合は、&quot;いいえ&quot;を選択する必要があります。パッケージが削除されると、Dataverse転送は失敗します。</p>
+</div>
+</section>
+<section id="perform-policy-checks-on-originals">
+<h4>オリジナルのポリシーチェックを実行<a class="headerlink" href="#perform-policy-checks-on-originals" title="Link to this heading">¶</a></h4>
+<p><a class="reference internal" href="../preservation/preservation-planning.html#fpr-mediaconch"><span class="std std-ref">MediaConch</span></a> を使用してポリシーを作成した場合、Archivematicaは、元の転送素材をポリシーに照らして実行し、適合性を評価します。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>はい</strong> - 転送はあらゆるポリシーと照合されます。</p></li>
+<li><p><strong>いいえ</strong> - ポリシーは無視されます。*</p></li>
+</ol>
+</section>
+<section id="examine-contents">
+<h4>内容検査<a class="headerlink" href="#examine-contents" title="Link to this heading">¶</a></h4>
+<p><a class="reference external" href="https://github.com/simsong/bulk_extractor/wiki">Bulk Extractor</a> を実行します。これは、クレジットカード番号、社会保障番号、およびデータ内のその他のパターンを認識できるフォレンジックツールです。Bulk Extractorログのレビューの詳細については、[評価] タブの <a class="reference internal" href="../appraisal/appraisal.html#analysis-pane"><span class="std std-ref">分析ペイン（</span></a> ）を参照してください。</p>
+<p><strong>オプション：</strong></p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>Skip examine contents</strong> - Bulk Extractorが実行されません。</p></li>
+<li><p><strong>はい</strong> - Bulk Extractorは、コンテンツをスキャンし、認識されたパターンのログ出力を作成してレビューします。</p></li>
+</ol>
+</section>
+<section id="create-sip-s">
+<h4>SIPの作成<a class="headerlink" href="#create-sip-s" title="Link to this heading">¶</a></h4>
+<p>転送から正式のSIPを作成するか、バックログに送ります。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>単一のSIPを作成し、処理を続行</strong> - 転送は、SIPとなり、インジェストタブでさらに処理できるようになります。</p></li>
+<li><p><strong>バックログに送信</strong> - 転送は、一時保管または評価のためにバックログ保管スペースに送られます。</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematicaをインデックスレスモード（Elasticsearchを使用しない）で実行している場合、バックログは、使用できなくなり、このドロップダウンに <strong>Send to backlog</strong> オプションは表示されません。</p>
+</div>
+</section>
+<section id="select-file-format-identification-command-ingest">
+<h4>ファイルフォーマット識別コマンドの選択（インジェスト）<a class="headerlink" href="#select-file-format-identification-command-ingest" title="Link to this heading">¶</a></h4>
+<p>SIP内のファイルのフォーマットを識別するために選択します。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>はい</strong> - 有効なファイル識別コマンドを使用します。詳細は、 <a class="reference internal" href="../preservation/preservation-planning.html#identification"><span class="std std-ref">識別</span></a> を参照してください。</p></li>
+<li><p><strong>いいえ、既存のデータを使用します</strong> - 転送タブからファイル識別データを再利用します。*</p></li>
+</ol>
+</section>
+<section id="normalize">
+<h4>正規化<a class="headerlink" href="#normalize" title="Link to this heading">¶</a></h4>
+<p>インジェストされたデジタルオブジェクトを、保存形式および/またはアクセス形式に変換します。詳しくは、 <a class="reference internal" href="../ingest/ingest.html#normalize"><span class="std std-ref">正規化</span></a> を参照してください。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>保存とアクセスのために正規化</strong> - オブジェクトの保存コピーと、DIPの生成に使用されるアクセスコピーを作成します。</p></li>
+<li><p><strong>保存のために正規化</strong> - 保存用コピーのみを作成します。アクセスコピーは作成されず、DIPも生成されません。</p></li>
+<li><p><strong>アクセス用に正規化</strong> - AIPは、オリジナルのみを含みます。保存コピーは作成されません。DIPの生成に使用されるアクセスコピーが作成されます。</p></li>
+<li><p><strong>アクセス用のサービスファイルを正規化</strong> - 詳細は、 <a class="reference internal" href="../transfer/transfer.html#transfer-service-files"><span class="std std-ref">サービス（メザニン）ファイルで素材を転送</span></a> を参照してください。</p></li>
+<li><p><strong>手動で正規化</strong> - 詳細は、 <a class="reference internal" href="../ingest/manual-normalization.html#manual-norm"><span class="std std-ref">手動正規化</span></a> を参照してください。</p></li>
+<li><p><strong>正規化しない</strong> - AIPには、原本のみが含まれます。保存用コピーやアクセス用コピーは生成されず、DIPも生成されません。</p></li>
+</ol>
+</section>
+<section id="approve-normalization">
+<h4>正規化を承認<a class="headerlink" href="#approve-normalization" title="Link to this heading">¶</a></h4>
+<p>ダッシュボードでは、正規化出力と正規化レポートを確認できます。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーは、正規化をレビューし、承認する機会があります。*</p></li>
+<li><p><strong>はい</strong> - レビューステップをスキップし、自動的に処理を続けます。</p></li>
+</ol>
+</section>
+<section id="generate-thumbnails">
+<h4>サムネイルの生成<a class="headerlink" href="#generate-thumbnails" title="Link to this heading">¶</a></h4>
+<p>これにより、AIPおよびDIPで使用するサムネイルを生成するオプションが提供されます。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>はい</strong> - サムネイルは、FPRのフォーマット規則に従って生成されます。ルールのない書式では、デフォルトのサムネイルが生成されます（灰色の文書アイコン）。*</p></li>
+<li><p><strong>はい、デフォルトアイコンなし</strong> - サムネイルは、FPRに <a class="reference internal" href="../preservation/preservation-planning.html#normalization"><span class="std std-ref">normalize for thumbnails</span></a> ルールがあるフォーマットに対して生成されます。ルールがないフォーマットでは、サムネイルは生成されません。</p></li>
+<li><p><strong>いいえ</strong> - サムネイルは生成されません。</p></li>
+</ol>
+</section>
+<section id="perform-policy-checks-on-preservation-derivatives">
+<h4>保存派生物のポリシーチェックを実行<a class="headerlink" href="#perform-policy-checks-on-preservation-derivatives" title="Link to this heading">¶</a></h4>
+<p>MediaConchを使用してポリシーを作成する場合は、新しく作成された保存派生物に対してポリシーを実行して、適合性を確認します。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>はい</strong> - 正規化されたファイルは、あらゆるポリシーに対して確認されます。</p></li>
+<li><p><strong>いいえ</strong> - ポリシーは無視されます。*</p></li>
+</ol>
+</section>
+<section id="perform-policy-checks-on-access-derivatives">
+<h4>アクセス派生物のポリシーチェックを実行<a class="headerlink" href="#perform-policy-checks-on-access-derivatives" title="Link to this heading">¶</a></h4>
+<p>MediaConchを使用してポリシーを作成する場合は、新しく作成された保存派生物に対してポリシーを実行して、適合性を確認します。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>はい</strong> - 正規化されたファイルは、あらゆるポリシーに対して確認されます。</p></li>
+<li><p><strong>いいえ</strong> - ポリシーは無視されます。*</p></li>
+</ol>
+</section>
+<section id="bind-pids">
+<h4>Bind PID<a class="headerlink" href="#bind-pids" title="Link to this heading">¶</a></h4>
+<p>永続的な識別子を割り当て、情報をHandle.Netサーバーに送信します。詳細は、 <a class="reference internal" href="../ingest/ingest.html#bind-pids"><span class="std std-ref">Bind PIDs</span></a> を参照してください。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>はい</strong> - PIDが作成され、APIコールがPIDをハンドルサーバーにポストします。</p></li>
+<li><p><strong>いいえ</strong> - PIDは作成されません。*</p></li>
+</ol>
+</section>
+<section id="document-empty-directories">
+<h4>空のディレクトリを文書化<a class="headerlink" href="#document-empty-directories" title="Link to this heading">¶</a></h4>
+<p>デフォルトでは、Archivematicaは、空のディレクトリを削除し、それらが存在したことを文書化しません。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>はい</strong> - ディレクトリのエントリがstructmapに作成されます。</p></li>
+<li><p><strong>いいえ</strong> - ディレクトリは文書化されません。*</p></li>
+</ol>
+</section>
+<section id="reminder-add-metadata-if-desired">
+<h4>備考：必要に応じてメタデータを追加します<a class="headerlink" href="#reminder-add-metadata-if-desired" title="Link to this heading">¶</a></h4>
+<p>Archivematicaでは、ユーザーインターフェースを通じて、 <a class="reference internal" href="../ingest/ingest.html#add-metadata"><span class="std std-ref">、SIPにメタデータ</span></a> を追加できます。このリマインダーは、メタデータを追加できる最後の瞬間に表示されます。インジェストがこのポイントを過ぎると、SIPにメタデータを追加することはできなくなります。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーがメタデータを追加する機会があります。*</p></li>
+<li><p><strong>続ける</strong> - リマインダーをスキップし、自動的に処理を続けます。</p></li>
+</ol>
+</section>
+<section id="transcribe-files-ocr">
+<h4>ファイルのテキスト変換（OCR）<a class="headerlink" href="#transcribe-files-ocr" title="Link to this heading">¶</a></h4>
+<p>ユーザーは、Archivematicaに含まれるOCRツールであるTesseractを実行して、ファイルのトランスクライブを含むテキストファイルを作成できます。詳細については、（ <a class="reference internal" href="../ingest/ingest.html#transcribe-contents"><span class="std std-ref">Transcribe SIP contents</span></a> ）を参照してください。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>はい</strong> - Tesseractは、OCR可能な全てのファイルで動作します。</p></li>
+<li><p><strong>いいえ</strong> - Tesseractが動作しません。</p></li>
+</ol>
+</section>
+<section id="select-file-format-identification-command-submission-documentation-metadata">
+<h4>ファイル形式識別コマンドの選択（提出文書とメタデータ）<a class="headerlink" href="#select-file-format-identification-command-submission-documentation-metadata" title="Link to this heading">¶</a></h4>
+<p>転送に含まれる提出書類および/またはメタデータファイルの形式を特定するツールを選択します。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>はい</strong> - 有効なファイル識別コマンドを使用します。詳細は、 <a class="reference internal" href="../preservation/preservation-planning.html#identification"><span class="std std-ref">識別</span></a> を参照してください。*</p></li>
+<li><p><strong>いいえ</strong> - ファイルは特定されません。</p></li>
+</ol>
+</section>
+<section id="select-compression-algorithm">
+<h4>圧縮アルゴリズムの選択<a class="headerlink" href="#select-compression-algorithm" title="Link to this heading">¶</a></h4>
+<p>Archivematicaで作成されたAIPは、お客様のストレージ要件に応じて、圧縮パッケージまたは非圧縮パッケージとして保存できます。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>7z using bzip2</strong> - 7Zipファイルは、 <a class="reference external" href="http://www.bzip.org/">bzip2</a> アルゴリズムを使用して作成されます。*</p></li>
+<li><p><strong>7z using LZMA</strong> - 7Zipファイルは、 <a class="reference external" href="https://www.7-zip.org/sdk.html">LZMA</a> アルゴリズムを使用して作成されます。</p></li>
+<li><p><strong>7z without compression</strong> - 7Zip ファイルは作成されますが、内容は圧縮されません。</p></li>
+<li><p><strong>Gzipped tar</strong> - AIPは、 <a class="reference external" href="https://launchpad.net/gzip">gzip</a> アルゴリズムで作成されます。</p></li>
+<li><p><strong>Parallel bzip2</strong> - 7Zipファイルは、 <a class="reference external" href="https://launchpad.net/pbzip2/">Parallel bzip2（pbzip2）</a> アルゴリズムを使用して作成されます。</p></li>
+<li><p><strong>非圧縮</strong> - AIPは圧縮されません。</p></li>
+</ol>
+</section>
+<section id="select-compression-level">
+<h4>圧縮レベルを選択<a class="headerlink" href="#select-compression-level" title="Link to this heading">¶</a></h4>
+<p>上記のステップで圧縮を選択した場合、AIPをどの程度圧縮するかを決定できます。高い圧縮レベルを選択すると、結果のAIPは小さくなりますが、圧縮にも時間がかかります。圧縮レベルが低いと、圧縮は早くなりますが、AIPは大きくなります。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。</p></li>
+<li><p><strong>1 - 最速圧縮</strong> - AIPは、できるだけ早く圧縮されます。</p></li>
+<li><p><strong>3 - 高速圧縮</strong> - 速く圧縮されるより大きなAIP。</p></li>
+<li><p><strong>5 - 通常の圧縮</strong> - 圧縮ツールは、スピードと圧縮のバランスをとり、適度な大きさで適度に圧縮されたAIPを作ります。*</p></li>
+<li><p><strong>7 - 最大圧縮</strong> - AIPが小さくなり、圧縮に時間がかかります。</p></li>
+<li><p><strong>9 - 超圧縮</strong> - 可能な限り小さなAIP。</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>前のステップで <cite>非圧縮</cite> または <cite>7z圧縮なし</cite> を選択した場合、圧縮レベルは、パッケージに影響しません。</p>
+</div>
+</section>
+<section id="store-aip">
+<h4>AIPの保存<a class="headerlink" href="#store-aip" title="Link to this heading">¶</a></h4>
+<p>[AIPの保存]マイクロサービスで一時停止すると、ユーザーは、保存前にAIPの内容を確認できます。保存前にAIPを手動でレビューしたくない場合は、このレビューステップをバイパスするように設定できます。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>はい</strong> - AIPは、自動的に保存用にマークされます。</p></li>
+</ol>
+</section>
+<section id="store-aip-location">
+<h4>[AIPの保存]の場所<a class="headerlink" href="#store-aip-location" title="Link to this heading">¶</a></h4>
+<p>前のステップが承認されると、優先場所を設定することにより、AIPを指定された保存場所に自動的に送ることができます。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>デフォルトの場所</strong> - AIPは、ストレージサービス でデフォルトとして定義されたAIP保存場所に保存されます。</p></li>
+<li><p><strong>[その他の保存場所]</strong> - 利用可能なその他のAIP保存場所もこのリストに表示されます。</p></li>
+</ol>
+</section>
+<section id="upload-dip">
+<h4>DIPのアップロード<a class="headerlink" href="#upload-dip" title="Link to this heading">¶</a></h4>
+<p>DIPが作成されると、Archivematicaと統合されているアクセスシステムに自動的に送信されます。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>DIPをAtoMにアップロード</strong> - <a class="reference internal" href="../access/access.html#upload-atom"><span class="std std-ref">AtoM</span></a> DIPアップロードの文書を参照してください。</p></li>
+<li><p><strong>DIPをArchivesSpaceにアップロード</strong> - <a class="reference internal" href="../access/access.html#upload-as"><span class="std std-ref">ArchivesSpace</span></a> DIPアップロードの文書を参照してください。</p></li>
+<li><p><strong>DIPをCONTENTdmにアップロード</strong> - <a class="reference internal" href="../access/contentdm.html#contentdm"><span class="std std-ref">CONTENTdm</span></a> DIPアップロードの文書を参照してください。</p></li>
+<li><p><strong>アップロードしない</strong> - DIPは、アクセスシステムにアップロードされません。</p></li>
+</ol>
+</section>
+<section id="store-dip">
+<h4>DIPの保管<a class="headerlink" href="#store-dip" title="Link to this heading">¶</a></h4>
+<p>DIPが作成された場合、ダッシュボードのワークフローを中断することなく、DIPを保存できます。DIPの保存は、必須ではなく、 <a class="reference internal" href="../ingest/ingest.html#reingest"><span class="std std-ref">AIP</span></a> を再インジェストすることで、DIPをオンデマンドで作成できることに注意してください。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>DIPの保存</strong> - DIPは、自動的に保存用にマークされます。</p></li>
+<li><p><strong>保存しない</strong> - DIPは廃棄されます。</p></li>
+</ol>
+</section>
+<section id="store-dip-location">
+<h4>DIPの保存の場所<a class="headerlink" href="#store-dip-location" title="Link to this heading">¶</a></h4>
+<p>前のステップとこのステップが構成されている場合、すべてのDIPは、選択された保存場所に送信されます（別の場所を定義するカスタム処理設定が転送に含まれている場合を除く）。</p>
+<p>オプション：</p>
+<ol class="arabic simple">
+<li><p><strong>なし</strong> - ユーザーに決定を促します。*</p></li>
+<li><p><strong>デフォルトの場所</strong> - DIPは、Storage Serviceでデフォルトとして定義されているDIPストレージの場所に保存されます。</p></li>
+<li><p><strong>[その他の保存場所]</strong> - 利用可能なその他のDIP保存場所もこのリストに表示されます。</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="general">
+<span id="dashboard-general"></span><h2>一般<a class="headerlink" href="#general" title="Link to this heading">¶</a></h2>
+<p>このセクションでは、Archivematicaクライアントの以下の設定を行います：</p>
+<ul class="simple">
+<li><p>Storage Serviceオプション</p></li>
+<li><p>チェックサムアルゴリズム</p></li>
+<li><p>Elasticsearchインデックス作成</p></li>
+</ul>
+<figure class="align-center" id="id2" style="width: 70%">
+<a class="reference internal image-reference" href="../../_images/generalConfig1.png"><img alt="ダッシュボードの「管理」タブにある一般設定オプション" src="../../_images/generalConfig1.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">ダッシュボードの「管理」タブにある一般設定オプション</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="storage-service-options">
+<h3>Storage Serviceオプション<a class="headerlink" href="#storage-service-options" title="Link to this heading">¶</a></h3>
+<p>ここには、ユーザー名とAPIキーとともに、Storage Serviceの完全なURLがあります。この機能の詳細については、Storage Serviceの文書を参照してください。</p>
+</section>
+<section id="checksum-algorithm">
+<h3>チェックサムアルゴリズム<a class="headerlink" href="#checksum-algorithm" title="Link to this heading">¶</a></h3>
+<p>転送における <em>Assign UUIDs and checksums</em> マイクロサービスで、Archivematicaがどのチェックサムアルゴリズムを使用するかを選択できます。MD5、SHA-1、SHA-256、SHA-512から選択します。</p>
+</section>
+<section id="elasticsearch-indexing">
+<h3>Elasticsearchインデックス作成<a class="headerlink" href="#elasticsearch-indexing" title="Link to this heading">¶</a></h3>
+<p>Archivematica 1.7では、Elasticsearchのインストールはオプションです。Elasticsearchは、 <a class="reference internal" href="../backlog/backlog.html#backlog"><span class="std std-ref">Backlog</span></a> 、 <a class="reference internal" href="../appraisal/appraisal.html#appraisal"><span class="std std-ref">Appraisal</span></a> 、 <a class="reference internal" href="../archival-storage/archival-storage.html#archival-storage"><span class="std std-ref">Archival Storage</span></a> の検索に使用されるインデックスを生成します。Elasticsearchを使用せずにArchivematicaをインストールすると、コンピューティングリソースの消費量が削減され、運用の複雑さが軽減されます。Elasticsearchを無効にすると、ユーザーインターフェースにBacklog、Appraisal、Archival Storageのタブが表示されなくなり、これらの機能が利用できなくなります。</p>
+<p>一般設定のこのセクションは、Elasticsearchが有効か無効かを示します。</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="../../_images/elasticsearch-indexing1.png"><img alt="Elasticsearchインデックス作成セクションの読み取り&quot;転送関連のインデックスが有効で&quot;、&quot;AIPs関連のインデックスが有効です&quot;。" src="../../_images/elasticsearch-indexing1.png" style="width: 30%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">この例では、転送とAIPの両方でインデックスが有効です。</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>転送（「Backlog」と「Appraisal」タブ）、AIP（「Archival Storage」タブ）、またはその両方のインデックス作成を無効にすることが可能です。Elasticsearchの無効化に関する詳細は、管理者マニュアルの <a class="reference internal" href="../../admin-manual/installation-setup/installation/installation.html#install-elasticsearch"><span class="std std-ref">Elasticsearch</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="failures">
+<span id="dashboard-failures"></span><h2>障害<a class="headerlink" href="#failures" title="Link to this heading">¶</a></h2>
+<p>このページは、処理中に障害が発生したパッケージを表示します。</p>
+<figure class="align-center" id="id4" style="width: 70%">
+<a class="reference internal image-reference" href="../../_images/failuresAdmin1.png"><img alt="ダッシュボードの障害レポート" src="../../_images/failuresAdmin1.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">ダッシュボードの障害レポート</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>日付、名前、またはUUIDをクリックすると、障害レポートが表示されます：</p>
+<a class="reference internal image-reference" href="../../_images/failReport1.png"><img alt="転送に失敗した場合の障害レポート" class="align-center" src="../../_images/failReport1.png" style="width: 70%;" />
+</a>
+<p>障害レポートは、削除をクリックすることでダッシュボードから削除できます。</p>
+</section>
+<section id="storage-locations">
+<span id="dashboard-storage-locations"></span><h2>保存場所<a class="headerlink" href="#storage-locations" title="Link to this heading">¶</a></h2>
+<p>[管理]ページのこのセクションには、Archivematicaインスタンスに設定されている保存場所が表示されます。保存場所は、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#administrators" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Storage Service</span></a> で設定します。この表は、Storage Serviceの情報を示しています。</p>
+<a class="reference internal image-reference" href="../../_images/dashboard-storage-locations.png"><img alt="Archivematicaパイプラインで設定可能なストレージの場所を示す表" class="align-center" src="../../_images/dashboard-storage-locations.png" style="width: 80%;" />
+</a>
+<p>保存場所ページの表には、保存場所の <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#location-purposes" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">目的</span></a> 、場所の説明、使用済み容量、パスが表示されます。</p>
+<p>保存場所にクォータが設定されていない場合、その場所の利用可能容量は、 <em>無制限</em> に設定されます。クォータは、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#id13" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">ストレージサービス</span></a> を通じて、いくつかのタイプのロケーションに設定できます。</p>
+<p><em>使用済み/使用可能</em> 値は、現在、レプリケーター、転送バックログ、転送ソースロケーションなど、すべてのタイプの保存場所では計算されません。</p>
+<p>Archivematicaデプロイの構成によっては、すべての保存場所の値が表示されない場合があります。</p>
+</section>
+<section id="processing-storage-usage">
+<span id="dashboard-usage"></span><h2>処理ストレージ使用状況<a class="headerlink" href="#processing-storage-usage" title="Link to this heading">¶</a></h2>
+<p>管理画面のこのセクションには、Archivematicaインスタンスの現在処理中のロケーションが表示されます。現在処理中のロケーションは、処理中の素材を保管するために使用されます。また、失敗した転送や拒否された転送など、特定のタイプのコンテンツの一時的な保管ディレクトリとしても使用されます。</p>
+<p>ページに移動したら、 <strong>Calculate disk usage</strong> をクリックし、ディスク使用量を確認します。Archivematicaインスタンスの構成や現在のディスク使用状況によっては、計算に時間がかかる場合があります。ディスク使用量の計算中は、素材の処理を続けることができます。</p>
+<a class="reference internal image-reference" href="../../_images/dashboard-storage-calculate-disk-usage.png"><img alt="計算前の管理ページの処理ストレージ使用状況" class="align-center" src="../../_images/dashboard-storage-calculate-disk-usage.png" style="width: 80%;" />
+</a>
+<p>計算されると、 <em>一般情報</em> セクションで、ディスクがシステムにマウントされている場所と現在の使用量（計算可能な場合）が表示されます。共有ディレクトリのパスも、割り当てサイズと現在の使用量とともに表示されます。</p>
+<p><em>クリア可能なディレクトリ</em> セクションには、共有ディレクトリにあるサブセットのディレクトリが列挙されます。各ディレクトリの目的、サイズ、パスが記載されています。</p>
+<a class="reference internal image-reference" href="../../_images/dashboard-storage-calculated.png"><img alt="一般的な情報セクションと、ディレクトリとその使用量のリストを表示する、計算後の管理ページの処理ストレージ使用状況エリア" class="align-center" src="../../_images/dashboard-storage-calculated.png" style="width: 80%;" />
+</a>
+<p>ユーザーは、ディレクトリの <strong>Clear</strong> ボタンをクリックして、処理場所のコンテンツを削除できます。サーバーのスペースを節約するために、処理ディレクトリを定期的にクリアするのは良いアイデアです。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Linuxの空のディレクトリのサイズは4 KBです。</p>
+</div>
+</section>
+<section id="dip-upload">
+<span id="dashboard-dip-upload"></span><h2>DIPアップロード<a class="headerlink" href="#dip-upload" title="Link to this heading">¶</a></h2>
+<p>Archivematica has access integrations with two access platforms: AtoM
+and ArchivesSpace. For more information on Archivematica
+integrations, please see the <a class="reference internal" href="../../admin-manual/installation-setup/integrations/integrations.html#integrations"><span class="std std-ref">Integrations</span></a> page.</p>
+<section id="atom-dip-upload">
+<span id="dashboard-atom"></span><h3>AtoM DIP upload<a class="headerlink" href="#atom-dip-upload" title="Link to this heading">¶</a></h3>
+<p>Archivematica can upload DIPs directly to an <a class="reference external" href="https://www.accesstomemory.org">AtoM</a> website so that the
+contents can be accessed online.</p>
+<p>For more information on configuring the AtoM DIP upload parameters and
+the servers, please see the <a class="reference internal" href="../../admin-manual/installation-setup/customization/dashboard-config.html#admin-dashboard-atom"><span class="std std-ref">AtoM DIP upload</span></a>
+configuration instructions.</p>
+<p><strong>記述のレベル</strong></p>
+<p>You can fetch levels of description from AtoM so that they can be used for
+<a class="reference internal" href="../appraisal/appraisal.html#arrangement"><span class="std std-ref">SIP arrangement</span></a>. From the AtoM page in the
+Administration tab, click on <em>Levels of Description</em>, then <em>Fetch from AtoM</em> to
+get an updated list from the AtoM levels of description taxonomy.</p>
+<a class="reference internal image-reference" href="../../_images/atom-levels-of-description.png"><img alt="Archivematicaの管理画面に表示されるAtoMからの説明のレベル" class="align-center" src="../../_images/atom-levels-of-description.png" style="width: 80%;" />
+</a>
+<p>AtoMタクソノミーの中にArchivematica SIP arrangeで使用したくない記述レベルがある場合、赤い削除ボタンで削除できます。この画面の上下矢印で、SIP arrangeに表示する順番を変更できます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ArchivematicaからのDIPアップロード用にAtoMを設定するには、管理者が必要な場合があります。管理者の手順については、管理者マニュアルの <a class="reference internal" href="../../admin-manual/installation-setup/customization/dashboard-config.html#admin-dashboard-atom"><span class="std std-ref">AtoM DIPアップロード</span></a> を参照してください</p>
+</div>
+</section>
+<section id="archivesspace-dip-upload">
+<span id="dashboard-as"></span><h3>ArchivesSpace DIPアップロード<a class="headerlink" href="#archivesspace-dip-upload" title="Link to this heading">¶</a></h3>
+<p>ArchivesSpaceにデジタルオブジェクトをインジェストする前に、ダッシュボードの管理タブにあるArchivesSpace DIPアップロード設定が設定されていることを確認してください。</p>
+<p>ArchivesSpace DIPアップロードパラメーターの設定については、管理者マニュアル <a class="reference internal" href="../../admin-manual/installation-setup/customization/dashboard-config.html#admin-dashboard-as"><span class="std std-ref">ArchivesSpace DIPアップロード</span></a> の設定手順を参照してください。</p>
+</section>
+</section>
+<section id="premis-agent">
+<span id="dashboard-premis"></span><h2>PREMISエージェント<a class="headerlink" href="#premis-agent" title="Link to this heading">¶</a></h2>
+<p>PREMISエージェント名とコードは、管理インターフェイスで設定できます。</p>
+<a class="reference internal image-reference" href="../../_images/premis-agent.png"><img alt="管理タブでのPREMISエージェント設定" class="align-center" src="../../_images/premis-agent.png" style="width: 80%;" />
+</a>
+<p>PREMISエージェント情報は、Archivematicaが作成するMETSファイルで、デジタル保存イベントを実行するエージェンシーを特定するために使用されます。</p>
+</section>
+<section id="rest-api">
+<span id="dashboard-rest"></span><h2>REST API<a class="headerlink" href="#rest-api" title="Link to this heading">¶</a></h2>
+<p>Archivematicaには、転送承認を自動化するためのREST APIが含まれています。Artefactualでは、技術管理者がこの機能のオプションを設定することを推奨しています。</p>
+<p>自動化にREST APIを使用するようにArchivematicaを設定するには、 <a class="reference internal" href="../../admin-manual/installation-setup/customization/dashboard-config.html#admin-dashboard-rest"><span class="std std-ref">管理者マニュアル - REST API</span></a> を参照してください。</p>
+</section>
+<section id="users">
+<span id="dashboard-users"></span><h2>ユーザー<a class="headerlink" href="#users" title="Link to this heading">¶</a></h2>
+<p>Archivematicaダッシュボードでは、 <a class="reference external" href="https://docs.djangoproject.com/en/1.8/topics/auth/">Django認証フレームワーク</a> を使用したシンプルなクッキーベースのユーザ認証システムを提供しています。ダッシュボードへのアクセスは、ログインしたユーザーに限定され、ユーザーが認識されない場合は、ログインページが表示されます。データベースにユーザーがない場合、代わりにユーザー作成ページが表示され、管理者ユーザーを作成できます。</p>
+<p>ユーザーは、[管理]タブの[ <em>ユーザー]</em> セクションから作成、変更、削除できます。新規ユーザーをシステムに追加するには、 <strong>新規追加</strong> をクリックします。</p>
+<p>フィールド：</p>
+<ul class="simple">
+<li><p><strong>ユーザー名</strong> ：ログイン画面で使用される名前。必須、255文字以下。ASCII文字、数字、 <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> 、 <code class="docutils literal notranslate"><span class="pre">.</span></code> 、 <code class="docutils literal notranslate"><span class="pre">+</span></code> 、 <code class="docutils literal notranslate"><span class="pre">-</span></code> 、 <code class="docutils literal notranslate"><span class="pre">_</span></code> 文字のみ使用できます。</p></li>
+<li><p><strong>名前</strong> ：ユーザーのファーストネーム。オプション。</p></li>
+<li><p><strong>姓</strong> ：ユーザーのファーストネーム。オプション。</p></li>
+<li><p><strong>メールアドレス</strong> ：ユーザーの名前。省略可能ですが、ユーザーがシステムからの電子メールを受信したい場合は入力する必要があります。</p></li>
+<li><p><strong>アクティブ</strong> ：このユーザーをアクティブとして扱うかどうかを指定します。非アクティブユーザーは、Archivematicaインスタンスにログインできませんが、アカウントは保持されます。</p></li>
+<li><p><strong>管理者</strong> ：ユーザーに管理者権限を与えるには、このボックスにチェックを入れます。管理者は、他のユーザーを作成、編集、削除できます。</p></li>
+<li><p><strong>パスワード</strong> ：新規ユーザーを作成する際、パスワードを設定する必要があります。ユーザーは、初回ログイン時にパスワードを変更する必要があります。</p></li>
+<li><p><strong>パスワード確認</strong> ：確認のため、上記と同じパスワードを入力してください。</p></li>
+<li><p><strong>システムメールを送信しますか？</strong> ：チェックを入れると、このユーザーは、障害通知や正規化レポートなどのシステムメールを受信します。Archivematicaサーバーに関連するメールサーバーが設定されている必要があります。</p></li>
+</ul>
+<p>ユーザーの作成、削除、セキュリティの詳細については、管理者マニュアルの <a class="reference internal" href="../../admin-manual/installation-setup/customization/dashboard-config.html#admin-dashboard-users"><span class="std std-ref">ユーザー</span></a> セクションを参照してください。</p>
+</section>
+<section id="handle-server-config">
+<span id="handle-server"></span><h2>サーバー設定の処理<a class="headerlink" href="#handle-server-config" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、ファイル、ディレクトリ、AIP全体に永続識別子（PIDS）と派生永続URL（PURL）を割り当てることができるように、Handle System HTTP APIへのリクエストを行うように設定できます。</p>
+</section>
+<section id="language">
+<span id="language-choice"></span><h2>言語<a class="headerlink" href="#language" title="Link to this heading">¶</a></h2>
+<p>言語メニューでは、選択した言語から選択できます。</p>
+<p>Archivematicaは、 <a class="reference external" href="https://www.transifex.com/artefactual/archivematica/">Transifex</a> を通じてボランティアによって翻訳されています。言語の完全性は、Transifexで翻訳された文字列の数により異なります。Archivematicaプロジェクトへの翻訳の貢献については、 <a class="reference internal" href="../translations/translations.html#translations"><span class="std std-ref">翻訳</span></a> を参照してください。</p>
+</section>
+<section id="version">
+<span id="id1"></span><h2>バージョン<a class="headerlink" href="#version" title="Link to this heading">¶</a></h2>
+<p>このタブには、使用しているArchivematicaのバージョンが表示されます。</p>
+<p><a class="reference internal" href="#dashboard-admin"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">ダッシュボード管理タブ</a><ul>
+<li><a class="reference internal" href="#processing-configuration">処理設定</a><ul>
+<li><a class="reference internal" href="#processing-configuration-fields">設定フィールドの処理</a><ul>
+<li><a class="reference internal" href="#name">名前</a></li>
+<li><a class="reference internal" href="#assign-uuids-to-directories">ディレクトリにUUIDを割り当てる</a></li>
+<li><a class="reference internal" href="#generate-transfer-structure-report">転送構造レポートの作成</a></li>
+<li><a class="reference internal" href="#perform-file-identification-transfer">ファイル識別の実行（転送）</a></li>
+<li><a class="reference internal" href="#extract-packages">パッケージの抽出</a></li>
+<li><a class="reference internal" href="#delete-packages-after-extraction">抽出後にパッケージを削除します</a></li>
+<li><a class="reference internal" href="#perform-policy-checks-on-originals">オリジナルのポリシーチェックを実行</a></li>
+<li><a class="reference internal" href="#examine-contents">内容検査</a></li>
+<li><a class="reference internal" href="#create-sip-s">SIPの作成</a></li>
+<li><a class="reference internal" href="#select-file-format-identification-command-ingest">ファイルフォーマット識別コマンドの選択（インジェスト）</a></li>
+<li><a class="reference internal" href="#normalize">正規化</a></li>
+<li><a class="reference internal" href="#approve-normalization">正規化を承認</a></li>
+<li><a class="reference internal" href="#generate-thumbnails">サムネイルの生成</a></li>
+<li><a class="reference internal" href="#perform-policy-checks-on-preservation-derivatives">保存派生物のポリシーチェックを実行</a></li>
+<li><a class="reference internal" href="#perform-policy-checks-on-access-derivatives">アクセス派生物のポリシーチェックを実行</a></li>
+<li><a class="reference internal" href="#bind-pids">Bind PID</a></li>
+<li><a class="reference internal" href="#document-empty-directories">空のディレクトリを文書化</a></li>
+<li><a class="reference internal" href="#reminder-add-metadata-if-desired">備考：必要に応じてメタデータを追加します</a></li>
+<li><a class="reference internal" href="#transcribe-files-ocr">ファイルのテキスト変換（OCR）</a></li>
+<li><a class="reference internal" href="#select-file-format-identification-command-submission-documentation-metadata">ファイル形式識別コマンドの選択（提出文書とメタデータ）</a></li>
+<li><a class="reference internal" href="#select-compression-algorithm">圧縮アルゴリズムの選択</a></li>
+<li><a class="reference internal" href="#select-compression-level">圧縮レベルを選択</a></li>
+<li><a class="reference internal" href="#store-aip">AIPの保存</a></li>
+<li><a class="reference internal" href="#store-aip-location">[AIPの保存]の場所</a></li>
+<li><a class="reference internal" href="#upload-dip">DIPのアップロード</a></li>
+<li><a class="reference internal" href="#store-dip">DIPの保管</a></li>
+<li><a class="reference internal" href="#store-dip-location">DIPの保存の場所</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#general">一般</a><ul>
+<li><a class="reference internal" href="#storage-service-options">Storage Serviceオプション</a></li>
+<li><a class="reference internal" href="#checksum-algorithm">チェックサムアルゴリズム</a></li>
+<li><a class="reference internal" href="#elasticsearch-indexing">Elasticsearchインデックス作成</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#failures">障害</a></li>
+<li><a class="reference internal" href="#storage-locations">保存場所</a></li>
+<li><a class="reference internal" href="#processing-storage-usage">処理ストレージ使用状況</a></li>
+<li><a class="reference internal" href="#dip-upload">DIPアップロード</a><ul>
+<li><a class="reference internal" href="#atom-dip-upload">AtoM DIP upload</a></li>
+<li><a class="reference internal" href="#archivesspace-dip-upload">ArchivesSpace DIPアップロード</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#premis-agent">PREMISエージェント</a></li>
+<li><a class="reference internal" href="#rest-api">REST API</a></li>
+<li><a class="reference internal" href="#users">ユーザー</a></li>
+<li><a class="reference internal" href="#handle-server-config">サーバー設定の処理</a></li>
+<li><a class="reference internal" href="#language">言語</a></li>
+<li><a class="reference internal" href="#version">バージョン</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../preservation/preservation-planning.html"
+                          title="前の章へ">保存計画</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../metadata/METS.html"
+                          title="次の章へ">ArchivematicaのMETS</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/administer/dashboard-admin.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../metadata/METS.html" title="ArchivematicaのMETS"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../preservation/preservation-planning.html" title="保存計画"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ダッシュボード管理タブ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

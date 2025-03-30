@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>統合 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="ArchivematicaでDuraCloudを使用" href="duracloud-setup.html" />
+    <link rel="prev" title="パフォーマンス計装" href="../customization/instrumentation.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="duracloud-setup.html" title="ArchivematicaでDuraCloudを使用"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../customization/instrumentation.html" title="パフォーマンス計装"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">統合</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="integrations">
+<span id="id1"></span><h1>統合<a class="headerlink" href="#integrations" title="Link to this heading">¶</a></h1>
+<p>Archivematicaは、専用のストレージやアクセスシステムなど、多くの外部システムと幅広く統合できるように構築されています。現在の統合機能を以下に示します。</p>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#atom-integration"><span class="std std-ref">AtoMの統合</span></a></p></li>
+<li><p><a class="reference internal" href="#archivesspace-integration"><span class="std std-ref">ArchivesSpaceの統合</span></a></p></li>
+<li><p><a class="reference internal" href="#avalon-media-system-integration"><span class="std std-ref">Avalon Media Systemの統合</span></a></p></li>
+<li><p><a class="reference internal" href="#duracloud-integration"><span class="std std-ref">Duracloudの統合</span></a></p></li>
+<li><p><a class="reference internal" href="#swift-integration"><span class="std std-ref">Swiftの統合</span></a></p></li>
+<li><p><a class="reference internal" href="#islandora-integration"><span class="std std-ref">Islandoraの統合</span></a></p></li>
+<li><p><a class="reference internal" href="#arkivum-integration"><span class="std std-ref">Arkivumの統合</span></a></p></li>
+<li><p><a class="reference internal" href="#handlenet-integration"><span class="std std-ref">Handle.Netの統合</span></a></p></li>
+<li><p><a class="reference internal" href="#dataverse-integration"><span class="std std-ref">Dataverseの統合</span></a></p></li>
+</ul>
+<section id="atom-integration">
+<span id="id2"></span><h2>AtoMの統合<a class="headerlink" href="#atom-integration" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.accesstomemory.org/">AtoM</a> （Access to Memory）は、多言語、マルチリポジトリ環境における標準ベースのアーカイブ記述とアクセスのためのウェブベースのオープンソースアプリケーションです。</p>
+<p><a class="reference internal" href="atom-setup.html#atom-setup"><span class="std std-ref">Using AtoM 2.x with Archivematica</span></a> を参照してください。</p>
+</section>
+<section id="archivesspace-integration">
+<span id="id3"></span><h2>ArchivesSpaceの統合<a class="headerlink" href="#archivesspace-integration" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://archivesspace.org/">ArchivesSpace</a> は、アーカイブ、原稿、デジタルオブジェクトを管理し、ウェブアクセスを提供するオープンソースのアーカイブ情報管理アプリケーションです。</p>
+<p><a class="reference internal" href="archivesspace-setup.html#archivesspace-setup"><span class="std std-ref">ArchivematicaでArchivesSpaceを使用</span></a> を参照してください。</p>
+</section>
+<section id="avalon-media-system-integration">
+<span id="id4"></span><h2>Avalon Media Systemの統合<a class="headerlink" href="#avalon-media-system-integration" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.avalonmediasystem.org/">Avalon Media System</a> は、大規模なデジタルオーディオおよびビデオファイルのコレクションを管理するためのシステムです。Avalon Media System バージョン7には、Archivematicaとの統合が含まれています。詳細については、<a class="reference external" href="https://samvera.atlassian.net/wiki/spaces/AVALON/pages/1957954154/Archivematica+for+Avalon">Avalon Media System Technical Documentation</a> および <a class="reference external" href="https://github.com/artefactual/automation-tools">Automation-Tools</a> を参照してください。</p>
+</section>
+<section id="duracloud">
+<span id="duracloud-integration"></span><h2>Duracloud<a class="headerlink" href="#duracloud" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://duraspace.org/duracloud/">DuraCloud</a> は、DuraSpaceが提供するホスト型アーカイブクラウドストレージおよび保存サービスであり、組織やエンドユーザーがクラウドサービスを簡単に利用できるようにします。Archivematicaは、AIPパッケージをDuraCloudに自動的に転送し、長期的に安全なアーカイブ保存を実現します。DuraCloudは、 <a class="reference external" href="https://duraspace.org/archivesdirect/">ArchivesDirect</a> クライアントのストレージレイヤーとして使用されます。</p>
+<p><a class="reference internal" href="duracloud-setup.html#duracloud-setup"><span class="std std-ref">Archivematica DuraCloudクイックスタートガイド</span></a> を参照してください。</p>
+</section>
+<section id="swift">
+<span id="swift-integration"></span><h2>Swift<a class="headerlink" href="#swift" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://wiki.openstack.org/wiki/Swift">Swift</a> は、OpenStackによって開発されたシンプルなAPIであり、クラウドのストレージと検索を提供します。Swiftは、データセット全体の耐久性、可用性、同時性を最適化します。Archivematicaは、Storage Serviceを通してSwiftと統合します。</p>
+<p><a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#swift" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Swift Storage Service統合文書</span></a> を参照してください。</p>
+</section>
+<section id="islandora">
+<span id="islandora-integration"></span><h2>Islandora<a class="headerlink" href="#islandora" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="#islandora">Islandora</a> は、オープンソースのソフトウェアフレームワークであり、機関や組織とそのオーディエンスが共同でデジタルアセットを管理、発見できるように設計されています。Archivematicaは、Islandoraの基盤となるFedoraリポジトリに接続するStorage Serviceを通じてIslandoraと統合します。</p>
+<p><a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#fedora" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Fedora Storage Service integration documentation</span></a> を参照してください。</p>
+</section>
+<section id="arkivum">
+<span id="arkivum-integration"></span><h2>Arkivum<a class="headerlink" href="#arkivum" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://arkivum.com/">Arkivum</a> は、Archivematicaパッケージのアーカイブストレージバックエンドであり、クラウドベースとテープベースの両方のストレージを提供します。Arkivumは、 <a class="reference external" href="https://arkivum.com/heritage-higher-education-and-corporate-archives/">Arkivum Perpetua</a> クライアントのストレージレイヤーとして使用されます。</p>
+<p><a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#arkivum" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Arkivum Storage Service統合文書</span></a> を参照してください。</p>
+</section>
+<section id="handle-net-integration">
+<span id="handlenet-integration"></span><h2>Handle.Netの統合<a class="headerlink" href="#handle-net-integration" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.handle.net/index.html">Handle.Net</a> （Handle Systemとも呼ばれる）は、情報リソースに永続識別子（ハンドル）を割り当てるレジストリです。Archivematicaは、設定されたHandle.NetレジストリでPIDを定義することにより、デジタルオブジェクト、ディレクトリ、AIPの永続識別子（PID）を作成できます。Handle.Netは、PIDから永続URL（PURL）を作成し、永続URLへのリクエストをHandle.Netで設定されたターゲットURLにリルートできます。</p>
+<p><a class="reference internal" href="handlenet-setup.html#handlesystem-setup"><span class="std std-ref">Handle.Net統合文書</span></a> を参照してください</p>
+</section>
+<section id="dataverse">
+<span id="dataverse-integration"></span><h2>Dataverse<a class="headerlink" href="#dataverse" title="Link to this heading">¶</a></h2>
+<p>Dataverseデータセットの保存方法の概要については、 <a class="reference internal" href="../../../user-manual/transfer/dataverse.html#dataverse-transfers"><span class="std std-ref">Dataverseの統合</span></a> を参照してください。Dataverseの統合を設定する手順については、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#administrators" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Storage Service文書</span></a> を参照してください。</p>
+<p><a class="reference internal" href="#integrations"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">統合</a><ul>
+<li><a class="reference internal" href="#atom-integration">AtoMの統合</a></li>
+<li><a class="reference internal" href="#archivesspace-integration">ArchivesSpaceの統合</a></li>
+<li><a class="reference internal" href="#avalon-media-system-integration">Avalon Media Systemの統合</a></li>
+<li><a class="reference internal" href="#duracloud">Duracloud</a></li>
+<li><a class="reference internal" href="#swift">Swift</a></li>
+<li><a class="reference internal" href="#islandora">Islandora</a></li>
+<li><a class="reference internal" href="#arkivum">Arkivum</a></li>
+<li><a class="reference internal" href="#handle-net-integration">Handle.Netの統合</a></li>
+<li><a class="reference internal" href="#dataverse">Dataverse</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../customization/instrumentation.html"
+                          title="前の章へ">パフォーマンス計装</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="duracloud-setup.html"
+                          title="次の章へ">ArchivematicaでDuraCloudを使用</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/admin-manual/installation-setup/integrations/integrations.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="duracloud-setup.html" title="ArchivematicaでDuraCloudを使用"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../customization/instrumentation.html" title="パフォーマンス計装"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">統合</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Archivematica API &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="Storage Service API" href="api-reference-storage-service.html" />
+    <link rel="prev" title="APIの概要" href="api-overview.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="api-reference-storage-service.html" title="Storage Service API"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="api-overview.html" title="APIの概要"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">開発者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematica API</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="archivematica-api">
+<span id="api-reference-archivematica"></span><h1>Archivematica API<a class="headerlink" href="#archivematica-api" title="Link to this heading">¶</a></h1>
+<p>Archivematica APIが提供：</p>
+<ul class="simple">
+<li><p>基本的なワークフロー機能をカバー。</p></li>
+<li><p>Storage Serviceへのプロキシサポート。</p></li>
+<li><p>ユニットのステータスまたは処理設定の詳細への公開。</p></li>
+</ul>
+<section id="resources-and-endpoints">
+<h2>リソースとエンドポイント<a class="headerlink" href="#resources-and-endpoints" title="Link to this heading">¶</a></h2>
+<p>Archivematica APIのエンドポイントは、以下のリソースカテゴリに分類されます：</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#transfer-resource"><span class="std std-ref">転送</span></a></p></li>
+<li><p><a class="reference internal" href="#ingest-resource"><span class="std std-ref">インジェスト</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-resource"><span class="std std-ref">管理</span></a></p></li>
+<li><p><a class="reference internal" href="#unit-resource"><span class="std std-ref">ユニット</span></a></p></li>
+<li><p><a class="reference internal" href="#other-resource"><span class="std std-ref">その他</span></a></p></li>
+<li><p><a class="reference internal" href="#beta"><span class="std std-ref">ベータ</span></a></p></li>
+</ul>
+<section id="transfer">
+<span id="transfer-resource"></span><h3>転送<a class="headerlink" href="#transfer" title="Link to this heading">¶</a></h3>
+<p>転送とは、デジタルオブジェクトをArchivematicaに移動し、SIP（Submission Information Package）に変換するプロセスを指します。Transferタブでは、コンテンツをArchivematicaで保存するための準備を行います。</p>
+<section id="start-transfer">
+<h4>転送開始<a class="headerlink" href="#start-transfer" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/transfer/start_transfer/</strong></p></td>
+<td><p><em>Archive maticaで転送を開始します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディのパラメーター：</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>以下の表のパラメーターは、リクエストボディにキーと値のペアを持つJSONオブジェクトとして送信できます。</p>
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>転送の名前</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>新しい転送のタイプ。有効な値は、standard、zipfile、unzip bag、zip bag、dspace、maildir、TRIM、dataverseです。デフォルトでは、standardです。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">accession</span></code></p></td>
+<td><p>新規転送のAccession番号。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">paths[]</span></code></p></td>
+<td><p>新しい転送にコピーされるbase64エンコードされた <code class="docutils literal notranslate"><span class="pre">&lt;location_uuid&gt;:&lt;relative_path&gt;</span></code> のリスト。場所のUUIDは、このパイプラインに関連付けられている必要があり、相対パスは、場所からの相対パスでなければなりません。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">row_ids[]</span></code></p></td>
+<td><p>ディスクイメージインジェストに関連するTransferMetadataSetのID。 <code class="docutils literal notranslate"><span class="pre">[&quot;&quot;]</span></code> として指定できます．</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">--</span><span class="n">request</span> <span class="n">POST</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">my_archivematica_instance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">transfer</span><span class="o">/</span>
+  <span class="n">start_transfer</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey [_your_username_]:[_your_ApiKey_]&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Content-Type: application/x-www-form-urlencoded&#39;</span> \
+  <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;name=mc_api_transfer&amp;type=standard&amp;accession=2019-1234&amp;paths%5B%5D=&#39;</span>\
+  <span class="s1">&#39;&#39;</span><span class="n">M2JlYzc0MmYtMjBjMy00ZjBlLThjMzEtZGFmYTVlYzE4ZmRmOmNlbnRvcy9hcmNoaXZlbWF0aWNh</span>
+  <span class="n">LXNhbXBsZWRhdGEvU2FtcGxlVHJhbnNmZXJzL0RlbW9UcmFuc2ZlckNTVg</span><span class="o">%</span><span class="mi">3</span><span class="n">D</span><span class="o">%</span><span class="mi">3</span><span class="n">D</span><span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="o">&amp;</span><span class="n">rows_</span>
+  <span class="nb">id</span><span class="o">%</span><span class="mi">5</span><span class="n">B</span><span class="o">%</span><span class="mi">5</span><span class="n">D</span><span class="o">=</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">200</span>
+<span class="n">status</span><span class="p">:</span> <span class="mi">200</span>
+<span class="n">Server</span><span class="p">:</span> <span class="n">nginx</span><span class="o">/</span><span class="mf">1.12.2</span>
+<span class="n">Date</span><span class="p">:</span> <span class="n">Thu</span><span class="p">,</span> <span class="mi">15</span> <span class="n">Aug</span> <span class="mi">2019</span> <span class="mi">06</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">41</span> <span class="n">GMT</span>
+<span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
+<span class="n">Transfer</span><span class="o">-</span><span class="n">Encoding</span><span class="p">:</span> <span class="n">chunked</span>
+<span class="n">Connection</span><span class="p">:</span> <span class="n">keep</span><span class="o">-</span><span class="n">alive</span>
+<span class="n">Vary</span><span class="p">:</span> <span class="n">Accept</span><span class="o">-</span><span class="n">Language</span><span class="p">,</span> <span class="n">Cookie</span>
+<span class="n">Content</span><span class="o">-</span><span class="n">Language</span><span class="p">:</span> <span class="n">en</span>
+
+<span class="p">{</span>
+    <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/watchedDirectories/</span>
+    <span class="n">activeTransfers</span><span class="o">/</span><span class="n">standardTransfer</span><span class="o">/</span><span class="n">mc_api_transfer_1</span><span class="o">/</span><span class="s2">&quot;,</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Copy successful.&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="list-unapproved-transfer-s">
+<h4>未承認転送のリスト<a class="headerlink" href="#list-unapproved-transfer-s" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/transfer/unapproved/</strong></p></td>
+<td><p><em>承認待ちの転送のリストを返す</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
+<td><p>&quot;未承認の転送のフェッチに成功。&quot;</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">results</span></code></p></td>
+<td><p>以下のキーを持つ辞書のリスト：</p>
+<p><code class="docutils literal notranslate"><span class="pre">type</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">directory</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p>
+</td>
+<td><p>転送タイプ。</p>
+<p>standard、zipfile、unzip bag、zip bag、dspace、maildir、TRIM、dataverseのいずれか1つ</p>
+<p>転送が現在存在するディレクトリ。</p>
+<p>転送のUUID。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">my_archivematica_instance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">transfer</span><span class="o">/</span><span class="n">unapproved</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey [_your_username_]:[_your_ApiKey_]&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Content-Type: application/x-www-form-urlencoded&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Fetched unapproved transfers successfully.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;directory&quot;</span><span class="p">:</span> <span class="s2">&quot;mc-api-test-1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;f1bc64b5-5697-47fc-b3f3-ac92a1d1ebbb&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;directory&quot;</span><span class="p">:</span> <span class="s2">&quot;mc-api-test-2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;3ed192dc-8fa4-4698-ab03-00688a4a2553&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="approve-transfer-s">
+<h4>転送を承認<a class="headerlink" href="#approve-transfer-s" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/transfer/approve/</strong></p></td>
+<td><p><em>開始を待っている転送を承認します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>転送のタイプ。有効な値は、standard、zipfile、unzip bag、zip bag、dspace、maildir、TRIM、dataverseです。デフォルトではstandardです。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">directory</span></code></p></td>
+<td><p>転送が現在存在するディレクトリ。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">my_archivematica_instance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">transfer</span><span class="o">/</span><span class="n">approve</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey [_your_username_]:[_your_ApiKey_]&#39;</span> \
+    <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Content-Type: application/x-www-form-urlencoded&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: my_archivematica_instance.archivematica.org&#39;</span> \
+   <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;directory=mc-api-test-2&amp;type=standard&amp;rows_id%5B%5D=&#39;</span>
+</pre></div>
+</div>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
+<td><p>&quot;承認に成功。&quot;</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>承認された転送のUUID</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Approval successful.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;a8791a46-ac73-4c7d-8c60-0673524226e3&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="status">
+<h4>ステータス<a class="headerlink" href="#status" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/transfer/status/&lt;transfer
+UUID&gt;/</strong></p></td>
+<td><p><em>転送のステータスを返す。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code></p></td>
+<td><p>FAILED、REJECTED、USER_INPUT、COMPLETE、PROCESSINGのいずれか1つ</p></td>
+<td><p>文字列</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>転送の名前（例：&quot;imgs&quot;）</p></td>
+<td><p>文字列</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sip_uuid</span></code></p></td>
+<td><p>ステータスが、COMPLETEの場合、このフィールドは、SIPのUUIDまたは「BACKLOG」のいずれかで存在します</p></td>
+<td><p>文字列</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">microservice</span></code></p></td>
+<td><p>現在のマイクロサービスの名前</p></td>
+<td><p>文字列</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">directory</span></code></p></td>
+<td><p>ディレクトリ名、例：&quot;imgs-52dd0c01-e803-423a-be5f-b592b5d5d61c&quot;</p></td>
+<td><p>文字列</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">path</span></code></p></td>
+<td><p>転送へのフルパス、例：&quot;/var/archivematica/sharedD/var/archivematica/sharedDirectory/watchedDirectories/SIPCreation/ completedTransfers/imgs-52dd0c01-e803-423a-be5f-b592b5d5d61c&quot;</p></td>
+<td><p>文字列</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
+<td><p>&quot;&lt;transfer UUID&gt;からステータスの取得に成功。&quot;</p></td>
+<td><p>文字列</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>&quot;転送&quot;</p></td>
+<td><p>文字列</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>転送の UUID（例：&quot;52dd0c01-e803-423a-be5f-b592b5d5d61c&quot;）</p></td>
+<td><p>文字列</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>このエンドポイントのコンシューマーは、Archivematicaがsip_uuidなしでCOMPLETEステータスを返す可能性があります。そのため、インジェスト後に作成されるAIPのUUIDを使用したいコンシューマーは、COMPLETEというステータスと、BACKLOGと等しくないsip_uuidの存在をテストし、確実に取得する必要があります。これは、このデータが利用可能になる間に、ステータスエンドポイントへの追加の呼び出しを意味するかもしれません。</p>
+</div>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">my_archivematica_instance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">transfer</span><span class="o">/</span>
+  <span class="n">status</span><span class="o">/</span><span class="mi">89</span><span class="n">fd478d</span><span class="o">-</span><span class="n">c896</span><span class="o">-</span><span class="mi">461</span><span class="n">a</span><span class="o">-</span><span class="n">baec</span><span class="o">-</span><span class="mi">5</span><span class="n">d1faf661020</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey [_your_username_]:[_your_ApiKey_]&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: my_archivematica_instance.archivematica.org&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;COMPLETE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ab&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;microservice&quot;</span><span class="p">:</span> <span class="s2">&quot;Check transfer directory for objects&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;directory&quot;</span><span class="p">:</span> <span class="s2">&quot;ab-89fd478d-c896-461a-baec-5d1faf661020&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/watchedDirectories/SIPCreation/</span>
+    <span class="n">completedTransfers</span><span class="o">/</span><span class="n">ab</span><span class="o">-</span><span class="mi">89</span><span class="n">fd478d</span><span class="o">-</span><span class="n">c896</span><span class="o">-</span><span class="mi">461</span><span class="n">a</span><span class="o">-</span><span class="n">baec</span><span class="o">-</span><span class="mi">5</span><span class="n">d1faf661020</span><span class="o">/</span><span class="s2">&quot;,</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Fetched status for 89fd478d-c896-461a-baec-5d1faf661020</span>
+    <span class="n">successfully</span><span class="o">.</span><span class="s2">&quot;,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;transfer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;89fd478d-c896-461a-baec-5d1faf661020&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="hide">
+<h4>非表示<a class="headerlink" href="#hide" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DELETE</span></code></p></td>
+<td><p><strong>/api/transfer/&lt;transfer UUID&gt;/
+delete/</strong></p></td>
+<td><p><em>転送を非表示</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">transfer_uuid</span></code></p></td>
+<td><p>転送のUUID。</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">removed</span></code></p></td>
+<td><p>ブール値のtrueまたはfalse。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">DELETE</span> \
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">my_archivematica_instance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">transfer</span><span class="o">/</span>
+    <span class="mi">89</span><span class="n">fd478d</span><span class="o">-</span><span class="n">c896</span><span class="o">-</span><span class="mi">461</span><span class="n">a</span><span class="o">-</span><span class="n">baec</span><span class="o">-</span><span class="mi">5</span><span class="n">d1faf661020</span><span class="o">/</span><span class="n">delete</span><span class="o">/</span> \
+    <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey [_your_username_]:[_your_ApiKey_]&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;removed&quot;</span><span class="p">:</span> <span class="n">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="completed">
+<h4>完了<a class="headerlink" href="#completed" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/transfer/completed/</strong></p></td>
+<td><p><em>完了した転送のリストを返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
+<td><p>&quot;完了した転送を正常にフェッチしました。&quot;</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">results</span></code></p></td>
+<td><p>完了した転送のUUIDのリスト。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">test</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">transfer</span><span class="o">/</span><span class="n">completed</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Accept: */*&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey [_your_username_]:[_your_ApiKey_]&#39;</span> \
+</pre></div>
+</div>
+<p>レスポンス例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Fetched completed transfers successfully.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;02ce3b9a-0704-4408-b0c0-2eb74a9f6652&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;1557c65e-7e97-42a5-8e11-3d170d7ce435&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;6db73922-0cc8-422d-81a6-b0b9bc0ff5f6&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;72f7260e-a0aa-42cf-9e4c-fbb00c60d763&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;89fd478d-c896-461a-baec-5d1faf661020&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;8d961dac-8114-4c74-97e5-58264e34913f&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a58a60b3-9936-4233-b449-ab3620f4cf05&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;b9af0b93-734d-41ca-a02d-024d17600d0b&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ce1c8af6-8395-46fb-a81d-6e08b50a58ee&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;d2088fc6-7506-4012-ba0e-4f19880a1bfb&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e6efb7fb-eb27-4def-963e-31dfc2d55d61&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;f4e12ba4-d2e2-4a4a-973c-7babd1da0cc4&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="start-reingest">
+<h4>再インジェストの開始<a class="headerlink" href="#start-reingest" title="Link to this heading">¶</a></h4>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Start reインジェストエンドポイントは、Storage Service側の <a class="reference internal" href="api-reference-storage-service.html#ss-reingest-aip"><span class="std std-ref">AIPの再インジェスト</span></a> エンドポイントを補完します。再インジェストが開始されると、Archivematicaは、ストレージからAIPをフェッチし、抽出し、その完全性を確認するためにfixityを実行します。その後、Archivematicaは再インジェストの種類に応じて環境をセットアップし、Storage Service側のエンドポイントがArchivematica Start reインジェストエンドポイントを呼び出します。</p>
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/transfer/reingest</strong></p></td>
+<td><p><em>フル再イインジェストを開始します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>AIPの名前。AIPは、 <code class="docutils literal notranslate"><span class="pre">%sharedDirectory%/tmp/&lt;name&gt;</span></code> にもあるはずです。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>再インジェストするAIPのUUID。</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
+<td><p>&quot;承認に成功。&quot;</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reingest_uuid</span></code></p></td>
+<td><p>再インジェストした転送のUUID。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="ingest">
+<span id="ingest-resource"></span><h3>インジェスト<a class="headerlink" href="#ingest" title="Link to this heading">¶</a></h3>
+<p>インジェストとは、デジタルオブジェクトがSIPにパッケージ化され、正規化、AIPへのパッケージ化、DIPの生成を可能にするマイクロサービスを通じて実行されるプロセスを指します。</p>
+<section id="id1">
+<h4>ステータス<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/ingest/status/&lt;unit_UUID&gt;/</strong></p></td>
+<td><p><em>SIP のステータスを返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code></p></td>
+<td><p>FAILED、REJECTED、USER_INPUT、COMPLETE、PROCESSINGのいずれか1つ。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>SIPの名前（例：&quot;imgs&quot;）。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">microservices</span></code></p></td>
+<td><p>現在のマイクロサービスの名前</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">directory</span></code></p></td>
+<td><p>ディレクトリ名（例：&quot;imgs-52dd0c01-e803-423a-be5f-b592b5d5d61c&quot;）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">path</span></code></p></td>
+<td><p>転送へのフルパス（例：&quot;/var/archivematica/sharedDirectory/ currentlyProcessing/imgs-52dd0c01-e803-423a-be5f/b592b5d5d61c/&quot;）。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
+<td><p>&quot;&lt;SIP UUID&gt;のステータス取得に成功。&quot;</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>&quot;SIP&quot;</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>SIPのUUID、例えば&quot;52dd0c01-e803-423a-be5f-b592b5d61c&quot;。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">my_archivematica_instance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">transfer</span><span class="o">/</span>
+  <span class="n">status</span><span class="o">/</span><span class="mi">89</span><span class="n">fd478d</span><span class="o">-</span><span class="n">c896</span><span class="o">-</span><span class="mi">461</span><span class="n">a</span><span class="o">-</span><span class="n">baec</span><span class="o">-</span><span class="mi">5</span><span class="n">d1faf661020</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey [_your_username_]:[_your_ApiKey_]&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: my_archivematica_instance.archivematica.org&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例（JSON）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;COMPLETE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ab&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;microservice&quot;</span><span class="p">:</span> <span class="s2">&quot;Check transfer directory for objects&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;directory&quot;</span><span class="p">:</span> <span class="s2">&quot;ab-89fd478d-c896-461a-baec-5d1faf661020&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/watchedDirectories/SIPCreation/</span>
+    <span class="n">completedTransfers</span><span class="o">/</span><span class="n">ab</span><span class="o">-</span><span class="mi">89</span><span class="n">fd478d</span><span class="o">-</span><span class="n">c896</span><span class="o">-</span><span class="mi">461</span><span class="n">a</span><span class="o">-</span><span class="n">baec</span><span class="o">-</span><span class="mi">5</span><span class="n">d1faf661020</span><span class="o">/</span><span class="s2">&quot;,</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Fetched status for 89fd478d-c896-461a-baec-5d1faf661020</span>
+    <span class="n">successfully</span><span class="o">.</span><span class="s2">&quot;,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;transfer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;89fd478d-c896-461a-baec-5d1faf661020&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h4>非表示<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DELETE</span></code></p></td>
+<td><p><strong>/api/ingest/&lt;SIP UUID&gt;/delete/</strong></p></td>
+<td><p><em>SIPを非表示にします。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sip_uuid</span></code></p></td>
+<td><p>UUID of the SIP.</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">removed</span></code></p></td>
+<td><p>ブール値のtrueまたはfalse。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">DELETE</span> \
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">my_archivematica_instance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">ingest</span><span class="o">/</span> \
+    <span class="mi">89</span><span class="n">fd478d</span><span class="o">-</span><span class="n">c896</span><span class="o">-</span><span class="mi">461</span><span class="n">a</span><span class="o">-</span><span class="n">baec</span><span class="o">-</span><span class="mi">5</span><span class="n">d1faf661020</span><span class="o">/</span><span class="n">delete</span><span class="o">/</span> \
+    <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey [_your_username_]:[_your_ApiKey_]&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;removed&quot;</span><span class="p">:</span> <span class="n">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="list-sips-waiting-for-user-input">
+<h4>ユーザー入力待ちのSIPSをリストアップ<a class="headerlink" href="#list-sips-waiting-for-user-input" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/ingest/waiting</strong></p></td>
+<td><p><em>ユーザー入力を待っているSIPのリストを返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
+<td><p>&quot;ユニットの取得に成功。&quot;</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">results:</span></code></p></td>
+<td><p>キーを持つ辞書のリスト：</p>
+<p><code class="docutils literal notranslate"><span class="pre">sip_directory</span></code> ：SIPが現在あるディレクトリ。</p>
+<p><code class="docutils literal notranslate"><span class="pre">sip_uuid</span></code> ：SIPのUUID。</p>
+<p><code class="docutils literal notranslate"><span class="pre">sip_name</span></code> ：SIPの名前。</p>
+<p><code class="docutils literal notranslate"><span class="pre">microservice</span></code> ：現在のマイクロサービスの名前。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>URLとは裏腹に、これは現在、ユーザー入力待ちのSIPと転送（forward）の両方を返します。将来的には、転送（transfer）に <strong>/api/transfer/ waiting</strong> が追加されるはずです。</p>
+</div>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">mytestinstance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">ingest</span><span class="o">/</span><span class="n">waiting</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey admin:ooha0sshie8O&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: mytestinstsance.archivematica.net&#39;</span> \
+</pre></div>
+</div>
+<p>レスポンス例（JSON）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Fetched units successfully.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;microservice&quot;</span><span class="p">:</span> <span class="s2">&quot;Approve standard transfer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sip_name&quot;</span><span class="p">:</span> <span class="s2">&quot;reingest&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sip_directory&quot;</span><span class="p">:</span> <span class="s2">&quot;reingest&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sip_uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;affa2d71-3fdb-423f-8fe2-91c8d5ecc324&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;microservice&quot;</span><span class="p">:</span> <span class="s2">&quot;Approve standard transfer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sip_name&quot;</span><span class="p">:</span> <span class="s2">&quot;api-rein&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sip_directory&quot;</span><span class="p">:</span> <span class="s2">&quot;api-rein&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sip_uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;e5a5808d-2ee8-4896-9ed5-1b692feb9b87&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h4>完了<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/ingest/completed/</strong></p></td>
+<td><p><em>完了したSIPのリストを返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">mytestinstance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">transfer</span><span class="o">/</span><span class="n">completed</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Accept: */*&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey analyst:oui87nnmv&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Cache-Control: no-cache&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Connection: keep-alive&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: mytestinstance.archivematica.net&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;cache-control: no-cache&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例（JSON）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Fetched completed transfers successfully.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;8e15e1ff-e850-4a84-97b3-0eed0b535401&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;de2692d2-05c6-4762-9708-38046699d870&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ee1ab6d9-0cb5-4641-8e7e-198ed2fb9db4&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="reingest">
+<h4>再インジェスト<a class="headerlink" href="#reingest" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/ingest/reingest</strong></p></td>
+<td><p><em>部分的またはメタデータのみの再インジェストを開始します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>AIPの名前。AIPは、 <code class="docutils literal notranslate"><span class="pre">%sharedDirectory%/tmp/&lt;name&gt;</span></code> にもあるはずです。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>再インジェストするAIPのUUID。</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
+<td><p>&quot;承認に成功。&quot;</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reingest_uuid</span></code></p></td>
+<td><p>再インジェストした転送のUUID。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v2</span><span class="o">/</span><span class="n">file</span><span class="o">/</span><span class="mi">868</span><span class="n">a7ecd</span><span class="o">-</span><span class="n">c31b</span><span class="o">-</span><span class="mi">4773</span><span class="o">-</span><span class="n">ad6d</span><span class="o">-</span><span class="n">d736a35b8a6e</span><span class="o">/</span>
+  <span class="n">reingest</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey analyst:ow7ioGh2reephua8uPaiWee4EiHeev6u&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Content-Type: application/json&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: 127.0.0.1:8000&#39;</span> \
+  <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{</span>
+    <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span><span class="s2">&quot;85f9db99-b187-47c3-9b5b-fa35470104c4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;reingest_type&quot;</span><span class="p">:</span><span class="s2">&quot;FULL&quot;</span>
+    <span class="p">}</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例（JSON）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Package 868a7ecd-c31b-4773-ad6d-d736a35b8a6e sent to pipeline</span>
+    <span class="n">Archivematica</span> <span class="n">on</span> <span class="n">test</span><span class="o">-</span><span class="n">vm</span> <span class="p">(</span><span class="mi">85</span><span class="n">f9db99</span><span class="o">-</span><span class="n">b187</span><span class="o">-</span><span class="mi">47</span><span class="n">c3</span><span class="o">-</span><span class="mi">9</span><span class="n">b5b</span><span class="o">-</span><span class="n">abc123</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">re</span><span class="o">-</span><span class="n">ingest</span><span class="s2">&quot;,</span>
+    <span class="s2">&quot;reingest_uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;affa2d71-3fdb-423f-8fe2-91c8d5ecc324&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;status_code&quot;</span><span class="p">:</span> <span class="mi">202</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="copy-metadata">
+<h4>メタデータをコピー<a class="headerlink" href="#copy-metadata" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/ingest/copy_metadata_files/</strong></p></td>
+<td><p><em>SIPにメタデータファイルを追加します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sip_uuid</span></code></p></td>
+<td><p>ファイルを配置するSIPのUUID。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">source_paths[]</span></code></p></td>
+<td><p>コピーされるファイルのリスト。base64エンコードされ、フォーマットは、「source_location_uuid：full_path」です</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">error</span></code></p></td>
+<td><p>ブール値のtrueまたはfalse。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
+<td><p>Success message or reason for the error.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Usage example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> \
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">my_archivematica_instance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">ingest</span><span class="o">/</span><span class="n">copy_metadata_files</span><span class="o">/</span> \
+    <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey [_your_username_]:[_your_ApiKey_]&#39;</span> \
+    <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Content-Type: application/x-www-form-urlencoded&#39;</span> \
+    <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;sip_uuid=a7f1f36c-55c1-4fb7-a898-76d102e847dc&amp;source_paths%5B%5D= </span><span class="se">\</span>
+<span class="s1">    &#39;</span><span class="n">NmRjYTgxNDAtMDg2NC00MzE5LTg2ZDctNTg0ZjZiZTY4N2EzOi9ob21lL2FyY2hpdmVtYXRpY2EvYXJjaGl2ZW1hdGljYS1zYW1wbGVkYXRhL2lzc3VlX3RlbXBsYXRlLm1k</span><span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例</p>
+<p>201 Created:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+  <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Metadata files added successfully.&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>400 Bad Request:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+  <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;sip_uuid and source_paths[] both required.&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>500 Internal Server Error:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+  <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Location 6dca8140-0864-4319-86d7-584f6be687a3 is not associated with this pipeline&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="administration">
+<span id="admin-resource"></span><h3>管理<a class="headerlink" href="#administration" title="Link to this heading">¶</a></h3>
+<p>管理では、アプリケーションの様々な部分を設定し、統合やユーザーを管理できます。</p>
+<section id="levels-of-description">
+<h4>記述のレベル<a class="headerlink" href="#levels-of-description" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/administration/dips/atom /levels/</strong></p></td>
+<td><p><em>設定された記述レベルのセットをJSONエンコードして返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">mytestinstance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">administration</span><span class="o">/</span><span class="n">dips</span><span class="o">/</span><span class="n">atom</span><span class="o">/</span><span class="n">levels</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Accept: */*&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey admin:oohah5chashie8Olkjhl998&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Cache-Control: no-cache&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Connection: keep-alive&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: mytestinstance.archivematica.net&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例（JSON）：</p>
+<p>以下のレスポンスは、キー「UUID」と値「name of level of description」を持つAtoM記述レベルのリストを含みます。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;0a056204-1e35-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Collection&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;0a056205-1e35-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;File&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;0a056206-1e35-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Fonds&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;0a056207-1e35-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Item&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;0a056208-1e35-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Part&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;0a056209-1e35-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Record group&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;0a05620a-1e35-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Series&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;0a05620b-1e35-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Sous-fonds&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;0a05620c-1e35-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Subseries&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="fetch-levels-of-description">
+<h4>説明のレベルを取得<a class="headerlink" href="#fetch-levels-of-description" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/administration/dips/atom/fetch_levels/</strong></p></td>
+<td><p><em>AtoMデータベースからすべてのレベルの記述を取得し、既存の記述を置き換えます。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">mytestinstance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">administration</span><span class="o">/</span><span class="n">dips</span><span class="o">/</span><span class="n">atom</span><span class="o">/</span><span class="n">fetch_levels</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Accept: */*&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey admin:oohah5chashie8OwEih6udie4shoolal&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Cache-Control: no-cache&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Connection: keep-alive&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: mytestinstance.archivematica.net&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Postman-Token: a6a5e394-ff95-46ff-9aca-233386024f20,e40e9ab1-3cb0-4de4-8da8-c6aeea862ea0&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;User-Agent: PostmanRuntime/7.15.0&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;accept-encoding: gzip, deflate&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;cache-control: no-cache&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例（JSON）：</p>
+<p>以下のレスポンスには、キー「UUID」と値「name of level of description」を持つ、更新されたAtoM記述レベルのリストを含みます。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;bfbc21c2-1e3b-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Collection&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;bfbc21c3-1e3b-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;File&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;bfbc21c4-1e3b-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Fonds&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;bfbc21c5-1e3b-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Item&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;bfbc21c6-1e3b-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Part&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;bfbc21c7-1e3b-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Record group&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;bfbc21c8-1e3b-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Series&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;bfbc21c9-1e3b-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Sous-fonds&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;bfbc21ca-1e3b-11ea-887c-fa163e461c4e&quot;</span><span class="p">:</span> <span class="s2">&quot;Subseries&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="unit">
+<span id="unit-resource"></span><h3>ユニット<a class="headerlink" href="#unit" title="Link to this heading">¶</a></h3>
+<p>ユニットとは&quot;、アクセス補助が使用するアーカイブ情報ユニットに関する情報を提供するために特化されたパッケージ記述の一種を指します。&quot;（OAIS、p.1-13、セクション1.7.2）</p>
+<section id="list-jobs">
+<h4>ジョブ一覧<a class="headerlink" href="#list-jobs" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2beta/jobs/&lt;unit UUID&gt;/</strong></p></td>
+<td><p><em>渡されたユニット（転送またはインジェスト）のジョブのリストを返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>クエリ文字列パラメーター（オプション）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">microservice</span></code></p></td>
+<td><p>ジョブが属するマイクロサービスの名前。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">link_uuid</span></code></p></td>
+<td><p>ジョブチェーンリンクのUUID。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>ジョブ名。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">detailed</span></code></p></td>
+<td><p>If the parameter is included in the request, the endpoint
+returns all the task properties provided by the
+<a class="reference internal" href="#task"><span class="std std-ref">タスク</span></a> endpoint.</p></td>
+</tr>
+</tbody>
+</table>
+<p>応答定義（ディクションのリストから）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>ジョブのUUID。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>ジョブ名。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code></p></td>
+<td><p>USER_INPUT、PROCESSING、COMPLETE、FAILED、UNKNOWN のいずれか1つ。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">microservice</span></code></p></td>
+<td><p>ジョブが属するマイクロサービス。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">link_uuid</span></code></p></td>
+<td><p>ジョブチェーンリンクのUUID。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tasks</span></code></p></td>
+<td><p>マイクロサービスのタスクに関する情報を持つ辞書のリスト。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>タスクのUUID。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">exit_code</span></code></p></td>
+<td><p>タスクの終了コード。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+  <span class="s1">&#39;http://mytestinstance.archivematica.net/api/v2beta/jobs/a06ac9b9-0d67-420a-befb-80ea9a562190/?name=Store%20the%20AIP&amp;microservice=Store%20AIP&amp;link uuid=a06ac9b9-0d67-420a-befb-80ea9a562190&amp;link</span><span class="si">%20u</span><span class="s1">uid=a06ac9b9-0d67-420a-befb-80ea9a562190&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Accept: */*&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Connection: keep-alive&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: mytestinstance.archivematica.net&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;User-Agent: PostmanRuntime/7.15.0&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;accept-encoding: gzip, deflate&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;authorization: ApiKey analyst:oohah5chashie8OwEih6udie4choo3la&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;cookie: csrftoken=sb52U8S35EpdB2T1K4lWXFl5jNnOrXrA&#39;</span> \
+  <span class="o">-</span><span class="n">b</span> <span class="n">csrftoken</span><span class="o">=</span><span class="n">sb52U8S35EpdB2T1K4lWXFl5jNnOrXrA</span>
+</pre></div>
+</div>
+<p>レスポンスの例（JSONボディ）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;COMPLETE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tasks&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;e37fcdc5-bac9-4790-8df1-bfcc6f7ec18a&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;exit_code&quot;</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;3e9e152c-340b-4f4d-9172-b1d29a655eae&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;link_uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;20515483-25ed-4133-b23e-5bb14cab8e22&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;microservice&quot;</span><span class="p">:</span> <span class="s2">&quot;Store AIP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Store the AIP&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="task">
+<span id="id4"></span><h4>タスク<a class="headerlink" href="#task" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2beta/task/&lt;task UUID&gt;/</strong></p></td>
+<td><p><em>タスクに関する情報を返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>タスクのUUID。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">exit_code</span></code></p></td>
+<td><p>キーを持つ辞書のリスト：</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">file_uuid</span></code></p></td>
+<td><p>タスクの終了コード。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">file_name</span></code></p></td>
+<td><p>タスクに使用されるファイルのUUID。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">time_created</span></code></p></td>
+<td><p>タスクに使用されるファイル。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">time_started</span></code></p></td>
+<td><p>タスクがいつ作成されたかを表す文字列（YYYY-MM-DD HH：MM：SS）。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">duration</span></code></p></td>
+<td><p>タスクの継続時間（秒）（整数）。秒未満の場合は&lt; 1の文字列となります。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">mytestinstance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v2beta</span><span class="o">/</span><span class="n">task</span><span class="o">/</span><span class="mi">93</span><span class="n">c70e84</span><span class="o">-</span><span class="n">fe97</span><span class="o">-</span><span class="mi">4</span><span class="n">f31</span><span class="o">-</span><span class="n">bae0</span><span class="o">-</span><span class="mi">8</span><span class="n">aaf7d1e6c6b</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Accept: */*&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Cache-Control: no-cache&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Connection: keep-alive&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: mytestinstance.archivematica.net&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;User-Agent: PostmanRuntime/7.15.0&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;accept-encoding: gzip, deflate&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;authorization: ApiKey test:oohah5chashie8OwEih6udie4choo3la&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;cookie: csrftoken=sb52U8S35EpdB2T1K4lWXFl5jNnOrXrA&#39;</span> \
+  <span class="o">-</span><span class="n">b</span> <span class="n">csrftoken</span><span class="o">=</span><span class="n">sb52U8S35EpdB2T1K4lWXFl5jNnOrXrA</span>
+</pre></div>
+</div>
+<p>レスポンス例（JSON）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;93c70e84-fe97-4f31-bae0-8aaf7d1e6c6b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;BBhelmet.ai&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;exit_code&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;time_created&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-01-17T00:44:37&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;time_ended&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-01-17T00:44:40&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;file_uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;5be8e4d0-6819-420f-ad17-b8ebd44e728d&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;time_started&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-01-17T00:44:37&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="other">
+<span id="other-resource"></span><h3>その他<a class="headerlink" href="#other" title="Link to this heading">¶</a></h3>
+<p>その他は、記述レベルに関連するパスメタデータを含む一般的なリソースカテゴリであり、カスタマイズされた処理設定に関連する名前も含みます。</p>
+<section id="path-metadata">
+<h4>パスのメタデータ<a class="headerlink" href="#path-metadata" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET,</span> <span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/filesystem/metadata/</strong></p></td>
+<td><p><em>パス（現在は説明レベルのみ）のメタデータを取得（GET）または更新（POST）します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>クエリ文字列パラメーターまたはリクエストボディパラメーター：</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>以下のパラメーターは、GETの場合はクエリー文字列パラメーターとして、POSTの場合はリクエストボディにキーと値のペアを持つJSONオブジェクトとして送信できます。</p>
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">path</span></code></p></td>
+<td><p>メタデータを取得するために配列されたパス。</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス：ストリームとしての処理設定ファイル</p>
+<p>コンテンツタイプ：text/xml</p>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">mytestinstance</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v2beta</span><span class="o">/</span><span class="n">task</span><span class="o">/</span><span class="mi">93</span><span class="n">c70e84</span><span class="o">-</span><span class="n">fe97</span><span class="o">-</span><span class="mi">4</span><span class="n">f31</span><span class="o">-</span><span class="n">bae0</span><span class="o">-</span><span class="mi">8</span><span class="n">aaf7d1e6c6b</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Accept: */*&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Cache-Control: no-cache&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Connection: keep-alive&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: mytestinstance.archivematica.net&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;User-Agent: PostmanRuntime/7.15.0&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;accept-encoding: gzip, deflate&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;authorization: ApiKey test:oohah5chashie8OwEih6udie4choo3la&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;cookie: csrftoken=sb52U8S35EpdB2T1K4lWXFl5jNnOrXrA&#39;</span> \
+  <span class="o">-</span><span class="n">b</span> <span class="n">csrftoken</span><span class="o">=</span><span class="n">sb52U8S35EpdB2T1K4lWXFl5jNnOrXrA</span>
+</pre></div>
+</div>
+<p>レスポンス例（JSON）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;93c70e84-fe97-4f31-bae0-8aaf7d1e6c6b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;BBhelmet.ai&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;exit_code&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;time_created&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-01-17T00:44:37&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;time_ended&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-01-17T00:44:40&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;file_uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;5be8e4d0-6819-420f-ad17-b8ebd44e728d&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;time_started&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-01-17T00:44:37&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="processing-configuration">
+<h4>処理設定<a class="headerlink" href="#processing-configuration" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/processing-configuration/&lt;name&gt;</strong></p></td>
+<td><p><em>&lt;name&gt;</em> を持つ処理設定を返します</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">location</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s1">&#39;Authorization: ApiKey analyst:zzhah5chashie8OwEih6udie4choo4la&#39;</span> \
+        <span class="s1">&#39;http://test.machine.archivematica.net/api/processing-configuration/backlog&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;processingMCP&gt;
+    &lt;preconfiguredChoices&gt;
+        &lt;!-- Create SIP(s) --&gt;
+        &lt;preconfiguredChoice&gt;
+            &lt;appliesTo&gt;bb194013-597c-4e4a-8493-b36d190f8717&lt;/appliesTo&gt;
+            &lt;goToChain&gt;7065d256-2f47-4b7d-baec-2c4699626121&lt;/goToChain&gt;
+        &lt;/preconfiguredChoice&gt;
+        &lt;!-- Assign UUIDs to directories --&gt;
+        &lt;preconfiguredChoice&gt;
+            &lt;appliesTo&gt;bd899573-694e-4d33-8c9b-df0af802437d&lt;/appliesTo&gt;
+            &lt;goToChain&gt;2dc3f487-e4b0-4e07-a4b3-6216ed24ca14&lt;/goToChain&gt;
+        &lt;/preconfiguredChoice&gt;
+        &lt;!-- Send transfer to quarantine --&gt;
+        &lt;preconfiguredChoice&gt;
+            &lt;appliesTo&gt;755b4177-c587-41a7-8c52-015277568302&lt;/appliesTo&gt;
+            &lt;goToChain&gt;d4404ab1-dc7f-4e9e-b1f8-aa861e766b8e&lt;/goToChain&gt;
+        &lt;/preconfiguredChoice&gt;
+    &lt;/preconfiguredChoices&gt;
+&lt;/processingMCP&gt;
+</pre></div>
+</div>
+<p>コンテンツタイプ：text/xml</p>
+</section>
+</section>
+<section id="beta">
+<span id="id5"></span><h3>ベータ<a class="headerlink" href="#beta" title="Link to this heading">¶</a></h3>
+<p>まだ流動的で、変更の可能性があるAPIエンドポイント。</p>
+<section id="package">
+<h4>パッケージ<a class="headerlink" href="#package" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2beta/package</strong></p></td>
+<td><p><em>新しい転送タイプを開始します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディパラメーター（必須）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>転送名。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">path</span></code></p></td>
+<td><p>Storage Service転送元に対する相対パス、または絶対パス。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディパラメーター（オプション）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>転送タイプ。有効な値は、standard、zipfile、unzip bag、zip bag、dspace、maildir、TRIM、dataverseです。デフォルト：standard。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">processing_config</span></code></p></td>
+<td><p>処理設定（例：デフォルト、自動化、デフォルト：デフォルト）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">accession</span></code></p></td>
+<td><p>Accession ID。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">access_system_id</span></code></p></td>
+<td><p>アクセスシステムID（ <a class="reference external" href="https://bit.ly/3c4yWt6">Docs</a> を参照）。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metadata_set_id</span></code></p></td>
+<td><p>ユーザーインターフェース経由で追加されたメタデータセットへのリンクに使用されます。メタデータは、今のところ API経由で転送に関連付けることができないので、当面これは無視しても大丈夫です。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">auto_approve</span></code></p></td>
+<td><p>ブール値trueまたはfalseで、転送を自動承認に設定します。</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>転送UUID（注意：パッケージエンドポイントは、呼び出し元がArchivematicaと非同期でやり取りできるようにするものであり、転送が開始されたことを保証するものではありません。呼び出し側はレスポンスのUUIDを使用して、転送が開始されたこと、または転送を開始する際にエラーが発生したことを確認する必要があります）</p></td>
+</tr>
+</tbody>
+</table>
+<p>例：</p>
+<p>ほとんどのユースケースでは、これらのオプションのサブセットのみが必要になる場合があります。パッケージエンドポイントと、転送を開始できる他のエンドポイントとの基本的な違いは、Storage Serviceの転送場所 UUID が必ずしも必要ではないことです。場合によっては、それが依然として理想的な場合もあります。</p>
+<p><em>絶対パスを用いた転送の開始</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">POST</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Authorization: ApiKey test:test&quot;</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
+    <span class="o">--</span><span class="n">data</span> <span class="s2">&quot;{</span><span class="se">\</span>
+<span class="s2">       </span><span class="se">\&quot;</span><span class="s2">path</span><span class="se">\&quot;</span><span class="s2">: </span><span class="se">\&quot;</span><span class="s2">$(echo -n &#39;/home/archivematica/archivematica-sampledata</span>
+       <span class="o">/</span><span class="n">SampleTransfers</span><span class="o">/</span><span class="n">DemoTransfer</span><span class="s1">&#39; | base64 -w 0)</span><span class="se">\&quot;</span><span class="s1">, </span><span class="se">\</span>
+<span class="s1">       </span><span class="se">\&quot;</span><span class="s1">name</span><span class="se">\&quot;</span><span class="s1">: </span><span class="se">\&quot;</span><span class="s1">demo_transfer_absolute</span><span class="se">\&quot;</span><span class="s1">, </span><span class="se">\</span>
+<span class="s1">       </span><span class="se">\&quot;</span><span class="s1">processing_config</span><span class="se">\&quot;</span><span class="s1">: </span><span class="se">\&quot;</span><span class="s1">automated</span><span class="se">\&quot;</span><span class="s1">, </span><span class="se">\</span>
+<span class="s1">       </span><span class="se">\&quot;</span><span class="s1">type</span><span class="se">\&quot;</span><span class="s1">: </span><span class="se">\&quot;</span><span class="s1">standard</span><span class="se">\&quot;</span><span class="s1"> </span><span class="se">\</span>
+<span class="s1">      }&quot; </span><span class="se">\</span>
+<span class="s1">        &quot;http://&lt;archivematica-uri&gt;/api/v2beta/package&quot;</span>
+</pre></div>
+</div>
+<p><em>転送元 UUID による相対パスを用いた転送の開始</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">POST</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Authorization: ApiKey test:test&quot;</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
+    <span class="o">--</span><span class="n">data</span> <span class="s2">&quot;{</span><span class="se">\</span>
+<span class="s2">       </span><span class="se">\&quot;</span><span class="s2">path</span><span class="se">\&quot;</span><span class="s2">: </span><span class="se">\&quot;</span><span class="s2">$(echo -n &#39;d1184f7f-d755-4c8d-831a-a3793b88f760:</span>
+       <span class="o">/</span><span class="n">archivematica</span><span class="o">/</span><span class="n">archivematica</span><span class="o">-</span><span class="n">sampledata</span><span class="o">/</span><span class="n">SampleTransfers</span><span class="o">/</span><span class="n">DemoTransfer</span><span class="s1">&#39;</span>
+       <span class="o">|</span> <span class="n">base64</span> <span class="o">-</span><span class="n">w</span> <span class="mi">0</span><span class="p">)</span>\<span class="s2">&quot;, </span><span class="se">\</span>
+<span class="s2">       </span><span class="se">\&quot;</span><span class="s2">name</span><span class="se">\&quot;</span><span class="s2">: </span><span class="se">\&quot;</span><span class="s2">demo_transfer_relative</span><span class="se">\&quot;</span><span class="s2">, </span><span class="se">\</span>
+<span class="s2">       </span><span class="se">\&quot;</span><span class="s2">processing_config</span><span class="se">\&quot;</span><span class="s2">: </span><span class="se">\&quot;</span><span class="s2">automated</span><span class="se">\&quot;</span><span class="s2">, </span><span class="se">\</span>
+<span class="s2">       </span><span class="se">\&quot;</span><span class="s2">type</span><span class="se">\&quot;</span><span class="s2">: </span><span class="se">\&quot;</span><span class="s2">standard</span><span class="se">\&quot;</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">      }&quot;</span> \
+        <span class="s2">&quot;http://&lt;archivematica-uri&gt;/api/v2beta/package&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="validate">
+<h4>妥当性確認<a class="headerlink" href="#validate" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>/api/v2beta/validate/&lt;validator&gt;</strong></p></td>
+<td><p><em>Archivematica 1.10+で利用可能です。このエンドポイントを使用して、埋め込まれたルールセットに対してCSVを妥当性確認できます。現在、Avalon Media System Manifest（ ``avalon`` ）およびrights.csv（ ``rights`` ）ファイルで動作します。</em></p>
+<p><em>将来的には、このエンドポイントを拡張して、metadata.csvやarchivesspaceids.csv、あるいはその他の機関ベースのルールに対する妥当性確認をサポートできます。</em></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスの定義：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">valid</span></code></p></td>
+<td><p>ブール値のtrueまたはfalse。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reason</span></code></p></td>
+<td><p>妥当性確認エラーを含みます。</p></td>
+</tr>
+</tbody>
+</table>
+<p>使用例（avalon.csv が存在する場合）:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+  <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">binary</span> <span class="s2">&quot;@avalon.csv&quot;</span> \
+  <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Authorization: ApiKey test:test&quot;</span> \
+  <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Content-Type: text/csv; charset=utf-8&quot;</span> \
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">62080</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v2beta</span><span class="o">/</span><span class="n">validate</span><span class="o">/</span><span class="n">avalon</span>
+</pre></div>
+</div>
+<p>レスポンス例</p>
+<p>200 OK:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="n">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>400 Bad Request（異なる妥当性確認エラーが含まれることを想定）:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+  <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="s2">&quot;Administrative data must include reference name and author.&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>404見つかりません:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+  <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Unknown validator. Accepted values: avalon&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Archivematica API</a><ul>
+<li><a class="reference internal" href="#resources-and-endpoints">リソースとエンドポイント</a><ul>
+<li><a class="reference internal" href="#transfer">転送</a><ul>
+<li><a class="reference internal" href="#start-transfer">転送開始</a></li>
+<li><a class="reference internal" href="#list-unapproved-transfer-s">未承認転送のリスト</a></li>
+<li><a class="reference internal" href="#approve-transfer-s">転送を承認</a></li>
+<li><a class="reference internal" href="#status">ステータス</a></li>
+<li><a class="reference internal" href="#hide">非表示</a></li>
+<li><a class="reference internal" href="#completed">完了</a></li>
+<li><a class="reference internal" href="#start-reingest">再インジェストの開始</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ingest">インジェスト</a><ul>
+<li><a class="reference internal" href="#id1">ステータス</a></li>
+<li><a class="reference internal" href="#id2">非表示</a></li>
+<li><a class="reference internal" href="#list-sips-waiting-for-user-input">ユーザー入力待ちのSIPSをリストアップ</a></li>
+<li><a class="reference internal" href="#id3">完了</a></li>
+<li><a class="reference internal" href="#reingest">再インジェスト</a></li>
+<li><a class="reference internal" href="#copy-metadata">メタデータをコピー</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#administration">管理</a><ul>
+<li><a class="reference internal" href="#levels-of-description">記述のレベル</a></li>
+<li><a class="reference internal" href="#fetch-levels-of-description">説明のレベルを取得</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#unit">ユニット</a><ul>
+<li><a class="reference internal" href="#list-jobs">ジョブ一覧</a></li>
+<li><a class="reference internal" href="#task">タスク</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other">その他</a><ul>
+<li><a class="reference internal" href="#path-metadata">パスのメタデータ</a></li>
+<li><a class="reference internal" href="#processing-configuration">処理設定</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#beta">ベータ</a><ul>
+<li><a class="reference internal" href="#package">パッケージ</a></li>
+<li><a class="reference internal" href="#validate">妥当性確認</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="api-overview.html"
+                          title="前の章へ">APIの概要</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="api-reference-storage-service.html"
+                          title="次の章へ">Storage Service API</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/dev-manual/api/api-reference-archivematica.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="api-reference-storage-service.html" title="Storage Service API"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="api-overview.html" title="APIの概要"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >開発者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematica API</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

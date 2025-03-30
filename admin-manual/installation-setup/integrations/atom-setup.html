@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AtoM 2.xをArchivematicaで使用 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="ArchivematicaでのArchivesSpaceの使用" href="archivesspace-setup.html" />
+    <link rel="prev" title="ArchivematicaでDuraCloudを使用" href="duracloud-setup.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="archivesspace-setup.html" title="ArchivematicaでのArchivesSpaceの使用"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="duracloud-setup.html" title="ArchivematicaでDuraCloudを使用"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">AtoM 2.xをArchivematicaで使用</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="using-atom-2-x-with-archivematica">
+<span id="atom-setup"></span><h1>AtoM 2.xをArchivematicaで使用<a class="headerlink" href="#using-atom-2-x-with-archivematica" title="Link to this heading">¶</a></h1>
+<p>Archivematica 1.16 は、最新バージョンのAtoMでテストされており、その使用を推奨しています。階層DIP機能を使用する場合は、AtoMバージョン2.2以上が必要です。</p>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#install-atom"><span class="std std-ref">AtoMのインストール</span></a></p></li>
+<li><p><a class="reference internal" href="#config-dip-upload"><span class="std std-ref">DIPアップロードの設定</span></a></p></li>
+<li><p><a class="reference internal" href="#user-instructions-atom"><span class="std std-ref">ユーザーへの指示</span></a></p></li>
+</ul>
+<section id="install-atom">
+<span id="id1"></span><h2>AtoMのインストール<a class="headerlink" href="#install-atom" title="Link to this heading">¶</a></h2>
+<p>AtoM 2のインストール手順は、 <a class="reference external" href="https://www.accesstomemory.org/en/docs/2.8/#home" title="(in AtoM v2.8)"><span class="xref std std-ref">accesstomemory.org documentation</span></a> にあります。これらの指示に従う場合、AtoMをgitリポジトリからダウンロードするのが最適です（提供されているtarballのいずれかを使用するのではなく）。</p>
+<p><a class="reference external" href="https://www.accesstomemory.org/en/docs/2.8/user-manual/administer/manage-plugins/#manage-plugins" title="(in AtoM v2.8)"><span class="xref std std-ref">AtoMプラグインメニュー</span></a> からSWORDプラグイン（ <code class="docutils literal notranslate"><span class="pre">qtSwordPlugin</span></code> ）とREST API（ <code class="docutils literal notranslate"><span class="pre">arRestApiPlugin</span></code> ）を有効にする必要があります。</p>
+</section>
+<section id="configure-dip-upload">
+<span id="config-dip-upload"></span><h2>DIPアップロードの設定<a class="headerlink" href="#configure-dip-upload" title="Link to this heading">¶</a></h2>
+<p>Once you have a working AtoM installation, enter the appropriate credentials and
+information on Archivematica's Administration tab. See <a class="reference internal" href="../customization/dashboard-config.html#admin-dashboard-atom"><span class="std std-ref">AtoM DIP
+upload</span></a> for more information about the fields and their
+values.</p>
+<p>次に、2 つのシステム間の接続を設定します：</p>
+<ol class="arabic simple">
+<li><p>AtoMソースから <code class="docutils literal notranslate"><span class="pre">/etc/init/</span></code> に <code class="docutils literal notranslate"><span class="pre">atom-worker.conf</span></code> ファイルをコピーして、atom-workerがAtoMサーバーに設定されていることを確認します。</p></li>
+<li><p><a class="reference external" href="https://www.accesstomemory.org/en/docs/2.8/user-manual/administer/manage-plugins/#manage-plugins" title="(in AtoM v2.8)"><span class="xref std std-ref">AtoMプラグインメニュー</span></a> でSWORDプラグインとAtoM REST APIが有効になっていることを確認してください。</p>
+<ol class="loweralpha simple">
+<li><p>AtoM 2.1以下を実行している場合、AtoM設定ページで <a class="reference external" href="https://www.accesstomemory.org/en/docs/2.1/user-manual/administer/settings/#job-scheduling">ジョブスケジューリング</a> を有効にしてください。AtoMのそれ以降のバージョンでは、これはデフォルトで有効になっています。</p></li>
+</ol>
+</li>
+<li><p><a class="reference external" href="https://www.accesstomemory.org/en/docs/2.8/admin-manual/installation/#installation" title="(in AtoM v2.8)"><span class="xref std std-ref">AtoMインストール文書</span></a> に従って、gearmanがAtoMサーバーにインストールされていることを確認します。</p></li>
+<li><p>ArchivematicaユーザーでArchivematicaサーバーからAtoMサーバーへのrsyncが動作するようにSSHキーを設定します。</p></li>
+<li><p>AtoMサーバーでgearmanを再起動します。</p></li>
+<li><p>AtoMサーバーのAtoMワーカーを再起動します。</p></li>
+</ol>
+</section>
+<section id="user-instructions">
+<span id="user-instructions-atom"></span><h2>ユーザーへの指示<a class="headerlink" href="#user-instructions" title="Link to this heading">¶</a></h2>
+<p>DIPをAtoMにアップロードする方法は、ユーザーマニュアルのセクション <a class="reference internal" href="../../../user-manual/access/access.html#upload-atom"><span class="std std-ref">DIPをAtoMにアップロード</span></a> に記載されています。</p>
+<p><a class="reference internal" href="#atom-setup"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">AtoM 2.xをArchivematicaで使用</a><ul>
+<li><a class="reference internal" href="#install-atom">AtoMのインストール</a></li>
+<li><a class="reference internal" href="#configure-dip-upload">DIPアップロードの設定</a></li>
+<li><a class="reference internal" href="#user-instructions">ユーザーへの指示</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="duracloud-setup.html"
+                          title="前の章へ">ArchivematicaでDuraCloudを使用</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="archivesspace-setup.html"
+                          title="次の章へ">ArchivematicaでのArchivesSpaceの使用</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/admin-manual/installation-setup/integrations/atom-setup.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="archivesspace-setup.html" title="ArchivematicaでのArchivesSpaceの使用"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="duracloud-setup.html" title="ArchivematicaでDuraCloudを使用"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">AtoM 2.xをArchivematicaで使用</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

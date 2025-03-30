@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ウイルスのスキャン &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="ファイル名の変更" href="change-filenames.html" />
+    <link rel="prev" title="DSpaceエクスポート" href="dspace.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="change-filenames.html" title="ファイル名の変更"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="dspace.html" title="DSpaceエクスポート"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ウイルスのスキャン</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="scan-for-viruses">
+<span id="id1"></span><h1>ウイルスのスキャン<a class="headerlink" href="#scan-for-viruses" title="Link to this heading">¶</a></h1>
+<p>The scan for viruses microservice runs at multiple points in the transfer and
+ingest workflows inside Archivematica. Archivematica uses the ClamAV antivirus
+engine and its configuration is discussed <a class="reference internal" href="../../admin-manual/installation-setup/customization/antivirus-admin.html#antivirus-admin"><span class="std std-ref">here</span></a>. The
+configuration of this service can effect whether PREMIS events are recorded for
+files or not.</p>
+<figure class="align-center" id="id2" style="width: 80%">
+<a class="reference internal image-reference" href="../../_images/VirusPREMISPass.png"><img alt="ウイルスチェック成功時のイベントログ" src="../../_images/VirusPREMISPass.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">ウイルスチェック成功時のイベントログ</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>以下、さまざまな設定の影響について見ていきます。</p>
+<section id="exploring-clamav-settings">
+<h2>ClamAV 設定を探る<a class="headerlink" href="#exploring-clamav-settings" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">MaxFileSize</span></code> これより大きなファイルがスキャナに渡された場合、そのファイルはスキャンされません。イベントは、記録されません。</p>
+<p><code class="docutils literal notranslate"><span class="pre">MaxScanSize</span></code> は、スキャンされるバイト数を制限します。これは、ウイルスやマルウェアがその範囲内にしか出現しないと確信できるような標準的な運用環境で使用されるかもしれません。Archivematica では、その範囲外にもウイルスが存在する可能性があるため、PREMISイベントを確実に記録することはできません。</p>
+<p><code class="docutils literal notranslate"><span class="pre">MaxStreamLength</span></code> は Clamdscanでのみ使用される設定です。ClamAVデーモンに送信できる最大バイト数です。この制限を超えるサイズのファイルは、その全体をサーバに送信できないため、ファイル内のマルウェアの有無を示すPREMISイベントを確実に記録できません。</p>
+<p>以下の2つの表で、さまざまなコンフィギュレーションオプションの組み合わせの影響を観察できます。</p>
+<section id="clamscan">
+<h3>Clamscan<a class="headerlink" href="#clamscan" title="Link to this heading">¶</a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>FileSize</p></th>
+<th class="head"><p>MaxFileSize</p></th>
+<th class="head"><p>MaxScanSize</p></th>
+<th class="head"><p>スキャンしましたか？</p></th>
+<th class="head"><p>Premis Event</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>42M</p></td>
+<td><p>42M</p></td>
+<td><p>42M</p></td>
+<td><p>はい</p></td>
+<td><p>はい</p></td>
+</tr>
+<tr class="row-odd"><td><p>42M</p></td>
+<td><p>42M</p></td>
+<td><p>42M</p></td>
+<td><p>いいえ</p></td>
+<td><p>いいえ</p></td>
+</tr>
+<tr class="row-even"><td><p>84M</p></td>
+<td><p>84M</p></td>
+<td><p>42M</p></td>
+<td><p>いいえ</p></td>
+<td><p>いいえ</p></td>
+</tr>
+<tr class="row-odd"><td><p>84M</p></td>
+<td><p>42M</p></td>
+<td><p>84M</p></td>
+<td><p>いいえ</p></td>
+<td><p>いいえ</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="clamdscan">
+<h3>Clamdscan<a class="headerlink" href="#clamdscan" title="Link to this heading">¶</a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>FileSize</p></th>
+<th class="head"><p>MaxFileSize</p></th>
+<th class="head"><p>MaxScanSize</p></th>
+<th class="head"><p>StreamMaxLength</p></th>
+<th class="head"><p>スキャンしましたか？</p></th>
+<th class="head"><p>Premis Event</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>42M</p></td>
+<td><p>42M</p></td>
+<td><p>42M</p></td>
+<td><p>100M</p></td>
+<td><p>はい</p></td>
+<td><p>はい</p></td>
+</tr>
+<tr class="row-odd"><td><p>42M</p></td>
+<td><p>42M</p></td>
+<td><p>42M</p></td>
+<td><p>21M</p></td>
+<td><p>いいえ</p></td>
+<td><p>いいえ</p></td>
+</tr>
+<tr class="row-even"><td><p>84M</p></td>
+<td><p>84M</p></td>
+<td><p>42M</p></td>
+<td><p>100M</p></td>
+<td><p>いいえ</p></td>
+<td><p>いいえ</p></td>
+</tr>
+<tr class="row-odd"><td><p>84M</p></td>
+<td><p>42M</p></td>
+<td><p>84M</p></td>
+<td><p>100M</p></td>
+<td><p>いいえ</p></td>
+<td><p>いいえ</p></td>
+</tr>
+</tbody>
+</table>
+<p>どちらの表でも、何らかの理由でファイルがスキャンされなかった場合、または <em>「完全にスキャンされていない」</em> 場合、PREMIS イベントは記録されないことがわかります。 <cite>PASS</cite> または <cite>FAIL</cite> のいずれかのインスタンスの PREMIS イベントは誤検知となります。</p>
+<p><a class="reference internal" href="#scan-for-viruses"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">ウイルスのスキャン</a><ul>
+<li><a class="reference internal" href="#exploring-clamav-settings">ClamAV 設定を探る</a><ul>
+<li><a class="reference internal" href="#clamscan">Clamscan</a></li>
+<li><a class="reference internal" href="#clamdscan">Clamdscan</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="dspace.html"
+                          title="前の章へ">DSpaceエクスポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="change-filenames.html"
+                          title="次の章へ">ファイル名の変更</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/transfer/scan-for-viruses.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="change-filenames.html" title="ファイル名の変更"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="dspace.html" title="DSpaceエクスポート"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ウイルスのスキャン</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

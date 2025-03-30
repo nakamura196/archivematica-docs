@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Dataverseの統合 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="インジェスト" href="../ingest/ingest.html" />
+    <link rel="prev" title="ファイル名の変更" href="change-filenames.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../ingest/ingest.html" title="インジェスト"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="change-filenames.html" title="ファイル名の変更"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Dataverseの統合</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="dataverse-integration">
+<span id="dataverse-transfers"></span><h1>Dataverseの統合<a class="headerlink" href="#dataverse-integration" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<span id="dataverse-overview"></span><h2>概要<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://dataverse.org/">Dataverse</a> は、研究データのオープンソースリポジトリです。Archivematica は、Dataverse リポジトリを転送元ロケーションとして使用するように設定できます。Dataverse 転送元ロケーションは、利用可能なすべてのデータセットまたはそのサブセットを表示するように設定できます。</p>
+<p>データセットは、Dataverse APIを使って直接取得され、Dataverse <a class="reference internal" href="transfer.html#transfer-types"><span class="std std-ref">転送タイプ</span></a> を使って処理されます。これにより、以下で説明するように、いくつかの追加の処理ステップが可能になります。</p>
+<p>Dataverse の統合は、Archivematica 1.8 以降でサポートされており、Dataverse バージョン 4.8.6 を使用して開発およびテストされています。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>この2つの課題とともに、将来のリリースでサポートされる可能性のあるワークフローの機能強化/改善が他にも多数あります。<a class="reference external" href="https://github.com/archivematica/Issues/labels/OCUL%3A%20AM-Dataverse">issues filed in GitHub</a> を参照してください。</p>
+</div>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#selecting-datasets"><span class="std std-ref">保存するデータセットの選択</span></a></p></li>
+<li><p><a class="reference internal" href="#dataset-contents"><span class="std std-ref">データセットの内容</span></a></p></li>
+<li><p><a class="reference internal" href="#processing-datasets"><span class="std std-ref">Dataverseのデータセットを処理</span></a></p></li>
+<li><p><a class="reference internal" href="#dataverse-mets"><span class="std std-ref">Dataverse METSファイル</span></a></p></li>
+<li><p><a class="reference internal" href="#dataverse-aip-mets"><span class="std std-ref">AIP METSファイル</span></a></p></li>
+<li><p><a class="reference internal" href="#dataverse-configuration"><span class="std std-ref">設定</span></a></p></li>
+</ul>
+</section>
+<section id="selecting-datasets-for-preservation">
+<span id="selecting-datasets"></span><h2>保存するデータセットの選択<a class="headerlink" href="#selecting-datasets-for-preservation" title="Link to this heading">¶</a></h2>
+<p>ダッシュボードのTransferタブでDataverse Transfer Source Locationを選択すると、利用可能なデータセットのリストを閲覧できます。ディレクトリアイコンを選択すると、そのデータセットに含まれるファイルのリストが表示されます。個々のファイルを選択して転送することはできません。</p>
+<p>Dataverseデータセットが選択されている場合、転送タイプ'Dataverse'も選択されていなければなりません。</p>
+</section>
+<section id="dataset-contents">
+<span id="id1"></span><h2>データセットの内容<a class="headerlink" href="#dataset-contents" title="Link to this heading">¶</a></h2>
+<p>Dataverseは、 <code class="docutils literal notranslate"><span class="pre">dataset.json</span></code> というメタデータファイルを提供します。このファイルには、データセットに含まれるすべてのファイルと、その他の説明メタデータが含まれています。</p>
+<p>データセットに表フォーマットのデータファイルが含まれている場合、Dataverseは派生フォーマットと追加のメタデータファイルを作成します。 <a class="reference external" href="http://guides.dataverse.org/en/latest/user/tabulardataingest/index.html">表フォーマットデータファイルバンドル</a> の動作については、Dataverseガイドを参照してください。</p>
+<p>Archivematica は、表形式のデータファイルバンドルを検出し、すべての派生ファイルとメタデータファイルを取得します。</p>
+</section>
+<section id="processing-dataverse-datasets">
+<span id="processing-datasets"></span><h2>Dataverseのデータセットを処理<a class="headerlink" href="#processing-dataverse-datasets" title="Link to this heading">¶</a></h2>
+<p>Archivematica は、Dataverse から取得したデータセットの内容と構造を記述する Dataverse METS ファイルを作成します。Archivematica は、Storage Service で構成された Dataverse インスタンスの詳細を含む Agents.json ファイルも作成します。この情報は、AIP METS に Dataverse PREMIS エージェントの詳細を入力するために使用されます。</p>
+<p>修正チェックは、Dataverseが提供するチェックサムを使用して行われる。その他のマイクロサービスは通常通り実行されます（処理設定で設定された通りです）。最終的なAIPには、Dataverseによって提供された説明メタデータ、Dataverseによって生成された派生物を示す属性、Dataverseによって提供されたチェックサムを使用して実施されたフィキシティチェックの結果を示す属性が含まれます。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>Archivematicaは、パッケージ化された素材（.zipファイルや.tarファイルなど）を含むDataverseデータセットを処理する際に、これらのファイルの内容を抽出し、その内容に対して保存マイクロサービスを実行できます。これは <em>マイクロサービス：パッケージの抽出</em> の <a class="reference internal" href="transfer.html#transfer"><span class="std std-ref">転送</span></a> タブで発生します。</p>
+</div>
+</section>
+<section id="dataverse-mets-file">
+<span id="dataverse-mets"></span><h2>Dataverse METSファイル<a class="headerlink" href="#dataverse-mets-file" title="Link to this heading">¶</a></h2>
+<p>Archivematica は、Dataverse から取得したデータセットの内容を記述する Dataverse METS ファイルを生成します。データバース METS には以下が含まれます：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://ddialliance.org/Specification/DDI-Codebook/2.5/">DDI 標準</a> にマッピングされた、データセットに関する説明メタデータ</p></li>
+<li><p>提供されたすべてのファイルを一覧表示した <code class="docutils literal notranslate"><span class="pre">&lt;mets:fileSec&gt;</span></code> セクションであり、タイプごとにグループ化（オリジナル、メタデータ、または派生物）</p></li>
+<li><p>Dataverse によって提供されるファイルの構造を説明する <code class="docutils literal notranslate"><span class="pre">&lt;mets:structMap&gt;</span></code> セクション。これは、どのファイルが <a class="reference external" href="http://guides.dataverse.org/en/latest/user/tabulardataingest/index.html">表形式のデータファイルバンドル</a> で提供されているかを理解するのに特に役立ちます。</p></li>
+</ul>
+<p>Dataverse METS は、次の場所の最終 AIP にあります。 <code class="docutils literal notranslate"><span class="pre">&lt;AIP</span> <span class="pre">Name&gt;/data/objects/metadata/transfers/&lt;transfer</span> <span class="pre">name&gt;/METS.xml</span></code> （ここには、Dataverse によって提供される dataset.json メタデータ ファイルと、Archivematica によって作成された agents.json メタデータ ファイルもあります）。</p>
+</section>
+<section id="aip-mets-file">
+<span id="dataverse-aip-mets"></span><h2>AIP METSファイル<a class="headerlink" href="#aip-mets-file" title="Link to this heading">¶</a></h2>
+<p>Archival Information Package （AIP） METS ファイルは、標準的な Archivematica AIP METS ファイルの基本構造に従っています。Dataverseによって生成された派生物は、METS fileGrp属性（ここで <code class="docutils literal notranslate"><span class="pre">USE</span> <span class="pre">=“derivative”</span></code> ）を使用して示されます。</p>
+<p>Dataverse METSファイルの説明メタデータ（dmdSecs）は、AIP METSファイルにコピーされます。</p>
+<p>PREMIS Object エンティティでは、Dataverse からの派生表形式ファイルとオリジナルファイル間の関係は、PREMIS セマンティックユニットを使用して記述されます。PREMIS派生イベントは、派生ファイルがオリジナルファイルから生成されたことを示し、Dataverseエージェントは、イベントがArchivematicaではなくDataverseによってインジェスト前に実行されたことを示します。</p>
+<p>Dataverse によって提供されるチェックサムを使用する修正性チェックは、eventOutcomeDetailNote 属性を使用してチェックサムのソースを示す PREMIS イベントとして記録されます。</p>
+</section>
+<section id="configuration">
+<span id="dataverse-configuration"></span><h2>設定<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<p>Dataverseリポジトリとの統合は、Storage Serviceで設定します。詳細な手順については、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#administrators" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">管理者マニュアル</span></a> を参照してください。</p>
+<p><a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#dataverse" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Dataverseの統合</a><ul>
+<li><a class="reference internal" href="#overview">概要</a></li>
+<li><a class="reference internal" href="#selecting-datasets-for-preservation">保存するデータセットの選択</a></li>
+<li><a class="reference internal" href="#dataset-contents">データセットの内容</a></li>
+<li><a class="reference internal" href="#processing-dataverse-datasets">Dataverseのデータセットを処理</a></li>
+<li><a class="reference internal" href="#dataverse-mets-file">Dataverse METSファイル</a></li>
+<li><a class="reference internal" href="#aip-mets-file">AIP METSファイル</a></li>
+<li><a class="reference internal" href="#configuration">設定</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="change-filenames.html"
+                          title="前の章へ">ファイル名の変更</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../ingest/ingest.html"
+                          title="次の章へ">インジェスト</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/transfer/dataverse.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../ingest/ingest.html" title="インジェスト"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="change-filenames.html" title="ファイル名の変更"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Dataverseの統合</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

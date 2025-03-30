@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>設定 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="エラー処理" href="../troubleshooting/error-handling.html" />
+    <link rel="prev" title="Archivematicaクイックスタートガイド" href="quick-start.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../troubleshooting/error-handling.html" title="エラー処理"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="quick-start.html" title="Archivematicaクイックスタートガイド"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">設定</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="configuration">
+<span id="id1"></span><h1>設定<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h1>
+<section id="workflow-settings">
+<h2>ワークフロー設定<a class="headerlink" href="#workflow-settings" title="Link to this heading">¶</a></h2>
+<p>ワークフローの多くの選択肢は、ダッシュボードの「管理」タブで事前設定可能です。 <a class="reference internal" href="../../user-manual/administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> を参照してください。</p>
+<p>複数の Archivematicaパイプラインを別々のVMに インストールし、各パイプラインで処理される素材のタイプに特化した独自の処理設定を行うことで、処理コストの削減を実現しているユーザーもいます。</p>
+</section>
+<section id="integration-settings">
+<h2>統合設定<a class="headerlink" href="#integration-settings" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、様々なアクセスシステムやストレージシステムと統合できます。こちらを参照してください：</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../admin-manual/installation-setup/customization/dashboard-config.html#admin-dashboard-atom"><span class="std std-ref">AtoM</span></a></p></li>
+<li><p><a class="reference internal" href="../../user-manual/access/contentdm.html#contentdm"><span class="std std-ref">ContentDM</span></a></p></li>
+<li><p><a class="reference internal" href="../../user-manual/transfer/dspace.html#dspace"><span class="std std-ref">DSpace</span></a></p></li>
+<li><p><a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#admin-lockss" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">LOCKSS</span></a> （管理者用文書）</p></li>
+<li><p>DuraCloud（近日公開）</p></li>
+<li><p>Arkivum（近日公開）</p></li>
+</ul>
+</section>
+<section id="add-edit-users-and-passwords">
+<h2>ユーザーとパスワードの追加/編集<a class="headerlink" href="#add-edit-users-and-passwords" title="Link to this heading">¶</a></h2>
+<p>管理ユーザーは、ユーザーの追加/編集やパスワードの更新を行うことができます。管理ユーザーは、システム管理者である必要はなく、Archivematicaダッシュボードの管理ページでこの機能を実行できます。</p>
+<p><a class="reference internal" href="../../user-manual/administer/dashboard-admin.html#dashboard-premis"><span class="std std-ref">ユーザー</span></a> を参照してください。</p>
+</section>
+<section id="add-edit-premis-agents">
+<h2>PREMIS エージェントの追加/編集<a class="headerlink" href="#add-edit-premis-agents" title="Link to this heading">¶</a></h2>
+<p>管理ユーザーは、PREMISエージェントを追加/編集できます。PREMISエージェントは、METSファイルに記録され、デジタル保存イベントを実行するエージェンシーを識別します。これは、処理を開始する前に設定する必要があり、Archivematicaダッシュボードの管理画面から設定できます。</p>
+<p><a class="reference internal" href="../../user-manual/administer/dashboard-admin.html#dashboard-premis"><span class="std std-ref">PREMISエージェント</span></a> を参照してください。</p>
+<p><a class="reference internal" href="#configuration"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">設定</a><ul>
+<li><a class="reference internal" href="#workflow-settings">ワークフロー設定</a></li>
+<li><a class="reference internal" href="#integration-settings">統合設定</a></li>
+<li><a class="reference internal" href="#add-edit-users-and-passwords">ユーザーとパスワードの追加/編集</a></li>
+<li><a class="reference internal" href="#add-edit-premis-agents">PREMIS エージェントの追加/編集</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="quick-start.html"
+                          title="前の章へ">Archivematicaクイックスタートガイド</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../troubleshooting/error-handling.html"
+                          title="次の章へ">エラー処理</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/getting-started/quick-start/configuration.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../troubleshooting/error-handling.html" title="エラー処理"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="quick-start.html" title="Archivematicaクイックスタートガイド"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">設定</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>APIの概要 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="Archivematica API" href="api-reference-archivematica.html" />
+    <link rel="prev" title="開発者マニュアル" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="api-reference-archivematica.html" title="Archivematica API"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="開発者マニュアル"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">開発者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">APIの概要</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="api-overview">
+<span id="id1"></span><h1>APIの概要<a class="headerlink" href="#api-overview" title="Link to this heading">¶</a></h1>
+<p>Archivematicaは、以下のRESTスタイルのAPIでサービスとリソースを公開しています：</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#archivematica-api-intro"><span class="std std-ref">Archivematica API</span></a></p></li>
+<li><p><a class="reference internal" href="#storage-service-api-intro"><span class="std std-ref">Storage Service API</span></a></p></li>
+</ul>
+<p>ArchivematicaおよびStorage Service APIは、カスタムソリューションの作成を支援するように設計されています。</p>
+<section id="archivematica-api">
+<span id="archivematica-api-intro"></span><h2>Archivematica API<a class="headerlink" href="#archivematica-api" title="Link to this heading">¶</a></h2>
+<p>Archivematica APIでは、以下のことが可能です：</p>
+<ul class="simple">
+<li><p>基本的なワークフロー機能をカバー（例：決定待ちのワークフロータスクのリストアップと承認）。</p></li>
+<li><p>Storage Serviceへのプロキシサポート。</p></li>
+<li><p>ユニットのステータスや処理設定の詳細を公開。</p></li>
+</ul>
+<p>Archivematica APIのエンドポイントは認証が必要です。詳しくは、 <a class="reference internal" href="#api-overview-auth"><span class="std std-ref">認証</span></a> を参照してください。</p>
+<p>Archivematica APIエンドポイントについては、 <a class="reference internal" href="api-reference-archivematica.html#api-reference-archivematica"><span class="std std-ref">Archivematica API</span></a> を参照してください。</p>
+</section>
+<section id="storage-service-api">
+<span id="storage-service-api-intro"></span><h2>Storage Service API<a class="headerlink" href="#storage-service-api" title="Link to this heading">¶</a></h2>
+<p>システム構成にArchivematica Storage Serviceが含まれている場合、Storage Service APIは、以下のリソースの情報を取得するのに役立ちます：</p>
+<ul class="simple">
+<li><p>Pipeline</p></li>
+<li><p>Space</p></li>
+<li><p>Location</p></li>
+</ul>
+<p>Storage ServiceAPIエンドポイントは、認証を必要とします。詳細は、 <a class="reference internal" href="#api-overview-auth"><span class="std std-ref">認証</span></a> を参照してください。</p>
+<p>Storage ServiceAPIエンドポイントについては、 <a class="reference internal" href="api-reference-storage-service.html#api-reference-storage-service"><span class="std std-ref">Storage Service API</span></a> を参照してください。</p>
+<section id="authentication">
+<span id="api-overview-auth"></span><h3>認証<a class="headerlink" href="#authentication" title="Link to this heading">¶</a></h3>
+<p>APIエンドポイントへのすべての呼び出しには、ユーザー名とAPIキーによる認証が必要です。</p>
+<p>Archivematica Dashboardは、Django認証フレームワークを使用したシンプルなクッキーベースのユーザー認証システムを提供しています。認証されたユーザーのみがデータにアクセスできます。</p>
+<p>Archivematica APIもStorage Service APIも、デフォルトではGETパラメーターを使用し、認証されたユーザーにアクセスを許可します。</p>
+<p>GETパラメーターを設定する場合のフォーマットは::です</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?username=&lt;username&gt;&amp;api_key=&lt;api_key&gt;
+</pre></div>
+</div>
+<p>APIキー値をヘッダーの一部として渡す場合、フォーマットは::になります</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Authorization</span><span class="p">:</span> <span class="n">ApiKey</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">api_key</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>トランスポートレイヤーセキュリティ（TLS）プロトコルは、クライアントとサーバー間で送信されるすべてのデータが安全なアルゴリズムで暗号化され、第三者が閲覧できないようにするため、ウェブサーバー（通常はNginx）で有効にするべきです。</p>
+</section>
+<section id="generating-an-api-key-for-a-user">
+<h3>ユーザーのAPIキーを生成<a class="headerlink" href="#generating-an-api-key-for-a-user" title="Link to this heading">¶</a></h3>
+<p>APIキーは、ユーザーアカウントに関連付けられており、Dashboard Administrationタブで管理できます。Archivematicaユーザーは、管理者と非管理者の2津のカテゴリに分かれます。 <a class="reference internal" href="../../admin-manual/installation-setup/customization/dashboard-config.html#admin-dashboard-users"><span class="std std-ref">ユーザー</span></a> の管理者は、ユーザーアカウントの作成と編集ができます。管理者は、データベース内の任意のユーザーアカウントのAPIキーを生成もできます。</p>
+<p>Archivematicaの既存ユーザーのAPIキーを生成するには：</p>
+<ol class="arabic simple">
+<li><p><strong>Admin &gt; Users</strong> に移動し、Usersページにアクセスします。</p></li>
+<li><p>APIキーを生成したいユーザーのユーザー名を選択します。</p></li>
+<li><p><strong>Regenerate API key</strong> ボックスをクリックします。</p></li>
+<li><p><strong>Save</strong> をクリックします。</p></li>
+<li><p>ユーザー名をクリックして、そのユーザーのプロファイルから新しいAPIキーにアクセスします。</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Storage Serviceでは、新規ユーザーごとにAPIキーが自動的に生成されます。指定したユーザーのパスワードを変更すると、そのユーザー用に新しいAPIキーがランダムに生成されます。</p>
+</div>
+</section>
+<section id="using-an-api-key-in-a-request">
+<h3>リクエストでAPIキーを使用<a class="headerlink" href="#using-an-api-key-in-a-request" title="Link to this heading">¶</a></h3>
+<p>APIキー値は、APIエンドポイントへの各リクエストで渡されなければなりません。以下は、 <a class="reference external" href="https://curl.haxx.se/">cURL</a> を使用して、ヘッダーにAPIキーを指定してリクエストを送信する例です。</p>
+<p><em>リクエスト例</em> （curlを使用）:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">GET</span> \
+<span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">sandbox</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">transfer</span><span class="o">/</span><span class="n">completed</span><span class="o">/</span> \
+<span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey admin:90e458ded261c7a5&#39;</span>
+</pre></div>
+</div>
+<p><em>リクエストヘッダの例</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>GET /api/transfer/completed/? HTTP/1.1
+Host: sandbox.archivematica.org
+Authorization: ApiKey admin:90e458ded261c7a5
+</pre></div>
+</div>
+<p><em>レスポンスヘッダの例</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">200</span>
+<span class="n">status</span><span class="p">:</span> <span class="mi">200</span>
+<span class="n">Server</span><span class="p">:</span> <span class="n">nginx</span>
+<span class="n">Date</span><span class="p">:</span> <span class="n">Fri</span><span class="p">,</span> <span class="mi">19</span> <span class="n">Jul</span> <span class="mi">2019</span> <span class="mi">02</span><span class="p">:</span><span class="mi">26</span><span class="p">:</span><span class="mi">54</span> <span class="n">GMT</span>
+<span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
+<span class="n">Transfer</span><span class="o">-</span><span class="n">Encoding</span><span class="p">:</span> <span class="n">chunked</span>
+<span class="n">Connection</span><span class="p">:</span> <span class="n">keep</span><span class="o">-</span><span class="n">alive</span>
+<span class="n">Vary</span><span class="p">:</span> <span class="n">Accept</span><span class="o">-</span><span class="n">Language</span><span class="p">,</span> <span class="n">Cookie</span>
+<span class="n">Content</span><span class="o">-</span><span class="n">Language</span><span class="p">:</span> <span class="n">en</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">APIの概要</a><ul>
+<li><a class="reference internal" href="#archivematica-api">Archivematica API</a></li>
+<li><a class="reference internal" href="#storage-service-api">Storage Service API</a><ul>
+<li><a class="reference internal" href="#authentication">認証</a></li>
+<li><a class="reference internal" href="#generating-an-api-key-for-a-user">ユーザーのAPIキーを生成</a></li>
+<li><a class="reference internal" href="#using-an-api-key-in-a-request">リクエストでAPIキーを使用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../index.html"
+                          title="前の章へ">開発者マニュアル</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="api-reference-archivematica.html"
+                          title="次の章へ">Archivematica API</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/dev-manual/api/api-overview.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="api-reference-archivematica.html" title="Archivematica API"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="開発者マニュアル"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >開発者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">APIの概要</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

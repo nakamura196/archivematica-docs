@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>メンテナンス &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="セキュリティ" href="../security/security.html" />
+    <link rel="prev" title="Archivematicaでハンドルシステムを使用" href="../installation-setup/integrations/handlenet-setup.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../security/security.html" title="セキュリティ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../installation-setup/integrations/handlenet-setup.html" title="Archivematicaでハンドルシステムを使用"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">メンテナンス</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="maintenance">
+<span id="admin-maintenance"></span><h1>メンテナンス<a class="headerlink" href="#maintenance" title="Link to this heading">¶</a></h1>
+<p>このページでは、Archivematicaのメンテナンスに関する情報を提供します。</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#management-commands"><span class="std std-ref">管理コマンド</span></a></p></li>
+<li><p><a class="reference internal" href="#elasticsearch"><span class="std std-ref">Elasticsearchのメンテナンス</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#elasticsearch-indexes"><span class="std std-ref">Elasticsearchインデックスの再構築</span></a></p></li>
+<li><p><a class="reference internal" href="#elasticsearch-external"><span class="std std-ref">外部Elasticsearchのアクセス</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#data-backup"><span class="std std-ref">データバックアップ</span></a></p></li>
+<li><p><a class="reference internal" href="#admin-faq"><span class="std std-ref">よくあるご質問</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#disk-full"><span class="std std-ref">フルディスクのクリーンアップ方法</span></a></p></li>
+<li><p><a class="reference internal" href="#restart-services"><span class="std std-ref">サービスの再起動方法</span></a></p></li>
+<li><p><a class="reference internal" href="#stack-trace"><span class="std std-ref">エラースタックトレース</span></a></p></li>
+<li><p><a class="reference internal" href="#transfer-wont-start"><span class="std std-ref">転送が始まらない</span></a></p></li>
+<li><p><a class="reference internal" href="#clear-user-sessions"><span class="std std-ref">ユーザーセッションをクリアする方法</span></a></p></li>
+<li><p><a class="reference internal" href="#clear-app-db"><span class="std std-ref">アプリケーションデータベースのクリア方法</span></a></p></li>
+</ul>
+</li>
+</ul>
+<section id="management-commands">
+<span id="id1"></span><h2>管理コマンド<a class="headerlink" href="#management-commands" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、Django Webフレームワークが提供するコマンドインターフェースを使用して、複数の管理コマンドを実装しています。</p>
+<p>コマンドの完全なリストは、次のように取得できます：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py help</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>特定のコマンドのヘルプメッセージを見たい場合は、次のように操作してください：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py help purge_transient_processing_data</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>上記の例では、 <code class="docutils literal notranslate"><span class="pre">purge_transient_processing_data</span></code> について見ています。説明には十分な情報と、場合によっては使用例が必要です。</p>
+<p>最後に、オプションの引数を渡してコマンドを実行する例を紹介します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py purge_transient_processing_data --dry-run</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="maintaining-elasticsearch">
+<span id="elasticsearch"></span><h2>Elasticsearchのメンテナンス<a class="headerlink" href="#maintaining-elasticsearch" title="Link to this heading">¶</a></h2>
+<p>バージョン0.9以降、Archivematicaは、検索エンジンとしてElasticsearchを使用しています。Elasticsearchは、AIPとTransferに関する情報をbacklogに保存します。このデータは、ArchivematicaダッシュボードのArchival StorageやBacklogタブから検索できます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematica 1.7では、この機能を <a class="reference internal" href="../installation-setup/installation/installation.html#install-elasticsearch"><span class="std std-ref">完全または部分的に無効</span></a> にできます。</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>AtoM文書からの <a class="reference external" href="https://www.accesstomemory.org/docs/latest/admin-manual/maintenance/elasticsearch/#maintenance-elasticsearch">Elasticsearchトラブルシューティング</a> のヘルプ。</p>
+</div>
+<section id="rebuild-the-indexes">
+<span id="elasticsearch-indexes"></span><h3>インデックスの再構築<a class="headerlink" href="#rebuild-the-indexes" title="Link to this heading">¶</a></h3>
+<p>Archivematicaには、Elasticsearchインデックスを再生成するための3つのDjangoコマンドが含まれています。</p>
+<p id="aip-indexes-filesystem"><strong>ファイルシステムを使用して AIPインデックスを再構築</strong></p>
+<p>ファイルシステムからAIPインデックスを再作成するには、AIPと転送Backlogの保存場所のパスにアクセスする必要があります。これらは通常以下のパスにあります：</p>
+<ul class="simple">
+<li><p><code class="file docutils literal notranslate"><span class="pre">/var/archivematica/sharedDirectory/www/AIPsStore</span></code></p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">/var/archivematica/sharedDirectory/www/AIPsStore/transferBacklog</span></code></p></li>
+</ul>
+<p>Storage Serviceの Locations タブでインストールパスを確認してください。</p>
+<p>ファイルシステムからAIPインデックスを再作成するには、上記で確認した AIP保存場所のパスを指定して、以下のコマンドを実行します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>このコマンドの実行は、特にAIPが圧縮されて保存されている場合、大きなAIP保存場所では時間がかかることに注意してください。</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py rebuild_elasticsearch_aip_index_from_files \</span>
+<span class="s2">            /var/archivematica/sharedDirectory/www/AIPsStore --delete-all</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>コマンドは、以下のパラメーターを受け付けます：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[storage_location_path]</span></code> <strong>[必須]</strong> ：AIPの保存場所がローカルファイルシステムにあるパス。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--delete-all</span></code> ：インデックス全体を削除し、マッピングと設定を再生成します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--delete</span></code> ：重複を避けるために一致するAIP文書を削除しますが、インデックスのマッピングと設定は保持します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--uuid</span></code> [aip_uuid]：保存場所から単一のAIPをインデックスします。</p></li>
+</ul>
+<p>複数のAIPストレージにインデックスを付けるために、異なるパスで複数回実行できます。</p>
+<p id="aip-indexes-api"><strong>Storage Service APIを使用してAIPインデックスを再構築</strong></p>
+<p>このコマンドは、Storage ServiceAPIを使用して、（ステータスとオリジンパイプラインに基づいて）保存されたどのAIPとAICのインデックスを再作成する必要があるかを決定し、次にそれらのAIPとAICのMETSファイルの一時的にダウンロードされたコピーからインデックスを再作成します。この方法により、暗号化された場所や一部のリモート・ストレージに保存されたAIP/AICのインデックスを再作成できます。ただし、このコマンドはArchivematicaのコードベースのコードを使用するため、Archivematicaがインストールされている同じシステムで実行する必要があります。</p>
+<p>デフォルトでは、スクリプトは、スクリプトの実行元と一致するオリジンパイプラインを持ち、&quot;DELETED&quot;以外のステータスを持つ、Storage Service内のすべてのAIPとAICのインデックスを再作成します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py rebuild_aip_index_from_storage_service --delete-all</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>コマンドは、以下のパラメーターを受け付けます：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--pipeline</span></code> は、現在のダッシュボードとは異なるパイプラインからパッケージのインデックスを再作成するためにオプションで渡すことができます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-u</span></code> または <code class="docutils literal notranslate"><span class="pre">--uuid</span></code> をオプションで渡して、一致するUUIDを持つAIPのインデックスだけを再作成もできます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--delete</span></code> は、インデックスを再作成する前に、Elasticsearchで見つかったUUIDに一致するデータを削除します。すでに存在するAIPは情報が重複しないので、インデックスから一部のAIPだけが欠落している場合に便利です。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--delete-all</span></code> を実行すると、開始前にAIP Elasticsearchインデックス全体を削除します。これは、削除されたAIPがインデックスされている場合や、「aips」と「aipfiles」インデックスを完全に削除して最新バージョンのElasticsearchマッピングを使用して再作成したい場合に便利です。</p></li>
+</ul>
+<p id="transfer-indexes"><strong>転送インデックスの再構築</strong></p>
+<p>転送インデックスを再生成するために、保存場所へのアクセスとは別に、コマンドがダッシュボードデータベース内の転送と転送ファイルの存在をチェックします。インデックスは、現在の設定とマッピングで完全に再作成され、その場所から転送が入力されます。実行例：</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>このコマンドの実行は、Transfer Backlogの保存場所が大きい場合、時間がかかることがありますのでご注意ください。</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py rebuild_transfer_backlog</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>コマンドは、以下のパラメーターを受け付けます：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--transfer-backlog-dir</span></code> [storage_location_path]：Transfer Backlogの保存場所がローカルファイルシステム内にあるパス。 <em>デフォルト：</em> <cite>/var/archivematica/sharedDirectory/www/AIPsStore/transferBacklog</cite> 。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--no-prompt</span></code> ：確認を求めないでください。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--from-storage-service</span></code> ：Storage ServiceAPIを使用して、再インデックスが必要な保存された転送を決定します。インデックス作成のために、API経由で各転送のコピーを一時的にダウンロードします。これにより、暗号化された場所に保存されたパッケージや、一部のリモートロケーションのインデックスを再作成できます。</p></li>
+</ul>
+</section>
+<section id="external-access">
+<span id="elasticsearch-external"></span><h3>外部アクセス<a class="headerlink" href="#external-access" title="Link to this heading">¶</a></h3>
+<p>Elasticsearchインデックスとのさらなるインタラクション、データのブラウズ、ビジュアライゼーションの作成には、以下のツールをお勧めします：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.elastic.co/kibana">Kibana</a></p></li>
+<li><p><a class="reference external" href="https://github.com/appbaseio/dejavu">Dejavu</a></p></li>
+</ul>
+<p>インデックス名は以下の通り： <cite>aips</cite> 、 <cite>aipfiles</cite> 、 <cite>transfers</cite> 、 <cite>transferfiles</cite> 。</p>
+</section>
+</section>
+<section id="data-backup">
+<span id="id2"></span><h2>データバックアップ<a class="headerlink" href="#data-backup" title="Link to this heading">¶</a></h2>
+<p>デフォルトでは、バックアップすべきデータは3種類あります：</p>
+<ul class="simple">
+<li><p>ファイルシステム（特に自らのストレージディレクトリ）</p></li>
+<li><p>MySQLとSQLite</p></li>
+<li><p>Elasticsearch</p></li>
+</ul>
+<p>ファイルシステムに加えて、何をバックアップするか、どこに存在するか、どのようにバックアップするかについての詳細な手順を以下に示します。</p>
+<p>Archivematicaインスタンスからバックアップするデータ：</p>
+<ol class="arabic simple">
+<li><p>MCPデータベース（詳細は下記参照）</p></li>
+<li><p>SSデータベース（詳細は下記参照）</p></li>
+<li><p>Elasticsearchインデックス（詳細は下記参照）</p></li>
+<li><p>ポインターファイル（Storage Service内部の処理場所。デフォルトの場所は <code class="docutils literal notranslate"><span class="pre">/var/archivematica/storage_service</span></code> ）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/etc/archivematica</span></code> のAM設定</p></li>
+<li><p>処理設定（ <code class="docutils literal notranslate"><span class="pre">/var/archivematica/sharedDirectory/sharedMicroServiceTasksConfigs/processingMCPConfigs</span></code> ）</p></li>
+</ol>
+<p>Archivematicaを新しいサーバに更新または移行する場合は、以下のバックアップも重要です：</p>
+<ol class="arabic simple">
+<li><p>Archivematicaソースコード（ <code class="docutils literal notranslate"><span class="pre">/opt/archivematica</span></code> ）（どのバージョンのソフトウェアがインストールされたか、カスタムの変更があったかなどを知ることができます。）</p></li>
+<li><p>Archivematica共有ディレクトリ（ <code class="docutils literal notranslate"><span class="pre">/var/archivematica/sharedDirectory/</span></code> ）</p></li>
+</ol>
+<p>インスタンスが自動化ツールを使用している場合は、それもバックアップしておく必要があります：</p>
+<ol class="arabic simple">
+<li><p>ソースコード（ <code class="docutils literal notranslate"><span class="pre">/opt/archivematica/automation-tools</span></code> ）</p></li>
+<li><p>スクリプト（通常は <code class="docutils literal notranslate"><span class="pre">/etc/archivematica/automation-tools</span></code> ）</p></li>
+<li><p>automation-toolsのCrontabエントリ</p></li>
+<li><p>オートメーションデータベース（通常は <code class="docutils literal notranslate"><span class="pre">/var/archivematica/automation-tools/</span></code> ）</p></li>
+<li><p>その他のヘルパースクリプトのソースとデータベース</p></li>
+</ol>
+<section id="archivematica-database-backup-and-restore">
+<h3>Archivematicaデータベースのバックアップとリストア<a class="headerlink" href="#archivematica-database-backup-and-restore" title="Link to this heading">¶</a></h3>
+<p>MySQLは、短期処理データの保存に使用されます。MySQLデータベースのバックアップは、以下により行うことができます：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mysqldump<span class="w"> </span>-u<span class="w"> </span>&lt;your<span class="w"> </span>username&gt;<span class="w"> </span>-p&lt;your<span class="w"> </span>password&gt;<span class="w"> </span>-c<span class="w"> </span>MCP<span class="w"> </span>&gt;<span class="w"> </span>&lt;filename<span class="w"> </span>of<span class="w"> </span>backup&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">mysqldump</span></code> ファイルから復元するには：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mysql<span class="w"> </span>-u<span class="w"> </span>&lt;your<span class="w"> </span>username&gt;<span class="w"> </span>-p&lt;your<span class="w"> </span>password&gt;<span class="w"> </span>MCP<span class="w"> </span>&lt;<span class="w"> </span>MCP_backup.sql
+</pre></div>
+</div>
+</section>
+<section id="storage-service-database-backup-and-restore">
+<h3>Storage Serviceデータベースのバックアップと復元<a class="headerlink" href="#storage-service-database-backup-and-restore" title="Link to this heading">¶</a></h3>
+<p>SQLiteデータベースとStorage Serviceによって作成されたポインターファイルをバックアップするには、以下を実行します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rsync<span class="w"> </span>-av<span class="w"> </span>/var/archivematica/storage_service<span class="w"> </span>/backup/location/storage_service
+rsync<span class="w"> </span>-av<span class="w"> </span>/var/archivematica/storage-service/storage.db<span class="w"> </span>/backup/location/storage.db
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Storage Serviceはアクティブに使用されていないこと。 <code class="docutils literal notranslate"><span class="pre">nginx</span></code> 、 <code class="docutils literal notranslate"><span class="pre">storage-service</span></code> サービスを停止するか、使用されていない時間にバックアップを作成することで、Storage Serviceが実行されていないことを確認します。</p>
+</div>
+<p>Storage Serviceをバックアップから復元します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service<span class="w"> </span>archivematica-storage-service<span class="w"> </span>stop
+rsync<span class="w"> </span>-av<span class="w"> </span>/backup/location/storage.db<span class="w"> </span>/var/archivematica/storage-service/storage.db
+rsync<span class="w"> </span>-av<span class="w"> </span>/backup/location/storage_service<span class="w"> </span>/var/archivematica/storage_service
+service<span class="w"> </span>archivematica-storage-service<span class="w"> </span>start
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>Elasticsearch<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>Elasticsearchは、長期データの保存に使用されます。Elasticsearchのバックアップとリストアに関する説明とスクリプトは、 <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.8/modules-snapshots.html">Elasticsearch文書</a> にあります。</p>
+<p><strong>事前設定</strong></p>
+<p>path.repoとスナップショットリポジトリを設定する必要があります。例えば、 <code class="docutils literal notranslate"><span class="pre">/var/lib/elasticsearch/backup-repo</span></code> をリポジトリパスとして使用します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>/var/lib/elasticsearch/backup-repo
+chmod<span class="w"> </span><span class="m">0755</span><span class="w"> </span>/var/lib/elasticsearch/backup-repo
+chown<span class="w"> </span>elasticsearch:elasticsearch<span class="w"> </span>/var/lib/elasticsearch/backup-repo
+</pre></div>
+</div>
+<p>次の行を <code class="docutils literal notranslate"><span class="pre">/etc/elasticsearch/elasticsearch.yml</span></code> ファイルに追加します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>path.repo:<span class="w"> </span>/var/lib/elasticsearch/backup-repo
+</pre></div>
+</div>
+<p>elasticsearchを再起動します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service<span class="w"> </span>elasticsearch<span class="w"> </span>restart
+</pre></div>
+</div>
+<p>新しいディレクトリをスナップショットリポジトリとして使用するには、以下のように新しいディレクトリを作成し、権限を調整します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>/var/lib/elasticsearch/backup-repo/es_backup_YOUR-NAME
+chmod<span class="w"> </span><span class="m">0755</span><span class="w"> </span>/var/lib/elasticsearch/backup-repo/es_backup_YOUR-NAME
+chown<span class="w"> </span>elasticsearch:elasticsearch<span class="w"> </span>/var/lib/elasticsearch/backup-repo/es_backup_YOUR-NAME
+</pre></div>
+</div>
+<p>スナップショットや復元操作を行う前に、Elasticsearchにスナップショットリポジトリを登録する必要があります。リポジトリの設定は、リポジトリタイプに特有のものです：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-XPUT<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="s1">&#39;http://localhost:9200/_snapshot/es_backup_YOUR-NAME&#39;</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">    &quot;type&quot;: &quot;fs&quot;,</span>
+<span class="s1">    &quot;settings&quot;: {</span>
+<span class="s1">        &quot;compress&quot; : true,</span>
+<span class="s1">        &quot;location&quot;: &quot;/var/lib/elasticsearch/backup-repo/es_backup_YOUR-NAME&quot;</span>
+<span class="s1">    }</span>
+<span class="s1">}&#39;</span>
+</pre></div>
+</div>
+<p><strong>Elasticsearchインデックスのバックアップ</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">aips</span></code> 、 <code class="docutils literal notranslate"><span class="pre">aipfiles</span></code> 、 <code class="docutils literal notranslate"><span class="pre">transfer</span></code> 、 <code class="docutils literal notranslate"><span class="pre">transferfiles</span></code> インデックスのバックアップ（スナップショット）を作成するには、スナップショットを取得するたびに異なる名前を使用する必要があります。例えば、ファイル名の中に日付を使用します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-XPUT<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="s1">&#39;http://localhost:9200/_snapshot/es_backup_YOUR-NAME/%3Csnapshot-am-%7Bnow%2Fd%7D%3E?wait_for_completion=true&#39;</span><span class="w"> </span>-d<span class="s1">&#39;</span>
+<span class="s1">{</span>
+<span class="s1">  &quot;indices&quot;: &quot;aips,aipfiles,transfers,transferfiles&quot;,</span>
+<span class="s1">  &quot;ignore_unavailable&quot;: true,</span>
+<span class="s1">  &quot;include_global_state&quot;: false</span>
+<span class="s1">}&#39;</span>
+</pre></div>
+</div>
+<p>スナップショットは、 <code class="docutils literal notranslate"><span class="pre">/var/lib/elasticsearch/backup-repo/es_backup_YOUR-NAME</span></code> ディレクトリに保存されます。このディレクトリはrsyncなどでバックアップできます：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rsync<span class="w"> </span>-av<span class="w"> </span>/var/lib/elasticsearch/backup-repo/es_backup_YOUR-NAME<span class="w"> </span>/backup/location/elasticsearch
+</pre></div>
+</div>
+<p>すべてのスナップショットをリストアップします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-XGET<span class="w"> </span><span class="s1">&#39;http://localhost:9200/_snapshot/es_backup_YOUR-NAME/_all?pretty=true&#39;</span>
+</pre></div>
+</div>
+<p>スナップショットを削除するには：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-XDELETE<span class="w"> </span><span class="s1">&#39;http://localhost:9200/_snapshot/es_backup_YOUR-NAME/snapshot-am-YYYY.MM.DD&#39;</span>
+</pre></div>
+</div>
+<p><strong>Elasticsearchのリストア</strong></p>
+<p>リストアする前に、スナップショットレポをelasticsearchに登録する必要があります（事前設定を参照）。repo.pathを設定し、スナップショットレポを登録し（異なるパスやレポ名を使用できます）、 <code class="docutils literal notranslate"><span class="pre">/backup/location/elasticsearch</span></code> ディレクトリ内のファイルをコピーすることで、別のサーバーにリストアできます。</p>
+<p>復元を行う前にインデックスをクローズする必要があります。インデックスを閉じるには、following _close endpointsにポストします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-XPOST<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="s1">&#39;http://localhost:9200/aips,aipfiles,transfers,transferfiles/_close&#39;</span><span class="w"> </span>-d<span class="s1">&#39;</span>
+<span class="s1">{</span>
+<span class="s1">  &quot;ignore_unavailable&quot;: true</span>
+<span class="s1">}&#39;</span>
+</pre></div>
+</div>
+<p>ElasticSearchを復元するには：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-XPOST<span class="w"> </span><span class="s1">&#39;http://localhost:9200/_snapshot/es_backup_YOUR-NAME/snapshot-am-YYYY.MM.DD/_restore&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="faq">
+<span id="admin-faq"></span><h2>よくあるご質問<a class="headerlink" href="#faq" title="Link to this heading">¶</a></h2>
+<section id="how-to-clean-up-a-full-disk">
+<span id="disk-full"></span><h3>フルディスクのクリーンアップ方法<a class="headerlink" href="#how-to-clean-up-a-full-disk" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>&quot;Archivematicaのディスクがいっぱいになり、Archivematicaが使えません。どうすれば直りますか？&quot;</p>
+</div></blockquote>
+<p>Archivematicaサーバには、委託されただけのストレージがあります。非常に大きなファイルを大量に処理する場合、特に正規化処理を行う場合、ディスクがいっぱいになり、システムが誤動作する原因となります。</p>
+<p>Archivematicaインスタンスのディスクが一杯になった場合、復旧のためにいくつかのステップを踏む必要があります。</p>
+<p><strong>復旧プロトコル</strong></p>
+<ol class="arabic simple">
+<li><p>失敗した転送や拒否された転送、過剰な <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> データ、その他ディスクが一杯になった原因となっているものを取り除き、ディスクをクリーンアップします。</p></li>
+<li><p>MySQL（Rocky Linuxの場合はMariaDB）データベースをリセットします。</p></li>
+<li><p>Archivematicaのコンポーネントを適切な順序でリセットします（詳細は、 <a class="reference internal" href="#restart-services">restart-services</a> を参照してください）。</p></li>
+<li><p>Elasticsearch を書き込みモードに戻してください。最も簡単な方法は、以下のコマンドを実行することです：</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-XPUT<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="s1">&#39;http://localhost:9200/_all/_settings&#39;</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;index.blocks.read_only_allow_delete&quot;:null}&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="how-to-restart-services">
+<span id="restart-services"></span><h3>サービスの再起動方法<a class="headerlink" href="#how-to-restart-services" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>&quot;何かが正常に機能していません。または処理が停止した転送を停止する必要があります。どうすればいいですか？&quot;</p>
+</div></blockquote>
+<p>Archivematicaは、以下の4つのコアコンポーネントで構成されています：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>archivematica-mcp-server
+archivematica-mcp-client
+archivematica-dashboard
+archivematica-storage-service
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Archivematicaが依存しているその他のサービスは、次のとおりです：</dt><dd><ul class="simple">
+<li><p>ClamAV</p></li>
+<li><p>ElasticSearch</p></li>
+<li><p>Gearman</p></li>
+<li><p>MySQL（Ubuntu）またはMariaDB（Rocky Linux）</p></li>
+<li><p>Nailgun</p></li>
+<li><p>Nginx</p></li>
+</ul>
+</dd>
+</dl>
+<p>各サービスは、以下を使って起動/停止/再起動が可能です：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service<span class="w"> </span>&lt;name&gt;<span class="w"> </span>start<span class="p">|</span>stop<span class="p">|</span>status<span class="p">|</span>restart
+</pre></div>
+</div>
+<p>すべてのサービスを再起動するには、Gearmanサービス、Archivematicaの各コンポーネントの順に再起動します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service<span class="w"> </span>gearmand<span class="w"> </span>restart
+service<span class="w"> </span>archivematica-mcp-server<span class="w"> </span>restart
+service<span class="w"> </span>archivematica-mcp-client<span class="w"> </span>restart
+service<span class="w"> </span>archivematica-dashboard<span class="w"> </span>restart
+service<span class="w"> </span>archivematica-storage-service<span class="w"> </span>restart
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>インストールによっては、gearmandをgearman-job-serverと呼ぶこともあります。</p>
+</div>
+</section>
+<section id="error-stack-trace">
+<span id="stack-trace"></span><h3>エラースタックトレース<a class="headerlink" href="#error-stack-trace" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>&quot;ダッシュボードに白いエラーページが表示されます。どのようなエラーなのでしょうか？&quot;</p>
+</div></blockquote>
+<p>Dashboardを含むすべてのArchivematicaサービスには、警告やエラーを含む関連事象をキャプチャするロガーが設定されています。</p>
+<p>Archivematicaのログは <code class="docutils literal notranslate"><span class="pre">/var/log/archivematica/</span></code> に保存されますが、最終的な保存場所は環境やログの設定によって変更される場合があります。</p>
+</section>
+<section id="transfer-won-t-start">
+<span id="transfer-wont-start"></span><h3>転送が始まらない<a class="headerlink" href="#transfer-won-t-start" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>&quot;新しい転送を作成しようとしても、何も起こりません。どうしたらいいですか？&quot;</p>
+</div></blockquote>
+<p>転送を開始しようとしても、Archivematicaのプロセスが開始されないことがあります。このような場合、いくつかの問題に注意して調査する必要があります。</p>
+<ol class="arabic">
+<li><p>ファイルの許可</p>
+<p>まず、この問題は転送元ディレクトリのファイルパーミッションに関連している可能性があります。ディレクトリとファイルのアクセス権限をチェックして、すべてのファイルがArchivematicaによって読み取り可能であることを確認してください。</p>
+</li>
+<li><p>システムのタイムアウト</p>
+<p>大規模な転送の場合は、ファイルをコピーして最初にシステムにロードするのに時間がかかるだけの可能性があり、ユーザーはもう少し待って、少し時間が経ってからプロセスが開始されるかどうかを確認できます。一部のシステムタイムアウトを超過し、転送が失敗したために時間がかかっている可能性もあります。これは、Storage Serviceのログを確認し、ファイルシステム上の転送が存在する場所をチェックすることで確認できます。</p>
+<p>タイムアウトが不十分な場合は、Storage Service設定を確認し、必要に応じて調整します。</p>
+</li>
+<li><p>DashboardとGearman間の通信</p>
+<p>転送が共有ディレクトリに正常に移動している（つまり、 <code class="docutils literal notranslate"><span class="pre">sharedDirectory/watchedDirectories/activeTransfer/</span></code> フォルダで見つけることができる）にもかかわらず、ダッシュボードに表示されない場合は、ダッシュボードとGearman間の通信に問題がある可能性があります。すべてのサービスを再起動すると、この問題が解決され、転送が表示されるようになります。</p>
+<p>以下の順番でサービスを再起動します： <code class="docutils literal notranslate"><span class="pre">gearmand</span></code> 、 <code class="docutils literal notranslate"><span class="pre">archivematica-mcp-server</span></code> 、 <code class="docutils literal notranslate"><span class="pre">archivematica-mcp-client</span></code> 、 <code class="docutils literal notranslate"><span class="pre">archivematica-dashboard</span></code> 。</p>
+<p>インストレーションによっては、 <code class="docutils literal notranslate"><span class="pre">gearmand</span></code> が <code class="docutils literal notranslate"><span class="pre">gearman-job-server</span></code> と呼ばれることもあります。</p>
+</li>
+</ol>
+</section>
+<section id="how-to-clear-user-sessions">
+<span id="clear-user-sessions"></span><h3>ユーザーセッションをクリアする方法<a class="headerlink" href="#how-to-clear-user-sessions" title="Link to this heading">¶</a></h3>
+<p>管理者はDjango <code class="docutils literal notranslate"><span class="pre">clearsessions</span></code> コマンドを使って、cronジョブなどで、期限切れのセッションを定期的にパージしてください。これがその実行方法です：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py clearsessions \</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>CAS認証を使用する場合、 <code class="docutils literal notranslate"><span class="pre">clearsessions</span></code> を実行した直後に、 <code class="docutils literal notranslate"><span class="pre">./manage.py</span> <span class="pre">django_cas_ng_clean_sessions</span></code> を使用して期限切れのCASセッションをクリアすることが推奨されます。これは、このように実行されます：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py django_cas_ng_clean_sessions \</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Archivematicaデータベースの <code class="docutils literal notranslate"><span class="pre">django_session</span></code> テーブルを空にして、アクティブなセッションをクリアもできます（例：::）</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mysql</span> <span class="o">-</span><span class="n">hHOSTNAME</span> <span class="o">-</span><span class="n">uUSERNAME</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;DELETE FROM MCP.django_session&quot;</span>
+</pre></div>
+</div>
+<p>アクティブなセッションを消去すると、すべてのユーザーが強制的にログアウトされます。</p>
+</section>
+<section id="how-to-clear-the-application-database">
+<span id="clear-app-db"></span><h3>アプリケーションデータベースのクリア方法<a class="headerlink" href="#how-to-clear-the-application-database" title="Link to this heading">¶</a></h3>
+<p>Archivematica 1.13では、この特別な目的のために新しい管理コマンドを導入しました。このコマンドは、アクティブなパッケージを考慮し、特定の年齢のパッケージのみを対象とするために使用できます。詳細はコマンドのヘルプを参照してください。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py help purge_transient_processing_data</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>以下の例では、データベースのすべてのレコードと、6時間以上前に完了したパッケージに関連する検索文書を破棄します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>-u<span class="w"> </span>archivematica<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot; \</span>
+<span class="s2">    set -a -e -x</span>
+<span class="s2">    source /etc/default/archivematica-dashboard || \</span>
+<span class="s2">        source /etc/sysconfig/archivematica-dashboard \</span>
+<span class="s2">            || (echo &#39;Environment file not found&#39;; exit 1)</span>
+<span class="s2">    cd /usr/share/archivematica/dashboard</span>
+<span class="s2">    /usr/share/archivematica/virtualenvs/archivematica/bin/python \</span>
+<span class="s2">        manage.py purge_transient_processing_data --age=&#39;0 00:06:00&#39;</span>
+<span class="s2">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../../index.html#maintenance"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">メンテナンス</a><ul>
+<li><a class="reference internal" href="#management-commands">管理コマンド</a></li>
+<li><a class="reference internal" href="#maintaining-elasticsearch">Elasticsearchのメンテナンス</a><ul>
+<li><a class="reference internal" href="#rebuild-the-indexes">インデックスの再構築</a></li>
+<li><a class="reference internal" href="#external-access">外部アクセス</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data-backup">データバックアップ</a><ul>
+<li><a class="reference internal" href="#archivematica-database-backup-and-restore">Archivematicaデータベースのバックアップとリストア</a></li>
+<li><a class="reference internal" href="#storage-service-database-backup-and-restore">Storage Serviceデータベースのバックアップと復元</a></li>
+<li><a class="reference internal" href="#id3">Elasticsearch</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#faq">よくあるご質問</a><ul>
+<li><a class="reference internal" href="#how-to-clean-up-a-full-disk">フルディスクのクリーンアップ方法</a></li>
+<li><a class="reference internal" href="#how-to-restart-services">サービスの再起動方法</a></li>
+<li><a class="reference internal" href="#error-stack-trace">エラースタックトレース</a></li>
+<li><a class="reference internal" href="#transfer-won-t-start">転送が始まらない</a></li>
+<li><a class="reference internal" href="#how-to-clear-user-sessions">ユーザーセッションをクリアする方法</a></li>
+<li><a class="reference internal" href="#how-to-clear-the-application-database">アプリケーションデータベースのクリア方法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../installation-setup/integrations/handlenet-setup.html"
+                          title="前の章へ">Archivematicaでハンドルシステムを使用</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../security/security.html"
+                          title="次の章へ">セキュリティ</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/admin-manual/maintenance/maintenance.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../security/security.html" title="セキュリティ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../installation-setup/integrations/handlenet-setup.html" title="Archivematicaでハンドルシステムを使用"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">メンテナンス</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

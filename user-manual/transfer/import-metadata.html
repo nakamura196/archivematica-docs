@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>メタデータのインポート &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="圧縮バッグと解凍バッグ" href="bags.html" />
+    <link rel="prev" title="転送" href="transfer.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="bags.html" title="圧縮バッグと解凍バッグ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="transfer.html" title="転送"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">メタデータのインポート</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="import-metadata">
+<span id="id1"></span><h1>メタデータのインポート<a class="headerlink" href="#import-metadata" title="Link to this heading">¶</a></h1>
+<p>Archivematica は、転送に含まれる記述、権利、イベントのメタデータを認識できます。 <code class="docutils literal notranslate"><span class="pre">metadata</span></code> というディレクトリを転送に含めることで、メタデータをインポートできます。このディレクトリには、デジタルオブジェクトと一緒に保存したいあらゆるタイプのメタデータを含めることができます。Process Metadata Directory Microserviceは、このディレクトリ内のオブジェクトに対して多くの保存アクションを実行します。</p>
+<p>Archivematica は、説明メタデータ、権利メタデータ、イベントメタデータをインポートするための規約をサ ポートしており、メタデータファイルの内容を AIP METS ファイルに転置します。 <a class="reference internal" href="../../admin-manual/installation-setup/integrations/atom-setup.html#atom-setup"><span class="std std-ref">AtoM</span></a> または <a class="reference internal" href="../../admin-manual/installation-setup/integrations/archivesspace-setup.html#archivesspace-setup"><span class="std std-ref">ArchivesSpace</span></a> を使用している場合、METS にトランスポーズされたメタデータは、これらのアクセスシステムで使用できます。</p>
+<p>METS に転置できないメタデータ。たとえば、Archivematica にインジェストする前に BitCurator などのツールによって作成された保存メタデータは、転送中の素材と一緒に保存されます。</p>
+<p>記述、権利、イベントのメタデータは、標準、解凍、圧縮、ディスクイメージの <a class="reference internal" href="transfer.html#transfer-types"><span class="std std-ref">転送タイプ</span></a> に追加できます。</p>
+<p>METS ファイル内のメタデータは、 <a class="reference internal" href="../archival-storage/archival-storage.html#archival-storage"><span class="std std-ref">アーカイブストレージ</span></a> タブで検索できます。</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#metadata-csv"><span class="std std-ref">metadata.csv を使用した説明メタデータのインポート</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#object-metadata"><span class="std std-ref">個々のオブジェクトへの説明メタデータの追加</span></a></p></li>
+<li><p><a class="reference internal" href="#directory-metadata"><span class="std std-ref">ディレクトリへの説明メタデータの追加</span></a></p></li>
+<li><p><a class="reference internal" href="#non-dc-metadata"><span class="std std-ref">ダブリンコア以外のメタデータの追加</span></a></p></li>
+<li><p><a class="reference internal" href="#metadata-json"><span class="std std-ref">JSON ファイルを使ったメタデータの追加</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#metadata-xml-validation"><span class="std std-ref">source-metadata.csv による XML メタデータのインポートと妥当性確認</span></a></p></li>
+<li><p><a class="reference internal" href="#rights-csv"><span class="std std-ref">rights.csvを使った権利メタデータのインポート</span></a></p></li>
+<li><p><a class="reference internal" href="#premis-xml"><span class="std std-ref">premis.xml によるイベントメタデータのインポート</span></a></p></li>
+<li><p><a class="reference internal" href="#metadata-bags"><span class="std std-ref">バッグにメタデータを追加</span></a></p></li>
+<li><p><a class="reference internal" href="#other-metadata"><span class="std std-ref">他のタイプのメタデータのインポート</span></a></p></li>
+<li><p><a class="reference internal" href="#structmap-xml"><span class="std std-ref">mets_structmap.xml を使った構造メタデータのインポート</span></a></p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="transfer.html#create-submission"><span class="std std-ref">提出書類による転送を作成</span></a></p>
+</div>
+<section id="importing-descriptive-metadata-with-metadata-csv">
+<span id="metadata-csv"></span><h2>metadata.csv を使用した説明メタデータのインポート<a class="headerlink" href="#importing-descriptive-metadata-with-metadata-csv" title="Link to this heading">¶</a></h2>
+<p>Archivematica は、Dublin Core の <a class="reference external" href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/">DCMI メタデータ条件</a> をネイティブにサポートしています。これには、 <a class="reference external" href="https://www.dublincore.org/specifications/dublin-core/dces/">Dublin Core メタデータ要素セット</a> の基本的な 15 要素が含まれています。ユーザーは、metadata.csv メソッドを使用して、 <a class="reference internal" href="#non-dc-metadata"><span class="std std-ref">Dublin Core 以外のメタデータ</span></a> を含めることもできます。Archivematica は、Dublin Core メタデータを AtoM または ArchivesSpace に渡すことができますが、Dublin Core 以外のメタデータは渡すことができません。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>注意：Archivematica は、UTF-8 でエンコードされた CSV ファイルのみを読み取ることができます。UTF-8 以外のファイルエンコーディングで保存されたメタデータは、METS ファイルに正しくマッピングされないか、エラーが発生してまったく追加されない可能性があります。</p>
+</div>
+<p>説明メタデータは、転送内の個々のオブジェクト、転送内のディレクトリ、またはその両方に適用できます。</p>
+<section id="adding-descriptive-metadata-to-individual-objects">
+<span id="object-metadata"></span><h3>個々のオブジェクトへの説明メタデータの追加<a class="headerlink" href="#adding-descriptive-metadata-to-individual-objects" title="Link to this heading">¶</a></h3>
+<p>メタデータは、転送内の個々のオブジェクトに適用できます。たとえば、個々の画像やマルチメディアファイルにアイテムレベルの説明メタデータを適用できます。次のステップでは、個々のオブジェクトにメタデータを適用するmetadata.csvファイルを作成する基本的なワークフローを説明します。</p>
+<ol class="arabic">
+<li><p>保存したいデジタルオブジェクトを含む転送ディレクトリを作成します（Archivematica の基本的な転送の作成方法については、 <a class="reference internal" href="transfer.html#basic-transfers"><span class="std std-ref">基本的な転送</span></a> を参照してください）。例として、次のディレクトリツリーは、 <code class="docutils literal notranslate"><span class="pre">metadataTransfer</span></code> という基本的な転送を表示しています。あるデジタルオブジェクトはトップレベルのディレクトリにあり、別のオブジェクトはサブディレクトリにネストされています。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>metadataTransfer/
+├── audio
+│   └── bird.mp3
+└── beihai.tif
+</pre></div>
+</div>
+<p>なお、この転送には現在メタデータは含まれていません。</p>
+</li>
+<li><p>metadata.csvというCSVファイルを作成します。以下の例はダブリンコアのメタデータのテンプレートとして使用できます。ファイル名の列が最初に来るようにし、ファイル名のパスは常に <code class="docutils literal notranslate"><span class="pre">objects/</span></code> で始まるようにします。 <code class="docutils literal notranslate"><span class="pre">dc.element</span></code> または <code class="docutils literal notranslate"><span class="pre">dcterms.element</span></code> フォーマット以外の列見出しを追加した場合、Archivematica はそのメタデータが Dublin Core であることを示しませんのでご注意ください。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>filename</p></th>
+<th class="head"><p>dc.title</p></th>
+<th class="head"><p>dc.creator</p></th>
+<th class="head"><p>dc.subject</p></th>
+<th class="head"><p>dc.subject</p></th>
+<th class="head"><p>dc.subject</p></th>
+<th class="head"><p>dc.description</p></th>
+<th class="head"><p>dc.publisher</p></th>
+<th class="head"><p>dc.contributor</p></th>
+<th class="head"><p>dc.date</p></th>
+<th class="head"><p>dc.type</p></th>
+<th class="head"><p>dc.format</p></th>
+<th class="head"><p>dc.identifier</p></th>
+<th class="head"><p>dc.source</p></th>
+<th class="head"><p>dc.language</p></th>
+<th class="head"><p>dc.relation</p></th>
+<th class="head"><p>dc.coverage</p></th>
+<th class="head"><p>dc.rights</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>objects/beihai.tif</p></td>
+<td><p>Beihai, Guanxi, China, 1988</p></td>
+<td><p>NASA/GSFC/METI/ERSDAC/ JAROS and U.S./Japan ASTER Science Team</p></td>
+<td><p>中国</p></td>
+<td><p>北海</p></td>
+<td></td>
+<td><p>北海は、中華人民共和国広西チワン族自治区南部の都市です。</p></td>
+<td><p>NASAジェット推進研究所</p></td>
+<td></td>
+<td><p>2016年2月29日</p></td>
+<td><p>画像</p></td>
+<td><p>image.tif</p></td>
+<td></td>
+<td><p>NASAジェット推進研究所</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>パブリックドメイン</p></td>
+</tr>
+<tr class="row-odd"><td><p>objects/audio/bird.mp3</p></td>
+<td><p>14000 Caen, France - Bird in my garden</p></td>
+<td><p>Nicolas Germain</p></td>
+<td><p>field recording</p></td>
+<td><p>soundscapes</p></td>
+<td><p>radio aporee</p></td>
+<td><p>庭でさえずる鳥、フランス、カーン、ズームH6</p></td>
+<td><p>Radio Aporee</p></td>
+<td></td>
+<td><p>2017-05-27</p></td>
+<td><p>sound</p></td>
+<td><p>audio/mp3</p></td>
+<td></td>
+<td><p>インターネットアーカイブ</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>パブリックドメイン</p></td>
+</tr>
+</tbody>
+</table>
+<p>可能な基本的な Dublin Core 値の範囲を示すために、空の列（例： <code class="docutils literal notranslate"><span class="pre">dc.contributor</span></code> ）が残されていることに注意してください。空の列を保持する必要はありません。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code> というサブディレクトリを作成し、その中に metadata.csv ファイルを配列します。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>metadataTransfer/
+├── audio
+│   └── bird.mp3
+├── beihai.tif
+└── metadata
+   └── metadata.csv
+</pre></div>
+</div>
+</li>
+<li><p>通常どおり、 <a class="reference internal" href="transfer.html#process-transfer"><span class="std std-ref">転送を処理</span></a> します。</p></li>
+</ol>
+<p>上記の例のようにフォーマットされたDublin Coreメタデータはすべて、METSファイルに転置されます。上記の例のMETSファイルには、2つの説明メタデータセクション（ <code class="docutils literal notranslate"><span class="pre">&lt;dmdSec&gt;</span></code> ）があり、転送の各ファイルに1つずつあります。これらには、metadata.csvから解析されたDublin Coreメタデータが含まれます。これらには、 <code class="docutils literal notranslate"><span class="pre">dc.element</span></code> と <code class="docutils literal notranslate"><span class="pre">dcterms.element</span></code> の両方のメタデータが含まれます。メタデータラッパー（ <code class="docutils literal notranslate"><span class="pre">&lt;mdWrap&gt;</span></code> ）では、&quot;DC&quot; のMDTYPEが与えられていることに注意してください。もしmetadata.csvにダブリンコア以外のメタデータがあれば、&quot;OTHER&quot; というMDTYPEを持つ <code class="docutils literal notranslate"><span class="pre">&lt;mdWrap&gt;</span></code> ファイルが別に存在することになります。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;DC&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;dcterms:dublincore</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xmlns:dcterms=</span><span class="s">&quot;http://purl.org/dc/terms/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://purl.org/dc/terms/ http://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:title&gt;</span>Beihai,<span class="w"> </span>Guanxi,<span class="w"> </span>China,<span class="w"> </span>1988<span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:creator&gt;</span>NASA/GSFC/METI/ERSDAC/JAROS<span class="w"> </span>and<span class="w"> </span>U.S./Japan<span class="w"> </span>ASTER<span class="w"> </span>Science<span class="w"> </span>Team<span class="nt">&lt;/dc:creator&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>satellite<span class="w"> </span>imagery<span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>China|Beihai<span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:description&gt;</span>Beihai<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>city<span class="w"> </span>in<span class="w"> </span>the<span class="w"> </span>south<span class="w"> </span>of<span class="w"> </span>Guangxi,<span class="w"> </span>People&#39;s<span class="w"> </span>Republic<span class="w"> </span>of<span class="w"> </span>China.<span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:publisher&gt;</span>NASA<span class="w"> </span>Jet<span class="w"> </span>Propulsion<span class="w"> </span>Laboratory<span class="nt">&lt;/dc:publisher&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:contributor&gt;&lt;/dc:contributor&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:date&gt;</span>February<span class="w"> </span>29,2016<span class="nt">&lt;/dc:date&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:type&gt;</span>image<span class="nt">&lt;/dc:type&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:format&gt;</span>image/tif<span class="nt">&lt;/dc:format&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:identifier&gt;&lt;/dc:identifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:source&gt;</span>NASA<span class="w"> </span>Jet<span class="w"> </span>Propulsion<span class="w"> </span>Laboratory<span class="nt">&lt;/dc:source&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:language&gt;&lt;/dc:language&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:relation&gt;&lt;/dc:relation&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:coverage&gt;&lt;/dc:coverage&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:rights&gt;</span>Public<span class="w"> </span>domain<span class="nt">&lt;/dc:rights&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/dublincore&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mdWrap&gt;</span>
+<span class="nt">&lt;/dmdSec&gt;</span>
+<span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_2&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;DC&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;dcterms:dublincore</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xmlns:dcterms=</span><span class="s">&quot;http://purl.org/dc/terms/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://purl.org/dc/terms/ http://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:title&gt;</span>14000<span class="w"> </span>Caen,<span class="w"> </span>France<span class="w"> </span>-<span class="w"> </span>Bird<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden<span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:creator&gt;</span>Nicolas<span class="w"> </span>Germain<span class="nt">&lt;/dc:creator&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>field<span class="w"> </span>recording<span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>phonography|soundscape|sound<span class="w"> </span>art|soundmap|radio|ephemeral|listening|radio<span class="w"> </span>aporee<span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:description&gt;</span>Bird<span class="w"> </span>singing<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden,<span class="w"> </span>Caen,<span class="w"> </span>France,<span class="w"> </span>Zoom<span class="w"> </span>H6<span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:publisher&gt;</span>Radio<span class="w"> </span>Aporee<span class="nt">&lt;/dc:publisher&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:contributor&gt;&lt;/dc:contributor&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:date&gt;</span>2017-05-27<span class="nt">&lt;/dc:date&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:type&gt;</span>sound<span class="nt">&lt;/dc:type&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:format&gt;</span>audio/mp3<span class="nt">&lt;/dc:format&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:identifier&gt;&lt;/dc:identifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:source&gt;</span>Internet<span class="w"> </span>Archive<span class="nt">&lt;/dc:source&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:language&gt;&lt;/dc:language&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:relation&gt;&lt;/dc:relation&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:coverage&gt;&lt;/dc:coverage&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:rights&gt;</span>Public<span class="w"> </span>domain<span class="nt">&lt;/dc:rights&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/dcterms:dublincore&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-descriptive-metadata-to-a-directory">
+<span id="directory-metadata"></span><h3>ディレクトリへの説明メタデータの追加<a class="headerlink" href="#adding-descriptive-metadata-to-a-directory" title="Link to this heading">¶</a></h3>
+<p>メタデータは、転送内のディレクトリに適用もできます。たとえば、本のページを含むフォルダにディレクトリレベルの説明メタデータを適用でき、この場合、メタデータは個々のページではなく本自体を記述します。次の手順では、オブジェクトのディレクトリにメタデータを適用するmetadata.csvファイルを作成する基本的なワークフローを説明します。</p>
+<p>metadata.csv には、ディレクトリレベルのメタデータ、個々のオブジェクトのメタデータ、またはその両方の組み合わせを含めることができることに注意してください。</p>
+<ol class="arabic">
+<li><p>保存したいデジタルオブジェクトを含む転送ディレクトリを作成し、必要に応じてサブディレクトリ内に整理します（Archivematica の基本転送の作成の詳細については、 <a class="reference internal" href="transfer.html#basic-transfers"><span class="std std-ref">基本転送</span></a> を参照してください）。例として、次のディレクトリツリーには、 <code class="docutils literal notranslate"><span class="pre">directoryTransfer</span></code> という基本的な転送が表示されます。転送には 2 つのサブフォルダーが含まれており、それぞれのサブフォルダーに 2 つの画像が含まれています。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>directoryTransfer/
+├── CoastNews-1964-01-02
+│   ├── page-01.jpg
+│   └── page-02.jpg
+└── CoastNews-1964-01-09
+    ├── page-01.jpg
+    └── page-02.jpg
+</pre></div>
+</div>
+<p>なお、この転送には現在メタデータは含まれていません。</p>
+</li>
+<li><p>metadata.csvというCSVファイルを作成します。以下の例は、ダブリンコアのメタデータのテンプレートとして使用できます。ファイル名の列は必ず最初に来るようにし、ファイル名のパスは必ず <code class="docutils literal notranslate"><span class="pre">objects/</span></code> で始まるようにします。以下の例では、ファイル名の列にはファイル名のパスの代わりにディレクトリパスが含まれています。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>filename</p></th>
+<th class="head"><p>dc.title</p></th>
+<th class="head"><p>dc.publisher</p></th>
+<th class="head"><p>dc.subject</p></th>
+<th class="head"><p>dc.date</p></th>
+<th class="head"><p>dc.description</p></th>
+<th class="head"><p>dc.language</p></th>
+<th class="head"><p>dc.source</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>objects/CoastNews-1964-01-02</p></td>
+<td><p>Coast News, 1964年1月2日</p></td>
+<td><p>Fred Cruice</p></td>
+<td><p>ギブソンズ （B.C.） - 新聞</p></td>
+<td><p>1964/01/02</p></td>
+<td><p>Coast News 1964年1月2日号のスキャン。</p></td>
+<td><p>英語</p></td>
+<td><p>British Columbia Historical Newspapers コレクション、<a class="reference external" href="https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews">https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>objects/CoastNews-1964-01-09</p></td>
+<td><p>Coast News, 1964年1月9日</p></td>
+<td><p>Fred Cruice</p></td>
+<td><p>ギブソンズ （B.C.） - 新聞</p></td>
+<td><p>1964/01/09</p></td>
+<td><p>Coast News 1964年1月9日号のスキャン。</p></td>
+<td><p>英語</p></td>
+<td><p>British Columbia Historical Newspapers コレクション、<a class="reference external" href="https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews">https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews</a></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code> というサブディレクトリを作成し、その中に metadata.csv ファイルを配列します。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>directoryTransfer/
+├── CoastNews-1964-01-02
+│   ├── page-01.jpg
+│   └── page-02.jpg
+├── CoastNews-1964-01-09
+│   ├── page-01.jpg
+│   └── page-02.jpg
+└── metadata
+    └── metadata.csv
+</pre></div>
+</div>
+</li>
+<li><p>通常どおり、 <a class="reference internal" href="transfer.html#process-transfer"><span class="std std-ref">転送を処理</span></a> します。</p></li>
+</ol>
+<p>上記の例の結果として得られる METS ファイルには、個々のファイルではなく、ディレクトリごとに <code class="docutils literal notranslate"><span class="pre">&lt;dmdSec&gt;</span></code> が含まれています。これらには、metadata.csv から解析された Dublin Core メタデータが含まれています。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;DC&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;dcterms:dublincore</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xmlns:dcterms=</span><span class="s">&quot;http://purl.org/dc/terms/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://purl.org/dc/terms/ http://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:title&gt;</span>Coast<span class="w"> </span>News,<span class="w"> </span>January<span class="w"> </span>02,<span class="w"> </span>1964<span class="w"> </span><span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:publisher&gt;</span>Fred<span class="w"> </span>Cruice<span class="w"> </span><span class="nt">&lt;/dc:publisher&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>Gibsons<span class="w"> </span>(B.C.)–Newspapers<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:date&gt;</span>1964/01/02<span class="w"> </span><span class="nt">&lt;/dc:date&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:description&gt;</span>
+<span class="w">          </span>Scans<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>January<span class="w"> </span>2,<span class="w"> </span>1964<span class="w"> </span>issue<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>Coast<span class="w"> </span>News.
+<span class="w">        </span><span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:language&gt;</span>English<span class="w"> </span><span class="nt">&lt;/dc:language&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:source&gt;</span>
+<span class="w">          </span>British<span class="w"> </span>Columbia<span class="w"> </span>Historical<span class="w"> </span>Newspapers<span class="w"> </span>collection,<span class="w"> </span>https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews
+<span class="w">        </span><span class="nt">&lt;/dc:source&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/dcterms:dublincore&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+<span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_2&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;DC&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;dcterms:dublincore</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xmlns:dcterms=</span><span class="s">&quot;http://purl.org/dc/terms/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://purl.org/dc/terms/ http://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:title&gt;</span>Coast<span class="w"> </span>News,<span class="w"> </span>January<span class="w"> </span>09,<span class="w"> </span>1964<span class="w"> </span><span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:publisher&gt;</span>Fred<span class="w"> </span>Cruice<span class="w"> </span><span class="nt">&lt;/dc:publisher&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>Gibsons<span class="w"> </span>(B.C.)–Newspapers<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:date&gt;</span>1964/01/09<span class="w"> </span><span class="nt">&lt;/dc:date&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:description&gt;</span>
+<span class="w">          </span>Scans<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>January<span class="w"> </span>9,<span class="w"> </span>1964<span class="w"> </span>issue<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>Coast<span class="w"> </span>News.
+<span class="w">        </span><span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:language&gt;</span>English<span class="w"> </span><span class="nt">&lt;/dc:language&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:source&gt;</span>
+<span class="w">          </span>British<span class="w"> </span>Columbia<span class="w"> </span>Historical<span class="w"> </span>Newspapers<span class="w"> </span>collection,<span class="w"> </span>https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews
+<span class="w">        </span><span class="nt">&lt;/dc:source&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/dcterms:dublincore&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-non-dublin-core-descriptive-metadata">
+<span id="non-dc-metadata"></span><h3>Dublin Core 以外の説明メタデータの追加<a class="headerlink" href="#adding-non-dublin-core-descriptive-metadata" title="Link to this heading">¶</a></h3>
+<p>Dublin Core Metadata Elements Setでサポートされていないメタデータ要素をインジェストたい場合もあります。上記の例に示すように、ダブリンコアのメタデータは、メタデータタイプが <code class="docutils literal notranslate"><span class="pre">MDTYPE=&quot;DC&quot;</span></code> と示された METS ファイルの <code class="docutils literal notranslate"><span class="pre">&lt;dmdSec&gt;</span></code> に書き込まれます。ダブリンコア以外のメタデータは、 <code class="docutils literal notranslate"><span class="pre">&lt;dmdSec&gt;</span></code> に <code class="docutils literal notranslate"><span class="pre">MDTYPE=&quot;OTHER&quot;</span></code> として書き込まれます。</p>
+<p>以下は、ダブリンコアと非ダブリンコアの説明メタデータが混在するmetadata.csvファイルの例です。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>filename</p></th>
+<th class="head"><p>dc.title</p></th>
+<th class="head"><p>alternative_title</p></th>
+<th class="head"><p>dc.publisher</p></th>
+<th class="head"><p>dates_of_publication</p></th>
+<th class="head"><p>dc.subject</p></th>
+<th class="head"><p>dc.date</p></th>
+<th class="head"><p>dc.description</p></th>
+<th class="head"><p>頻度</p></th>
+<th class="head"><p>dc.language</p></th>
+<th class="head"><p>dc.source</p></th>
+<th class="head"><p>digital_file_format</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>objects/CoastNews-1964-01-02</p></td>
+<td><p>Coast News, 1964年1月2日</p></td>
+<td><p>Sunshine Coast News</p></td>
+<td><p>Fred Cruice</p></td>
+<td><p>1945-1995</p></td>
+<td><p>ギブソンズ （B.C.） - 新聞</p></td>
+<td><p>1964/01/02</p></td>
+<td><p>Coast News 1964年1月2日号のスキャン。</p></td>
+<td><p>毎週</p></td>
+<td><p>英語</p></td>
+<td><p>British Columbia Historical Newspapers コレクション、<a class="reference external" href="https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews">https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews</a></p></td>
+<td><p>jpg</p></td>
+</tr>
+<tr class="row-odd"><td><p>objects/CoastNews-1964-01-09</p></td>
+<td><p>Coast News, 1964年1月9日</p></td>
+<td><p>Sunshine Coast News</p></td>
+<td><p>Fred Cruice</p></td>
+<td><p>1945-1995</p></td>
+<td><p>ギブソンズ （B.C.） - 新聞</p></td>
+<td><p>1964/01/09</p></td>
+<td><p>Coast News 1964年1月9日号のスキャン。</p></td>
+<td><p>毎週</p></td>
+<td><p>英語</p></td>
+<td><p>British Columbia Historical Newspapers コレクション、<a class="reference external" href="https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews">https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews</a></p></td>
+<td><p>jpg</p></td>
+</tr>
+</tbody>
+</table>
+<p>この結果、各ディレクトリに2つの <code class="docutils literal notranslate"><span class="pre">&lt;dmdSec&gt;</span></code> セクション（ <code class="docutils literal notranslate"><span class="pre">MDTYPE=&quot;DC&quot;</span></code> と <code class="docutils literal notranslate"><span class="pre">MDTYPE=&quot;OTHER&quot;</span></code> ）を含むMETSファイルが作成されます。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;DC&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;dcterms:dublincore</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xmlns:dcterms=</span><span class="s">&quot;http://purl.org/dc/terms/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://purl.org/dc/terms/ http://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:title&gt;</span>Coast<span class="w"> </span>News,<span class="w"> </span>January<span class="w"> </span>02,<span class="w"> </span>1964<span class="w"> </span><span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:publisher&gt;</span>Fred<span class="w"> </span>Cruice<span class="w"> </span><span class="nt">&lt;/dc:publisher&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>Gibsons<span class="w"> </span>(B.C.)–Newspapers<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:date&gt;</span>1964/01/02<span class="w"> </span><span class="nt">&lt;/dc:date&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:description&gt;</span>
+<span class="w">          </span>Scans<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>January<span class="w"> </span>2,<span class="w"> </span>1964<span class="w"> </span>issue<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>Coast<span class="w"> </span>News.
+<span class="w">        </span><span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:language&gt;</span>English<span class="w"> </span><span class="nt">&lt;/dc:language&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:source&gt;</span>
+<span class="w">          </span>British<span class="w"> </span>Columbia<span class="w"> </span>Historical<span class="w"> </span>Newspapers<span class="w"> </span>collection,<span class="w"> </span>https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews
+<span class="w">        </span><span class="nt">&lt;/dc:source&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/dcterms:dublincore&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+<span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_2&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERMDTYPE=</span><span class="s">&quot;CUSTOM&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;alternative_title&gt;</span>Sunshine<span class="w"> </span>Coast<span class="w"> </span>News<span class="w"> </span><span class="nt">&lt;/alternative_title&gt;</span>
+<span class="w">      </span><span class="nt">&lt;dates_of_publication&gt;</span>1945-1995<span class="w"> </span><span class="nt">&lt;/dates_of_publication&gt;</span>
+<span class="w">      </span><span class="nt">&lt;frequency&gt;</span>Weekly<span class="w"> </span><span class="nt">&lt;/frequency&gt;</span>
+<span class="w">      </span><span class="nt">&lt;digital_file_format&gt;</span>image/jpg<span class="nt">&lt;/digital_file_format&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+<span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_3&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;DC&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;dcterms:dublincore</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xmlns:dcterms=</span><span class="s">&quot;http://purl.org/dc/terms/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://purl.org/dc/terms/ http://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:title&gt;</span>Coast<span class="w"> </span>News,<span class="w"> </span>January<span class="w"> </span>09,<span class="w"> </span>1964<span class="w"> </span><span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:publisher&gt;</span>Fred<span class="w"> </span>Cruice<span class="w"> </span><span class="nt">&lt;/dc:publisher&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>Gibsons<span class="w"> </span>(B.C.)–Newspapers<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:date&gt;</span>1964/01/09<span class="w"> </span><span class="nt">&lt;/dc:date&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:description&gt;</span>
+<span class="w">          </span>Scans<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>January<span class="w"> </span>9,<span class="w"> </span>1964<span class="w"> </span>issue<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>Coast<span class="w"> </span>News.
+<span class="w">        </span><span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:language&gt;</span>English<span class="w"> </span><span class="nt">&lt;/dc:language&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:source&gt;</span>
+<span class="w">          </span>British<span class="w"> </span>Columbia<span class="w"> </span>Historical<span class="w"> </span>Newspapers<span class="w"> </span>collection,<span class="w"> </span>https://open.library.ubc.ca/collections/bcnewspapers/xcoastnews
+<span class="w">        </span><span class="nt">&lt;/dc:source&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/dcterms:dublincore&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+<span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_4&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERMDTYPE=</span><span class="s">&quot;CUSTOM&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;alternative_title&gt;</span>Sunshine<span class="w"> </span>Coast<span class="w"> </span>News<span class="w"> </span><span class="nt">&lt;/alternative_title&gt;</span>
+<span class="w">      </span><span class="nt">&lt;dates_of_publication&gt;</span>1945-1995<span class="w"> </span><span class="nt">&lt;/dates_of_publication&gt;</span>
+<span class="w">      </span><span class="nt">&lt;frequency&gt;</span>Weekly<span class="w"> </span><span class="nt">&lt;/frequency&gt;</span>
+<span class="w">      </span><span class="nt">&lt;digital_file_format&gt;</span>image/jpg<span class="nt">&lt;/digital_file_format&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-metadata-using-json-files">
+<span id="metadata-json"></span><h3>JSON ファイルを使ったメタデータの追加<a class="headerlink" href="#adding-metadata-using-json-files" title="Link to this heading">¶</a></h3>
+<p>CSV ではなく JSON ファイルを使用して Dublin Core メタデータをインポートすることができます。上記のように、JSON ファイルがメタデータ ディレクトリに追加されます。</p>
+<ol class="arabic">
+<li><p>保存したいデジタルオブジェクトを含む転送ディレクトリを作成します（Archivematica の基本的な転送の作成方法については、 <a class="reference internal" href="transfer.html#basic-transfers"><span class="std std-ref">基本的な転送</span></a> を参照してください）。例として、次のディレクトリツリーは、 <code class="docutils literal notranslate"><span class="pre">jsonMetadataTransfer</span></code> という基本的な転送を表示しています。あるデジタルオブジェクトはトップレベルのディレクトリにあり、別のオブジェクトはサブディレクトリにネストされています。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>jsonMetadataTransfer/
+├── audio
+│   └── bird.mp3
+└── beihai.tif
+</pre></div>
+</div>
+<p>なお、この転送には現在メタデータは含まれていません。</p>
+</li>
+<li><p>metadata.jsonというJSONファイルを作成します。以下の例は、ダブリンコアのメタデータのテンプレートとして使用できます。ファイル名のフィールドが最初に来るようにし、ファイル名のパスは常に <code class="docutils literal notranslate"><span class="pre">objects/</span></code> で始まるようにします。 <code class="docutils literal notranslate"><span class="pre">dc.element</span></code> または <code class="docutils literal notranslate"><span class="pre">dcterms.element</span></code> フォーマット以外のフィールドを追加した場合、Archivematica はそのメタデータが Dublin Core であることを示しませんのでご注意ください。</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;filename&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;objects/audio/bird.mp3&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;14000 Caen, France - Bird in my garden&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.creator&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Nicolas Germain&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Bird singing in my garden, Caen, France, Zoom H6&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">       </span><span class="s2">&quot;field recording&quot;</span><span class="p">,</span>
+<span class="w">       </span><span class="s2">&quot;soundscapes&quot;</span><span class="p">,</span>
+<span class="w">       </span><span class="s2">&quot;radio aporee&quot;</span>
+<span class="w">       </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;dc.publisher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Radio Aporee&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2017-05-27&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.identifier&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;aporee_36644_41997&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Internet Archive&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.coverage&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Caen, France&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.rights&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Public domain&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;filename&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;objects/beihai.tif&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Beihai, Guanxi, China, 1988&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.creator&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NASA/GSFC/METI/ERSDAC/JAROS and U.S./Japan ASTER Science Team&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Beihai is a city in the south of Guangxi, People&#39;s Republic of China.&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">       </span><span class="s2">&quot;satellite imaging&quot;</span><span class="p">,</span>
+<span class="w">       </span><span class="s2">&quot;photography&quot;</span><span class="p">,</span>
+<span class="w">       </span><span class="s2">&quot;city&quot;</span>
+<span class="w">       </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;dc.publisher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NASA Jet Propulsion Laboratory&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;February 29,2016&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NASA Jet Propulsion Laboratory&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.coverage&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Beihai, China&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dc.rights&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Public domain&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>上の例の <code class="docutils literal notranslate"><span class="pre">dc.subject</span></code> のように、繰り返しフィールドを配列で列挙できます。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code> というサブディレクトリを作成し、その中に metadata.json ファイルを配列します。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>metadataTransfer/
+├── audio
+│   └── bird.mp3
+├── beihai.tif
+└── metadata
+   └── metadata.json
+</pre></div>
+</div>
+</li>
+<li><p>通常どおり、 <a class="reference internal" href="transfer.html#process-transfer"><span class="std std-ref">転送を処理</span></a> します。</p></li>
+</ol>
+<p>METS ファイルには、上記の CSV の例とまったく同じようにデータが入力されます。</p>
+</section>
+</section>
+<section id="importing-and-validating-xml-metadata-with-source-metadata-csv">
+<span id="metadata-xml-validation"></span><h2>source-metadata.csv による XML メタデータのインポートと妥当性確認<a class="headerlink" href="#importing-and-validating-xml-metadata-with-source-metadata-csv" title="Link to this heading">¶</a></h2>
+<p>ユーザーは、XML形式のメタデータファイルを転送に追加でき、転送内のオブジェクトに関連するメタデータをAIPのMETSファイルに解析させることができます。正しくフォーマットされていれば、Archivematica は、メタデータを妥当性確認し、ローカルまたはリンクされた標準に準拠していることを確認もできます。</p>
+<section id="setting-up">
+<h3>設定<a class="headerlink" href="#setting-up" title="Link to this heading">¶</a></h3>
+<p>この機能はデフォルトでは無効になっています。この機能はまだ実験的なものであり、使用する前にユーザーのニーズに応じて妥当性確認ルールを設定する必要があります。</p>
+<p>The <a class="reference external" href="https://github.com/artefactual/archivematica/blob/179247f9e5508defd563e4eae3c73ea8e8b674f3/src/MCPClient/install/README.md#metadata-xml-validation-variables">Metadata XML validation variables</a>
+section of the MCPClient installation documentation explains how to enable
+and configure this feature. You can also check the
+<a class="reference external" href="https://github.com/artefactual/archivematica-sampledata/tree/b01539902198a9e4a15f76add7b6b129eecf6b7b/xml-validation">sample configuration files</a>
+used in the Archivematica Automated User Acceptance Tests (AMAUATs).</p>
+</section>
+<section id="adding-and-validating-metadata">
+<h3>メタデータの追加と妥当性確認<a class="headerlink" href="#adding-and-validating-metadata" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>保存したいデジタルオブジェクトを含む転送ディレクトリを作成します（Archivematica の基本的な転送の作成方法については、 <a class="reference internal" href="transfer.html#basic-transfers"><span class="std std-ref">基本的な転送</span></a> を参照してください）。例として、次のディレクトリツリーは、 <code class="docutils literal notranslate"><span class="pre">metadataTransfer</span></code> という基本的な転送を表示しています。あるデジタルオブジェクトはトップレベルのディレクトリにあり、別のオブジェクトはサブディレクトリにネストされています。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>metadataTransfer/
+├── audio
+│   └── bird.mp3
+└── beihai.tif
+</pre></div>
+</div>
+<p>なお、この転送には現在メタデータは含まれていません。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source-metadata.csv</span></code> というCSVファイルを作成します。このファイルには、以下の順序で3つの列が含まれていなければなりません：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">filename</span></code> ：転送内のデジタルオブジェクトまたはディレクトリの相対パス。 <code class="docutils literal notranslate"><span class="pre">objects/</span></code> で始まる必要があります。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code> ： <code class="docutils literal notranslate"><span class="pre">filename</span></code> 列で指定されたデジタルオブジェクトまたはディレクトリに関す るメタデータを含む <code class="docutils literal notranslate"><span class="pre">metadata</span></code> ディレクトリ内の XML ファイルのパス。オプションとして、この XML ファイルは XML スキーマを用いて妥当性確認でき、その内容は AIP の METS ファイルに含まれます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> メタデータのコンテンツに対する一意な識別子。この識別子は、メタデータの再インジェスト時に、既存のメタデータを更新または削除するために使用されます。</p></li>
+</ul>
+<p>これは、 <code class="docutils literal notranslate"><span class="pre">metadataTransfer</span></code> ディレクトリに使用する <code class="docutils literal notranslate"><span class="pre">source-metadata.csv</span></code> ファイルです。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>filename</p></th>
+<th class="head"><p>メタデータ</p></th>
+<th class="head"><p>タイプ</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>objects/beihai.tif</p></td>
+<td><p>beihai.xml</p></td>
+<td><p>ローカル</p></td>
+</tr>
+<tr class="row-odd"><td><p>objects/audio/bird.mp3</p></td>
+<td><p>bird-dc.xml</p></td>
+<td><p>dc-xml</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source-metadata.csv</span></code> ファイルの <code class="docutils literal notranslate"><span class="pre">metadata</span></code> 列に記載されている2つのメタデータXMLファイル、 <code class="docutils literal notranslate"><span class="pre">beihai.xml</span></code> と <code class="docutils literal notranslate"><span class="pre">bird-dc.xml</span></code> を作成します。</p>
+<p><code class="docutils literal notranslate"><span class="pre">beihai.xml</span></code> メタデータファイルには、構造化されていないテキストが含まれ、単一のトップレベル <code class="docutils literal notranslate"><span class="pre">&lt;metadata&gt;</span></code> 要素として表現されます。このようなXML名前空間は、 <a class="reference external" href="https://www.w3.org/TR/REC-xml/#sec-cdata-sect">文字データ</a> をラップしていません：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;metadata&gt;</span>
+<span class="cp">&lt;![CDATA[</span>
+<span class="cp">Beihai, Guanxi, China, 1988</span>
+<span class="cp">Beihai is a city in the south of Guangxi, People&#39;s Republic of China.</span>
+<span class="cp">]]&gt;</span>
+<span class="nt">&lt;/metadata&gt;</span>
+</pre></div>
+</div>
+<p>さらに、 <code class="docutils literal notranslate"><span class="pre">bird-dc.xml</span></code> メタデータファイルには、 <a class="reference external" href="https://www.openarchives.org/pmh/">OAI-PMH</a> Dublin Coreメタデータが含まれており、 <a class="reference external" href="https://www.openarchives.org/OAI/openarchivesprotocol.html">OAI-PMH Version 2.0仕様</a> と照らし合わせて妥当性確認できます：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;oai_dc:dc</span><span class="w"> </span><span class="na">xmlns:oai_dc=</span><span class="s">&quot;http://www.openarchives.org/OAI/2.0/oai_dc/&quot;</span>
+<span class="w">  </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span>
+<span class="w">  </span><span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+<span class="w">  </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:title&gt;</span>14000<span class="w"> </span>Caen,<span class="w"> </span>France<span class="w"> </span>-<span class="w"> </span>Bird<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden<span class="w"> </span><span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:creator&gt;</span>Nicolas<span class="w"> </span>Germain<span class="nt">&lt;/dc:creator&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:subject&gt;</span>field<span class="w"> </span>recording<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:subject&gt;</span>soundscapes<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:subject&gt;</span>radio<span class="w"> </span>aporee<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:description&gt;</span>Bird<span class="w"> </span>singing<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden,<span class="w"> </span>Caen,<span class="w"> </span>France,<span class="w"> </span>Zoom<span class="w"> </span>H6<span class="w"> </span><span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:publisher&gt;</span>Radio<span class="w"> </span>Aporee<span class="w"> </span><span class="nt">&lt;/dc:publisher&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:date&gt;</span>27/05/2017<span class="nt">&lt;/dc:date&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:type&gt;</span>sound<span class="w"> </span><span class="nt">&lt;/dc:type&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:format&gt;</span>audio/mp3<span class="w"> </span><span class="nt">&lt;/dc:format&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:source&gt;</span>Internet<span class="w"> </span>Archive<span class="w"> </span><span class="nt">&lt;/dc:source&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dc:rights&gt;</span>Public<span class="w"> </span>domain<span class="nt">&lt;/dc:rights&gt;</span>
+<span class="nt">&lt;/oai_dc:dc&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code> というサブディレクトリを作成し、 <code class="docutils literal notranslate"><span class="pre">source-metadata.csv</span></code> ファイルと 2 つのメタデータ XML ファイルをその中に配列します。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>metadataTransfer/
+├── audio
+│   └── bird.mp3
+├── beihai.tif
+└── metadata
+    ├── source-metadata.csv
+    ├── beihai.xml
+    └── bird-dc.xml
+</pre></div>
+</div>
+</li>
+<li><p>通常どおり、 <a class="reference internal" href="transfer.html#process-transfer"><span class="std std-ref">転送を処理</span></a> します。</p></li>
+</ol>
+<p>上記の例のMETSファイルには、2つの説明メタデータセクション（ <code class="docutils literal notranslate"><span class="pre">&lt;dmdSec&gt;</span></code> ）が含まれており、転送の各ファイルに対して1つずつあります。どちらのセクションにも、作成時刻を指定する属性が与えられ、ステータスは、 <code class="docutils literal notranslate"><span class="pre">original</span></code> に設定されています。そして、 <code class="docutils literal notranslate"><span class="pre">metadata</span></code> ディレクトリにあるメタデータ XML ファイルの内容がここに転置されています。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_3&quot;</span><span class="w"> </span><span class="na">CREATED=</span><span class="s">&quot;2023-06-06T05:43:01&quot;</span><span class="w"> </span><span class="na">STATUS=</span><span class="s">&quot;original&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERMDTYPE=</span><span class="s">&quot;local&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;metadata&gt;</span>
+<span class="w">        </span>Beihai,<span class="w"> </span>Guanxi,<span class="w"> </span>China,<span class="w"> </span>1988
+<span class="w">        </span>Beihai<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>city<span class="w"> </span>in<span class="w"> </span>the<span class="w"> </span>south<span class="w"> </span>of<span class="w"> </span>Guangxi,<span class="w"> </span>People&#39;s<span class="w"> </span>Republic<span class="w"> </span>of<span class="w"> </span>China.
+<span class="w">      </span><span class="nt">&lt;/metadata&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+<span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_4&quot;</span><span class="w"> </span><span class="na">CREATED=</span><span class="s">&quot;2023-06-06T05:43:01&quot;</span><span class="w"> </span><span class="na">STATUS=</span><span class="s">&quot;original&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERMDTYPE=</span><span class="s">&quot;dc-xml&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;oai_dc:dc</span><span class="w"> </span><span class="na">xmlns:oai_dc=</span><span class="s">&quot;http://www.openarchives.org/OAI/2.0/oai_dc/&quot;</span>
+<span class="w">        </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span>
+<span class="w">        </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:title&gt;</span>14000<span class="w"> </span>Caen,<span class="w"> </span>France<span class="w"> </span>-<span class="w"> </span>Bird<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden<span class="w"> </span><span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:creator&gt;</span>Nicolas<span class="w"> </span>Germain<span class="nt">&lt;/dc:creator&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>field<span class="w"> </span>recording<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>soundscapes<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>radio<span class="w"> </span>aporee<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:description&gt;</span>Bird<span class="w"> </span>singing<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden,<span class="w"> </span>Caen,<span class="w"> </span>France,<span class="w"> </span>Zoom<span class="w"> </span>H6<span class="w"> </span><span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:publisher&gt;</span>Radio<span class="w"> </span>Aporee<span class="w"> </span><span class="nt">&lt;/dc:publisher&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:date&gt;</span>27/05/2017<span class="nt">&lt;/dc:date&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:type&gt;</span>sound<span class="w"> </span><span class="nt">&lt;/dc:type&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:format&gt;</span>audio/mp3<span class="w"> </span><span class="nt">&lt;/dc:format&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:source&gt;</span>Internet<span class="w"> </span>Archive<span class="w"> </span><span class="nt">&lt;/dc:source&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:rights&gt;</span>Public<span class="w"> </span>domain<span class="nt">&lt;/dc:rights&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/oai_dc:dc&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+<p>メタデータラッパー（ <code class="docutils literal notranslate"><span class="pre">&lt;mdWrap&gt;</span></code> ）では、&quot;OTHER&quot; のMDTYPEと、 <code class="docutils literal notranslate"><span class="pre">source-metadata.csv</span></code> ファイルの <code class="docutils literal notranslate"><span class="pre">type</span></code> セルの値を持つMDOTHERTYPEが与えられていることに注意してください。これは、メタデータの再インジェストの際に、AIPのメタデータファイルを更新または削除するのに便利です。</p>
+</section>
+<section id="updating-metadata-through-metadata-reingests">
+<h3>メタデータの再インジェストによるメタデータの更新<a class="headerlink" href="#updating-metadata-through-metadata-reingests" title="Link to this heading">¶</a></h3>
+<p>再インジェストを承認する前に、AIP を再インジェストし、新しい <code class="docutils literal notranslate"><span class="pre">source-metadata.csv</span></code> ファイルと更新されたメタデータ XML ファイルを転送元の場所の 1 つから追加することで、METS ファイルに含まれるメタデータを更新できます。</p>
+<ol class="arabic">
+<li><p>これは、前回の転送で <code class="docutils literal notranslate"><span class="pre">beihai.tif</span></code> デジタルオブジェクトに関連付けられたメタデータを更新するために使用する新しい <code class="docutils literal notranslate"><span class="pre">source-metadata.csv</span></code> ファイルです。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>filename</p></th>
+<th class="head"><p>メタデータ</p></th>
+<th class="head"><p>タイプ</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>objects/beihai.tif</p></td>
+<td><p>beihai-v2.xml</p></td>
+<td><p>ローカル</p></td>
+</tr>
+</tbody>
+</table>
+<p>重要なのは、 <code class="docutils literal notranslate"><span class="pre">type</span></code> 列で、 <code class="docutils literal notranslate"><span class="pre">&lt;dmdSec&gt;</span></code> の <code class="docutils literal notranslate"><span class="pre">OTHERMDTYPE</span></code> 属性として設定された識別子（すなわち <code class="docutils literal notranslate"><span class="pre">local</span></code> ）を再利用することです。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source-metadata.csv</span></code> ファイルの <code class="docutils literal notranslate"><span class="pre">metadata</span></code> 列に新しいメタデータ XML ファイル、 <code class="docutils literal notranslate"><span class="pre">beihai-v2.xml</span></code> を作成します。</p>
+<p><code class="docutils literal notranslate"><span class="pre">beihai-v2.xml</span></code> メタデータファイルには、以前と同じ構造といくつかの追加文が含まれています：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;metadata&gt;</span>
+<span class="cp">&lt;![CDATA[</span>
+<span class="cp">Beihai, Guanxi, China, 1988</span>
+<span class="cp">Beihai is a city in the south of Guangxi, People&#39;s Republic of China.</span>
+<span class="cp">This image was created by NASA/GSFC/METI/ERSDAC/ JAROS and U.S./Japan ASTER Science Team.</span>
+<span class="cp">This image was published by the NASA Jet Propulsion Laboratory.</span>
+<span class="cp">]]&gt;</span>
+<span class="nt">&lt;/metadata&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p><a class="reference internal" href="../ingest/ingest.html#reingest"><span class="std std-ref">前のAIPのメタデータ再インジェスト</span></a> を開始します。</p></li>
+<li><p>再インジェスト <a class="reference internal" href="../ingest/ingest.html#metadata-csv-ui"><span class="std std-ref">を承認する前に、ユーザーインターフェース</span></a> から新しい CSV ファイルとメタデータ XML ファイルをアップロードします。</p></li>
+<li><p>メタデータの再インジェストを承認し、終了します。</p></li>
+</ol>
+<p>METSファイルには、 <code class="docutils literal notranslate"><span class="pre">beihai.tif</span></code> デジタルオブジェクトの新しい説明メタデータセクション（ <code class="docutils literal notranslate"><span class="pre">&lt;dmdSec&gt;</span></code> ）が含まれるようになりました。また、作成時刻を指定する属性も含まれ、ステータスは <code class="docutils literal notranslate"><span class="pre">update</span></code> に設定されています。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_15&quot;</span><span class="w"> </span><span class="na">CREATED=</span><span class="s">&quot;2023-06-06T15:59:29&quot;</span><span class="w"> </span><span class="na">STATUS=</span><span class="s">&quot;update&quot;</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;bfd05690-6e58-4f6c-90c1-e1200b79cbc3&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERMDTYPE=</span><span class="s">&quot;local&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;metadata&gt;</span>
+<span class="w">        </span>Beihai,<span class="w"> </span>Guanxi,<span class="w"> </span>China,<span class="w"> </span>1988
+<span class="w">        </span>Beihai<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>city<span class="w"> </span>in<span class="w"> </span>the<span class="w"> </span>south<span class="w"> </span>of<span class="w"> </span>Guangxi,<span class="w"> </span>People&#39;s<span class="w"> </span>Republic<span class="w"> </span>of<span class="w"> </span>China.
+<span class="w">        </span>This<span class="w"> </span>image<span class="w"> </span>was<span class="w"> </span>created<span class="w"> </span>by<span class="w"> </span>NASA/GSFC/METI/ERSDAC/<span class="w"> </span>JAROS<span class="w"> </span>and<span class="w"> </span>U.S./Japan<span class="w"> </span>ASTER<span class="w"> </span>Science<span class="w"> </span>Team.
+<span class="w">        </span>This<span class="w"> </span>image<span class="w"> </span>was<span class="w"> </span>published<span class="w"> </span>by<span class="w"> </span>the<span class="w"> </span>NASA<span class="w"> </span>Jet<span class="w"> </span>Propulsion<span class="w"> </span>Laboratory.
+<span class="w">      </span><span class="nt">&lt;/metadata&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+<span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_3&quot;</span><span class="w"> </span><span class="na">CREATED=</span><span class="s">&quot;2023-06-06T05:43:01&quot;</span><span class="w"> </span><span class="na">STATUS=</span><span class="s">&quot;original-superseded&quot;</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;bfd05690-6e58-4f6c-90c1-e1200b79cbc3&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERMDTYPE=</span><span class="s">&quot;local&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;metadata&gt;</span>
+<span class="w">        </span>Beihai,<span class="w"> </span>Guanxi,<span class="w"> </span>China,<span class="w"> </span>1988
+<span class="w">        </span>Beihai<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>city<span class="w"> </span>in<span class="w"> </span>the<span class="w"> </span>south<span class="w"> </span>of<span class="w"> </span>Guangxi,<span class="w"> </span>People&#39;s<span class="w"> </span>Republic<span class="w"> </span>of<span class="w"> </span>China.
+<span class="w">      </span><span class="nt">&lt;/metadata&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+<span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_4&quot;</span><span class="w"> </span><span class="na">CREATED=</span><span class="s">&quot;2023-06-06T05:43:01&quot;</span><span class="w"> </span><span class="na">STATUS=</span><span class="s">&quot;original&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERMDTYPE=</span><span class="s">&quot;dc-xml&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;oai_dc:dc</span><span class="w"> </span><span class="na">xmlns:oai_dc=</span><span class="s">&quot;http://www.openarchives.org/OAI/2.0/oai_dc/&quot;</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:title&gt;</span>14000<span class="w"> </span>Caen,<span class="w"> </span>France<span class="w"> </span>-<span class="w"> </span>Bird<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden<span class="w"> </span><span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:creator&gt;</span>Nicolas<span class="w"> </span>Germain<span class="nt">&lt;/dc:creator&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>field<span class="w"> </span>recording<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>soundscapes<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>radio<span class="w"> </span>aporee<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:description&gt;</span>Bird<span class="w"> </span>singing<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden,<span class="w"> </span>Caen,<span class="w"> </span>France,<span class="w"> </span>Zoom<span class="w"> </span>H6<span class="w"> </span><span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:publisher&gt;</span>Radio<span class="w"> </span>Aporee<span class="w"> </span><span class="nt">&lt;/dc:publisher&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:date&gt;</span>27/05/2017<span class="nt">&lt;/dc:date&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:type&gt;</span>sound<span class="w"> </span><span class="nt">&lt;/dc:type&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:format&gt;</span>audio/mp3<span class="w"> </span><span class="nt">&lt;/dc:format&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:source&gt;</span>Internet<span class="w"> </span>Archive<span class="w"> </span><span class="nt">&lt;/dc:source&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:rights&gt;</span>Public<span class="w"> </span>domain<span class="nt">&lt;/dc:rights&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/oai_dc:dc&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+<p>オブジェクトの最初の説明メタデータセクションはまだ存在しますが、ステータスが <code class="docutils literal notranslate"><span class="pre">original-superseded</span></code> に更新されていることに注意してください。また、AIP 内の他のデジタルオブジェクトの説明メタデータセクションは、プロセス中にそのまま残されています。</p>
+</section>
+<section id="deleting-metadata-through-metadata-reingests">
+<h3>メタデータの再インジェストによるメタデータの削除<a class="headerlink" href="#deleting-metadata-through-metadata-reingests" title="Link to this heading">¶</a></h3>
+<p>AIP を再試行し、再インジェストを承認する前に、転送元の 1 つから新しい <code class="docutils literal notranslate"><span class="pre">source-metadata.csv</span></code> ファイルを追加することで、AIP および ... METS ファイルに含まれるメタデータ XML ファイルを削除できます。</p>
+<ol class="arabic">
+<li><p>これは、前の転送で <code class="docutils literal notranslate"><span class="pre">audio/bird.mp3</span></code> デジタルオブジェクトに関連付けられたメタデータを削除するために使用する新しい <code class="docutils literal notranslate"><span class="pre">source-metadata.csv</span></code> ファイルです。ここでは、これが前節のメタデータの再インジェストに続く、AIPの2番目のメタデータの再インジェストであると仮定します。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>filename</p></th>
+<th class="head"><p>メタデータ</p></th>
+<th class="head"><p>タイプ</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>objects/audio/bird.mp3</p></td>
+<td></td>
+<td><p>dc-xml</p></td>
+</tr>
+</tbody>
+</table>
+<p>重要なのは、 <code class="docutils literal notranslate"><span class="pre">type</span></code> 列で、 <code class="docutils literal notranslate"><span class="pre">&lt;dmdSec&gt;</span></code> の <code class="docutils literal notranslate"><span class="pre">OTHERMDTYPE</span></code> 属性として設定された識別子（すなわち、 <code class="docutils literal notranslate"><span class="pre">dc-xml</span></code> ）を再利用することです。 <code class="docutils literal notranslate"><span class="pre">metadata</span></code> 値を空にすることで、削除リクエストのシグナルを送ることに注意してください。</p>
+</li>
+<li><p><a class="reference internal" href="../ingest/ingest.html#reingest"><span class="std std-ref">前のAIPのメタデータ再インジェスト</span></a> を開始します。</p></li>
+<li><p>再インジェストを承認する前に、 <a class="reference internal" href="../ingest/ingest.html#metadata-csv-ui"><span class="std std-ref">ユーザーインターフェースから新しい CSV ファイルをアップロードします</span></a> 。</p></li>
+<li><p>メタデータの再インジェストを承認し、終了します。</p></li>
+</ol>
+<p>METS ファイルでは、 <code class="docutils literal notranslate"><span class="pre">audio/bird.mp3</span></code> デジタルオブジェクトの説明メタデータセクション ( <code class="docutils literal notranslate"><span class="pre">&lt;dmdSec&gt;</span></code> ) のステータス属性が <code class="docutils literal notranslate"><span class="pre">original</span></code> から <code class="docutils literal notranslate"><span class="pre">deleted</span></code> に更新されました。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_15&quot;</span><span class="w"> </span><span class="na">CREATED=</span><span class="s">&quot;2023-06-06T15:59:29&quot;</span><span class="w"> </span><span class="na">STATUS=</span><span class="s">&quot;update&quot;</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;bfd05690-6e58-4f6c-90c1-e1200b79cbc3&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERMDTYPE=</span><span class="s">&quot;local&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;metadata&gt;</span>
+<span class="w">        </span>Beihai,<span class="w"> </span>Guanxi,<span class="w"> </span>China,<span class="w"> </span>1988
+<span class="w">        </span>Beihai<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>city<span class="w"> </span>in<span class="w"> </span>the<span class="w"> </span>south<span class="w"> </span>of<span class="w"> </span>Guangxi,<span class="w"> </span>People&#39;s<span class="w"> </span>Republic<span class="w"> </span>of<span class="w"> </span>China.
+<span class="w">        </span>This<span class="w"> </span>image<span class="w"> </span>was<span class="w"> </span>created<span class="w"> </span>by<span class="w"> </span>NASA/GSFC/METI/ERSDAC/<span class="w"> </span>JAROS<span class="w"> </span>and<span class="w"> </span>U.S./Japan<span class="w"> </span>ASTER<span class="w"> </span>Science<span class="w"> </span>Team.
+<span class="w">        </span>This<span class="w"> </span>image<span class="w"> </span>was<span class="w"> </span>published<span class="w"> </span>by<span class="w"> </span>the<span class="w"> </span>NASA<span class="w"> </span>Jet<span class="w"> </span>Propulsion<span class="w"> </span>Laboratory.
+<span class="w">      </span><span class="nt">&lt;/metadata&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+<span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_3&quot;</span><span class="w"> </span><span class="na">CREATED=</span><span class="s">&quot;2023-06-06T05:43:01&quot;</span><span class="w"> </span><span class="na">STATUS=</span><span class="s">&quot;original-superseded&quot;</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;bfd05690-6e58-4f6c-90c1-e1200b79cbc3&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERMDTYPE=</span><span class="s">&quot;local&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;metadata&gt;</span>
+<span class="w">        </span>Beihai,<span class="w"> </span>Guanxi,<span class="w"> </span>China,<span class="w"> </span>1988
+<span class="w">        </span>Beihai<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>city<span class="w"> </span>in<span class="w"> </span>the<span class="w"> </span>south<span class="w"> </span>of<span class="w"> </span>Guangxi,<span class="w"> </span>People&#39;s<span class="w"> </span>Republic<span class="w"> </span>of<span class="w"> </span>China.
+<span class="w">      </span><span class="nt">&lt;/metadata&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+<span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_4&quot;</span><span class="w"> </span><span class="na">CREATED=</span><span class="s">&quot;2023-06-06T05:43:01&quot;</span><span class="w"> </span><span class="na">STATUS=</span><span class="s">&quot;deleted&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERMDTYPE=</span><span class="s">&quot;dc-xml&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;oai_dc:dc</span><span class="w"> </span><span class="na">xmlns:oai_dc=</span><span class="s">&quot;http://www.openarchives.org/OAI/2.0/oai_dc/&quot;</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:title&gt;</span>14000<span class="w"> </span>Caen,<span class="w"> </span>France<span class="w"> </span>-<span class="w"> </span>Bird<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden<span class="w"> </span><span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:creator&gt;</span>Nicolas<span class="w"> </span>Germain<span class="nt">&lt;/dc:creator&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>field<span class="w"> </span>recording<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>soundscapes<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>radio<span class="w"> </span>aporee<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:description&gt;</span>Bird<span class="w"> </span>singing<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden,<span class="w"> </span>Caen,<span class="w"> </span>France,<span class="w"> </span>Zoom<span class="w"> </span>H6<span class="w"> </span><span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:publisher&gt;</span>Radio<span class="w"> </span>Aporee<span class="w"> </span><span class="nt">&lt;/dc:publisher&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:date&gt;</span>27/05/2017<span class="nt">&lt;/dc:date&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:type&gt;</span>sound<span class="w"> </span><span class="nt">&lt;/dc:type&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:format&gt;</span>audio/mp3<span class="w"> </span><span class="nt">&lt;/dc:format&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:source&gt;</span>Internet<span class="w"> </span>Archive<span class="w"> </span><span class="nt">&lt;/dc:source&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:rights&gt;</span>Public<span class="w"> </span>domain<span class="nt">&lt;/dc:rights&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/oai_dc:dc&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+<p>この後、 <code class="docutils literal notranslate"><span class="pre">bird-dc.xml</span></code> ファイルは、AIPの <code class="docutils literal notranslate"><span class="pre">objects/metadata</span></code> ディレクトリから削除されました。その際、他のデジタルオブジェクトの説明メタデータセクションはそのまま残されていることに注意してください。</p>
+</section>
+</section>
+<section id="importing-rights-metadata-with-rights-csv">
+<span id="rights-csv"></span><h2>rights.csvを使った権利メタデータのインポート<a class="headerlink" href="#importing-rights-metadata-with-rights-csv" title="Link to this heading">¶</a></h2>
+<p>権利情報は、説明メタデータに使用される metadata.csv ファイルと同様に、rights.csv ファイルを作成することで、転送中のオブジェクトやディレクトリに関連付けることができます。Archivematica は、ここで使用されているような PREMIS の権利情報を含む、 <a class="reference internal" href="../metadata/premis.html#premis-template"><span class="std std-ref">PREMIS メタデータを Archivematica</span></a> で実装しています。rights.csv を使って追加された権利メタデータは、METS ファイルに転置されます。</p>
+<p>権利メタデータは、転送内の個々のオブジェクト、転送内のディレクトリ、またはその両方に適用できます。</p>
+<ol class="arabic">
+<li><p>保存したいデジタルオブジェクトを含む転送ディレクトリを作成します。例として、次のディレクトリツリーには、 <code class="docutils literal notranslate"><span class="pre">rightsTransfer</span></code> という基本的な転送が表示されます。1 つのデジタルオブジェクトは最上位のディレクトリ内にあり、別のオブジェクトがサブディレクトリ内にネストされています。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>rightsTransfer/
+├── audio
+│   └── bird.mp3
+└── beihai.tif
+</pre></div>
+</div>
+</li>
+<li><p>rights.csv というファイルを作成します。以下の例は、PREMISの権利メタデータのテンプレートとして使用できます。ファイル名の列が最初に来るようにし、ファイル名のパスは必ず <code class="docutils literal notranslate"><span class="pre">objects/</span></code> で始まるようにします。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ファイル</p></th>
+<th class="head"><p>根拠</p></th>
+<th class="head"><p>ステータス</p></th>
+<th class="head"><p>determination_date</p></th>
+<th class="head"><p>管轄</p></th>
+<th class="head"><p>start_date</p></th>
+<th class="head"><p>end_date</p></th>
+<th class="head"><p>条件</p></th>
+<th class="head"><p>引用</p></th>
+<th class="head"><p>注意</p></th>
+<th class="head"><p>grant_act</p></th>
+<th class="head"><p>grant_restriction</p></th>
+<th class="head"><p>grant_start_date</p></th>
+<th class="head"><p>grant_end_date</p></th>
+<th class="head"><p>grant_note</p></th>
+<th class="head"><p>doc_id_type</p></th>
+<th class="head"><p>doc_id_value</p></th>
+<th class="head"><p>doc_id_role</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>objects/beihai.tif</p></td>
+<td><p>著作権</p></td>
+<td><p>copyrighted</p></td>
+<td><p>01/01/2011</p></td>
+<td><p>ca</p></td>
+<td><p>01/01/2011</p></td>
+<td><p>31/12/2013</p></td>
+<td><p>著作権の条件。</p></td>
+<td></td>
+<td><p>著作権について。</p></td>
+<td><p>普及</p></td>
+<td><p>不許可</p></td>
+<td><p>01/01/2011</p></td>
+<td><p>31/12/2013</p></td>
+<td><p>付与メモ</p></td>
+<td><p>著作権文書の識別子タイプ。</p></td>
+<td><p>著作権文書の識別子値。</p></td>
+<td><p>著作権文書識別子の役割。</p></td>
+</tr>
+<tr class="row-odd"><td><p>objects/beihai.tif</p></td>
+<td><p>著作権</p></td>
+<td><p>copyrighted</p></td>
+<td><p>01/01/2011</p></td>
+<td><p>ca</p></td>
+<td><p>01/01/2011</p></td>
+<td><p>31/12/2013</p></td>
+<td><p>著作権の条件。</p></td>
+<td></td>
+<td><p>著作権について。</p></td>
+<td><p>使用</p></td>
+<td><p>不許可</p></td>
+<td><p>01/01/2011</p></td>
+<td><p>31/12/2013</p></td>
+<td><p>付与メモ</p></td>
+<td><p>著作権文書の識別子タイプ。</p></td>
+<td><p>著作権文書の識別子値。</p></td>
+<td><p>著作権文書識別子の役割。</p></td>
+</tr>
+<tr class="row-even"><td><p>objects/audio/bird.mp3</p></td>
+<td><p>ライセンス</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>09/09/2000</p></td>
+<td><p>08/09/2010</p></td>
+<td><p>ライセンスの条件。</p></td>
+<td></td>
+<td><p>マイグレート</p></td>
+<td><p>許可</p></td>
+<td><p>条件付き</p></td>
+<td></td>
+<td><p>2000-09-00</p></td>
+<td><p>付与メモ</p></td>
+<td><p>ライセンス文書の識別子タイプ。</p></td>
+<td><p>ライセンス文書の識別子値。</p></td>
+<td><p>ライセンス文書の識別子の役割。</p></td>
+</tr>
+<tr class="row-odd"><td><p>objects/audio/bird.mp3</p></td>
+<td><p>法令</p></td>
+<td></td>
+<td><p>01/01/2003</p></td>
+<td><p>ca</p></td>
+<td><p>01/01/2003</p></td>
+<td></td>
+<td></td>
+<td><p>2003 年法第 1 号 12 パート 3 s14</p></td>
+<td><p>法令に関する注意</p></td>
+<td><p>普及</p></td>
+<td><p>条件付き</p></td>
+<td><p>01/01/2011</p></td>
+<td><p>01/01/2050</p></td>
+<td><p>付与メモ</p></td>
+<td><p>法令文書の識別子タイプ。</p></td>
+<td><p>法令文書の識別子値。</p></td>
+<td><p>法令文書の識別子の役割</p></td>
+</tr>
+</tbody>
+</table>
+<p>同じ根拠に基づく複数の権利行為を入力するには、上記の例の行 1 と行 2 のように、2 つの別々の行を作成する必要があることに注意してください。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code> というサブディレクトリを作成し、その中に right.csv ファイルを配列します。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>rightsTransfer/
+├── audio
+│   └── bird.mp3
+├── beihai.tif
+└── metadata
+    └── rights.csv
+</pre></div>
+</div>
+</li>
+<li><p>通常どおり、 <a class="reference internal" href="transfer.html#process-transfer"><span class="std std-ref">転送を処理</span></a> します。</p></li>
+</ol>
+<p>上記の例のようにフォーマットされたPREMISの権利メタデータは、すべてMETSファイルに転置されます。上記の例のMETSファイルには、3つのライツメタデータセクション（ <code class="docutils literal notranslate"><span class="pre">&lt;mets:rightsMD&gt;</span></code> ）が含まれています。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:rightsMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;rightsMD_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:RIGHTS&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:rightsStatement</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsStatementIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsStatementIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:rightsStatementIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsStatementIdentifierValue&gt;</span>525c2b5e-457d-464e-ba54-1b493b68c7a4<span class="nt">&lt;/premis:rightsStatementIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:rightsStatementIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsBasis&gt;</span>License<span class="nt">&lt;/premis:rightsBasis&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:licenseInformation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:licenseDocumentationIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:licenseDocumentationIdentifierType&gt;</span>License<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>type.<span class="nt">&lt;/premis:licenseDocumentationIdentifierType&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:licenseDocumentationIdentifierValue&gt;</span>License<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>value.<span class="nt">&lt;/premis:licenseDocumentationIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:licenseDocumentationRole&gt;</span>License<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>role.<span class="nt">&lt;/premis:licenseDocumentationRole&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:licenseDocumentationIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:licenseTerms&gt;</span>Terms<span class="w"> </span>of<span class="w"> </span>license.<span class="nt">&lt;/premis:licenseTerms&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:licenseNote&gt;</span>migrate<span class="nt">&lt;/premis:licenseNote&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:licenseApplicableDates&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:startDate&gt;</span>09-09-2000<span class="nt">&lt;/premis:startDate&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:endDate&gt;</span>08-09-2010<span class="nt">&lt;/premis:endDate&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:licenseApplicableDates&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:licenseInformation&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsGranted&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:act&gt;</span>allow<span class="nt">&lt;/premis:act&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:restriction&gt;</span>Conditional<span class="nt">&lt;/premis:restriction&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:termOfRestriction&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:startDate&gt;&lt;/premis:startDate&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:endDate&gt;</span>2000-09-00<span class="nt">&lt;/premis:endDate&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:termOfRestriction&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsGrantedNote&gt;</span>Grant<span class="w"> </span>note<span class="nt">&lt;/premis:rightsGrantedNote&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:rightsGranted&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:linkingObjectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:linkingObjectIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:linkingObjectIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:linkingObjectIdentifierValue&gt;</span>7a5e102c-983c-456c-b1fb-26a9e7564033<span class="nt">&lt;/premis:linkingObjectIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:linkingObjectIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:rightsStatement&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:rightsMD&gt;</span>
+<span class="nt">&lt;mets:rightsMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;rightsMD_2&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:RIGHTS&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:rightsStatement</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsStatementIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsStatementIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:rightsStatementIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsStatementIdentifierValue&gt;</span>eab5f546-cea9-43c1-9604-7aa670f97a67<span class="nt">&lt;/premis:rightsStatementIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:rightsStatementIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsBasis&gt;</span>Statute<span class="nt">&lt;/premis:rightsBasis&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:statuteInformation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:statuteJurisdiction&gt;</span>ca<span class="nt">&lt;/premis:statuteJurisdiction&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:statuteCitation&gt;</span>Act<span class="w"> </span>2003<span class="w"> </span>no.<span class="w"> </span>12<span class="w"> </span>part<span class="w"> </span>3<span class="w"> </span>s14<span class="nt">&lt;/premis:statuteCitation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:statuteInformationDeterminationDate&gt;</span>01-01-2003<span class="nt">&lt;/premis:statuteInformationDeterminationDate&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:statuteNote&gt;</span>note<span class="w"> </span>about<span class="w"> </span>statute<span class="nt">&lt;/premis:statuteNote&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:statuteDocumentationIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:statuteDocumentationIdentifierType&gt;</span>Statute<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>type.<span class="nt">&lt;/premis:statuteDocumentationIdentifierType&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:statuteDocumentationIdentifierValue&gt;</span>Statute<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>value.<span class="nt">&lt;/premis:statuteDocumentationIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:statuteDocumentationRole&gt;</span>Statute<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>role<span class="nt">&lt;/premis:statuteDocumentationRole&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:statuteDocumentationIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:statuteApplicableDates&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:startDate&gt;</span>01-01-2003<span class="nt">&lt;/premis:startDate&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:statuteApplicableDates&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:statuteInformation&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsGranted&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:act&gt;</span>disseminate<span class="nt">&lt;/premis:act&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:restriction&gt;</span>Conditional<span class="nt">&lt;/premis:restriction&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:termOfRestriction&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:startDate&gt;</span>01-01-2011<span class="nt">&lt;/premis:startDate&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:endDate&gt;</span>01-01-2050<span class="nt">&lt;/premis:endDate&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:termOfRestriction&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsGrantedNote&gt;</span>Grant<span class="w"> </span>note<span class="nt">&lt;/premis:rightsGrantedNote&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:rightsGranted&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:linkingObjectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:linkingObjectIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:linkingObjectIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:linkingObjectIdentifierValue&gt;</span>7a5e102c-983c-456c-b1fb-26a9e7564033<span class="nt">&lt;/premis:linkingObjectIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:linkingObjectIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:rightsStatement&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:rightsMD&gt;</span>
+<span class="nt">&lt;mets:rightsMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;rightsMD_3&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:RIGHTS&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:rightsStatement</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsStatementIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsStatementIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:rightsStatementIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsStatementIdentifierValue&gt;</span>0ed28a3f-351f-4617-a7f6-2e0cc6fda032<span class="nt">&lt;/premis:rightsStatementIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:rightsStatementIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsBasis&gt;</span>Copyright<span class="nt">&lt;/premis:rightsBasis&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:copyrightInformation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightStatus&gt;</span>copyrighted<span class="nt">&lt;/premis:copyrightStatus&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightJurisdiction&gt;</span>ca<span class="nt">&lt;/premis:copyrightJurisdiction&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightStatusDeterminationDate&gt;</span>01-01-2011<span class="nt">&lt;/premis:copyrightStatusDeterminationDate&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightNote&gt;</span>Note<span class="w"> </span>about<span class="w"> </span>copyright.<span class="nt">&lt;/premis:copyrightNote&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightDocumentationIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:copyrightDocumentationIdentifierType&gt;</span>Copyright<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>type.<span class="nt">&lt;/premis:copyrightDocumentationIdentifierType&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:copyrightDocumentationIdentifierValue&gt;</span>Copyright<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>value.<span class="nt">&lt;/premis:copyrightDocumentationIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:copyrightDocumentationRole&gt;</span>Copyright<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>role.<span class="nt">&lt;/premis:copyrightDocumentationRole&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:copyrightDocumentationIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightApplicableDates&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:startDate&gt;</span>01-01-2011<span class="nt">&lt;/premis:startDate&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:endDate&gt;</span>31-12-2013<span class="nt">&lt;/premis:endDate&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:copyrightApplicableDates&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:copyrightInformation&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsGranted&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:act&gt;</span>disseminate<span class="nt">&lt;/premis:act&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:restriction&gt;</span>Disallow<span class="nt">&lt;/premis:restriction&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:termOfRestriction&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:startDate&gt;</span>01-01-2011<span class="nt">&lt;/premis:startDate&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:endDate&gt;</span>31-12-2013<span class="nt">&lt;/premis:endDate&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:termOfRestriction&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsGrantedNote&gt;</span>Grant<span class="w"> </span>note<span class="nt">&lt;/premis:rightsGrantedNote&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:rightsGranted&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:linkingObjectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:linkingObjectIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:linkingObjectIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:linkingObjectIdentifierValue&gt;</span>0a157acf-56ef-453e-9093-8734af92ee51<span class="nt">&lt;/premis:linkingObjectIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:linkingObjectIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:rightsStatement&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:rightsMD&gt;</span>
+<span class="nt">&lt;mets:rightsMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;rightsMD_4&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:RIGHTS&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:rightsStatement</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsStatementIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsStatementIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:rightsStatementIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsStatementIdentifierValue&gt;</span>3c6f7226-b4a6-4908-ac3c-b39f0f9fc6d4<span class="nt">&lt;/premis:rightsStatementIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:rightsStatementIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsBasis&gt;</span>Copyright<span class="nt">&lt;/premis:rightsBasis&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:copyrightInformation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightStatus&gt;</span>copyrighted<span class="nt">&lt;/premis:copyrightStatus&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightJurisdiction&gt;</span>ca<span class="nt">&lt;/premis:copyrightJurisdiction&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightStatusDeterminationDate&gt;</span>01-01-2011<span class="nt">&lt;/premis:copyrightStatusDeterminationDate&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightNote&gt;</span>Note<span class="w"> </span>about<span class="w"> </span>copyright.<span class="nt">&lt;/premis:copyrightNote&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightDocumentationIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:copyrightDocumentationIdentifierType&gt;</span>Copyright<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>type.<span class="nt">&lt;/premis:copyrightDocumentationIdentifierType&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:copyrightDocumentationIdentifierValue&gt;</span>Copyright<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>value.<span class="nt">&lt;/premis:copyrightDocumentationIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:copyrightDocumentationRole&gt;</span>Copyright<span class="w"> </span>documentation<span class="w"> </span>identifier<span class="w"> </span>role.<span class="nt">&lt;/premis:copyrightDocumentationRole&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:copyrightDocumentationIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:copyrightApplicableDates&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:startDate&gt;</span>01-01-2011<span class="nt">&lt;/premis:startDate&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:endDate&gt;</span>31-12-2013<span class="nt">&lt;/premis:endDate&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:copyrightApplicableDates&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:copyrightInformation&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:rightsGranted&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:act&gt;</span>use<span class="nt">&lt;/premis:act&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:restriction&gt;</span>Disallow<span class="nt">&lt;/premis:restriction&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:termOfRestriction&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:startDate&gt;</span>01-01-2011<span class="nt">&lt;/premis:startDate&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:endDate&gt;</span>31-12-2013<span class="nt">&lt;/premis:endDate&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:termOfRestriction&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsGrantedNote&gt;</span>Grant<span class="w"> </span>note<span class="nt">&lt;/premis:rightsGrantedNote&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:rightsGranted&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:linkingObjectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:linkingObjectIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:linkingObjectIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:linkingObjectIdentifierValue&gt;</span>0a157acf-56ef-453e-9093-8734af92ee51<span class="nt">&lt;/premis:linkingObjectIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:linkingObjectIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:rightsStatement&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:rightsMD&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="importing-event-metadata-with-premis-xml">
+<span id="premis-xml"></span><h2>premis.xml によるイベントメタデータのインポート<a class="headerlink" href="#importing-event-metadata-with-premis-xml" title="Link to this heading">¶</a></h2>
+<p>場合によっては、Archivematicaに転送される前のデジタルオブジェクトにデジタル保存イベントが発生することがあります。このようなイベントに関する情報は、PREMIS標準を使用してXMLファイルに記録できます。</p>
+<ol class="arabic">
+<li><p>保存したいデジタルオブジェクトを含む転送ディレクトリを作成します。例として、次のディレクトリツリーには、 <code class="docutils literal notranslate"><span class="pre">eventsTransfer</span></code> という基本的な転送が表示されます。1つのデジタルオブジェクトは、オブジェクトサブディレクトリ内にあり、premis.xml ファイルは、メタデータサブディレクトリ内にあります。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>eventsTransfer/
+├── objects
+│   └── bird.mp3
+└── metadata
+    └── premis.xml
+</pre></div>
+</div>
+</li>
+<li><p>イベント情報を含むpremis.xmlファイルを作成するには、以下の例をテンプレートとして使用できます。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;premis:premis</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xmlns:xlink=</span><span class="s">&quot;http://www.w3.org/1999/xlink&quot;</span><span class="w"> </span><span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 https://www.loc.gov/standards/premis/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;premis:object</span><span class="w"> </span><span class="na">xsi:type=</span><span class="s">&quot;premis:file&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:objectIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:objectIdentifierType&gt;</span>hdl<span class="nt">&lt;/premis:objectIdentifierType&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:objectIdentifierValue&gt;</span>hdl:3847677<span class="nt">&lt;/premis:objectIdentifierValue&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:objectIdentifier&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:objectCharacteristics&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:format&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:formatDesignation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:formatName&gt;</span>MPEG<span class="w"> </span>1/2<span class="w"> </span>Audio<span class="w"> </span>Layer<span class="w"> </span>3<span class="nt">&lt;/premis:formatName&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:formatVersion&gt;&lt;/premis:formatVersion&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:formatDesignation&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:format&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:objectCharacteristics&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:originalName&gt;</span>
+<span class="w">      </span>objects/bird.mp3
+<span class="w">    </span><span class="nt">&lt;/premis:originalName&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:linkingEventIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:linkingEventIdentifierType&gt;</span>NRI<span class="w"> </span>Repository<span class="w"> </span>Event<span class="w"> </span>ID<span class="nt">&lt;/premis:linkingEventIdentifierType&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:linkingEventIdentifierValue&gt;</span>NRI-016<span class="nt">&lt;/premis:linkingEventIdentifierValue&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:linkingEventIdentifier&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:linkingEventIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:linkingEventIdentifierType&gt;</span>NRI<span class="w"> </span>Repository<span class="w"> </span>Event<span class="w"> </span>ID<span class="nt">&lt;/premis:linkingEventIdentifierType&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:linkingEventIdentifierValue&gt;</span>NRI-017<span class="nt">&lt;/premis:linkingEventIdentifierValue&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:linkingEventIdentifier&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/premis:object&gt;</span>
+<span class="w">  </span><span class="nt">&lt;premis:event&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:eventIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventIdentifierType&gt;</span>NRI<span class="w"> </span>Repository<span class="w"> </span>Event<span class="w"> </span>ID<span class="nt">&lt;/premis:eventIdentifierType&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventIdentifierValue&gt;</span>NRI-016<span class="nt">&lt;/premis:eventIdentifierValue&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:eventIdentifier&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:eventType&gt;</span>ingestion<span class="nt">&lt;/premis:eventType&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:eventDateTime&gt;</span>2019-07-04T22:46:07.773391+00:00<span class="nt">&lt;/premis:eventDateTime&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:eventDetailInformation&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventDetail&gt;</span>Acquired<span class="w"> </span>via<span class="w"> </span>records<span class="w"> </span>transfer<span class="w"> </span>002/041<span class="nt">&lt;/premis:eventDetail&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:eventDetailInformation&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:eventOutcomeInformation&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventOutcome/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventOutcomeDetail&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventOutcomeDetailNote/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:eventOutcomeDetail&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:eventOutcomeInformation&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:linkingAgentIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:linkingAgentIdentifierType&gt;</span>repository<span class="w"> </span>code<span class="nt">&lt;/premis:linkingAgentIdentifierType&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:linkingAgentIdentifierValue&gt;</span>NRI<span class="nt">&lt;/premis:linkingAgentIdentifierValue&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:linkingAgentIdentifier&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/premis:event&gt;</span>
+<span class="w">  </span><span class="nt">&lt;premis:event&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:eventIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventIdentifierType&gt;</span>NRI<span class="w"> </span>Repository<span class="w"> </span>Event<span class="w"> </span>ID<span class="nt">&lt;/premis:eventIdentifierType&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventIdentifierValue&gt;</span>NRI-017<span class="nt">&lt;/premis:eventIdentifierValue&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:eventIdentifier&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:eventType&gt;</span>virus<span class="w"> </span>check<span class="nt">&lt;/premis:eventType&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:eventDateTime&gt;</span>2019-07-04T22:46:07.773391+00:00<span class="nt">&lt;/premis:eventDateTime&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:eventDetailInformation&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventDetail&gt;</span>program=&quot;ClamAV<span class="w"> </span>(clamd)&quot;;<span class="w"> </span>version=&quot;ClamAV<span class="w"> </span>0.100.3&quot;;<span class="w"> </span>virusDefinitions=&quot;25500/Thu<span class="w"> </span>Jul<span class="w">  </span>4<span class="w"> </span>08:04:41<span class="w"> </span>2019&quot;<span class="nt">&lt;/premis:eventDetail&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:eventDetailInformation&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:eventOutcomeInformation&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventOutcome&gt;</span>Pass<span class="nt">&lt;/premis:eventOutcome&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventOutcomeDetail&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventOutcomeDetailNote/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:eventOutcomeDetail&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:eventOutcomeInformation&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:linkingAgentIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:linkingAgentIdentifierType&gt;</span>repository<span class="w"> </span>code<span class="nt">&lt;/premis:linkingAgentIdentifierType&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:linkingAgentIdentifierValue&gt;</span>NRI<span class="nt">&lt;/premis:linkingAgentIdentifierValue&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:linkingAgentIdentifier&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/premis:event&gt;</span>
+<span class="w">  </span><span class="nt">&lt;premis:agent&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:agentIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:agentIdentifierType&gt;</span>repository<span class="w"> </span>code<span class="nt">&lt;/premis:agentIdentifierType&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:agentIdentifierValue&gt;</span>NRI<span class="nt">&lt;/premis:agentIdentifierValue&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:agentIdentifier&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:agentName&gt;</span>Not<span class="w"> </span>a<span class="w"> </span>Real<span class="w"> </span>Institution<span class="nt">&lt;/premis:agentName&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:agentType&gt;</span>organization<span class="nt">&lt;/premis:agentType&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/premis:agent&gt;</span>
+<span class="nt">&lt;/premis:premis&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p>各 premis.xml ファイルは、1 つ以上の <code class="docutils literal notranslate"><span class="pre">premis:object</span></code> 、 <code class="docutils literal notranslate"><span class="pre">premis:event</span></code> 、 <code class="docutils literal notranslate"><span class="pre">premis:agent</span></code> エンティティを含んでいなければなりません。各エンティティは、ファイル内でリンクするための独自のローカル識別子値を持つ必要があります。これらはインポート時に Archivematica の UUID に変換されます。1つのオブジェクトは、多くのイベントにリンクできます。各イベントは、1 つのエージェントにリンクする必要があります。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">premis:originalName</span></code> 値は、 <code class="docutils literal notranslate"><span class="pre">premis:object</span></code> を <code class="docutils literal notranslate"><span class="pre">objects\bird.mp3</span></code> ファイルにリンクするものであることに注意してください。オブジェクトは、 <code class="docutils literal notranslate"><span class="pre">premis:linkingEventIdentifierValue</span></code> プロパティを介してイベントにリンクされます。</p></li>
+<li><p>なお、 <code class="docutils literal notranslate"><span class="pre">premis:eventDateTime</span></code> の値は ISO 8601 形式でなければなりません（例：2019-07-04T22：46：07.773391+00：00）</p></li>
+<li><p>通常どおり、 <a class="reference internal" href="transfer.html#process-transfer"><span class="std std-ref">転送を処理します</span></a> 。[転送] タブで <code class="docutils literal notranslate"><span class="pre">Characterize</span> <span class="pre">and</span> <span class="pre">extract</span> <span class="pre">metadata</span></code> マイクロサービスを確認し、 <code class="docutils literal notranslate"><span class="pre">Load</span> <span class="pre">PREMIS</span> <span class="pre">events</span> <span class="pre">from</span> <span class="pre">metadata/premis.xml</span></code> ジョブのステータスを確認して、インポートが成功したかどうかを判断します。</p></li>
+</ol>
+</section>
+<section id="adding-metadata-to-bags">
+<span id="metadata-bags"></span><h2>バッグにメタデータを追加<a class="headerlink" href="#adding-metadata-to-bags" title="Link to this heading">¶</a></h2>
+<p>米国議会図書館の <a class="reference external" href="https://tools.ietf.org/html/rfc8493">BagIt</a> 仕様に従ってパッケージ化された転送 (圧縮または解凍) にメタデータを追加することもできます。Archivematica がメタデータ ファイルを認識して適切に処理できるようにするには、特別な注意を払う必要があります。</p>
+<ol class="arabic">
+<li><p>メタデータファイルを作成します。この例では、バッグ内の個々のオブジェクトに説明メタデータを追加するために、metadata.csvを作成します。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>filename</p></th>
+<th class="head"><p>dc.title</p></th>
+<th class="head"><p>dc.creator</p></th>
+<th class="head"><p>dc.subject</p></th>
+<th class="head"><p>dc.subject</p></th>
+<th class="head"><p>dc.subject</p></th>
+<th class="head"><p>dc.description</p></th>
+<th class="head"><p>dc.publisher</p></th>
+<th class="head"><p>dc.date</p></th>
+<th class="head"><p>dc.type</p></th>
+<th class="head"><p>dc.format</p></th>
+<th class="head"><p>dc.source</p></th>
+<th class="head"><p>dc.rights</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>data/beihai.tif</p></td>
+<td><p>Beihai, Guanxi, China, 1988</p></td>
+<td><p>NASA/GSFC/METI/ERSDAC/ JAROS and U.S./Japan ASTER Science Team</p></td>
+<td><p>中国</p></td>
+<td><p>北海</p></td>
+<td></td>
+<td><p>北海は、中華人民共和国広西チワン族自治区南部の都市です。</p></td>
+<td><p>NASAジェット推進研究所</p></td>
+<td><p>2016年2月29日</p></td>
+<td><p>画像</p></td>
+<td><p>image.tif</p></td>
+<td><p>NASAジェット推進研究所</p></td>
+<td><p>パブリックドメイン</p></td>
+</tr>
+<tr class="row-odd"><td><p>data/audio/bird.mp3</p></td>
+<td><p>14000 Caen, France - Bird in my garden</p></td>
+<td><p>Nicolas Germain</p></td>
+<td><p>field recording</p></td>
+<td><p>soundscapes</p></td>
+<td><p>radio aporee</p></td>
+<td><p>庭でさえずる鳥、フランス、カーン、ズームH6</p></td>
+<td><p>Radio Aporee</p></td>
+<td><p>2017-05-27</p></td>
+<td><p>sound</p></td>
+<td><p>audio/mp3</p></td>
+<td><p>インターネットアーカイブ</p></td>
+<td><p>パブリックドメイン</p></td>
+</tr>
+</tbody>
+</table>
+<p>ファイル名パスは、ペイロードディレクトリ（ <code class="docutils literal notranslate"><span class="pre">data</span></code> ）をパスに含めることで、以下で作成するバッグの構造を予期していることに注意してください。お使いの転送にサブディレクトリが含まれていれば、それらもパスに反映されるべきです。</p>
+</li>
+<li><p>転送素材を組み立てます。この例では、metadata.csvファイルを含むmetadataディレクトリと同様に、サブディレクトリに含まれる2つのオブジェクトがあります。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>to-be-transferred/
+├── audio
+│   └── bird.mp3
+├── beihai.tif
+└── metadata
+    └── metadata.csv
+</pre></div>
+</div>
+</li>
+<li><p>保存したい素材とメタデータを入れたバッグを作成します。デジタルオブジェクトとメタデータディレクトリがペイロードディレクトリ（ <code class="docutils literal notranslate"><span class="pre">data</span></code> ）に追加されました。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>bagTest/
+├── bag-info.txt
+├── bagit.txt
+├── data
+│   ├── audio
+│   │   └── bird.mp3
+│   ├── beihai.tif
+│   └── metadata
+│       └── metadata.csv
+├── manifest-md5.txt
+└── tagmanifest-md5.txt
+</pre></div>
+</div>
+<p>上記の手順 1 で metadata.csv を作成したときに、この構造を予期する必要があることに注意してください。バッグに追加する素材は常にペイロードディレクトリ内にあるため、ファイル名のパスは常に <code class="docutils literal notranslate"><span class="pre">data</span></code> で始まる必要があります。</p>
+<p>バギングプログラムは、必要なバッグファイルも作成しています。</p>
+</li>
+<li><p><a class="reference internal" href="transfer.html#process-transfer"><span class="std std-ref">圧縮バッグまたは解凍バッグ転送タイプを使用して転送を処理します</span></a> 。</p></li>
+</ol>
+<p>結果として得られる AIP 内の METS ファイルは、上記の非バッグ化された例と同様に、 <code class="docutils literal notranslate"><span class="pre">&lt;dmdSec&gt;</span></code> 内のメタデータを含みます。</p>
+<p>上記の方法は、メタデータをディレクトリに適用するmetadata.csv ファイル、rights.csv ファイル、および保存したいその他の種類のメタデータに使用できます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>サブミッション・文書は、上記の方法でバッグに追加もできます。 <code class="docutils literal notranslate"><span class="pre">submissionDocumentation</span></code> ディレクトリは、metadata ディレクトリの中に入れ子にする必要があります。詳しくは、 <a class="reference internal" href="transfer.html#create-submission"><span class="std std-ref">Submission documentation</span></a> を参照してください。</p>
+</div>
+</section>
+<section id="importing-other-types-of-metadata">
+<span id="other-metadata"></span><h2>他のタイプのメタデータのインポート<a class="headerlink" href="#importing-other-types-of-metadata" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">metadata</span></code> ディレクトリには、metadata.csv ファイルと rights.csv ファイル以外の他のタイプのメタデータファイルを含めることができます。たとえば、専用の分析ツールの出力をファイルと一緒に保存したい場合があります。これらのファイルはメタデータディレクトリに配列できます。:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>rightsTransfer/
+├── video.mp4
+└── metadata
+    ├── qctools.xml.gz
+    └── rights.csv
+</pre></div>
+</div>
+<p>Archivematica は、このファイルに対して、metadata.csv や rights.csv と同様に様々な保存タスクを実行します。METSでは、このファイルは他のメタデータファイルと共にファイルセクション（ <code class="docutils literal notranslate"><span class="pre">&lt;fileSec&gt;</span></code> ）のファイルグループ（ <code class="docutils literal notranslate"><span class="pre">fileGrp</span></code> ）の使用見出し（ <code class="docutils literal notranslate"><span class="pre">metadata</span></code> ）にリスト表示されます。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:fileSec&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:fileGrp</span><span class="w"> </span><span class="na">USE=</span><span class="s">&quot;metadata&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-0befdb64-c512-4dd2-98c7-16a5a312daeb&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-0befdb64-c512-4dd2-98c7-16a5a312daeb&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_3&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/metadata/transfers/other-md-5f6bbf43-64b1-4bed-9296-dcf458f6db0d/qctools.xml.qz&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-6852937b-cd7e-4871-ac6e-564e4e14309e&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-6852937b-cd7e-4871-ac6e-564e4e14309e&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_4&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/metadata/transfers/other-md-5f6bbf43-64b1-4bed-9296-dcf458f6db0d/rights.csv&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:fileGrp&gt;</span>
+<span class="nt">&lt;/mets:fileSec&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="importing-structural-metadata-with-mets-structmap-xml">
+<span id="structmap-xml"></span><h2>mets_structmap.xml を使った構造メタデータのインポート<a class="headerlink" href="#importing-structural-metadata-with-mets-structmap-xml" title="Link to this heading">¶</a></h2>
+<p>Archivematica に転送されるファイルは、METS 構造マップに記述された一貫性のある階層構造や論理構造（書籍の一部やオーディオファイルの一部など）を持っている場合があります。ユーザーは、転送の <code class="docutils literal notranslate"><span class="pre">metadata</span></code> ディレクトリに <code class="docutils literal notranslate"><span class="pre">mets_structmap.xml</span></code> というファイルを含めることで、これらをインポートできます。この構造マップで参照されるファイルは、転送の <code class="docutils literal notranslate"><span class="pre">objects</span></code> ディレクトリに含める必要があります。</p>
+<p>Archivematica は、この構造マップに一意の構造マップ ID を割り当て、アーカイブ情報パッケージの METS ファイルにマージします。また、アーカイブ情報パッケージのファイルに対して、Archivematicaが作成したUUIDを使用するようにファイルポインタ（ <code class="docutils literal notranslate"><span class="pre">mets:fptr</span></code> ）を更新します。</p>
+<p>Archivematicaでは、ファイルをIDに正しくマッピングするために、 <code class="docutils literal notranslate"><span class="pre">mets:fptr</span></code> 要素の <code class="docutils literal notranslate"><span class="pre">CONTENTIDS</span></code> 属性を、 <code class="docutils literal notranslate"><span class="pre">objects/</span></code> 接頭辞とともに使用する必要があることに注意してください。</p>
+<p><strong>mets_structmap.xml の例</strong></p>
+<p>オーディオファイルには、最小限の構造マップの例を使用します：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:mets</span><span class="w"> </span><span class="na">xmlns:mets=</span><span class="s">&quot;http://www.loc.gov/METS/&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:structMap</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;logical&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;track&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Complete documentary&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Introduction&quot;</span><span class="w"> </span><span class="na">ORDER=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;ferdinand_short_2017_01_27.mp3&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/ferdinand_short_2017_01_27.mp3&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:area</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;ferdinand_short_2017_01_27.mp3&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/ferdinand_short_2017_01_27.mp3&quot;</span><span class="w"> </span><span class="na">BEGIN=</span><span class="s">&quot;00:00:00&quot;</span><span class="w"> </span><span class="na">END=</span><span class="s">&quot;00:00:17&quot;</span><span class="w"> </span><span class="na">BETYPE=</span><span class="s">&quot;TIME&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:fptr&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Outro&quot;</span><span class="w"> </span><span class="na">ORDER=</span><span class="s">&quot;2&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;ferdinand_short_2017_01_27.mp3&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/ferdinand_short_2017_01_27.mp3&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:area</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;ferdinand_short_2017_01_27.mp3&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/ferdinand_short_2017_01_27.mp3&quot;</span><span class="w"> </span><span class="na">BEGIN=</span><span class="s">&quot;00:00:18&quot;</span><span class="w"> </span><span class="na">END=</span><span class="s">&quot;00:01:13&quot;</span><span class="w"> </span><span class="na">BETYPE=</span><span class="s">&quot;TIME&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:fptr&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:structMap&gt;</span>
+<span class="nt">&lt;/mets:mets&gt;</span>
+</pre></div>
+</div>
+<p>Archivematica AIP METS ファイルの出力は、次のようになります：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:structMap</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;logical&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;structMap_2&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;track&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Complete documentary&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Introduction&quot;</span><span class="w"> </span><span class="na">ORDER=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-a47cee9a-7508-4189-aa21-76ab3d02e2a2&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/ferdinand_short_2017_01_27.mp3&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:area</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-a47cee9a-7508-4189-aa21-76ab3d02e2a2&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/ferdinand_short_2017_01_27.mp3&quot;</span><span class="w"> </span><span class="na">BEGIN=</span><span class="s">&quot;00:00:00&quot;</span><span class="w"> </span><span class="na">END=</span><span class="s">&quot;00:00:17&quot;</span><span class="w"> </span><span class="na">BETYPE=</span><span class="s">&quot;TIME&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:fptr&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Outro&quot;</span><span class="w"> </span><span class="na">ORDER=</span><span class="s">&quot;2&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-a47cee9a-7508-4189-aa21-76ab3d02e2a2&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/ferdinand_short_2017_01_27.mp3&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:area</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-a47cee9a-7508-4189-aa21-76ab3d02e2a2&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/ferdinand_short_2017_01_27.mp3&quot;</span><span class="w"> </span><span class="na">BEGIN=</span><span class="s">&quot;00:00:18&quot;</span><span class="w"> </span><span class="na">END=</span><span class="s">&quot;00:01:13&quot;</span><span class="w"> </span><span class="na">BETYPE=</span><span class="s">&quot;TIME&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:fptr&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="nt">&lt;/mets:structMap&gt;</span>
+</pre></div>
+</div>
+<p>これは、単純な書籍のカスタム METS 構造マップの別の例です。転送の <code class="docutils literal notranslate"><span class="pre">objects/</span></code> ディレクトリには、書籍の編集に使用されるすべてのデジタルファイル（例：cover.jpg、inside_cover.jpg、page_01.jpg など）が含まれています。転送の <code class="docutils literal notranslate"><span class="pre">metadata/</span></code> ディレクトリには、書籍の構造を定義する次の <code class="docutils literal notranslate"><span class="pre">mets_structmap.xml</span></code> ファイルが含まれています。インポート時に、Archivematica は、一意の ID を <code class="docutils literal notranslate"><span class="pre">structMap</span></code> 要素に追加し、すべての <code class="docutils literal notranslate"><span class="pre">FILEID</span></code> 属性を更新して、Archivematica AIP 内のこれらのファイルの UUID 値と一致させます。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:structMap</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;logical&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;book&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;How to create a hierarchical book&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Cover&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;cover.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/cover.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- cover --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Inside cover&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;inside_cover.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/inside_cover.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- inside cover --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;chapter&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Chapter 1&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 1&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;page_01.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_01.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;subchapter&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Subchapter 1.1&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 2&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;page_02.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_02.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 3&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;page_03.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_03.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 4&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;page_04.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_04.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="cm">&lt;!-- Subchapter 1.1 --&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;subchapter&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Subchapter 1.2&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 5&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;page_05.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_05.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 6&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;page_06.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_06.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 7&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;page_07.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_07.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="cm">&lt;!-- Subchapter 1.2 --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- Chapter 1 --&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- Chapters 2 and 3, each with their own subchapters as in Chapter 1, omitted from this example. --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;afterword&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Afterword&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 20&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;page_20.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_20.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- afterword --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;index&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Index&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Index, page 1&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;index_01.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/index_01.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Index, page 2&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;index_02.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/index_02.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- index --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Back cover&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;back_cover.jpg&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/back_cover.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- back cover --&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">  </span><span class="cm">&lt;!-- book --&gt;</span>
+<span class="nt">&lt;/mets:structMap&gt;</span>
+<span class="nt">&lt;/mets:mets&gt;</span>
+<span class="nt">&lt;/mets:structMap&gt;</span>
+</pre></div>
+</div>
+<p>Archivematica AIP METS ファイルの出力は、次のようになります：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:structMap</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;logical&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;structMap_2&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;book&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;How to create a hierarchical book&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Cover&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-89dea0eb-663f-4c86-b2e0-4f41a7654fcd&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/cover.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Inside cover&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-fd3f32cc-eef2-4d8e-aa1c-a9ad06ac03b4&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/inside_cover.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;chapter&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Chapter 1&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 1&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-709ff24e-7594-4bae-b5fe-9be1103805fb&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_01.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;subchapter&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Subchapter 1.1&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 2&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-12b79f5e-853e-4767-a1f8-221540e2df63&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_02.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 3&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-a2c1ec4b-e165-4c67-94f1-6d63aa78df1a&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_03.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 4&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-cc4474e7-0640-4824-8c30-fd9309b752ca&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_04.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="cm">&lt;!-- Subchapter 1.1 --&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;subchapter&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Subchapter 1.2&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 5&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-5d19ca92-5f93-46c6-a1bd-65b3c6af8025&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_05.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 6&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-7f760fdd-173c-4158-a673-b8231ae30d1c&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_06.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 7&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-3db99d4e-323a-4d75-be45-74772597d560&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_07.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="cm">&lt;!-- Subchapter 1.2 --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- Chapter 1 --&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- Chapters 2 and 3, each with their own subchapters as in Chapter 1, omitted from this example. --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;afterword&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Afterword&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Page 20&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-465bb720-a801-401e-880f-49a1416cb444&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/page_20.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- afterword --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;index&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Index&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Index, page 1&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-6a3be87f-a0e1-4d6f-bd39-aef8fe289542&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/index_01.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Index, page 2&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-9af8ab15-ff76-4094-8114-0e94d9245093&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/index_02.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- index --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;page&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Back cover&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-335db20c-752f-4a94-a679-4fde4d2777f5&quot;</span><span class="w"> </span><span class="na">CONTENTIDS=</span><span class="s">&quot;objects/back_cover.jpg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">    </span><span class="cm">&lt;!-- back cover --&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">  </span><span class="cm">&lt;!-- book --&gt;</span>
+<span class="nt">&lt;/mets:structMap&gt;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#import-metadata"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">メタデータのインポート</a><ul>
+<li><a class="reference internal" href="#importing-descriptive-metadata-with-metadata-csv">metadata.csv を使用した説明メタデータのインポート</a><ul>
+<li><a class="reference internal" href="#adding-descriptive-metadata-to-individual-objects">個々のオブジェクトへの説明メタデータの追加</a></li>
+<li><a class="reference internal" href="#adding-descriptive-metadata-to-a-directory">ディレクトリへの説明メタデータの追加</a></li>
+<li><a class="reference internal" href="#adding-non-dublin-core-descriptive-metadata">Dublin Core 以外の説明メタデータの追加</a></li>
+<li><a class="reference internal" href="#adding-metadata-using-json-files">JSON ファイルを使ったメタデータの追加</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#importing-and-validating-xml-metadata-with-source-metadata-csv">source-metadata.csv による XML メタデータのインポートと妥当性確認</a><ul>
+<li><a class="reference internal" href="#setting-up">設定</a></li>
+<li><a class="reference internal" href="#adding-and-validating-metadata">メタデータの追加と妥当性確認</a></li>
+<li><a class="reference internal" href="#updating-metadata-through-metadata-reingests">メタデータの再インジェストによるメタデータの更新</a></li>
+<li><a class="reference internal" href="#deleting-metadata-through-metadata-reingests">メタデータの再インジェストによるメタデータの削除</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#importing-rights-metadata-with-rights-csv">rights.csvを使った権利メタデータのインポート</a></li>
+<li><a class="reference internal" href="#importing-event-metadata-with-premis-xml">premis.xml によるイベントメタデータのインポート</a></li>
+<li><a class="reference internal" href="#adding-metadata-to-bags">バッグにメタデータを追加</a></li>
+<li><a class="reference internal" href="#importing-other-types-of-metadata">他のタイプのメタデータのインポート</a></li>
+<li><a class="reference internal" href="#importing-structural-metadata-with-mets-structmap-xml">mets_structmap.xml を使った構造メタデータのインポート</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="transfer.html"
+                          title="前の章へ">転送</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="bags.html"
+                          title="次の章へ">圧縮バッグと解凍バッグ</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/transfer/import-metadata.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="bags.html" title="圧縮バッグと解凍バッグ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="transfer.html" title="転送"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">メタデータのインポート</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,2302 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Storage Service API &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="開発環境" href="../development-environment.html" />
+    <link rel="prev" title="Archivematica API" href="api-reference-archivematica.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../development-environment.html" title="開発環境"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="api-reference-archivematica.html" title="Archivematica API"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">開発者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Storage Service API</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="storage-service-api">
+<span id="api-reference-storage-service"></span><h1>Storage Service API<a class="headerlink" href="#storage-service-api" title="Link to this heading">¶</a></h1>
+<p>Storage Service APIは、Storage Serviceがアクセス可能なストレージ領域へのアクセスを可能にします。</p>
+<section id="resources-and-endpoints">
+<h2>リソースとエンドポイント<a class="headerlink" href="#resources-and-endpoints" title="Link to this heading">¶</a></h2>
+<p>Storage Service APIのエンドポイントは、以下のリソースカテゴリーに整理されています：</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ss-pipeline"><span class="std std-ref">Pipeline</span></a></p></li>
+<li><p><a class="reference internal" href="#ss-space"><span class="std std-ref">Space</span></a></p></li>
+<li><p><a class="reference internal" href="#ss-location"><span class="std std-ref">Location</span></a></p></li>
+<li><p><a class="reference internal" href="#ss-package"><span class="std std-ref">パッケージ</span></a></p></li>
+</ul>
+<section id="pipeline">
+<span id="ss-pipeline"></span><h3>Pipeline<a class="headerlink" href="#pipeline" title="Link to this heading">¶</a></h3>
+<p>パイプラインとは、Archivematicaのインストールを表すもので、Storage Serviceに登録する際に一意のユニバーサル識別子（UUID）が割り当てられます。UUIDは、サーバーと関連するすべてのクライアントに関する情報を提供します。</p>
+<p>各Storage Service APIリソースについて、以下の例のように&quot;schema&quot;をget all URLに追加することで、詳細なスキーマを表示できます:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Authorization: ApiKey test:95141fc645ed97a95893f1f865d24687f89a27ad&quot;</span> \
+        <span class="s1">&#39;http://localhost:8000/api/v2/location/schema/?format=json</span>
+
+<span class="p">{</span>
+   <span class="s2">&quot;allowed_detail_http_methods&quot;</span><span class="p">:</span> <span class="p">[</span>
+       <span class="s2">&quot;get&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;post&quot;</span>
+   <span class="p">],</span>
+   <span class="s2">&quot;allowed_list_http_methods&quot;</span><span class="p">:</span> <span class="p">[</span>
+       <span class="s2">&quot;get&quot;</span>
+   <span class="p">],</span>
+   <span class="s2">&quot;default_format&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;default_limit&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+   <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;blank&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;No default provided.&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Unicode string data. Ex: </span><span class="se">\&quot;</span><span class="s2">Hello World</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;primary_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;readonly&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;verbose_name&quot;</span><span class="p">:</span> <span class="s2">&quot;description&quot;</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;blank&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+           <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;True if space can be accessed.&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;primary_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;readonly&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;verbose_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Enabled&quot;</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;blank&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;No default provided.&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Unicode string data. Ex: </span><span class="se">\&quot;</span><span class="s2">Hello World</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;primary_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;readonly&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;verbose_name&quot;</span><span class="p">:</span> <span class="s2">&quot;path&quot;</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;blank&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;No default provided.&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Many related resources. Can be either a list of URIs</span>
+           <span class="ow">or</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">individually</span> <span class="n">nested</span> <span class="n">resource</span> <span class="n">data</span><span class="o">.</span><span class="s2">&quot;,</span>
+           <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;primary_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;readonly&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;related_schema&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/schema/&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;related_type&quot;</span><span class="p">:</span> <span class="s2">&quot;to_many&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;related&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;verbose_name&quot;</span><span class="p">:</span> <span class="s2">&quot;pipeline&quot;</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;blank&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;No default provided.&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Purpose of the space.  Eg. AIP storage, Transfer</span>
+           <span class="n">source</span><span class="s2">&quot;,</span>
+           <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;primary_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;readonly&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;verbose_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Purpose&quot;</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;quota&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;blank&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+           <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Size, in bytes (optional)&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+           <span class="s2">&quot;primary_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;readonly&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;verbose_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Quota&quot;</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;relative_path&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;blank&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Path to location, relative to the storage space&#39;s</span>
+           <span class="n">path</span><span class="o">.</span><span class="s2">&quot;,</span>
+           <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;primary_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;readonly&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;verbose_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Relative Path&quot;</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;blank&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;No default provided.&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Unicode string data. Ex: </span><span class="se">\&quot;</span><span class="s2">Hello World</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;primary_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;readonly&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;verbose_name&quot;</span><span class="p">:</span> <span class="s2">&quot;resource uri&quot;</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;blank&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;No default provided.&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;A single related resource. Can be either a URI or</span>
+           <span class="nb">set</span> <span class="n">of</span> <span class="n">nested</span> <span class="n">resource</span> <span class="n">data</span><span class="o">.</span><span class="s2">&quot;,</span>
+           <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;primary_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;readonly&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;related_schema&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/schema/&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;related_type&quot;</span><span class="p">:</span> <span class="s2">&quot;to_one&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;related&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;verbose_name&quot;</span><span class="p">:</span> <span class="s2">&quot;space&quot;</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;blank&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+           <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Amount used, in bytes.&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;primary_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;readonly&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;verbose_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Used&quot;</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;blank&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Unique identifier&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;primary_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;readonly&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+           <span class="s2">&quot;verbose_name&quot;</span><span class="p">:</span> <span class="s2">&quot;uuid&quot;</span>
+       <span class="p">}</span>
+   <span class="p">},</span>
+   <span class="s2">&quot;filtering&quot;</span><span class="p">:</span> <span class="p">{</span>
+       <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+       <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+       <span class="s2">&quot;quota&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+       <span class="s2">&quot;relative_path&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+       <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+       <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+       <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="mi">1</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>このスキーマは特に、リソース内のフィールド（関連するリソースフィールドのスキーマURIを含む）と、フィルタリングを許可するフィールドを記述します。有効なフィルタリング値は以下の通りです：Django ORMフィルタ（例えばstartswith, exact, lteなど）か1か2です。フィルタリングフィールドが2に設定されている場合は、関連するリソースフィールドでフィルタリングできます。たとえば、2つのアンダースコアでフォーマットされたリクエストパラメーターにパイプラインUUIDを設定することで、ロケーションをフィルタリングできます：/api/v2/location/?pipeline__uuid=&lt;uuid&gt;</p>
+<p>APIとのやり取りについての詳細は、こちらをご参照ください：</p>
+<blockquote>
+<div><p>` &lt;<a class="reference external" href="http://django-tastypie.readthedocs.io/en/v0.13.1/interacting.html">http://django-tastypie.readthedocs.io/en/v0.13.1/interacting.html</a>&gt;`_ _</p>
+</div></blockquote>
+<section id="get-all-pipelines">
+<h4>すべてのパイプラインを取得<a class="headerlink" href="#get-all-pipelines" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/pipeline/</strong></p></td>
+<td><p><em>システム内の全パイプラインの情報を取得します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>クエリ文字列パラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>パイプラインの説明。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>パイプラインに関連付けられたUUID。</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス定義（JSON）：</p>
+<p>システム内のすべてのパイプラインに関する情報を返します。説明やuuidでフィルタリングできます。無効なパイプラインは返されません。</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">meta</span></code></p></td>
+<td><p>レスポンスのメタデータ：ヒット数、ページネーション情報。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">objects</span></code></p></td>
+<td><p>パイプラインのリスト。フォーマットについては、 <a class="reference internal" href="#ss-pipeline-details"><span class="std std-ref">パイプラインの詳細を取得</span></a> を参照してください。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Authorization: ApiKey test:95141fc645ed97a95893f1f865d24687f89a27ad&quot;</span>
+        <span class="s1">&#39;http://localhost:8000/api/v2/pipeline/?description__startswith=Archivematica&#39;</span> \
+            <span class="o">|</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">json</span><span class="o">.</span><span class="n">tool</span>
+</pre></div>
+</div>
+<p>レスポンス例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="s2">&quot;next&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;previous&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;total_count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;objects&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Archivematica on alouette&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;remote_name&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/dd354557-9e6e-4918-9fe3-a65b00ecb1af/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;dd354557-9e6e-4918-9fe3-a65b00ecb1af&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="create-new-pipeline">
+<h4>新しいパイプラインの作成<a class="headerlink" href="#create-new-pipeline" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2/pipeline/</strong></p></td>
+<td><p><em>新しいパイプラインを作成します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディパラメーター（パラメーター値としてJSON文字列を受け付けます）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>新しいパイプラインのUUID。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>パイプラインの説明。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">api_key</span></code></p></td>
+<td><p>認可のためにユーザーに関連付けられたAPIキー。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">api_username</span></code></p></td>
+<td><p>ストレージへの書き込みを許可された管理者のユーザー名。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">create_default_locations</span></code></p></td>
+<td><p>Trueの場合、新しく作成されたパイプラインにデフォルトのLocationsを関連付けます。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shared_path</span></code></p></td>
+<td><p>デフォルトの場所が作成される場合は、ローカルファイルシステムのこのパスに処理場所を作成します。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">remote_name</span></code></p></td>
+<td><p>パイプラインのURI。</p>
+<p>注意：v0.11.0以前：create_default_locationsが設定されている場合、SSは、REMOTE_ADDRヘッダーを使って値を推測しようとします。</p>
+<p>v0.11.0 以降：提供されない場合、SSは、REMOTE_ADDR ヘッダを使って値を推測しようとします。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">POST</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Authorization: ApiKey test:95141fc645ed97a95893f1f865d24687f89a27ad&quot;</span> \
+    <span class="o">--</span><span class="n">headaer</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
+    <span class="o">--</span><span class="n">data</span> <span class="s1">&#39;{</span>
+      <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;99354557-9e6e-4918-9fe3-a65b00ecb199&quot;</span><span class="p">,</span> \
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Test pipeline&quot;</span><span class="p">,</span> <span class="s2">&quot;create_default_locations&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span> \
+      <span class="s2">&quot;api_username&quot;</span><span class="p">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span> \
+      <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="s2">&quot;03ecb307f5b8012f4771d245d534830378a87259&quot;</span> \
+    <span class="p">}</span><span class="s1">&#39; </span><span class="se">\</span>
+<span class="s1">        &#39;</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">192.168.1.42</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v2</span><span class="o">/</span><span class="n">pipeline</span><span class="o">/</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="s2">&quot;create_default_locations&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+   <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Test pipeline&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;remote_name&quot;</span><span class="p">:</span> <span class="s2">&quot;192.168.1.42&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/99354557-9e6e-4918-9fe3-a65b00ecb199/&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;99354557-9e6e-4918-9fe3-a65b00ecb199&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="get-pipeline-details">
+<span id="ss-pipeline-details"></span><h4>パイプラインの詳細を取得<a class="headerlink" href="#get-pipeline-details" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/pipeline/&lt;uuid&gt;</strong></p></td>
+<td><p><em>システム内の全パイプラインの情報を取得します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス定義（JSON）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>パイプラインに関する一般的な記述。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">remote_name</span></code></p></td>
+<td><p>APIコールで使用するパイプラインのIPまたはホスト名。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">resource_uri</span></code></p></td>
+<td><p>APIにおけるこのパイプラインのURI。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>パイプラインのUUID。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>curl --location --request GET &#39;http://test-machine.archivematica.net:8000/
+api/v2/pipeline/?uuid=a64e061a-5688-49b5-95c1-0b6885c40c04&#39; \
+--header &#39;Authorization: ApiKey test-user:ow7ioGh2reephua8uPaiWee6EiHeev9u&#39; \
+--header &#39;Cookie: csrftoken=sb52U8S35EpdB2T1K4lWXFl5jNnOrXrA&#39;
+</pre></div>
+</div>
+<p>レスポンスの例（JSONボディ）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="s2">&quot;next&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;previous&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;total_count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;objects&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Archivematica on Test-machine&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;remote_name&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;a64e061a-5688-49b5-95c1-0b6885c40c04&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="space">
+<span id="ss-space"></span><h3>Space<a class="headerlink" href="#space" title="Link to this heading">¶</a></h3>
+<p>ストレージスペースには、物理的なストレージに接続するために必要なすべての情報が含まれています。ファイルが保存される場所です。NFSエクスポートパスやホスト名、SSHでのみアクセス可能なシステムのユーザー名など、プロトコル固有の情報は、ここに格納されます。すべての場所は、スペースで囲む必要があります。</p>
+<section id="get-all-spaces">
+<h4>すべてのスペースを取得<a class="headerlink" href="#get-all-spaces" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/space/</strong></p></td>
+<td><p><em>システム内のすべてのスペースに関する情報を取得します。アクセスプロトコル、パス、サイズ、使用量、UUID、妥当性確認済みステータスなどのフィールドでフィルタリングできます。無効なスペースは返されません。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>クエリ文字列パラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">access_protocol</span></code></p></td>
+<td><p>スペースが使用するプロトコル。データベースコードに基づいて検索しなければなりません。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">path</span></code></p></td>
+<td><p>スペースのパス。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">size</span></code></p></td>
+<td><p>バイト単位の最大サイズ。より大きい（size__gt=1024）、小さい（size__lt=1024）、その他のDjangoフィールド検索が使えます。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">used</span></code></p></td>
+<td><p>この領域に格納されるバイト数。greater than （size__gt=1024）、less than （size__lt=1024）、その他のDjangoフィールド検索が使えます。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>スペースのUUID。</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス定義（JSON）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">meta</span></code></p></td>
+<td><p>レスポンスのメタデータ：ヒット数、ページネーション情報。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">objects</span></code></p></td>
+<td><p>スペース一覧。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">--</span><span class="n">location</span> <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> <span class="s1">&#39;http://test-machine.archivematica.net:8000/</span>
+<span class="n">api</span><span class="o">/</span><span class="n">v2</span><span class="o">/</span><span class="n">space</span><span class="o">/</span><span class="s1">&#39; </span><span class="se">\</span>
+<span class="s1">--header &#39;</span><span class="n">Authorization</span><span class="p">:</span> <span class="n">ApiKey</span> <span class="n">test</span><span class="o">-</span><span class="n">user</span><span class="p">:</span><span class="n">ow7ioGh2reephua8uPaiWee6EiHeev9u</span><span class="s1">&#39; </span><span class="se">\</span>
+<span class="s1">--header &#39;</span><span class="n">Cookie</span><span class="p">:</span> <span class="n">csrftoken</span><span class="o">=</span><span class="n">sb52U8S35EpdB2T1K4lWXFl5jNnOrXrA</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例（JSON）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="s2">&quot;next&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;previous&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;total_count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;objects&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;access_protocol&quot;</span><span class="p">:</span> <span class="s2">&quot;FS&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;last_verified&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/218caeb7-fd59-4b7b-99b1-f5771a2dd34f/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;218caeb7-fd59-4b7b-99b1-f5771a2dd34f&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="s2">&quot;186549173&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;218caeb7-fd59-4b7b-99b1-f5771a2dd34f&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verified&quot;</span><span class="p">:</span> <span class="n">false</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="get-space-details">
+<h4>スペースの詳細を取得<a class="headerlink" href="#get-space-details" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/space/&lt;UUID&gt;/</strong></p></td>
+<td><p><em>スペース固有の詳細を返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス定義（JSON）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">access_protocol</span></code></p></td>
+<td><p>アクセスプロトコルのデータベースコード。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">last</span> <span class="pre">verified</span></code></p></td>
+<td><p>最終妥当性確認日。これはスタブ機能です。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">path</span></code></p></td>
+<td><p>スペースのパス。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">resource_uri</span></code></p></td>
+<td><p>APIのリソースへのURI。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">size</span></code></p></td>
+<td><p>スペースの最大サイズ（バイト）。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">used</span></code></p></td>
+<td><p>この領域に格納されているバイト数。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>スペースのUUID。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">verified</span></code></p></td>
+<td><p>スペースが確認されれば、これはスタブ機能です。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">--</span><span class="n">location</span> <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> <span class="s1">&#39;http://test-machine.archivematica.net:8000/</span>
+<span class="n">api</span><span class="o">/</span><span class="n">v2</span><span class="o">/</span><span class="n">space</span><span class="o">/</span><span class="mi">218</span><span class="n">caeb7</span><span class="o">-</span><span class="n">fd59</span><span class="o">-</span><span class="mi">4</span><span class="n">b7b</span><span class="o">-</span><span class="mi">99</span><span class="n">b1</span><span class="o">-</span><span class="n">f5771a2dd34f</span><span class="o">/</span><span class="s1">&#39; </span><span class="se">\</span>
+<span class="s1">--header &#39;</span><span class="n">Authorization</span><span class="p">:</span> <span class="n">ApiKey</span> <span class="n">test</span><span class="o">-</span><span class="n">user</span><span class="p">:</span><span class="n">ow7ioGh2reephua8uPaiWee6EiHeev9u</span><span class="s1">&#39; </span><span class="se">\</span>
+<span class="s1">--header &#39;</span><span class="n">Cookie</span><span class="p">:</span> <span class="n">csrftoken</span><span class="o">=</span><span class="n">sb52U8S35EpdB2T1K4lWXFl5jNnOrXrA</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例（JSON）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;access_protocol&quot;</span><span class="p">:</span> <span class="s2">&quot;FS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;last_verified&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/218caeb7-fd59-4b7b-99b1-f5771a2dd34f/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;218caeb7-fd59-4b7b-99b1-f5771a2dd34f&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="s2">&quot;186549173&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;218caeb7-fd59-4b7b-99b1-f5771a2dd34f&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;verified&quot;</span><span class="p">:</span> <span class="n">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="browse-space-path">
+<h4>スペースパスをブラウズ<a class="headerlink" href="#browse-space-path" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/space/&lt;UUID&gt;/browse/</strong></p></td>
+<td><p><em>スペースパスとディレクトリ構造の詳細を取得します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>クエリ文字列パラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">path</span></code></p></td>
+<td><p>スペース内を探索するためのパスです。</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス定義（JSON）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">entries</span></code></p></td>
+<td><p>パス、ファイル、またはディレクトリのエントリのリスト。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">directories</span></code></p></td>
+<td><p>パス内のディレクトリのリスト。エントリのサブセット。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">--</span><span class="n">location</span> <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> <span class="s1">&#39;http://test-machine.archivematica.net:8000/</span>
+<span class="n">api</span><span class="o">/</span><span class="n">v2</span><span class="o">/</span><span class="n">space</span><span class="o">/</span><span class="mi">218</span><span class="n">caeb7</span><span class="o">-</span><span class="n">fd59</span><span class="o">-</span><span class="mi">4</span><span class="n">b7b</span><span class="o">-</span><span class="mi">99</span><span class="n">b1</span><span class="o">-</span><span class="n">f5771a2dd34f</span><span class="o">/</span><span class="s1">&#39; </span><span class="se">\</span>
+<span class="s1">--header &#39;</span><span class="n">Authorization</span><span class="p">:</span> <span class="n">ApiKey</span> <span class="n">test</span><span class="o">-</span><span class="n">user</span><span class="p">:</span><span class="n">ow7ioGh2reephua8uPaiWee6EiHeev9u</span><span class="s1">&#39; </span><span class="se">\</span>
+<span class="s1">--header &#39;</span><span class="n">Cookie</span><span class="p">:</span> <span class="n">csrftoken</span><span class="o">=</span><span class="n">sb52U8S35EpdB2T1K4lWXFl5jNnOrXrA</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例（JSON）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;access_protocol&quot;</span><span class="p">:</span> <span class="s2">&quot;FS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;last_verified&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/218caeb7-fd59-4b7b-99b1-f5771a2dd34f/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;218caeb7-fd59-4b7b-99b1-f5771a2dd34f&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="s2">&quot;186549173&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;218caeb7-fd59-4b7b-99b1-f5771a2dd34f&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;verified&quot;</span><span class="p">:</span> <span class="n">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="create-space">
+<span id="id1"></span><h4>スペースを作成<a class="headerlink" href="#create-space" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2/space/</strong></p></td>
+<td><p><em>新しいスペースを作成します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディのパラメーター：</p>
+<p>Parameters should contain fields for a new space: See
+<a class="reference internal" href="#access-protocols"><span class="std std-ref">Access protocols</span></a> documentation for fields relevant
+to each type of space. Basic fields for each Access Protocols are listed below.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">access_protocol</span></code></p></td>
+<td><p>これは、スペースのタイプを定義します。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">path</span></code></p></td>
+<td><p>ローカルファイルシステム上のスペースへの絶対パス。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">size</span></code></p></td>
+<td><p>（オプション）このスペースに許可される最大サイズ。0に設定するか、無制限の場合は空白のままにします。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">staging_path</span></code></p></td>
+<td><p>The absolute path to a staging area. Must be UNIX
+filesystem compatible and preferably will be located on
+the same filesystem as the path.</p></td>
+</tr>
+</tbody>
+</table>
+<p>例（S3スペースを作成）:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">POST</span> \
+    <span class="o">--</span><span class="n">data</span> <span class="nd">@payload</span><span class="o">.</span><span class="n">json</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Authorization: ApiKey test:test&quot;</span> \
+        <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">62081</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v2</span><span class="o">/</span><span class="n">space</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>payload.jsonには::が含まれます</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;access_protocol&quot;</span><span class="p">:</span> <span class="s2">&quot;S3&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;staging_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;endpoint_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://127.0.0.1:12345&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;access_key_id&quot;</span><span class="p">:</span> <span class="s2">&quot;_Cah4cae1_&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;secret_access_key&quot;</span><span class="p">:</span> <span class="s2">&quot;_Thu6Ahqu_&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;us-west-2&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;bucket&quot;</span><span class="p">:</span> <span class="s2">&quot;bucket_name&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>エンドポイントは、すべてのパスをbase64エンコードして返します。</p>
+</div>
+</section>
+<section id="access-protocols">
+<span id="id2"></span><h4>Access protocols<a class="headerlink" href="#access-protocols" title="Link to this heading">¶</a></h4>
+</section>
+<section id="archipelago">
+<h4>Archipelago<a class="headerlink" href="#archipelago" title="Link to this heading">¶</a></h4>
+<p>Archipelago is currently supported for AIP Storage locations.
+Archipelago is built on the content management system Drupal,
+which accepts JSON API calls to create new entities.
+Basic fields for Archipelago space are listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">archipelago_url</span></code></p></td>
+<td><p>The hostname of the Archipelago web instance or IP address
+with port, e.g. archipelago.example.com:8443</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">archipelago_user</span></code></p></td>
+<td><p>Archipelago username with write access required.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">archipelago_password</span></code></p></td>
+<td><p>Archipelago password with write access required.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="arkivum">
+<h4>Arkivum<a class="headerlink" href="#arkivum" title="Link to this heading">¶</a></h4>
+<p>Archivematica can use Arkivum’s A-Stor as an access protocol in version 0.7 and higher.
+Basic fields for Arkivum space are listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">host</span></code></p></td>
+<td><p>The hostname of the Arkivum web instance or IP address
+with port, e.g. arkivum.example.com:8443</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">remote_user</span></code></p></td>
+<td><p>Username on the remote machine accessible via passwordless ssh.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">remote_name</span></code></p></td>
+<td><p>Name or IP of the remote machine.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dataverse">
+<h4>Dataverse<a class="headerlink" href="#dataverse" title="Link to this heading">¶</a></h4>
+<p>Dataverse Integration is supported with Archivematica v1.8 (and higher) and
+Storage Service v0.13 (and higher). Basic fields for Dataverse space
+are listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">host</span></code></p></td>
+<td><p>The hostname of the Dataverse web instance or IP address
+with port, e.g. dataverse.example.com:8443</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">api_key</span></code></p></td>
+<td><p>API key for Dataverse instance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">agent_name</span></code></p></td>
+<td><p>A string that will be used in Archivematica METS file to
+identify this Dataverse instance as a PREMIS agent,
+e.g. My Institution's Dataverse Instance.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">agent_type</span></code></p></td>
+<td><p>A string that will be used in Archivematica METS file to
+identify the type of PREMIS agent named above,
+e.g. organization.Name or IP of the remote machine.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">agent_identifier</span></code></p></td>
+<td><p>A string that will be used as an identifier in the Archivematica
+METS file to uniquely identify the PREMIS agent named above.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="duracloud">
+<h4>DuraCloud<a class="headerlink" href="#duracloud" title="Link to this heading">¶</a></h4>
+<p>Archivematica can use DuraCloud as an access protocol for the Storage Service in
+version 0.5 and higher. Basic fields for a DuraCloud space are
+listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">host</span></code></p></td>
+<td><p>The hostname of the Duracloud web instance or IP address
+with port, e.g. duracloud.example.com:8443</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p></td>
+<td><p>The username for the Archivematica user that you created in DuraCloud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">password</span></code></p></td>
+<td><p>The password for the Archivematica user that you created in DuraCloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">duraspace</span></code></p></td>
+<td><p>The name of the space within DuraCloud.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dspace-via-sword2-api">
+<h4>DSpace via SWORD2 API<a class="headerlink" href="#dspace-via-sword2-api" title="Link to this heading">¶</a></h4>
+<p>DSpace via SWORD2 locations are currently supported only for AIP Storage locations.
+Basic fields for a DSpace are listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sd_iri</span></code></p></td>
+<td><p>URL of the service document. E.g. <code class="docutils literal notranslate"><span class="pre">http://demo.dspace.org/swordv2/servicedocument,</span></code>
+where servicedocument is the handle to the community or collection being used
+for deposit.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p></td>
+<td><p>A username for the DSpace instance with sufficient permissions to permit
+authentication.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">password</span></code></p></td>
+<td><p>The password for the Dspace user that you created.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metadata_policy</span></code></p></td>
+<td><p>Use to restrict access to the metadata bitstream. Must be specified as a list of
+objects in JSON, e.g. <code class="docutils literal notranslate"><span class="pre">[{&quot;action&quot;:&quot;READ&quot;,&quot;groupId&quot;:&quot;5&quot;,&quot;rpType&quot;:&quot;TYPE_CUSTOM&quot;}]</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">archive_format</span></code></p></td>
+<td><p>Archive format, e.g. <code class="docutils literal notranslate"><span class="pre">ZIP</span></code>, <code class="docutils literal notranslate"><span class="pre">7z</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dspace-via-rest-api">
+<h4>DSpace via REST API<a class="headerlink" href="#dspace-via-rest-api" title="Link to this heading">¶</a></h4>
+<p>DSpace via REST API locations are supported for both AIP and DIP Storage locations.
+Basic fields for a DSpace via REST API space are listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ds_rest_url</span></code></p></td>
+<td><p>URL to the &quot;REST&quot; webapp. E.g. <code class="docutils literal notranslate"><span class="pre">http://localhost:8080/rest/</span></code>; for production
+systems, this address will be slightly different, such as:
+<code class="docutils literal notranslate"><span class="pre">https://demo.dspace.org/rest/</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ds_user</span></code></p></td>
+<td><p>A username for the DSpace instance with sufficient permissions to permit
+authentication.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ds_password</span></code></p></td>
+<td><p>The password for the Dspace user that you created.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ds_dip_collection</span></code></p></td>
+<td><p>UUID of default DSpace collection for the DIP to be deposited.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ds_aip_collection</span></code></p></td>
+<td><p>UUID of default DSpace collection for the AIP to be deposited.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">as_url</span></code></p></td>
+<td><p>URL to the ArchiveSpace server. E.g.: <code class="docutils literal notranslate"><span class="pre">http://sandbox.archivesspace.org/</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">as_user</span></code></p></td>
+<td><p>ArchivesSpace username to authenticate as.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">as_password</span></code></p></td>
+<td><p>ArchivesSpace password to authenticate with.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">as_repository</span></code></p></td>
+<td><p>Identifier of the default ArchivesSpace repository.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">as_archival_object</span></code></p></td>
+<td><p>Identifier of the default ArchivesSpace archival object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">upload_to_tsm</span></code></p></td>
+<td><p>Boolean true or false. Default is false. will attempt to send the AIP to
+the Tivoli Storage Manager using command-line client dsmc</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">verify_ssl</span></code></p></td>
+<td><p>Boolean true or false. Default is true.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fedora-via-sword2">
+<h4>Fedora via SWORD2<a class="headerlink" href="#fedora-via-sword2" title="Link to this heading">¶</a></h4>
+<p>Basic fields for a Fedora space are listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">fedora_user</span></code></p></td>
+<td><p>Fedora user name (for SWORD functionality).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fedora_password</span></code></p></td>
+<td><p>Fedora password (for SWORD functionality).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">fedora_name</span></code></p></td>
+<td><p>Name or IP of the remote Fedora machine.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="gpg-encryption-on-local-filesystem">
+<h4>GPG encryption on Local Filesystem<a class="headerlink" href="#gpg-encryption-on-local-filesystem" title="Link to this heading">¶</a></h4>
+<p>Creating a GPG encryption space will allow users to create encrypted AIPs and
+transfers. Basic fields for a local file system space are listed in
+<a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">key</span></code></p></td>
+<td><p>The encryption key to be used for the space.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="local-filesystem">
+<h4>Local Filesystem<a class="headerlink" href="#local-filesystem" title="Link to this heading">¶</a></h4>
+<p>Local Filesystem spaces handle storage that is available locally on the
+machine running the Storage Service. Basic fields for a local file
+system space are listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+</section>
+<section id="lockss">
+<h4>LOCKSS<a class="headerlink" href="#lockss" title="Link to this heading">¶</a></h4>
+<p>Archivematica can store AIPs in a <a class="reference internal" href="#lockss">LOCKSS</a> network via LOCKSS-O-Matic.
+Basic fields for a LOCKSS space are listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sd_iri</span></code></p></td>
+<td><p>The URL of the LOCKSS-o-matic service document IRI,
+e.g. <code class="docutils literal notranslate"><span class="pre">http://lockssomatic.example.org/api/sword/2.0/sd-iri</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">content_provider_id</span></code></p></td>
+<td><p>On-Behalf-Of value when communicating with LOCKSS-o-matic.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">external_domain</span></code></p></td>
+<td><p>Base URL for this server that LOCKSS will be able to access.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">keep_local</span></code></p></td>
+<td><p>Boolean true or false. Default is true.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="nfs">
+<h4>NFS<a class="headerlink" href="#nfs" title="Link to this heading">¶</a></h4>
+<p>NFS spaces are for NFS exports mounted on the Storage Service server and the
+Archivematica pipeline. Basic fields for a NFS space are listed
+in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">remote_name</span></code></p></td>
+<td><p>Name of the NFS server.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">remote_path</span></code></p></td>
+<td><p>Path on the NFS server to the export.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">version</span></code></p></td>
+<td><p>Type of the filesystem, e.g. <code class="docutils literal notranslate"><span class="pre">nfs</span> <span class="pre">or</span> <span class="pre">nfs4</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">manually_mounted</span></code></p></td>
+<td><p>Boolean true or false. Default is false.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="pipeline-local-filesystem">
+<h4>Pipeline Local Filesystem<a class="headerlink" href="#pipeline-local-filesystem" title="Link to this heading">¶</a></h4>
+<p>Pipeline Local Filesystems refer to the storage that is local to the
+Archivematica pipeline, but remote to the Storage Service.
+Basic fields for a Pipeline Local Filesystem space are listed
+in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">remote_user</span></code></p></td>
+<td><p>The username on the remote host.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">remote_name</span></code></p></td>
+<td><p>Name or IP of the remote machine.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">assume_rsync_daemon</span></code></p></td>
+<td><p>Boolean true or false. Default is false.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rsync_password</span></code></p></td>
+<td><p>The password for the rsync daemon.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="rclone">
+<h4>RClone<a class="headerlink" href="#rclone" title="Link to this heading">¶</a></h4>
+<p>Rclone is a command-line program to manage files in cloud storage, and is
+available as an access protocol in Storage Service 0.20 and higher.
+Basic fields for a Rclone space are listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">remote_name</span></code></p></td>
+<td><p>Remote name for the rclone configuration to use with this Space.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">container</span></code></p></td>
+<td><p>Container or bucket name to use in configured remote.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="swift">
+<h4>Swift<a class="headerlink" href="#swift" title="Link to this heading">¶</a></h4>
+<p>OpenStack's Swift is available as an access protocol in Storage Service 0.7 and
+higher. Basic fields for a Swift space are listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">auth_url</span></code></p></td>
+<td><p>The URL to authenticate against.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">auth_version</span></code></p></td>
+<td><p>The OpenStack authentication version. Default is 2.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">username</span></code></p></td>
+<td><p>Username to authenticate as. E.g. <code class="docutils literal notranslate"><span class="pre">http://example.com:5000/v2.0/</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">password</span></code></p></td>
+<td><p>Password to authenticate with.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">container</span></code></p></td>
+<td><p>The name of the Swift container.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tenant</span></code></p></td>
+<td><p>The tenant/account name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">region</span></code></p></td>
+<td><p>The region in Swift. This field is optional.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="s3-amazon">
+<h4>S3 (Amazon)<a class="headerlink" href="#s3-amazon" title="Link to this heading">¶</a></h4>
+<p>Amazon S3 is available as an access protocol as of Storage Service version 0.12.
+Basic fields for a S3(Amazon) space are listed in <a class="reference internal" href="#create-space"><span class="std std-ref">Create space</span></a></p>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">endpoint_url</span></code></p></td>
+<td><p>The URL of the S3 endpoint, e.g. <code class="docutils literal notranslate"><span class="pre">https://s3.amazonaws.com</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">access_key_id</span></code></p></td>
+<td><p>The public key generated by S3.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">secret_access_key</span></code></p></td>
+<td><p>The secret key generated by S3.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">region</span></code></p></td>
+<td><p>The region that the S3 instance uses, e.g. <code class="docutils literal notranslate"><span class="pre">us-east-2</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bucket</span></code></p></td>
+<td><p>The name of the designated S3 Bucket.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="location">
+<span id="ss-location"></span><h3>Location<a class="headerlink" href="#location" title="Link to this heading">¶</a></h3>
+<p>ロケーションとは、スペースを細分化したものです。各ロケーションには、AIP保管、DIP保管、転送元、転送バックログといった特定の目的が割り当てられ、スペース内のコンテンツを組織的に構成する方法を提供します。</p>
+<section id="get-all-locations">
+<h4>全ロケーションを取得<a class="headerlink" href="#get-all-locations" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/location/</strong></p></td>
+<td><p><em>スペース固有の詳細を返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Authorization: ApiKey test:95141fc645ed97a95893f1f865d24687f89a27ad&quot;</span> \
+        <span class="s1">&#39;http://localhost:8000/api/v2/location/schema/?format=json&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="s2">&quot;next&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;previous&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;total_count&quot;</span><span class="p">:</span> <span class="mi">7</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;objects&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/home&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="s2">&quot;TS&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;quota&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;relative_path&quot;</span><span class="p">:</span> <span class="s2">&quot;home&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/a48e2a56-bae7-4b63-824e-b886bbadd77d/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/218caeb7-fd59-4b7b-99b1-f5771a2dd34f/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;a48e2a56-bae7-4b63-824e-b886bbadd77d&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Store AIP in standard Archivematica Directory&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="s2">&quot;AS&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;quota&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;relative_path&quot;</span><span class="p">:</span> <span class="s2">&quot;var/archivematica/sharedDirectory/www/AIPsStore&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/6286affb-6a2b-4ac7-b81e-192d84ede4c6/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/218caeb7-fd59-4b7b-99b1-f5771a2dd34f/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="s2">&quot;179586607&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;6286affb-6a2b-4ac7-b81e-192d84ede4c6&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Store DIP in standard Archivematica Directory&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/DIPsStore&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="s2">&quot;DS&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;quota&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;relative_path&quot;</span><span class="p">:</span> <span class="s2">&quot;var/archivematica/sharedDirectory/www/DIPsStore&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/8b70e21b-57a3-46f1-baee-c8c48fb6383c/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/218caeb7-fd59-4b7b-99b1-f5771a2dd34f/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="s2">&quot;6773558&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;8b70e21b-57a3-46f1-baee-c8c48fb6383c&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Default transfer backlog&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore/transferBacklog&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="s2">&quot;BL&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;quota&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;relative_path&quot;</span><span class="p">:</span> <span class="s2">&quot;var/archivematica/sharedDirectory/www/AIPsStore/</span><span class="se">\</span>
+<span class="s2">            transferBacklog&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/0da78c11-4ea7-4c52-8114-d39980e5</span><span class="se">\</span>
+<span class="s2">            ad2b/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/218caeb7-fd59-4b7b-99b1-f5771a2dd34f/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="s2">&quot;189008&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;0da78c11-4ea7-4c52-8114-d39980e5ad2b&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;For storage service internal usage.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/storage_service&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="s2">&quot;SS&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;quota&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;relative_path&quot;</span><span class="p">:</span> <span class="s2">&quot;var/archivematica/storage_service&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/5bf813d0-5663-4025-aac3-956ed1403790/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/218caeb7-fd59-4b7b-99b1-f5771a2dd34f/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;5bf813d0-5663-4025-aac3-956ed1403790&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Default AIP recovery&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/storage_service/recover&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="s2">&quot;AR&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;quota&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;relative_path&quot;</span><span class="p">:</span> <span class="s2">&quot;var/archivematica/storage_service/recover&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/e26a003e-361c-45ad-b82e-185faabc</span><span class="se">\</span>
+<span class="s2">            7a2d/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/218caeb7-fd59-4b7b-99b1-f5771a2dd34f/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;e26a003e-361c-45ad-b82e-185faabc7a2d&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="s2">&quot;CP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;quota&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;relative_path&quot;</span><span class="p">:</span> <span class="s2">&quot;var/archivematica/sharedDirectory/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/6f99d6c7-65ff-4966-993d-92a40df4</span><span class="se">\</span>
+<span class="s2">            a072/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/218caeb7-fd59-4b7b-99b1-f5771a2dd34f/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;6f99d6c7-65ff-4966-993d-92a40df4a072&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="create-new-location">
+<h4>新しい場所を作成<a class="headerlink" href="#create-new-location" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2/location/</strong></p></td>
+<td><p><em>v0.12で追加 - issue `367 &lt;https://github.com/artefactual/archivematica-storage-service/issues/367&gt;`_ およびissue `37 &lt;https://github.com/archivematica/Issues/issues/37&gt;`_ を参照してください。</em></p>
+<p><em>このエンドポイントは、Storage Service内にロケーションを作成します。ただし、その場所が指すディレクトリは実際には作成されません。</em></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>スペースに関する情報。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline</span></code></p></td>
+<td><p>パイプラインのURI。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">space</span></code></p></td>
+<td><p>空間のURI。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">default</span></code></p></td>
+<td><p>trueの場合、この場所は、その目的のためのデフォルトとなります。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">purpose</span></code></p></td>
+<td><p>以下の値を受け付けます：</p>
+<p>AR（AIP_RECOVERY）</p>
+<p>AS（AIP_STORAGE）</p>
+<p>CP（CURRENTLY_PROCESSING）</p>
+<p>DS（DIP_STORAGE）</p>
+<p>SD (SWORD_DEPOSIT)</p>
+<p>SS（STORAGE_SERVICE_INTERNAL）</p>
+<p>BL (BACKLOG)</p>
+<p>TS (TRANSFER_SOURCE)</p>
+<p>RP (REPLICATOR)</p>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">relative_path</span></code></p></td>
+<td><p>スペースのパスに対して。</p></td>
+</tr>
+</tbody>
+</table>
+<p>例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+  <span class="o">--</span><span class="n">request</span> <span class="n">POST</span> \
+  <span class="o">--</span><span class="n">silent</span> \
+  <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Authorization: ApiKey test:test&quot;</span> \
+  <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> \
+  <span class="o">--</span><span class="n">data</span> <span class="s1">&#39;{</span>
+      <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/api/v2/pipeline/90707555-244f-47af-8271-66496a6a965b/&quot;</span><span class="p">],</span>
+      <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="s2">&quot;TS&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;relative_path&quot;</span><span class="p">:</span> <span class="s2">&quot;foo/bar&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/141593ff-2a27-44a1-9de1-917573fa0f4a/&quot;</span>
+    <span class="p">}</span><span class="s1">&#39; </span><span class="se">\</span>
+<span class="s1">      &quot;http://127.0.0.1:62081/api/v2/location/&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="get-location-details">
+<h4>場所の詳細を取得<a class="headerlink" href="#get-location-details" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/location/&lt;UUID&gt;/</strong></p></td>
+<td><p><em>スペース固有の詳細を返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s1">&#39;Authorization: ApiKey test_user:ow7ioGh2reephua8uPaiWee3EiHeev6u&#39;</span> \
+        <span class="s1">&#39;http://test.archivematica.net:8000/api/v2/location/e26a003e-361c-45ad-b82e-185faabc7a4d&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Default AIP recovery&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/storage_service/recover&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="s2">&quot;AR&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;quota&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;relative_path&quot;</span><span class="p">:</span> <span class="s2">&quot;var/archivematica/storage_service/recover&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/e26a003e-361c-45ad-b82e-185faabc7a4d/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/space/218caeb7-fd59-4b7b-99b1-f5771a2dd34f/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;e26a003e-361c-45ad-b82e-185faabc7a2d&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="move-files-to-this-location">
+<h4>ファイルをこの場所に移動<a class="headerlink" href="#move-files-to-this-location" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2/location/&lt;UUID&gt;/</strong></p></td>
+<td><p><em>指定したパイプラインの場所にファイルを移動します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">origin_location</span></code></p></td>
+<td><p>AIPを再インジェストするパイプラインのUUID。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline</span></code></p></td>
+<td><p>パイプラインのURI。両方の場所をこのパイプラインに関連付けなければなりません。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">files</span></code></p></td>
+<td><p>移動元と移動先を含むディクションのリスト。 <cite>source</cite> 、 <cite>destination</cite> は、移動するファイルのLocationからの相対パスです。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>転送、SIPなどの作成や、ファイルを移動する必要があるがStorage Serviceによって追跡されないような場合に使用することを意図しています。</p>
+</div>
+</section>
+<section id="browse-location-path">
+<h4>ロケーションパスをブラウズ<a class="headerlink" href="#browse-location-path" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/location/&lt;UUID&gt;/browse/</strong></p></td>
+<td><p><em>base64エンコードされたロケーションパスを返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>クエリ文字列パラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">entries</span></code></p></td>
+<td><p><cite>パス</cite> 、ファイルまたはディレクトリのエントリのリスト。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">directories</span></code></p></td>
+<td><p><cite>パス</cite> 内のディレクトリのリスト。 <cite>エントリ</cite> のサブセット。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sword-collection">
+<h4>SWORDコレクション<a class="headerlink" href="#sword-collection" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET,</span> <span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2/location/&lt;UUID&gt;/</strong> <strong>sword/collection</strong></p></td>
+<td><p><em>Archivematica Storage Service REST APIの一部です。Storage Serviceは、Archivematicaダッシュボードとも通信し、SWORDデポジットから作成された転送の処理が承認されたことを通知します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>Archivematica Sword APIを使用すると、サードパーティのアプリケーションで転送の作成プロセスを自動化できます。</p>
+<blockquote>
+<div><p>1. Create Transfer - set the name and other metadata about a Transfer
+Populate Transfer - add/edit/update digital objects in a Transfer,
+and associated metadata.</p>
+<p>2. Finalize Transfer - indicates that the Transfer is ready to start processing.
+After content has been deposited, if users have access to the deposit directory
+they can also manually manipulate the deposit directory aside from any
+manipulation using the API.</p>
+<p>3. Once a Transfer has been created, populated and finalized, Archivematica
+will begin processing that Transfer.</p>
+</div></blockquote>
+<p>リクエスト例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">location</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> \
+        <span class="s1">&#39;http://test.archivematica.net:8000/api/v2/location/6286affb-6a2b-4ac7-b81e-192d84ede7c6/browse/&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;directories&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;MTk5OA==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MjdkOQ==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MmM0Yg==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MmNkMA==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;OTE0NA==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;YjdlZg==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ZTA1Mg==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dHJhbnNmZXJCYWNrbG9n&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;entries&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;MTk5OA==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MjdkOQ==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MmM0Yg==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MmNkMA==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;OTE0NA==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;YjdlZg==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ZTA1Mg==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dHJhbnNmZXJCYWNrbG9n&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;MTk5OA==&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;object count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;MjdkOQ==&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;object count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;MmM0Yg==&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;object count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;MmNkMA==&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;object count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;OTE0NA==&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;object count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;YjdlZg==&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;object count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;ZTA1Mg==&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;object count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;dHJhbnNmZXJCYWNrbG9n&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;object count&quot;</span><span class="p">:</span> <span class="mi">34</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="package">
+<span id="ss-package"></span><h3>パッケージ<a class="headerlink" href="#package" title="Link to this heading">¶</a></h3>
+<p>パッケージは、外部サービスから転送された1つ以上のファイルのバンドルです。例えば、パッケージは AIP、バックログ転送、またはDIPであるかもしれません。各パッケージはある場所に保存されます。</p>
+<section id="get-all-packages">
+<h4>すべてのパッケージを取得<a class="headerlink" href="#get-all-packages" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/file/</strong></p></td>
+<td><p><em>利用可能なすべての保存場所のすべてのパッケージに関する情報を取得します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">location</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s1">&#39;Authorization: ApiKey test_user:ow7ioGh2reephua8uPaiWee3EiHeev6u&#39;</span> \
+        <span class="s1">&#39;http://test.archivematica.net:8000/api/v2/file/&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="s2">&quot;next&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;previous&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;total_count&quot;</span><span class="p">:</span> <span class="mi">11</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;objects&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore/27d9/8723/a8f2/490b/9116/88c5/a555/9ca2/img-2-27d98723-a8f2-490b-9116-88c5a5559ca2.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/6286affb-6a2b-4ac7-b81e-192d84ede4c6/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;27d9/8723/a8f2/490b/9116/88c5/a555/9ca2/img-2-27d98723-a8f2-490b-9116-88c5a5559ca2.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;reingest_pipeline&quot;</span><span class="p">:</span> <span class="n">null</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;AIP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/27d98723-a8f2-490b-9116-88c5a5559ca2/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">11444115</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;27d98723-a8f2-490b-9116-88c5a5559ca2&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore/b7ef/c3ad/81dc/4581/b630/f7ed/5ca8/01ce/images-b7efc3ad-81dc-4581-b630-f7ed5ca801ce.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/6286affb-6a2b-4ac7-b81e-192d84ede4c6/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;b7ef/c3ad/81dc/4581/b630/f7ed/5ca8/01ce/images-b7efc3ad-81dc-4581-b630-f7ed5ca801ce.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;reingest_pipeline&quot;</span><span class="p">:</span> <span class="n">null</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;AIP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/b7efc3ad-81dc-4581-b630-f7ed5ca801ce/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">11447220</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;b7efc3ad-81dc-4581-b630-f7ed5ca801ce&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore/9144/66c1/d89d/4232/b583/7dcd/631f/d08a/test-914466c1-d89d-4232-b583-7dcd631fd08a.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/6286affb-6a2b-4ac7-b81e-192d84ede4c6/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;9144/66c1/d89d/4232/b583/7dcd/631f/d08a/test-914466c1-d89d-4232-b583-7dcd631fd08a.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;AIP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/914466c1-d89d-4232-b583-7dcd631fd08a/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">43609598</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;914466c1-d89d-4232-b583-7dcd631fd08a&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore/1998/acb4/c6d8/439f/8e74/7285/ba15/012d/i2-1998acb4-c6d8-439f-8e74-7285ba15012d.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/6286affb-6a2b-4ac7-b81e-192d84ede4c6/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;1998/acb4/c6d8/439f/8e74/7285/ba15/012d/i2-1998acb4-c6d8-439f-8e74-7285ba15012d.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;reingest_pipeline&quot;</span><span class="p">:</span> <span class="n">null</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;AIP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/1998acb4-c6d8-439f-8e74-7285ba15012d/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">11408327</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;1998acb4-c6d8-439f-8e74-7285ba15012d&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore/2cd0/575f/5e0b/4d2f/bd00/7e0b/254e/0802/mc-test-2cd0575f-5e0b-4d2f-bd00-7e0b254e0802.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/6286affb-6a2b-4ac7-b81e-192d84ede4c6/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;2cd0/575f/5e0b/4d2f/bd00/7e0b/254e/0802/mc-test-2cd0575f-5e0b-4d2f-bd00-7e0b254e0802.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;AIP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;/api/v2/file/855e14e9-2921-4b51-be77-0afdbdc16aeb/&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/2cd0575f-5e0b-4d2f-bd00-7e0b254e0802/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">11416388</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;2cd0575f-5e0b-4d2f-bd00-7e0b254e0802&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/DIPsStore/855e/14e9/2921/4b51/be77/0afd/bdc1/6aeb/mc-test-2cd0575f-5e0b-4d2f-bd00-7e0b254e0802&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/8b70e21b-57a3-46f1-baee-c8c48fb6383c/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;855e/14e9/2921/4b51/be77/0afd/bdc1/6aeb/mc-test-2cd0575f-5e0b-4d2f-bd00-7e0b254e0802&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;DIP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;/api/v2/file/2cd0575f-5e0b-4d2f-bd00-7e0b254e0802/&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/855e14e9-2921-4b51-be77-0afdbdc16aeb/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">3386601</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;855e14e9-2921-4b51-be77-0afdbdc16aeb&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore/transferBacklog/originals/test_bag-cdc18f4b-e859-4244-9c42-c575b69e92fe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/0da78c11-4ea7-4c52-8114-d39980e5ad2b/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;originals/test_bag-cdc18f4b-e859-4244-9c42-c575b69e92fe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;transfer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/cdc18f4b-e859-4244-9c42-c575b69e92fe/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">189008</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;cdc18f4b-e859-4244-9c42-c575b69e92fe&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore/e052/5606/c710/4380/9c98/fdb4/3e77/c0ba/demo_images-e0525606-c710-4380-9c98-fdb43e77c0ba.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/6286affb-6a2b-4ac7-b81e-192d84ede4c6/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;e052/5606/c710/4380/9c98/fdb4/3e77/c0ba/demo_images-e0525606-c710-4380-9c98-fdb43e77c0ba.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;AIP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;/api/v2/file/578fec0b-4d6e-4725-8649-e03be6ab7425/&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/e0525606-c710-4380-9c98-fdb43e77c0ba/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">11414225</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;e0525606-c710-4380-9c98-fdb43e77c0ba&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/DIPsStore/578f/ec0b/4d6e/4725/8649/e03b/e6ab/7425/demo_images-e0525606-c710-4380-9c98-fdb43e77c0ba&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/8b70e21b-57a3-46f1-baee-c8c48fb6383c/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;578f/ec0b/4d6e/4725/8649/e03b/e6ab/7425/demo_images-e0525606-c710-4380-9c98-fdb43e77c0ba&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;DIP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;/api/v2/file/e0525606-c710-4380-9c98-fdb43e77c0ba/&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/578fec0b-4d6e-4725-8649-e03be6ab7425/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">3386957</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;578fec0b-4d6e-4725-8649-e03be6ab7425&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore/2c4b/a224/5889/4a07/a6ca/8323/5ad1/82e0/metadata-2c4ba224-5889-4a07-a6ca-83235ad182e0.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/6286affb-6a2b-4ac7-b81e-192d84ede4c6/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;2c4b/a224/5889/4a07/a6ca/8323/5ad1/82e0/metadata-2c4ba224-5889-4a07-a6ca-83235ad182e0.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;AIP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/2c4ba224-5889-4a07-a6ca-83235ad182e0/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">78948258</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;2c4ba224-5889-4a07-a6ca-83235ad182e0&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore/9390/594f/84c2/457d/bd6a/618f/21f7/c954/cf-1-9390594f-84c2-457d-bd6a-618f21f7c954.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/6286affb-6a2b-4ac7-b81e-192d84ede4c6/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;9390/594f/84c2/457d/bd6a/618f/21f7/c954/cf-1-9390594f-84c2-457d-bd6a-618f21f7c954.7z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;AIP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/9390594f-84c2-457d-bd6a-618f21f7c954/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">11417385</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;9390594f-84c2-457d-bd6a-618f21f7c954&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="create-new-package">
+<h4>新しいパッケージを作成<a class="headerlink" href="#create-new-package" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2/file/</strong></p></td>
+<td><p><em>パッケージ（AIP、転送など）を追跡するデータベースエントリを作成します。パッケージがAIP、DIPまたはAICで、current_locationがAIPまたはDIPの保存場所である場合、ソースから宛先の場所にファイルを移動します。パッケージがTransferで、current_locationがtransfer backlogの場合、それも移動されます。</em></p>
+<p><em>これは、</em> <code class="docutils literal notranslate"><span class="pre">Package.store_aip</span></code> <em>または</em> <code class="docutils literal notranslate"><span class="pre">Package.backlog_transfer</span></code> を呼び出す、修正された * <code class="docutils literal notranslate"><span class="pre">obj_create</span></code> * 関数によって処理されます。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>クエリ文字列パラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>新しいパッケージのUUID。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">origin_location</span></code></p></td>
+<td><p>パッケージが現在ある場所のURI。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">origin_path</span></code></p></td>
+<td><p>パッケージへのパス、origin_locationに対して。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">current_location</span></code></p></td>
+<td><p>パッケージが保存されるべき場所のURI。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">current_path</span></code></p></td>
+<td><p>パッケージが保管されるパス、current_locationに対して。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">package_type</span></code></p></td>
+<td><p>これは、パッケージの種類です。 <cite>AIP</cite> 、 <cite>AIC</cite> 、 <cite>DIP</cite> 、 <cite>転送</cite> 、 <cite>SIP</cite> 、 <cite>ファイル</cite> 、 <cite>デポジット</cite> のいずれかになります。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">size</span></code></p></td>
+<td><p>パッケージのサイズ。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">origin_pipeline</span></code></p></td>
+<td><p>パッケージのあったパイプラインのURI。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">related_package_uuid</span></code></p></td>
+<td><p>このパッケージに関連するパッケージのUUID。例：AIPを保存するときのDIPのUUID</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="get-package-details">
+<h4>パッケージの詳細を取得<a class="headerlink" href="#get-package-details" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;</strong></p></td>
+<td><p><em>パッケージに関する情報を取得します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">location</span>
+    <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s1">&#39;Authorization: ApiKey test:ow7ioGh2reephua8uPaiWee4EiHeav7u&#39;</span> \
+        <span class="s1">&#39;http://test.archivematica.net:8000/api/v2/file/9390594f-84c2-457d-bd6a-618f21f7c954/&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="s2">&quot;current_full_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/archivematica/sharedDirectory/www/AIPsStore/9390/594f/84c2/457d/bd6a/618f/21f7/c954/cf-1-9390594f-84c2-457d-bd6a-618f21f7c954.7z&quot;</span><span class="p">,</span>
+<span class="s2">&quot;current_location&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/location/6286affb-6a2b-4ac7-b81e-192d84ede4c6/&quot;</span><span class="p">,</span>
+<span class="s2">&quot;current_path&quot;</span><span class="p">:</span> <span class="s2">&quot;9390/594f/84c2/457d/bd6a/618f/21f7/c954/cf-1-9390594f-84c2-457d-bd6a-618f21f7c954.7z&quot;</span><span class="p">,</span>
+<span class="s2">&quot;encrypted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+<span class="s2">&quot;misc_attributes&quot;</span><span class="p">:</span> <span class="p">{},</span>
+<span class="s2">&quot;origin_pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/pipeline/a64e061a-5688-49b5-95c1-0b6885c40c04/&quot;</span><span class="p">,</span>
+<span class="s2">&quot;package_type&quot;</span><span class="p">:</span> <span class="s2">&quot;AIP&quot;</span><span class="p">,</span>
+<span class="s2">&quot;related_packages&quot;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s2">&quot;replicas&quot;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s2">&quot;replicated_package&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+<span class="s2">&quot;resource_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v2/file/9390594f-84c2-457d-bd6a-618f21f7c954/&quot;</span><span class="p">,</span>
+<span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">11417385</span><span class="p">,</span>
+<span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UPLOADED&quot;</span><span class="p">,</span>
+<span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;9390594f-84c2-457d-bd6a-618f21f7c954&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="update-package-contents">
+<h4>パッケージ内容の更新<a class="headerlink" href="#update-package-contents" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PUT</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;</strong></p></td>
+<td><p><em>reインジェスト中にパッケージの内容を更新します。パッケージがAIPまたはAICで、現在AIPの保存場所に保存されており、「reインジェスト」パラメーターが設定されている場合、</em> <code class="docutils literal notranslate"><span class="pre">Package.finish_reingest</span></code> <em>を呼び出し、新しいAIPを既存のものとマージします。</em></p>
+<p>** <code class="docutils literal notranslate"><span class="pre">obj_update_hook.</span></code> を呼び出す修正済み * <code class="docutils literal notranslate"><span class="pre">obj_update</span></code> * を使って実施</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディのパラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">reingest</span></code></p></td>
+<td><p><em>再インジェストであることを示すフラグ。誤ってAIPを変更する可能性を減らします。</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p><em>既存のパッケージのUUID。</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">origin_location</span></code></p></td>
+<td><p><em>パッケージが現在ある場所のURI。</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">origin_path</span></code></p></td>
+<td><p><em>パッケージへのパス、origin_locationに対して。</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">current_location</span></code></p></td>
+<td><p><em>パッケージが保存されるべき場所のURI</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">package_type</span></code></p></td>
+<td><p><em>パッケージの種類。</em> <code class="docutils literal notranslate"><span class="pre">AIP</span></code> , <code class="docutils literal notranslate"><span class="pre">AIC</span></code> のいずれか。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">size</span></code></p></td>
+<td><p><em>パッケージのサイズ。</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">origin_pipeline</span></code></p></td>
+<td><p><em>パッケージのパイプラインのURI。これは、reインジェストが開始されたのと同じパイプラインでなければなりません（</em> <code class="docutils literal notranslate"><span class="pre">Package.misc_attributes.reingest_pipeline)</span></code> を通して追跡されます）。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="update-package-metadata">
+<h4>パッケージのメタデータを更新<a class="headerlink" href="#update-package-metadata" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PATCH</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;</strong></p></td>
+<td><p><em>パッケージのデータベースに保存されているメタデータを更新します。現在、これは再インジェストステータスの更新に使用されています。</em></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>現在のところ、これは実際にどのような値が渡されたかにかかわらず、常に <code class="docutils literal notranslate"><span class="pre">Package.misc_attributes.reingest</span></code> を <code class="docutils literal notranslate"><span class="pre">None</span></code> に設定します。</p>
+</div>
+<p>これは、 <code class="docutils literal notranslate"><span class="pre">obj_update_hook</span></code> を呼び出す <code class="docutils literal notranslate"><span class="pre">modified</span> <span class="pre">obj_update</span></code> を使って実装されており、 <code class="docutils literal notranslate"><span class="pre">update_in_place</span></code> も役に立ちます。</p>
+</section>
+<section id="delete-package-request">
+<h4>パッケージ削除リクエスト<a class="headerlink" href="#delete-package-request" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;/delete_aip/</strong></p></td>
+<td><p><em>パッケージの削除を要求します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディパラメーター（必須）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">event_reason</span></code></p></td>
+<td><p><em>AIP を削除する根拠。</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline</span></code></p></td>
+<td><p><em>削除要求元のパイプラインのUUID。</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">user_id</span></code></p></td>
+<td><p><em>削除を要求するユーザーID。これは、パイプライン上のユーザーのIDであり、0以上の整数でなければなりません。</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">user_email</span></code></p></td>
+<td><p><em>削除を要求するユーザーの電子メール。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">location</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">POST</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s1">&#39;Authorization: ApiKey test:ow7ioGh2reephua8uPaiWee4EiHeev2z&#39;</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s1">&#39;Content-Type: application/json&#39;</span> \
+    <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">raw</span> <span class="s1">&#39;{</span>
+    <span class="s2">&quot;event_reason&quot;</span><span class="p">:</span> <span class="s2">&quot;testing purposes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;a64e061a-5688-49b5-95c1-0b6885c40c04&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;user_email&quot;</span><span class="p">:</span> <span class="s2">&quot;demo@example.com&quot;</span>
+    <span class="p">}</span><span class="s1">&#39; </span><span class="se">\</span>
+<span class="s1">        &#39;</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">test</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">net</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v2</span><span class="o">/</span><span class="n">file</span><span class="o">/</span><span class="mi">2</span><span class="n">cd0575f</span><span class="o">-</span><span class="mf">5e0</span><span class="n">b</span><span class="o">-</span><span class="mi">4</span><span class="n">d2f</span><span class="o">-</span><span class="n">bd00</span><span class="o">-</span><span class="mf">7e0</span><span class="n">b254e0802</span><span class="o">/</span><span class="n">delete_aip</span><span class="o">/</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Delete request created successfully.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">3</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="recover-aip-request">
+<h4>AIPリクエストの復旧<a class="headerlink" href="#recover-aip-request" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;/recover_aip/</strong></p></td>
+<td><p><em>パッケージの復旧を要求します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディパラメーター（必須）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">event_reason</span></code></p></td>
+<td><p><em>AIP復旧の根拠。</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline</span></code></p></td>
+<td><p><em>回復要求元のパイプラインのURI。</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">user_id</span></code></p></td>
+<td><p><em>復旧を要求するユーザーID。これはパイプライン上のユーザーのIDであり、0以上の整数でなければなりません。</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">user_email</span></code></p></td>
+<td><p><em>復旧を依頼するユーザーの電子メール。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">--</span><span class="n">location</span> \
+    <span class="o">--</span><span class="n">request</span> <span class="n">POST</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s1">&#39;Authorization: ApiKey test:ow7ioGh2reephua8uPaiWee4EiHeev2z&#39;</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s1">&#39;Content-Type: application/json&#39;</span> \
+    <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">raw</span> <span class="s1">&#39;{</span>
+    <span class="s2">&quot;event_reason&quot;</span><span class="p">:</span> <span class="s2">&quot;testing purposes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span> <span class="s2">&quot;a64e061a-5688-49b5-95c1-0b6885c40c04&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;user_email&quot;</span><span class="p">:</span> <span class="s2">&quot;demo@example.com&quot;</span>
+    <span class="p">}</span><span class="s1">&#39; </span><span class="se">\</span>
+<span class="s1">        &#39;</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">test</span><span class="o">.</span><span class="n">archivematica</span><span class="o">.</span><span class="n">net</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v2</span><span class="o">/</span><span class="n">file</span><span class="o">/</span><span class="mi">2</span><span class="n">cd0575f</span><span class="o">-</span><span class="mf">5e0</span><span class="n">b</span><span class="o">-</span><span class="mi">4</span><span class="n">d2f</span><span class="o">-</span><span class="n">bd00</span><span class="o">-</span><span class="mf">7e0</span><span class="n">b254e0802</span><span class="o">/</span><span class="n">recover_aip</span><span class="o">/</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>レスポンス例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Recover request created successfully.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">4</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="download-single-file">
+<h4>単一ファイルのダウンロード<a class="headerlink" href="#download-single-file" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET,</span> <span class="pre">HEAD</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;/extract_file/</strong></p></td>
+<td><p><em>パッケージがローカルで利用可能かどうかをチェックし、パッケージから1つのファイルを返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>（今後の改善）HEADとGETは同じ機能を実行すべきではありません。HEADは、ファイルを返さず、存在だけをチェックするように更新されるべきです。現在、Storage Serviceは、このAIPをダウンロードして展開する以外に、ファイルが存在するかどうかをチェックする方法がありません。</p>
+</div>
+<p>レスポンス：</p>
+<p>パッケージから単一のファイルを返します。パッケージが圧縮されている場合は、AIP全体をダウンロードして解凍します。</p>
+<p>AtoMは HEADを使用してファイルの存在をチェックするため、HEADに応答します。</p>
+<p>パッケージがArkivumにある場合、そのパッケージは実際には利用できないかもしれません。このエンドポイントは、パッケージがローカルで利用可能かどうかをチェックします。利用可能な場合は、通常通り返されます。そうでない場合は、 <code class="docutils literal notranslate"><span class="pre">202</span></code> を返し、アクセスの試みについて管理者にメールを送ります。</p>
+</section>
+<section id="download-package">
+<h4>パッケージのダウンロード<a class="headerlink" href="#download-package" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET,</span> <span class="pre">HEAD</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;/download/</strong></p>
+<p><strong>/api/v2/file/&lt;UUID&gt;/download/&lt;chunk number&gt;/ （LOCKSS採取用）</strong></p>
+</td>
+<td><p><em>パッケージが利用可能かどうかをチェックし、パッケージ全体を単一のファイルとして返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>パッケージがArkivumにある場合、そのパッケージは実際には利用できないかもしれません。このエンドポイントは、パッケージがローカルで利用可能かどうかをチェックします。利用可能な場合は、通常通り返されます。そうでない場合は、 <code class="docutils literal notranslate"><span class="pre">202</span></code> を返し、アクセスの試みについて管理者にメールを送ります。</p>
+</section>
+<section id="get-pointer-file">
+<h4>ポインタファイルの取得<a class="headerlink" href="#get-pointer-file" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;/pointer_file/</strong></p></td>
+<td><p><em>ポインタファイルが利用可能かどうかをチェックし、ポインターファイルの内容を返します。</em></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="check-fixity">
+<h4>fixityのチェック<a class="headerlink" href="#check-fixity" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>//api/v2/file/&lt;UUID&gt;/check_fixity/</strong></p></td>
+<td><p><em>バッグチェックを行い、チェック結果でStorage Serviceデータベースを更新します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>クエリ文字列パラメーター：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">force_local</span></code></p></td>
+<td><p><em>trueの場合、スペースが提供する修正機能 (利用可能な場合) を使用するのではなく、AIPにfixityをローカルにダウンロードして実行します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス定義（JSON）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">success</span></code></p></td>
+<td><p>妥当性確認に成功した場合は <cite>True</cite> 、妥当性確認に失敗した場合は <cite>Faulse</cite> 、スキャンを開始できなかった場合は <cite>None</cite> です。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
+<td><p>人が読める形式でレポートを説明する文字列です。スキャンが成功した場合は空になります。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">failures</span></code></p></td>
+<td><p>0個以上のエラーのリスト。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></p></td>
+<td><p>最後のfixityチェックの日時を示すISO形式の文字列です。チェックが外部システムによって実行された場合、これは、そのシステムによって提供されます。提供されない場合、またはエラーの場合は、Noneとなります。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="aip-storage-callback-request">
+<h4>AIPストレージコールバックリクエスト<a class="headerlink" href="#aip-storage-callback-request" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;/send_callback/post_store/</strong></p></td>
+<td><p><em>指定されたAIPのポストストレージを実行するように設定されたコールバックを取得します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Archivematica Storage Serviceのバージョン0.15以降では、このエンドポイントが拡張され、AIP、AIC、DIPの 保存イベントのコールバックをサポートします。</p>
+<ul class="simple">
+<li><p><strong>イベント</strong> ポストストアAIP、AIC、またはDIP</p></li>
+<li><p><strong>URL：</strong> <a class="reference external" href="https://scope.com/api/v1/dip">https://scope.com/api/v1/dip</a>/&lt;package_uuid&gt;/stored</p></li>
+<li><p><strong>メソッド</strong> POST</p></li>
+<li><dl class="simple">
+<dt><strong>ヘッダー:</strong></dt><dd><ul>
+<li><p>認証 -&gt; トークン&lt;token&gt;</p></li>
+<li><p>送信元 -&gt; <a class="reference external" href="https://ss.com">https://ss.com</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>予想されるステータス：</strong> 202</p></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>このエンドポイントを使用する場合、APIコールが現在正しく機能するには、AIPがローカルに保存されていなければなりません。</p>
+</div>
+</section>
+<section id="get-file-information-for-package">
+<h4>パッケージのファイル情報を取得<a class="headerlink" href="#get-file-information-for-package" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;/contents/</strong></p></td>
+<td><p><em>パッケージ内の各ファイルのメタデータを取得します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス定義（JSON）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">success</span></code></p></td>
+<td><p>True。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">package</span></code></p></td>
+<td><p>パッケージのUUID。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">files</span></code></p></td>
+<td><p>ファイル情報を持つ辞書のリスト。各辞書には：</p>
+<ul class="simple">
+<li><p>source_id - インデックス化するファイルのUUID。</p></li>
+<li><p>name - パッケージ内のファイルの相対パス。</p></li>
+<li><p>source_package - このファイルの送信元のSIPの UUID。</p></li>
+<li><p>checksum - ファイルのチェックサム、または空の文字列。</p></li>
+<li><p>accessionid - Accession番号、または空の文字列。</p></li>
+<li><p>送信元 - ArchivematicaダッシュボードのUUID。</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="update-file-information-for-package">
+<h4>パッケージのファイル情報を更新<a class="headerlink" href="#update-file-information-for-package" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PUT</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;/contents/</strong></p></td>
+<td><p><em>一連のファイルをパッケージに追加します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス定義（JSON）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">relative_path</span></code></p></td>
+<td><p>パッケージ内のファイルの相対パス。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fileuuid</span></code></p></td>
+<td><p>インデックスを作成するファイルのUUID。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">accessionid</span></code></p></td>
+<td><p>Accession番号、または空の文字列。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sipuuid</span></code></p></td>
+<td><p>このファイルの送信元のSIPのUUID。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">origin</span></code></p></td>
+<td><p>ArchivematicaダッシュボードのUUID。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="delete-file-information-for-package">
+<h4>パッケージのファイル情報を削除<a class="headerlink" href="#delete-file-information-for-package" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DELETE</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;/contents/</strong></p></td>
+<td><p><em>このパッケージに関連するすべてのファイルレコードを削除します。</em></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="query-file-information-on-packages">
+<h4>パッケージのファイル情報のクエリ<a class="headerlink" href="#query-file-information-on-packages" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET,</span> <span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2/file/metadata/</strong></p></td>
+<td><p><em>ファイルに関する情報にアクセスしたり、書き込んだりします。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス定義（JSON）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">file</span></code></p></td>
+<td><p>クエリーに一致するファイルに関する情報を持つ辞書のリスト：</p>
+<ul class="simple">
+<li><p>accessionid - accessionid番号、または空の文字列。</p></li>
+<li><p>file_extension - ファイルの拡張子。</p></li>
+<li><p>filename - パス名を除いたファイル名、sans path。</p></li>
+<li><p>relative_path - パッケージ内のファイルの相対パス。</p></li>
+<li><p>fileuuid - インデックス化するファイルのUUID。</p></li>
+<li><p>sipuuid - このファイルの送信元のSIPのUUID。</p></li>
+<li><p>送信元 - ArchivematicaダッシュボードのUUID。</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="reingest-aip">
+<span id="ss-reingest-aip"></span><h4>AIPの再インジェスト<a class="headerlink" href="#reingest-aip" title="Link to this heading">¶</a></h4>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;/reingest/</strong></p></td>
+<td><p><em>AIPの再インジェストを開始します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> \
+  <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v2</span><span class="o">/</span><span class="n">file</span><span class="o">/</span><span class="mi">868</span><span class="n">a7ecd</span><span class="o">-</span><span class="n">c31b</span><span class="o">-</span><span class="mi">4773</span><span class="o">-</span><span class="n">ad6d</span><span class="o">-</span><span class="n">d736a35b8a6e</span><span class="o">/</span>
+  <span class="n">reingest</span><span class="o">/</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Authorization: ApiKey analyst:ow7ioGh2reephua8uPaiWee4EiHeev6u&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Content-Type: application/json&#39;</span> \
+  <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;Host: 127.0.0.1:8000&#39;</span> \
+  <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{</span>
+    <span class="s2">&quot;pipeline&quot;</span><span class="p">:</span><span class="s2">&quot;85f9db99-b187-47c3-9b5b-fa35470104c4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;reingest_type&quot;</span><span class="p">:</span><span class="s2">&quot;FULL&quot;</span>
+    <span class="p">}</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>リクエストボディパラメーター（JSON）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline</span></code></p></td>
+<td><p>AIPを再インジェストするパイプラインのUUID。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reingest_type</span></code></p></td>
+<td><p><cite>METADATA_ONLY</cite> （メタデータのみの再インジェスト）、 <cite>OBJECTS</cite> （部分的な再インジェスト）、 <cite>FULL</cite> （完全な再インジェスト）のいずれか1つ。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">processing_config</span></code></p></td>
+<td><p>オプション。完全な再インジェストで使用する処理設定の名前。</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンス例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Package 868a7ecd-c31b-4773-ad6d-d736a35b8a6e sent to pipeline</span>
+    <span class="n">Archivematica</span> <span class="n">on</span> <span class="n">test</span><span class="o">-</span><span class="n">vm</span> <span class="p">(</span><span class="mi">85</span><span class="n">f9db99</span><span class="o">-</span><span class="n">b187</span><span class="o">-</span><span class="mi">47</span><span class="n">c3</span><span class="o">-</span><span class="mi">9</span><span class="n">b5b</span><span class="o">-</span><span class="n">abc123</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">re</span><span class="o">-</span><span class="n">ingest</span><span class="s2">&quot;,</span>
+    <span class="s2">&quot;reingest_uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;affa2d71-3fdb-423f-8fe2-91c8d5ecc324&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;status_code&quot;</span><span class="p">:</span> <span class="mi">202</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="move-package">
+<h4>パッケージの移動<a class="headerlink" href="#move-package" title="Link to this heading">¶</a></h4>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>このエンドポイントは、Storage Serviceバージョン0.14で導入されました。</p>
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+<td><p><strong>/api/v2/file/&lt;UUID&gt;/move/</strong></p></td>
+<td><p><em>パッケージを再配列します。</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエストボディパラメーター（JSON）：</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">location_uuid</span></code></p></td>
+<td><p>パッケージを送る場所のUUID。その場所は、パッケージの現在の場所（例えば、AIP StorageやDIP Storage）と同じPurposeを持たなければなりません。</p></td>
+</tr>
+</tbody>
+</table>
+<p>リクエスト例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> \
+    <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;location_uuid=7c5c48d4-50db-4018-b4b1-7ed29d1ef9d3 &#39;</span> \
+    <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Authorization: ApiKey test:4525fd5272275caeac04a28447698c51&quot;</span> \
+        <span class="s1">&#39;http://mysite.archivematica.org:8000/api/v2/file/8b8aa1a2-79c9-490e-b630-28f90bb7e654/move/&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="sword-endpoints">
+<h4>SWORDエンドポイント<a class="headerlink" href="#sword-endpoints" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p>URL： <code class="docutils literal notranslate"><span class="pre">/api/v2/file/&lt;UUID&gt;/sword/</span></code></p></li>
+<li><p>URL： <code class="docutils literal notranslate"><span class="pre">/api/v2/file/&lt;UUID&gt;/sword/media/</span></code></p></li>
+<li><p>URL： <code class="docutils literal notranslate"><span class="pre">/api/v2/file/&lt;UUID&gt;/sword/state/</span></code></p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Storage Service API</a><ul>
+<li><a class="reference internal" href="#resources-and-endpoints">リソースとエンドポイント</a><ul>
+<li><a class="reference internal" href="#pipeline">Pipeline</a><ul>
+<li><a class="reference internal" href="#get-all-pipelines">すべてのパイプラインを取得</a></li>
+<li><a class="reference internal" href="#create-new-pipeline">新しいパイプラインの作成</a></li>
+<li><a class="reference internal" href="#get-pipeline-details">パイプラインの詳細を取得</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#space">Space</a><ul>
+<li><a class="reference internal" href="#get-all-spaces">すべてのスペースを取得</a></li>
+<li><a class="reference internal" href="#get-space-details">スペースの詳細を取得</a></li>
+<li><a class="reference internal" href="#browse-space-path">スペースパスをブラウズ</a></li>
+<li><a class="reference internal" href="#create-space">スペースを作成</a></li>
+<li><a class="reference internal" href="#access-protocols">Access protocols</a></li>
+<li><a class="reference internal" href="#archipelago">Archipelago</a></li>
+<li><a class="reference internal" href="#arkivum">Arkivum</a></li>
+<li><a class="reference internal" href="#dataverse">Dataverse</a></li>
+<li><a class="reference internal" href="#duracloud">DuraCloud</a></li>
+<li><a class="reference internal" href="#dspace-via-sword2-api">DSpace via SWORD2 API</a></li>
+<li><a class="reference internal" href="#dspace-via-rest-api">DSpace via REST API</a></li>
+<li><a class="reference internal" href="#fedora-via-sword2">Fedora via SWORD2</a></li>
+<li><a class="reference internal" href="#gpg-encryption-on-local-filesystem">GPG encryption on Local Filesystem</a></li>
+<li><a class="reference internal" href="#local-filesystem">Local Filesystem</a></li>
+<li><a class="reference internal" href="#lockss">LOCKSS</a></li>
+<li><a class="reference internal" href="#nfs">NFS</a></li>
+<li><a class="reference internal" href="#pipeline-local-filesystem">Pipeline Local Filesystem</a></li>
+<li><a class="reference internal" href="#rclone">RClone</a></li>
+<li><a class="reference internal" href="#swift">Swift</a></li>
+<li><a class="reference internal" href="#s3-amazon">S3 (Amazon)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#location">Location</a><ul>
+<li><a class="reference internal" href="#get-all-locations">全ロケーションを取得</a></li>
+<li><a class="reference internal" href="#create-new-location">新しい場所を作成</a></li>
+<li><a class="reference internal" href="#get-location-details">場所の詳細を取得</a></li>
+<li><a class="reference internal" href="#move-files-to-this-location">ファイルをこの場所に移動</a></li>
+<li><a class="reference internal" href="#browse-location-path">ロケーションパスをブラウズ</a></li>
+<li><a class="reference internal" href="#sword-collection">SWORDコレクション</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#package">パッケージ</a><ul>
+<li><a class="reference internal" href="#get-all-packages">すべてのパッケージを取得</a></li>
+<li><a class="reference internal" href="#create-new-package">新しいパッケージを作成</a></li>
+<li><a class="reference internal" href="#get-package-details">パッケージの詳細を取得</a></li>
+<li><a class="reference internal" href="#update-package-contents">パッケージ内容の更新</a></li>
+<li><a class="reference internal" href="#update-package-metadata">パッケージのメタデータを更新</a></li>
+<li><a class="reference internal" href="#delete-package-request">パッケージ削除リクエスト</a></li>
+<li><a class="reference internal" href="#recover-aip-request">AIPリクエストの復旧</a></li>
+<li><a class="reference internal" href="#download-single-file">単一ファイルのダウンロード</a></li>
+<li><a class="reference internal" href="#download-package">パッケージのダウンロード</a></li>
+<li><a class="reference internal" href="#get-pointer-file">ポインタファイルの取得</a></li>
+<li><a class="reference internal" href="#check-fixity">fixityのチェック</a></li>
+<li><a class="reference internal" href="#aip-storage-callback-request">AIPストレージコールバックリクエスト</a></li>
+<li><a class="reference internal" href="#get-file-information-for-package">パッケージのファイル情報を取得</a></li>
+<li><a class="reference internal" href="#update-file-information-for-package">パッケージのファイル情報を更新</a></li>
+<li><a class="reference internal" href="#delete-file-information-for-package">パッケージのファイル情報を削除</a></li>
+<li><a class="reference internal" href="#query-file-information-on-packages">パッケージのファイル情報のクエリ</a></li>
+<li><a class="reference internal" href="#reingest-aip">AIPの再インジェスト</a></li>
+<li><a class="reference internal" href="#move-package">パッケージの移動</a></li>
+<li><a class="reference internal" href="#sword-endpoints">SWORDエンドポイント</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="api-reference-archivematica.html"
+                          title="前の章へ">Archivematica API</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../development-environment.html"
+                          title="次の章へ">開発環境</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/dev-manual/api/api-reference-storage-service.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../development-environment.html" title="開発環境"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="api-reference-archivematica.html" title="Archivematica API"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >開発者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Storage Service API</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

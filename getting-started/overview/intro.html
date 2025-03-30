@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Archivematicaとは？ &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="ウェブベースのダッシュボード" href="dashboard.html" />
+    <link rel="prev" title="はじめに" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="dashboard.html" title="ウェブベースのダッシュボード"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="はじめに"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematicaとは？</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="what-is-archivematica">
+<span id="intro"></span><h1>Archivematicaとは？<a class="headerlink" href="#what-is-archivematica" title="Link to this heading">¶</a></h1>
+<p>Archivematicaは、デジタルオブジェクトのコレクションへの標準ベースの長期的なアクセスを維持するために設計されたフリーでオープンソースのデジタル保存システムです。Archivematicaは、Webベースのコンテンツ管理システムAtoMとパッケージ化されており、デジタルオブジェクトにアクセスできます。</p>
+<section id="open-source-oais">
+<span id="intro-oais"></span><h2>オープンソースOAIS<a class="headerlink" href="#open-source-oais" title="Link to this heading">¶</a></h2>
+<a class="reference internal image-reference" href="../../_images/OAIS.png"><img alt="Open Archival Information Systemの図" class="align-left" src="../../_images/OAIS.png" style="width: 50%;" />
+</a>
+<p>Archivematicaは、フリーでオープンソースの統合ツールスイートを提供し、 <a class="reference external" href="https://en.wikipedia.org/wiki/Open_Archival_Information_System">Open Archival Information System （OAIS）</a> 機能モデルやその他のデジタル保存の標準やベストプラクティスに準拠した、デジタルオブジェクトのインジェストからアーカイブ保存、アクセスまでの処理を可能にします。</p>
+<p>Archivematicaのコードは、すべて <a class="reference external" href="http://www.gnu.org/licenses/agpl-3.0.en.html">GNU Affero General Public License</a> の下でリリースされており、Archivematicaの文書は、 <a class="reference external" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a> の下でリリースされています。</p>
+</section>
+<section id="lowering-the-barriers-to-best-practice-digital-preservation">
+<span id="intro-barriers"></span><h2>ベストプラクティスのデジタル保存への障壁を下げる<a class="headerlink" href="#lowering-the-barriers-to-best-practice-digital-preservation" title="Link to this heading">¶</a></h2>
+<p>Archivematicaプロジェクトの目標は、技術的・経済的に余裕のないアーキビストや図書館員に、今日からデジタル情報の保存を始めるためのツール、方法論、自信を提供することです。プロジェクトでは、徹底的なOAISのユースケースとプロセス分析を行い、インジェストからアクセスまでOAISの機能モデルに準拠するために実施しなければならない具体的なステップをまとめました。展開の経験やユーザーからのフィードバックを通じて、プロジェクトでは、OAISの枠を超え、転送されたデジタルオブジェクトの分析とSIPへの配列に取り組み、複数の意思決定ポイントでのアーカイブ鑑定が可能になりました。可能な限り、これらの要件は、Archivematicaシステム内のソフトウェアツールに割り当てられています。現在のシステムでこれらのステップを自動化できない場合は、エンドユーザーが実行するマニュアル手順に組み込み、文書化します。これにより、1.0以前の初期のシステムリリースにおいても、保存要件全体が確実に実行されます。要するに、システムは、単なるソフトウェア・ツールのセットではなく、技術、人材、手順の統合された全体として概念化されています。Archivematicaのインストールやカスタマイズの技術的なサポートを希望する機関には、Artefactual Systems社がオプションで技術サポートサービスを提供しています。</p>
+<p>ソフトウェア、ドキュメンテーション、開発インフラストラクチャはすべて無料で利用でき、AGPLおよびクリエイティブ・コモンズ・ライセンスの下でリリースされています。Archivematicaプロジェクトは、このような自由を制限するプロプライエタリなソフトウェアライセンスに貴重な資金を費やすのではなく、デジタル保存の課題に取り組むメモリー機関が、Archivematicaのようなプロジェクトに資金と技術リソースをプールし、同僚やユーザー、専門家コミュニティ全体の利益のために長期的な投資を最大限に活用することを奨励しています。</p>
+<p><a class="reference internal" href="#intro"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Archivematicaとは？</a><ul>
+<li><a class="reference internal" href="#open-source-oais">オープンソースOAIS</a></li>
+<li><a class="reference internal" href="#lowering-the-barriers-to-best-practice-digital-preservation">ベストプラクティスのデジタル保存への障壁を下げる</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../index.html"
+                          title="前の章へ">はじめに</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="dashboard.html"
+                          title="次の章へ">ウェブベースのダッシュボード</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/getting-started/overview/intro.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="dashboard.html" title="ウェブベースのダッシュボード"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="はじめに"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematicaとは？</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

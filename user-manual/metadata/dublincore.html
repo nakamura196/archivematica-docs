@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Archivematicaのダブリンコア &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="Archivematica のPREMISメタデータ" href="premis.html" />
+    <link rel="prev" title="ArchivematicaのMETS" href="METS.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="premis.html" title="Archivematica のPREMISメタデータ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="METS.html" title="ArchivematicaのMETS"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematicaのダブリンコア</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="dublin-core-in-archivematica">
+<span id="dublin-core"></span><h1>Archivematicaのダブリンコア<a class="headerlink" href="#dublin-core-in-archivematica" title="Link to this heading">¶</a></h1>
+<section id="general-description">
+<h2>概要<a class="headerlink" href="#general-description" title="Link to this heading">¶</a></h2>
+<p>Archivematicaでは、 <a class="reference external" href="https://dublincore.org/">Dublin Core</a> 説明メタデータ、 <a class="reference external" href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/">DCMI Metadata Terms</a> の使用を、インポートと手入力の両方でサポートしています。</p>
+<p>転送でメタデータをインポートする手順については、 <a class="reference internal" href="../transfer/import-metadata.html#import-metadata"><span class="std std-ref">メタデータのインポート</span></a> を参照してください。Archivematica のメタデータインポートワークフローは、 <code class="docutils literal notranslate"><span class="pre">dc.elements</span></code> と <code class="docutils literal notranslate"><span class="pre">dcterms.elements</span></code> の両方を受け入れます。</p>
+<p>インジェスト中にユーザーインターフェイスを通じて説明メタデータを追加する手順については、 <a class="reference internal" href="../ingest/ingest.html#add-metadata"><span class="std std-ref">Add metadata</span></a> を参照してください。</p>
+</section>
+<section id="metadata-handling">
+<h2>メタデータの取り扱い<a class="headerlink" href="#metadata-handling" title="Link to this heading">¶</a></h2>
+<p>上記のいずれかの方法で説明メタデータが追加されると、Archivematica は、このメタデータをMETSファイルにパースして処理します。例えば：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_2&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;DC&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;dcterms:dublincore</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xmlns:dcterms=</span><span class="s">&quot;http://purl.org/dc/terms/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://purl.org/dc/terms/ https://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:title&gt;</span>14000<span class="w"> </span>Caen,<span class="w"> </span>France<span class="w"> </span>-<span class="w"> </span>Bird<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden<span class="w"> </span><span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dcterms:isPartOf&gt;</span>part<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>sound<span class="w"> </span>collection<span class="nt">&lt;/dcterms:isPartOf&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:creator&gt;</span>Nicolas<span class="w"> </span>Germain<span class="nt">&lt;/dc:creator&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>field<span class="w"> </span>recording<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>soundscapes<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:subject&gt;</span>radio<span class="w"> </span>aporee<span class="w"> </span><span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:description&gt;</span>Bird<span class="w"> </span>singing<span class="w"> </span>in<span class="w"> </span>my<span class="w"> </span>garden,<span class="w"> </span>Caen,<span class="w"> </span>France,<span class="w"> </span>Zoom<span class="w"> </span>H6<span class="w"> </span><span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:publisher&gt;</span>Radio<span class="w"> </span>Aporee<span class="w"> </span><span class="nt">&lt;/dc:publisher&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dcterms:provenance&gt;</span>Comes<span class="w"> </span>from<span class="w"> </span>Wikimedia<span class="nt">&lt;/dcterms:provenance&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:contributor&gt;</span><span class="w">  </span><span class="nt">&lt;/dc:contributor&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:date&gt;</span>27/05/2017<span class="nt">&lt;/dc:date&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:type&gt;</span>sound<span class="w"> </span><span class="nt">&lt;/dc:type&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:format&gt;</span>audio/mp3<span class="w"> </span><span class="nt">&lt;/dc:format&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:identifier&gt;</span><span class="w">  </span><span class="nt">&lt;/dc:identifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:source&gt;</span>Internet<span class="w"> </span>Archive<span class="w"> </span><span class="nt">&lt;/dc:source&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:language&gt;</span><span class="w">  </span><span class="nt">&lt;/dc:language&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:relation&gt;</span><span class="w">  </span><span class="nt">&lt;/dc:relation&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:coverage&gt;</span><span class="w">  </span><span class="nt">&lt;/dc:coverage&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dc:rights&gt;</span>Public<span class="w"> </span>domain<span class="nt">&lt;/dc:rights&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dcterms:accessRights&gt;</span>Unrestricted<span class="nt">&lt;/dcterms:accessRights&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/dcterms:dublincore&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+<p>DIP が <a class="reference internal" href="../access/access.html#upload-atom"><span class="std std-ref">AtoM</span></a> に送信されると、Dublin Core メタデータは AtoM 説明テンプレートの適切なフィールドに解析されます。説明メタデータは Archivematica の Archival Storage タブでもインデックス化され、検索結果には個々のファイルではなくAIPが表示されます。</p>
+<p><a class="reference internal" href="#dublin-core"><span class="std std-ref">トップに戻る</span></a> 。</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Archivematicaのダブリンコア</a><ul>
+<li><a class="reference internal" href="#general-description">概要</a></li>
+<li><a class="reference internal" href="#metadata-handling">メタデータの取り扱い</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="METS.html"
+                          title="前の章へ">ArchivematicaのMETS</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="premis.html"
+                          title="次の章へ">Archivematica のPREMISメタデータ</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/metadata/dublincore.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="premis.html" title="Archivematica のPREMISメタデータ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="METS.html" title="ArchivematicaのMETS"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematicaのダブリンコア</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

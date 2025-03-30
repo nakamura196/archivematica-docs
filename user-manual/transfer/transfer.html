@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>転送 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="メタデータのインポート" href="import-metadata.html" />
+    <link rel="prev" title="ユーザーマニュアル" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="import-metadata.html" title="メタデータのインポート"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="ユーザーマニュアル"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">転送</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="transfer">
+<span id="id1"></span><h1>転送<a class="headerlink" href="#transfer" title="Link to this heading">¶</a></h1>
+<p>Archivematica では、 <em>転送</em> は、デジタルオブジェクトのセットを Archivematica に移動し、素材を提出情報パッケージ (SIP) に変換するプロセスを指します。[転送] タブでは、Archivematica に保存するためのコンテンツを準備します。</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#transfer-tab"><span class="std std-ref">転送タブ</span></a></p></li>
+<li><p><a class="reference internal" href="#prepare-transfer"><span class="std std-ref">デジタルオブジェクトの転送準備</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#transfer-permissions"><span class="std std-ref">転送許可</span></a></p></li>
+<li><p><a class="reference internal" href="#transfer-types"><span class="std std-ref">転送の種類</span></a></p></li>
+<li><p><a class="reference internal" href="#basic-transfers"><span class="std std-ref">基本的な転送</span></a></p></li>
+<li><p><a class="reference internal" href="#transfers-with-metadata"><span class="std std-ref">説明、権利、および/またはイベントメタデータを伴う転送</span></a></p></li>
+<li><p><a class="reference internal" href="#create-submission"><span class="std std-ref">提出書類を伴う転送</span></a></p></li>
+<li><p><a class="reference internal" href="#transfer-checksums"><span class="std std-ref">既存のチェックサムによる転送</span></a></p></li>
+<li><p><a class="reference internal" href="#transfer-pids"><span class="std std-ref">既存の永続的識別子による転送</span></a></p></li>
+<li><p><a class="reference internal" href="#transfer-derivatives"><span class="std std-ref">保存またはアクセス派生物を含む素材の転送 (手動正規化)</span></a></p></li>
+<li><p><a class="reference internal" href="#transfer-access-copies"><span class="std std-ref">Transferring material with access copies only</span></a></p></li>
+<li><p><a class="reference internal" href="#transfer-service-files"><span class="std std-ref">サービス (メザニン) ファイルで素材を転送</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#process-transfer"><span class="std std-ref">転送処理</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#create-transfer"><span class="std std-ref">転送を開始</span></a></p></li>
+<li><p><a class="reference internal" href="#transfer-tab-microservices"><span class="std std-ref">転送タブマイクロサービス</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#cleanup"><span class="std std-ref">転送タブのクリーンアップ</span></a></p></li>
+</ul>
+<section id="the-transfer-tab">
+<span id="transfer-tab"></span><h2>転送タブ<a class="headerlink" href="#the-transfer-tab" title="Link to this heading">¶</a></h2>
+<p>[転送] タブは、多くのユーザーがデジタルオブジェクトをアーカイブ情報パッケージ (AIP) に変換するプロセスを開始する場所です。[転送] タブで、ユーザーは保存する素材を選択し、転送に名前を付けて、転送プロセスを開始します。</p>
+<a class="reference internal image-reference" href="../../_images/transfer-tab.png"><img alt="転送タブは、Archivematica への転送を開始する場所です。" class="align-center" src="../../_images/transfer-tab.png" style="width: 80%;" />
+</a>
+<p>[転送] タブの上部にあるセクションには、Archivematica に転送するための素材が表示されます。 <code class="docutils literal notranslate"><span class="pre">Browse</span></code> と <code class="docutils literal notranslate"><span class="pre">Start</span> <span class="pre">transfer</span></code> ボタン、および <code class="docutils literal notranslate"><span class="pre">Approve</span> <span class="pre">automatically</span></code> チェックボックスに加えて、入力するフィールドが 4 つあります。</p>
+<ul class="simple">
+<li><p><strong>転送タイプ</strong> ：転送される素材の種類。詳細は、 <a class="reference internal" href="#transfer-types"><span class="std std-ref">転送タイプ</span></a> を参照してください。</p></li>
+<li><p><strong>転送名</strong> ：転送の名前。これは、結果のアーカイブ情報パッケージ（AIP）の名前になります。これは必須項目です。</p></li>
+<li><p><strong>Accession no.</strong> ：転送のためにアクセッション番号を入力すると、登録イベントとしてアクセッション番号がAIP METSファイルにコピーされます。Archivematica 内での AIP の識別や検索には使用されません。このフィールドはオプションです。</p></li>
+<li><p><strong>Access system ID</strong>: Entering an access system ID field when you are setting
+up your transfer allows you to automate the process of uploading a DIP to
+AtoM. Archivematica will automatically grab this value when it reaches
+the Upload DIP microservice. See <a class="reference internal" href="../access/access.html#upload-atom"><span class="std std-ref">Upload a DIP to AtoM</span></a>
+for more information. This field is optional.</p></li>
+<li><p><strong>ブラウズ</strong> ：[ブラウズ] ボタンを押すと、転送ブラウザが開きます。これにより、ユーザーは設定された転送元の場所を表示およびブラウズできるようになります。Archivematica がアクセスできる転送元の場所の設定の詳細については、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#administrators" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">管理者マニュアル - ストレージサービス</span></a> を参照してください。ディレクトリを選択して <strong>追加</strong> をクリックすると、素材のディレクトリが転送に追加されます。</p></li>
+</ul>
+<a class="reference internal image-reference" href="../../_images/transfer-browser.png"><img alt="[ブラウズ] ボタンをクリックすると、転送ブラウザが開き、Archivematica に転送できるディレクトリとファイルのリストが表示されます" class="align-center" src="../../_images/transfer-browser.png" style="width: 80%;" />
+</a>
+<ul class="simple">
+<li><p><strong>転送の開始</strong> ：転送に名前を付け、転送ブラウザから素材を選択したら、[Start transfer]ボタンで転送マイクロサービスをキックオフします。</p></li>
+<li><p><strong>処理設定</strong> ：緑色の <strong>Start Transfer</strong> ボタンの右端に下向きの矢印があります。クリックすると、ドロップダウンメニューが表示され、転送に使用する処理設定プロファイルを選択できます。詳しくは、 <a class="reference internal" href="#processing-config"><span class="std std-ref">Choose a processing configuration</span></a> を参照してください。このドロップダウンを無視すると、デフォルトの処理設定が使用されます。</p></li>
+<li><p><strong>自動的に承認する</strong> ：このボックスチェックを外すと、Archivematica は最初のマイクロサービスである <em>転送の承認</em> で一時停止し、転送が適切に設定されていることを確認する機会が与えられます。ボックスがチェックされている場合、Archivematica はこのステップで一時停止しません。</p></li>
+</ul>
+<p>転送が開始されると、転送準備エリアの下に表示されます。 <a class="reference internal" href="../../getting-started/overview/microservices.html#microservices"><span class="std std-ref">いくつかのマイクロサービス</span></a> が転送された素材上で実行され、SIPになる準備をします。マイクロサービスのリストは下から上に読んでください。</p>
+<a class="reference internal image-reference" href="../../_images/transfer-microservices-1-11.png"><img alt="画像は、Archivematica 1.8 の標準転送で実行される多くのマイクロサービスを示しています" class="align-center" src="../../_images/transfer-microservices-1-11.png" style="width: 80%;" />
+</a>
+<p>転送プロセスの最後に、転送された素材は、 <a class="reference internal" href="../backlog/backlog.html#backlog"><span class="std std-ref">バックログ</span></a> に送信され、AIP に変換する準備が整うまで保存されます。バックログにより、ユーザーは、 <a class="reference internal" href="../appraisal/appraisal.html#appraisal"><span class="std std-ref">評価</span></a> タスクを実行する機会も得られます。あるいは、ユーザーは転送されたマテリアルを SIP に変換し、それを <a class="reference internal" href="../ingest/ingest.html#ingest"><span class="std std-ref">インジェスト</span></a> タブに送信することもできます。</p>
+<p>完了または拒否された転送を削除することで、「転送」タブをクリーンアップできます。詳しくは、 <a class="reference internal" href="#cleanup"><span class="std std-ref">Transfer タブのクリーンアップ</span></a> を参照してください。</p>
+</section>
+<section id="preparing-digital-objects-for-transfer">
+<span id="prepare-transfer"></span><h2>デジタルオブジェクトの転送準備<a class="headerlink" href="#preparing-digital-objects-for-transfer" title="Link to this heading">¶</a></h2>
+<p>Archivematica は、形式にとらわれず、どのようなファイルでも受け入れて処理できます。つまり、どのようなファイルでも受け入れて処理できます。しかし、Archivematica に転送する際に、どのような構造で素材を転送するかによって、転送されたファイルの処理に大きな影響を与えます。以下に、デジタル保存に関連する特定の目標を達成するための転送の構造について詳しく説明します。</p>
+<p>Archivematica が転送をどれだけ早く処理できるかは、転送のサイズ (個々のオブジェクトと全体としての転送の両方) と転送の複雑さの 2 つの要素によって決まります。Archivematica パイプラインの速度と効率は非常に主観的なものであり、その多くは使用している Archivematica インスタンスの仕様により異なります。大規模な転送や複雑な転送を処理するように Archivematica を設定する方法の詳細については、 <a class="reference internal" href="../../admin-manual/installation-setup/customization/scaling-archivematica.html#scaling-archivematica"><span class="std std-ref">Archivematica のスケーリング</span></a> を参照してください。</p>
+<section id="permissions">
+<span id="transfer-permissions"></span><h3>許可<a class="headerlink" href="#permissions" title="Link to this heading">¶</a></h3>
+<p>Archivematica が保存タスクを実行できるようにするには、Archivematica ユーザーは、転送元の場所にあるディレクトリに対する実行権限とファイルに対する読み取り権限を持っている必要があります。</p>
+<p>Archivematica ユーザーに十分な権限がない場合、転送に追加できるディレクトリまたは圧縮ファイルが利用できないことが表示されることがあります (オブジェクトは、グレー表示され、名前には取り消し線が付きます)。正確な権限設定によっては、転送にディレクトリを追加できる場合がありますが、転送は開始されません。</p>
+</section>
+<section id="transfer-types">
+<span id="id2"></span><h3>転送の種類<a class="headerlink" href="#transfer-types" title="Link to this heading">¶</a></h3>
+<p>Archivematica に転送される一部の素材には特別な処理が必要です。これらの特殊なワークフローを開始するには、特定の <em>転送タイプ</em> を選択します。7 種類の転送タイプが利用可能です。</p>
+<a class="reference internal image-reference" href="../../_images/transfer-types.png"><img alt="[転送] タブの左側にある転送タイプのドロップダウンメニューには、7 つの異なる転送タイプオプションが表示されます" class="align-center" src="../../_images/transfer-types.png" style="width: 80%;" />
+</a>
+<p><strong>標準</strong> ：標準転送が、Archivematica ではデフォルト設定されています。標準転写タイプであらゆる素材の転写が可能です。特別な処理タスクは実行されません。どの転送タイプを選択すればよいかわからない場合は、標準の転送から始めてください。標準転送の構成方法の詳細については、以下の <a class="reference internal" href="#basic-transfers"><span class="std std-ref">基本転送</span></a> と後続のセクションを参照してください。</p>
+<p><strong>圧縮ディレクトリ</strong> ：Zip圧縮されたディレクトリの転送は、Archivematicaのデフォルトの転送タイプの一種です。すべての素材は、Zip圧縮されたディレクトリ転送タイプを使って転送できます。素材は、最初に <code class="docutils literal notranslate"><span class="pre">.zip</span></code> 、 <code class="docutils literal notranslate"><span class="pre">.tgz</span></code> 、 <code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code> ファイルに格納されます。Zip 形式のディレクトリ転送が開始されると、Zip は解凍され、上記の標準転送ワークフローを使用して処理されます。ZIP圧縮されたディレクトリ転送の内部構造は、標準転送と同じで、ファイルの緩やかなコレクションにすることも、より構造化されたものにもできます。例えば、 <code class="docutils literal notranslate"><span class="pre">objects</span></code> や <code class="docutils literal notranslate"><span class="pre">metadata</span></code> ディレクトリにmetadata.csvやidentifiers.jsonなどのArchivematicaの特別なファイルを含めることもできます。</p>
+<p><strong>解凍されたバッグ</strong> ：Archivematica は、 <a class="reference external" href="https://tools.ietf.org/html/rfc8493">BagIt File Packaging Format</a> に従ってパッケージ化された素材を認識し、利用できます。Archivematicaに素材を転送する前にバッグを作成する習慣がある場合は、その習慣を継続できます。Archivematica は転送プロセスの初期段階で、チェックサムやペイロードのオキサムなど、バッグ作成プロセスで作成されたマニフェスト情報を参照し、バッグを妥当性確認します。Unzipped bags転送タイプは、圧縮形式で保存されていないバッグに使用できます。Archivematica によるバッグの実装方法の詳細については、 <a class="reference internal" href="bags.html#bags"><span class="std std-ref">Bags</span></a> を参照してください。</p>
+<p>このスクリーンショットは、バギングされた転送のレイアウトを示しています。バギングプロセスは、保存するデジタルオブジェクトを <code class="docutils literal notranslate"><span class="pre">data</span></code> ディレクトリに移動し、BagIt 仕様で必要とされる様々なメタデータファイルを作成します（すなわち、 <code class="docutils literal notranslate"><span class="pre">bag-info.txt</span></code> 、 <code class="docutils literal notranslate"><span class="pre">manifest-md5.txt</span></code> ）。</p>
+<a class="reference internal image-reference" href="../../_images/bag-transfer.png"><img alt="デジタルオブジェクトとバッグメタデータを含むバッグ転送" class="align-center" src="../../_images/bag-transfer.png" style="width: 50%;" />
+</a>
+<p><strong>ジップされたバッグ</strong> ：アンジップされたバッグと同様に、ジップバッグ転送タイプは、 <a class="reference external" href="https://tools.ietf.org/html/rfc8493">BagIt File Packaging Format</a> に従ってパッケージされた素材に使用できます。Zip バッグ転送タイプは、圧縮（または Zip）形式で保存されたバッグに使用します。Archivematica では、 <code class="docutils literal notranslate"><span class="pre">.zip</span></code> 、 <code class="docutils literal notranslate"><span class="pre">.tgz</span></code> 、 <code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code> の形式を使用できます。転送タイプをZipped bagsに切り替えると、.zip、.tgz、.tar.gzとして保存されたファイルのみが転送ブラウザで選択できるようになります。Archivematica がどのようにバッグを実装しているかについては、 <a class="reference internal" href="bags.html#bags"><span class="std std-ref">バッグ</span></a> を参照してください。</p>
+<p><strong>DSpace</strong> ： <a class="reference external" href="https://duraspace.org/dspace/">DSpace</a> リポジトリから素材をエクスポートすると、エクスポート全体と個々の素材の METS ファイルがパッケージ化されます。Archivematica は、これらの METS ファイル内のデータの一部を再利用できます。詳しくは、 <a class="reference internal" href="dspace.html#dspace"><span class="std std-ref">DSpace</span></a> を参照してください。</p>
+<p><strong>ディスクイメージ</strong> ：ディスクイメージを保存するためにディスクイメージ転送タイプを選択する必要はありません (ディスクイメージがバッグ化されている場合は、標準転送タイプまたはバッグ転送タイプを使用できます)。ただし、イメージングプロセスに関する情報を記録できる追加のディスクイメージ固有のメタデータフォームが提供されます。詳細については、 <a class="reference internal" href="forensic.html#forensic"><span class="std std-ref">フォレンジックディスクイメージ</span></a> を参照してください。</p>
+<p><strong>Dataverse</strong> ：DSpace 転送タイプと同様に、 <a class="reference external" href="https://dataverse.org/">Dataverse</a> リポジトリからエクスポートされた素材には、Archivematica が再利用できるメタデータが含まれています。詳しくは、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#dataverse" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Dataverse</span></a> を参照してください。</p>
+</section>
+<section id="basic-transfers">
+<span id="id3"></span><h3>基本的な転送<a class="headerlink" href="#basic-transfers" title="Link to this heading">¶</a></h3>
+<p>このセクションでは、標準転送の基本セットアップについて説明します。他の転送タイプを使用する予定がある場合は、転送タイプの詳細について、上記の <a class="reference internal" href="#transfer-types"><span class="std std-ref">転送タイプ</span></a> セクションを参照してください。</p>
+<p>Archivematicaでは、zip圧縮されたバッグの転送を除き、転送されるすべての素材がトップレベルのディレクトリに含まれている必要があります。転送のディレクトリ構造は、単純なもの（つまり、すべてのファイルが同じディレクトリにある）でも、ネストされた階層構造でもかまいません。</p>
+<p>次のスクリーンショットは、 <code class="docutils literal notranslate"><span class="pre">basicTransfer</span></code> という基本的な転送を示しています。トップレベルのディレクトリに4つのデジタルオブジェクトがあり、さらに2つのオブジェクトがサブディレクトリにネストされています。</p>
+<a class="reference internal image-reference" href="../../_images/basic-transfer.png"><img alt="BasicTransfer というフォルダには、4 つの最上位のデジタルオブジェクトと、さらに 2 つのオブジェクトを含む&quot;サブディレクトリ&quot;というフォルダが含まれています" class="align-center" src="../../_images/basic-transfer.png" style="width: 50%;" />
+</a>
+<p>転送には、いくつでもサブディレクトリを持つことができますが、処理時間に影響する場合があります。デジタルオブジェクトのフォーマットは問いませんが、Archivematica がどのようなファイルフォーマットで保存できるかは様々です。Archivematica がどのようにファイルフォーマットの保存を行うかについては、 <a class="reference internal" href="../preservation/preservation-planning.html#preservation-planning"><span class="std std-ref">保存計画</span></a> を参照してください。</p>
+<p>これは、Archivematica における転送の基本構造です。ただし、さまざまなバリエーションがあります。以下のセクションでは、デジタルオブジェクトの保存に関する特定の目標を達成するための基本的な標準転送に基づいて説明します。</p>
+</section>
+<section id="transfers-with-descriptive-rights-and-or-event-metadata">
+<span id="transfers-with-metadata"></span><h3>説明、権利、および/またはイベントメタデータを伴う転送<a class="headerlink" href="#transfers-with-descriptive-rights-and-or-event-metadata" title="Link to this heading">¶</a></h3>
+<p>説明、権利、イベントのメタデータを転送に含めるには、 <code class="docutils literal notranslate"><span class="pre">metadata</span></code> というサブディレクトリを転送の最上位に追加する必要があります。metadataディレクトリ名はArchivematicaの予約名です。メタデータディレクトリを含めることで、メタデータファイルがMETSファイルで適切にマークされるようになります。</p>
+<a class="reference internal image-reference" href="../../_images/transfer-with-metadata.png"><img alt="メタデータ サブディレクトリを含む転送であり、メタデータ サブディレクトリには、metadata.csv および right.csv ファイルが含まれます" class="align-center" src="../../_images/transfer-with-metadata.png" style="width: 50%;" />
+</a>
+<p>コンテンツを AIP METS に転置できるようにメタデータと権利 CSV ファイルまたはイベント XML ファイルを構造化する方法など、Archivematica へのメタデータのインポートの詳細については、 <a class="reference internal" href="import-metadata.html#import-metadata"><span class="std std-ref">メタデータのインポート</span></a> を参照してください。</p>
+<section id="adding-metadata-to-a-bag">
+<h4>バッグにメタデータを追加<a class="headerlink" href="#adding-metadata-to-a-bag" title="Link to this heading">¶</a></h4>
+<p>詳細については、 <a class="reference internal" href="import-metadata.html#metadata-bags"><span class="std std-ref">バッグへのメタデータの追加</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="transfers-with-submission-documentation">
+<span id="create-submission"></span><h3>提出書類を伴う転送<a class="headerlink" href="#transfers-with-submission-documentation" title="Link to this heading">¶</a></h3>
+<p>提出文書は、保存されているデジタルオブジェクトに関連するが、厳密にはコレクションの一部ではないマテリアルを説明する Archivematica の概念です。たとえば、ドナーとの契約、素材に関する通信、保存報告書などがあります。Archivematicaは、転送に提出文書が含まれていることを確認した場合、AIP METSファイルにこの文書の説明を含めることができます。</p>
+<p>提出文書は、標準、アンジップ、ジップ、ディスクイメージの転送タイプに追加できます。</p>
+<p>投稿文書を含む転送を作成するには、トップレベルのディレクトリに <code class="docutils literal notranslate"><span class="pre">metadata</span></code> ディレクトリが含まれていなければなりません。metadataディレクトリの中に、 <code class="docutils literal notranslate"><span class="pre">submissionDocumentation</span></code> という入れ子になったディレクトリがあり、その中に投稿文書ファイルが含まれています。</p>
+<a class="reference internal image-reference" href="../../_images/transfer-with-subdocs.png"><img alt="メタデータサブディレクトリを含む転送。このサブディレクトリには、submissionDocumentation という別のサブディレクトリが含まれます" class="align-center" src="../../_images/transfer-with-subdocs.png" style="width: 50%;" />
+</a>
+<section id="adding-submission-documentation-to-a-bag">
+<h4>バッグに提出書類を追加<a class="headerlink" href="#adding-submission-documentation-to-a-bag" title="Link to this heading">¶</a></h4>
+<p>詳細については、 <a class="reference internal" href="import-metadata.html#metadata-bags"><span class="std std-ref">バッグへのメタデータの追加</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="create-a-transfer-with-existing-checksums">
+<span id="transfer-checksums"></span><h3>既存のチェックサムを使用して転送を作成<a class="headerlink" href="#create-a-transfer-with-existing-checksums" title="Link to this heading">¶</a></h3>
+<p>Archivematica は、システム外で作成された MD5、SHA1、SHA256、SHA512 チェックサムを妥当性確認できます。Archivematica への移行時にデータの整合性が失われることが懸念される場合は、Archivematica の外部でチェックサムを作成することをお勧めします。チェックサムは、 <em>Verify transfer checksums</em> マイクロサービスの転送タブでチェックされます。</p>
+<p>チェックサムは、標準、DSpace、およびディスクイメージ転送タイプに追加できます。チェックサムは、バッグの要件の一部として、解凍された転送タイプと圧縮された転送タイプの両方に追加されることに注意してください。</p>
+<p>チェックサムファイルは <code class="docutils literal notranslate"><span class="pre">metadata</span></code> ディレクトリに配置されます。上記の <a class="reference internal" href="#transfers-with-metadata"><span class="std std-ref">説明メタデータや権利メタデータを伴う転送</span></a> セクションに従って、このディレクトリに説明メタデータと権利メタデータの CSV を配置することもできます。</p>
+<a class="reference internal image-reference" href="../../_images/transfer-with-checksums.png"><img alt="メタデータサブディレクトリを含む転送。このサブディレクトリには、submissionDocumentation という別のサブディレクトリが含まれます" class="align-center" src="../../_images/transfer-with-checksums.png" style="width: 50%;" />
+</a>
+<p>チェックサムファイルには、次のような名前を付ける必要があります：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">checksum.md5</span></code> 、</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">checksum.sha1</span></code> 、</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">checksum.sha256</span></code> または</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">checksum.sha512</span></code> 。</p></li>
+</ul>
+<p>チェックサムファイル自体には、チェックサムごとに 1 行が含まれている必要があります。チェックサムで始まり、その後に 2 つのスペース、その後にファイルパスが続きます:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2121</span><span class="n">dca88ad7f701d3f3e2d041004a56</span>  <span class="n">beihai</span><span class="o">.</span><span class="n">tif</span>
+<span class="mi">7</span><span class="n">f42199657dea535b6ad1963a6c7a2ac</span>  <span class="n">bird</span><span class="o">.</span><span class="n">mp3</span>
+<span class="mi">6</span><span class="n">dc1519418859ea5c20fd708e89d7254</span>  <span class="n">ocr</span><span class="o">-</span><span class="n">image</span><span class="o">.</span><span class="n">png</span>
+<span class="mf">4737e4</span><span class="n">dacfc9510915ea58cf12e51712</span>  <span class="n">View_from_lookout_over_Queenstown_towards_the_Remarkables_in_spring</span><span class="o">.</span><span class="n">jpg</span>
+<span class="mi">75388</span><span class="n">a532283b988f79206d63f65e9a2</span>  <span class="n">subdirectory</span><span class="o">/</span><span class="n">piiTestDataCreditCardNumbers</span><span class="o">.</span><span class="n">txt</span>
+<span class="mi">1</span><span class="n">d7193ea3b2193c79f55ea7e645503a9</span>  <span class="n">subdirectory</span><span class="o">/</span><span class="n">piiTestDataSocialSecurityNumbers</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>チェックサムチェックが失敗すると、 <em>転送チェックサムの確認</em> マイクロサービスでエラーが表示され、転送は失敗します。マイクロサービスを展開すると、ジョブ <em>メタデータディレクトリのチェックサムを妥当性確認する</em> が赤色であることがわかります。エラーを確認するには、ジョブの歯車アイコンをクリックします。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>バッグを作成する場合、チェックサムファイルは、バッグ作成プロセスの一部として作成されます。チェックサムを手動で作成する必要はありません。</p>
+</div>
+</section>
+<section id="transfers-with-existing-persistent-identifiers">
+<span id="transfer-pids"></span><h3>既存の永続的識別子による転送<a class="headerlink" href="#transfers-with-existing-persistent-identifiers" title="Link to this heading">¶</a></h3>
+<p>Archivematicaは、DOI識別子やカタログシステムで作成された識別子など、Archivematicaの外部で作成された永続的な識別子をインポートできます。転送のメタデータディレクトリに <code class="docutils literal notranslate"><span class="pre">identifiers.json</span></code> ファイルを含めることで、Archivematica がファイルに対して作成した PREMIS オブジェクトにバインドできます。</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;objects/bird.mp3&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;identifiers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;identifier&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;01D9T8NGAQ2DBN8M4D23HM5FYN&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;identifierType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ULID&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;objects/beihai.tif&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;identifiers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;identifier&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://example.com/file/id/2367652602&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;identifierType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;EXID&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">identifiers.json</span></code> ファイルは、 <em>インジェスト タブの Process metadata directory</em> マイクロサービス中に解析されます。</p>
+<a class="reference internal image-reference" href="../../_images/load-persistent-identifiers.png"><img alt="identifiers.jsonの永続識別子（PID）は、「Process metadata directory」マイクロサービス中に解析され、ロードされます" class="align-center" src="../../_images/load-persistent-identifiers.png" style="width: 80%;" />
+</a>
+<p>AIP が作成されると、識別子は、AIP METS ファイル内の各オブジェクト <code class="docutils literal notranslate"><span class="pre">techMD</span></code> 内の <code class="docutils literal notranslate"><span class="pre">premis:objectIdentifier</span></code> としてリンクされます。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:techMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;techMD_4&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:OBJECT&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:object</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:type=</span><span class="s">&quot;premis:file&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:objectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:objectIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:objectIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:objectIdentifierValue&gt;</span>2251bc66-85c1-4d64-952e-b0d7ea2db385<span class="nt">&lt;/premis:objectIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:objectIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:objectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:objectIdentifierType&gt;</span>EXID<span class="nt">&lt;/premis:objectIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:objectIdentifierValue&gt;</span>https://example.com/file/id/2367652602<span class="nt">&lt;/premis:objectIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:objectIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:object&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:techMD&gt;</span>
+<span class="nt">&lt;mets:techMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;techMD_5&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:OBJECT&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:object</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:type=</span><span class="s">&quot;premis:file&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:objectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:objectIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:objectIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:objectIdentifierValue&gt;</span>480d31e0-f57f-4254-a5bf-c813ed5734d5<span class="nt">&lt;/premis:objectIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:objectIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:objectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:objectIdentifierType&gt;</span>ULID<span class="nt">&lt;/premis:objectIdentifierType&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:objectIdentifierValue&gt;</span>01D9T8NGAQ2DBN8M4D23HM5FYN<span class="nt">&lt;/premis:objectIdentifierValue&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:objectIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:object&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="nt">&lt;/mets:techMD&gt;</span>
+</pre></div>
+</div>
+<p>Archivematica で使用されるメタデータ要素がどのようにエンコードされるかについて詳しくは、 <a class="reference internal" href="../metadata/METS.html#mets-schema"><span class="std std-ref">ArchivematicaのMETS</span></a> および <a class="reference internal" href="../metadata/premis.html#premis-template"><span class="std std-ref">ArchivematicaのPREMISメタデータ</span></a> を参照してください。</p>
+</section>
+<section id="transferring-material-with-preservation-or-access-derivatives-manual-normalization">
+<span id="transfer-derivatives"></span><h3>保存またはアクセス派生物を含む素材の転送 （手動正規化）<a class="headerlink" href="#transferring-material-with-preservation-or-access-derivatives-manual-normalization" title="Link to this heading">¶</a></h3>
+<p>Archivematica の主なファイル保存方法は、「保存計画」タブの <a class="reference internal" href="../preservation/preservation-planning.html#normalization"><span class="std std-ref">normalization rules</span></a> に従って <a class="reference internal" href="../ingest/ingest.html#normalize"><span class="std std-ref">normalize</span></a> 正規化することです。しかし、Archivematica 以外（デジタル化プロジェクトなど）でデジタルオブジェクトの保存用コピーやアクセス用コピーを作成したい場合もあります。Archivematicaは、手作業による正規化作業を認識し、新しい派生物を作成する代わりに、保存コピーやアクションコピーを使用できます。</p>
+<p>手動で正規化された保存デリバティブとアクセスデリバティブを用いた転送の仕組みの詳細については、 <a class="reference internal" href="../ingest/manual-normalization.html#manual-norm"><span class="std std-ref">手動正規化</span></a> を参照してください。</p>
+</section>
+<section id="transferring-material-with-access-derivatives-only">
+<span id="transfer-access-copies"></span><h3>アクセス派生物のみを使用した素材の転送<a class="headerlink" href="#transferring-material-with-access-derivatives-only" title="Link to this heading">¶</a></h3>
+<p>オリジナルとそのアクセス派生物のみを転送する場合は、上記の <a class="reference internal" href="#transfer-derivatives"><span class="std std-ref">手動正規化</span></a> オプションよりも多少合理化されたワークフローがあります。</p>
+<p>アクセスデリバティブは、標準的な転送タイプに追加できます。</p>
+<p>最上位ディレクトリ内に <code class="docutils literal notranslate"><span class="pre">access</span></code> サブディレクトリを作成し、このファイル内にオリジナルのアクセスコピーを配置します。</p>
+<a class="reference internal image-reference" href="../../_images/transfer-with-access-copies.png"><img alt="アクセス派生物のみを含むアクセスサブディレクトリを含む転送" class="align-center" src="../../_images/transfer-with-access-copies.png" style="width: 50%;" />
+</a>
+<p>上に示した例では、元のファイルはPNGです（すなわち <code class="docutils literal notranslate"><span class="pre">beihai.png</span></code> ）。各ファイルには、JPG （ <code class="docutils literal notranslate"><span class="pre">beihai.jpg</span></code> ） 形式のアクセスコピーがあります。Archivematicaがオリジナルファイルとアクセスコピーのリンクを認識するためには、ベースファイル名（拡張子の前）が一致している必要があります。</p>
+<p>この転送を処理すると、Archivematica は、アクセスコピーの存在を自動的に認識します。 <a class="reference internal" href="../ingest/ingest.html#ingest"><span class="std std-ref">[インジェスト] タブ</span></a> の <a class="reference internal" href="../ingest/ingest.html#normalize"><span class="std std-ref">normalization</span></a> マイクロサービスでは、Archivematica が、提供されたアクセスコピーから常に普及情報パッケージ (DIP) を作成するため、表示される正規化オプションが少なくなります。</p>
+<a class="reference internal image-reference" href="../../_images/normalize-access-copies.png"><img alt="Archivematica の正規化マイクロサービスは、アクセス ディレクトリが検出された場合に、保存のために正規化する、SIP を拒否する、および正規化しないという 3 つのオプションのみを提供します" class="align-center" src="../../_images/normalize-access-copies.png" style="width: 50%;" />
+</a>
+</section>
+<section id="transferring-material-with-service-mezzanine-files">
+<span id="transfer-service-files"></span><h3>サービス（メザニン）ファイルで素材を転送<a class="headerlink" href="#transferring-material-with-service-mezzanine-files" title="Link to this heading">¶</a></h3>
+<p>上記の <a class="reference internal" href="#transfer-derivatives"><span class="std std-ref">manual normalization</span></a> と <a class="reference internal" href="#transfer-access-copies"><span class="std std-ref">manual normalization</span></a> オプションと似ていますが、Archivematica は、サービス（またはメザニン）ファイルの存在を認識もできます。サービスファイルは、オリジナルファイルから作成された高品質の派生ファイルで、他の派生ファイルを作成するために使用されます。例えば、デジタル化プロジェクトにおいて、画像を高画質のTIFFとしてスキャンし、そのTIFFから高画質のJP2000を生成するとします。新しいアクセス派生物が必要になるたびに、TIFFにアクセスする代わりに、JP2000を使用してファイルの新しいコピーを作成します。</p>
+<p>サービス（またはメザニン）ファイルは、標準的な転送タイプに追加できます。</p>
+<p>トップレベルディレクトリの中に、 <code class="docutils literal notranslate"><span class="pre">service</span></code> サブディレクトリを作成し、オリジナルのサービスコピーをこのファイルの中に置きます。</p>
+<a class="reference internal image-reference" href="../../_images/transfer-with-service-files.png"><img alt="サービスサブディレクトリを含む転送。これには、オリジナルのサービスコピーまたはメザニンコピーが含まれます" class="align-center" src="../../_images/transfer-with-service-files.png" style="width: 50%;" />
+</a>
+<p>上に示した例では、元のファイルはTIFFです（つまり <code class="docutils literal notranslate"><span class="pre">beihai.tif</span></code> ）。各ファイルには、JP2000 （ <code class="docutils literal notranslate"><span class="pre">beihai.jp2</span></code> ） 形式のサービスコピーがあります。Archivematicaがオリジナルファイルとサービスコピーのリンクを認識するには、ベースファイル名（拡張子の前）が一致している必要があります。</p>
+<p>この転送処理を行うと、Archivematicaは、自動的にサービスコピーの存在を認識します。 <a class="reference internal" href="../ingest/ingest.html#normalize"><span class="std std-ref">正規化</span></a> マイクロサービスの <a class="reference internal" href="../ingest/ingest.html#ingest"><span class="std std-ref">インジェストタブ</span></a> では、オリジナルファイルではなく、アクセス派生物を生成するためにサービスコピーを使用するオプションが与えられます。</p>
+<a class="reference internal image-reference" href="../../_images/normalize-service-files.png"><img alt="Archivematica の正規化マイクロサービスは、サービスディレクトリが検出された場合に追加のオプション (アクセス用にサービスファイルを正規化する) を提供します" class="align-center" src="../../_images/normalize-service-files.png" style="width: 50%;" />
+</a>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>サービスファイルからアクセスコピーを作成する場合は、正規化サービスで <em>アクセス用にサービスファイルを正規化</em> を選択します。上記の <a class="reference internal" href="#transfer-access-copies"><span class="std std-ref">アクセス派生物を使用した素材の転送</span></a> の手順に従ってアクセスコピーを含めた場合は、正規化マイクロサービスで <em>正規化しない</em> を選択します。Archivematica がアクセスディレクトリを検出したため、DIP は、自動的に作成されます。</p>
+</div>
+</section>
+</section>
+<section id="processing-a-transfer">
+<span id="process-transfer"></span><h2>転送処理<a class="headerlink" href="#processing-a-transfer" title="Link to this heading">¶</a></h2>
+<p>素材が Archivematica 用にパッケージ化されたら、転送プロセスを開始できます。</p>
+<section id="start-a-transfer">
+<span id="create-transfer"></span><h3>転送を開始<a class="headerlink" href="#start-a-transfer" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>Archivematica にサインインし、 <code class="docutils literal notranslate"><span class="pre">Transfer</span></code> または Archivematica ロゴをクリックして、[転送] タブに移動します。</p></li>
+<li><p>[転送] タイプのプルダウン メニューから <a class="reference internal" href="#transfer-types"><span class="std std-ref">転送タイプ</span></a> を選択します。</p></li>
+<li><p>転送先に名前をつけます。転送名はAIPの名前になりますので、意味のある名前にしてください。</p></li>
+<li><p>必要に応じて、アクセッション番号やアクセスシステム ID も追加し、 <code class="docutils literal notranslate"><span class="pre">Approve</span> <span class="pre">transfer</span></code> チェックボックスをオンまたはオフにします。</p></li>
+<li><p><strong>参照</strong> をクリックして転送ブラウザを開き、保存するデジタルオブジェクトを選択します。転送ブラウザの上部バー (以下のスクリーンショットでは <code class="docutils literal notranslate"><span class="pre">archivematica-sampledata</span></code> と呼ばれる) をクリックすると、転送元の場所を切り替えることができます。</p></li>
+<li><p>黄色のフォルダーアイコンをクリックして、ネストされたディレクトリを探索します。保存する素材を選択するには、フォルダーの名前 (または、圧縮バッグを転送する場合は .zip ファイル) をクリックして強調表示し、 <strong>追加</strong> をクリックします。ブラウザを閉じるには、もう一度 <strong>ブラウズ</strong> ] をクリックします。</p>
+<a class="reference internal image-reference" href="../../_images/transfer-browser.png"><img alt="&quot;Images&quot; というフォルダが選択されています" class="align-center" src="../../_images/transfer-browser.png" style="width: 80%;" />
+</a>
+</li>
+</ol>
+</section>
+<section id="choose-a-processing-configuration">
+<span id="processing-config"></span><h3>処理設定を選択<a class="headerlink" href="#choose-a-processing-configuration" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>追加</strong> ボタンをクリックすると、 <strong>転送開始</strong> ボタンがアクティブになります。</p></li>
+<li><p>緑色の <strong>Start Transfer</strong> ボタンの右端に下向きの矢印があります。クリックするとドロップダウンメニューが表示され、転送に使用する処理設定プロファイルを選択できます。</p>
+<p>これらのプロファイルは、ArchivematicaのAdministrationタブで定義します。これらのプロファイルを使用することで、Archivematicaが転送やインジェストの際に提示するジョブの決定ポイント（サムネイルを生成するかどうか、どのAIP保存場所を使用するかなど）を設定できます。詳細については、管理者マニュアルの <a class="reference internal" href="../../admin-manual/installation-setup/customization/dashboard-config.html#process-config"><span class="std std-ref">Processing configuration</span></a> を参照してください。</p>
+</li>
+<li><p>[管理]タブで新しい処理設定プロファイルを定義すると、 <strong>[転送開始]</strong> ドロップダウンのオプションとして表示されます（例：&quot;my_custom_config&quot; ）。</p>
+<a class="reference internal image-reference" href="../../_images/choose-processing-config.png"><img alt="処理設定の選択" class="align-center" src="../../_images/choose-processing-config.png" style="width: 80%;" />
+</a>
+</li>
+<li><p>この処理設定プロファイルを転送に使用したい場合は、ドロップダウンメニューから選択し、 <strong>Start Transfer</strong> （転送開始）ボタンを押してください。</p></li>
+<li><p>Archivematica から転送が開始された旨と、転送とインジェスト中に発生する決定ポイントで使用する処理設定プロファイルが通知されます。</p>
+<a class="reference internal image-reference" href="../../_images/processing-config-notification.png"><img alt="設定通知の処理" class="align-center" src="../../_images/processing-config-notification.png" style="width: 80%;" />
+</a>
+</li>
+<li><p>ドロップダウンメニューを無視して <strong>転送開始</strong> メニューを押すだけの場合は、&quot;デフォルト&quot;の処理設定が使われます。</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>転送のルートディレクトリに <strong>proccessingMCP.xml</strong> ファイルを含めることを選択した場合、その決定ポイントは、 <strong>転送開始</strong> ボタンで選択された設定プロファイルよりも優先されます。</p>
+</div>
+</section>
+<section id="transfer-tab-microservices">
+<span id="id4"></span><h3>転送タブマイクロサービス<a class="headerlink" href="#transfer-tab-microservices" title="Link to this heading">¶</a></h3>
+<p><strong>転送開始</strong> をクリックすると、転送準備領域の下に転送が表示されます。これには数秒しかかかりませんが、転送が非常に大きい場合は遅延する可能性があります。転送が表示されない場合は、別の転送を開始しないでください。処理スペースが不足している可能性があり、別の新しい転送を開始すると問題がさらに悪化するだけなので、代わりにシステム管理者に問い合わせてください。</p>
+<p>転送タブの各マイクロサービスは、お客様の素材をSIP（Submission Information Package）、そしてAIP（Archival Information Package）にするための準備を行います。Archivematica のマイクロサービスアーキテクチャの詳細については、 <a class="reference internal" href="../../getting-started/overview/microservices.html#microservices"><span class="std std-ref">マイクロサービス</span></a> を参照してください。</p>
+<p>マイクロサービスの中には、人の介入なしに実行されるものもあれば、ユーザーに決定を促すものもあります。初期の例としては、 <em>Identify file format</em> マイクロサービスがあり、転送中のファイルに対してファイルフォーマット識別ツールを実行するかどうかの判断をユーザーに求めます。</p>
+<figure class="align-center" style="width: 60%">
+<a class="reference internal image-reference" href="../../_images/select-file-id.png"><img alt="決定ドロップダウンメニューが &quot;ジョブ：ファイル形式の識別を実行しますか?&quot;に表示されます。オプションは &quot;はい&quot; または &quot;いいえ&quot; があります。" src="../../_images/select-file-id.png" style="width: 100%;" />
+</a>
+</figure>
+<p>Archivematica では、すべての決定ポイントを自動化することが可能です。詳しくは、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> を参照してください。</p>
+<p>[転送] タブで実行されるマイクロサービスには、次のものがあります：</p>
+<ul class="simple">
+<li><p><strong>Verify transfer compliance</strong> ：転送が転送タイプの要件に従って適切に構造化されていることを妥当性確認します。</p></li>
+<li><p><strong>Rename with transfer UUID</strong> ：転送全体に一意のユニバーサル識別子を割り当てます。</p></li>
+<li><p><strong>ファイルのUUIDとチェックサムをオブジェクトに割り当て</strong> ：各デジタルオブジェクトに一意のユニバーサル識別子とチェックサムを割り当てます。</p></li>
+<li><p><strong>Verify transfer checksums</strong> ：転送に含まれる <a class="reference internal" href="#transfer-checksums"><span class="std std-ref">チェックサムを妥当性確認</span></a> .</p></li>
+<li><p><strong>METS.xml文書を生成</strong> ：転送のオリジナルオーダーをキャプチャするMETSファイルを作成します。このMETSファイルは、この転送（transfer）から 生成されるすべてのSIPに追加されます。</p></li>
+<li><p><strong>ウィルスのスキャン</strong> ：ウィルスとマルウェアをスキャンします。詳しくは、 <a class="reference internal" href="scan-for-viruses.html#scan-for-viruses"><span class="std std-ref">ウイルスのスキャン</span></a> を参照してください。</p></li>
+<li><p><strong>Generate transfer structure report</strong> ：オリジナル転送のディレクトリツリーを生成し、AIPにテキストファイルとして配置します。</p></li>
+<li><p><strong>Change transfer filenames</strong> ：フォルダー名やファイル名から、アンパサンドなどの禁止文字を削除します。詳細については、 <a class="reference internal" href="change-filenames.html#change-filenames"><span class="std std-ref">ファイル名の変更</span></a> を参照してください。</p></li>
+<li><p><strong>Identify file format</strong> ：ファイル形式を識別するかどうかを選択できます。&quot;はい&quot; を選択すると、有効なファイル識別コマンドの実行が促されます。詳細については、 <a class="reference internal" href="../preservation/preservation-planning.html#identification"><span class="std std-ref">識別</span></a> を参照してください。</p></li>
+<li><p><strong>Extract packages</strong> ：ZIP圧縮されたファイルやその他のパッケージ化されたファイルからコンテンツを抽出します。詳しくは <a class="reference internal" href="../preservation/preservation-planning.html#extraction"><span class="std std-ref">展開</span></a> を参照してください。</p></li>
+<li><p><strong>Characterize and extract metadata</strong> ：ファイルに埋め込まれた技術的なメタデータを抽出します。詳しくは、 <a class="reference internal" href="../preservation/preservation-planning.html#characterization"><span class="std std-ref">特性化</span></a> を参照してください。</p></li>
+<li><p><strong>Validation</strong> ：ファイルフォーマットをフォーマットの仕様に照らして妥当性確認します。詳細は、 <a class="reference internal" href="../preservation/preservation-planning.html#validation"><span class="std std-ref">妥当性確認</span></a> を参照してください。</p></li>
+<li><p><strong>内容検査</strong> ： <a class="reference external" href="https://github.com/simsong/bulk_extractor/wiki">Bulk Extractor</a> を実行します。</p></li>
+<li><p><strong>Create SIP from transfer</strong> ：ユーザーは、転送を <a class="reference internal" href="../backlog/backlog.html#backlog"><span class="std std-ref">Backlogタブ</span></a> に送ることができます。バックログを使用することで、ユーザーは、 <a class="reference internal" href="../appraisal/appraisal.html#appraisal"><span class="std std-ref">評価</span></a> タスクを実行もできます。あるいは、ユーザーは、転送された素材をSIPに変換し、 <a class="reference internal" href="../ingest/ingest.html#ingest"><span class="std std-ref">インジェスト</span></a> できます。この時点で転送を拒否もできます。</p></li>
+</ul>
+<a class="reference internal image-reference" href="../../_images/create-sip.png"><img alt="SIPにパッケージされるか、バックログに保存される準備が整った転送" class="align-center" src="../../_images/create-sip.png" style="width: 100%;" />
+</a>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><a class="reference internal" href="../../admin-manual/installation-setup/installation/installation.html#install-elasticsearch"><span class="std std-ref">エラスティックサーチを使用せずに Archivematica</span></a> を実行している場合、または エラスティックサーチの機能が制限されている場合は、転送をバックログに送信するオプションがない場合があります。</p>
+</div>
+<p>処理中の転送には、どのマイクロサービスが完了したのか (緑色)、どのマイクロサービスが進行中なのか (オレンジ色) が表示されます。マイクロサービスが失敗するかエラーが発生すると、マイクロサービスの背景が緑からピンクに変わり、転送名または SIP 名の横に&quot;失敗&quot;アイコンが表示されます。エラーの処理方法の詳細については、 <a class="reference internal" href="../../getting-started/troubleshooting/error-handling.html#error-handling"><span class="std std-ref">エラー処理</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="cleaning-up-the-transfer-dashboard">
+<span id="cleanup"></span><h2>転送ダッシュボードのクリーンアップ<a class="headerlink" href="#cleaning-up-the-transfer-dashboard" title="Link to this heading">¶</a></h2>
+<p>[転送] タブのダッシュボードは、時々クリーンアップする必要があります。転送のリストが増えると、Archivematica がこの情報を解析するのにかかる時間が長くなり、ブラウザーのタイムアウトの問題が発生する可能性があります。</p>
+<section id="remove-a-single-transfer">
+<h3>単一転送の削除<a class="headerlink" href="#remove-a-single-transfer" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>削除する転送にユーザー入力が必要ないことを確認してください。ダッシュボードから転送を削除する前に、すべてのユーザー入力を完了し、転送を完了する (つまり、バックログに送信するか SIP を作成する) か、転送を拒否する必要があります。</p></li>
+<li><p>ダッシュボードから転送を削除する準備ができたら、転送名の右側にある赤い丸のアイコンをクリックします。</p></li>
+<li><p>[確認] ボタンをクリックして、ダッシュボードから転送を削除します。</p></li>
+</ol>
+<figure class="align-center" style="width: 60%">
+<a class="reference internal image-reference" href="../../_images/delete-single-transfer.png"><img alt="ダッシュボードから単一転送を削除" src="../../_images/delete-single-transfer.png" style="width: 100%;" />
+</a>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>これにより、転送元ディレクトリなどの転送エンティティや関連エンティティは削除されません。ダッシュボード上の表示からそれらを削除するだけです。</p>
+</div>
+</section>
+<section id="remove-all-completed-transfers">
+<h3>完了した転送をすべて削除<a class="headerlink" href="#remove-all-completed-transfers" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>削除したい転送が完了していることを確認してください（例：バックログまたはインジェストに送信）。この機能は、完了した転送に対してのみ機能しますので、拒否された転送は、1つずつ削除する必要があることに注意してください。</p></li>
+<li><p>完了したすべての転送を削除する準備ができたら、転送リストの表ヘッダーにある赤丸のアイコンをクリックします。</p></li>
+<li><p>[確認] ボタンをクリックして、完了した転送をすべてダッシュボードから削除します。</p></li>
+</ol>
+<figure class="align-center" style="width: 60%">
+<a class="reference internal image-reference" href="../../_images/delete-all-transfers.png"><img alt="ダッシュボードからすべての転送を削除します。" src="../../_images/delete-all-transfers.png" style="width: 100%;" />
+</a>
+</figure>
+<p><a class="reference internal" href="#transfer"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">転送</a><ul>
+<li><a class="reference internal" href="#the-transfer-tab">転送タブ</a></li>
+<li><a class="reference internal" href="#preparing-digital-objects-for-transfer">デジタルオブジェクトの転送準備</a><ul>
+<li><a class="reference internal" href="#permissions">許可</a></li>
+<li><a class="reference internal" href="#transfer-types">転送の種類</a></li>
+<li><a class="reference internal" href="#basic-transfers">基本的な転送</a></li>
+<li><a class="reference internal" href="#transfers-with-descriptive-rights-and-or-event-metadata">説明、権利、および/またはイベントメタデータを伴う転送</a><ul>
+<li><a class="reference internal" href="#adding-metadata-to-a-bag">バッグにメタデータを追加</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#transfers-with-submission-documentation">提出書類を伴う転送</a><ul>
+<li><a class="reference internal" href="#adding-submission-documentation-to-a-bag">バッグに提出書類を追加</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#create-a-transfer-with-existing-checksums">既存のチェックサムを使用して転送を作成</a></li>
+<li><a class="reference internal" href="#transfers-with-existing-persistent-identifiers">既存の永続的識別子による転送</a></li>
+<li><a class="reference internal" href="#transferring-material-with-preservation-or-access-derivatives-manual-normalization">保存またはアクセス派生物を含む素材の転送 （手動正規化）</a></li>
+<li><a class="reference internal" href="#transferring-material-with-access-derivatives-only">アクセス派生物のみを使用した素材の転送</a></li>
+<li><a class="reference internal" href="#transferring-material-with-service-mezzanine-files">サービス（メザニン）ファイルで素材を転送</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#processing-a-transfer">転送処理</a><ul>
+<li><a class="reference internal" href="#start-a-transfer">転送を開始</a></li>
+<li><a class="reference internal" href="#choose-a-processing-configuration">処理設定を選択</a></li>
+<li><a class="reference internal" href="#transfer-tab-microservices">転送タブマイクロサービス</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cleaning-up-the-transfer-dashboard">転送ダッシュボードのクリーンアップ</a><ul>
+<li><a class="reference internal" href="#remove-a-single-transfer">単一転送の削除</a></li>
+<li><a class="reference internal" href="#remove-all-completed-transfers">完了した転送をすべて削除</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../index.html"
+                          title="前の章へ">ユーザーマニュアル</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="import-metadata.html"
+                          title="次の章へ">メタデータのインポート</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/transfer/transfer.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="import-metadata.html" title="メタデータのインポート"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="ユーザーマニュアル"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">転送</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

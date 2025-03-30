@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CONTENTdm &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="保存計画" href="../preservation/preservation-planning.html" />
+    <link rel="prev" title="アクセス" href="access.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../preservation/preservation-planning.html" title="保存計画"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="access.html" title="アクセス"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CONTENTdm</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="contentdm">
+<span id="id1"></span><h1>CONTENTdm<a class="headerlink" href="#contentdm" title="Link to this heading">¶</a></h1>
+<p>Archivematicaは、CONTENTdmにアップロードするDIPSを準備できます。Archivematicaバージョン1.4では、CONTENTdmのインストール時の設定は不要です。ArchivematicaがDIPを作成し、DashboardまたはSFTPでArchivematicaがインストールされているサーバーにダウンロードできます。</p>
+<p>Archivematicaバージョン1.4では、CONTENTdmへの直接アップロードができなくなりました。以下のプロセスは、 <a class="reference external" href="https://help.oclc.org/Metadata_Services/CONTENTdm/Project_Client">CONTENTdm Project Client</a> を使用してDIPをCONTENTdmにアップロードすることを前提としています。</p>
+<p>この処理中にエラーが発生した場合は、 <a class="reference internal" href="../../getting-started/troubleshooting/error-handling.html#error-handling"><span class="std std-ref">エラー処理</span></a> を参照してください。</p>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#transfer-contentdm"><span class="std std-ref">CONTENTdmへの転送準備</span></a></p></li>
+<li><p><a class="reference internal" href="#contentdm-order"><span class="std std-ref">ファイルの順序の制御</span></a></p></li>
+<li><p><a class="reference internal" href="#dip-contentdm"><span class="std std-ref">CONTENTdmのDIPを作成</span></a></p></li>
+</ul>
+<section id="preparing-a-transfer-for-contentdm">
+<span id="transfer-contentdm"></span><h2>CONTENTdmへの転送準備<a class="headerlink" href="#preparing-a-transfer-for-contentdm" title="Link to this heading">¶</a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../ingest/manual-normalization.html#manual-norm"><span class="std std-ref">マニュアル正規化</span></a></p>
+<p><a class="reference internal" href="../transfer/import-metadata.html#import-metadata"><span class="std std-ref">メタデータのインポート</span></a></p>
+</div>
+<p>単一のシンプルオブジェクトまたは複合オブジェクト、または複数のシンプルオブジェクトまたは複合オブジェクトのいずれに対しても、これらの手順に従うことができることに注意してください。</p>
+<p><strong>転送の準備</strong></p>
+<p>シンプルなオブジェクトの転送の場合：</p>
+<ol class="arabic simple">
+<li><p>転送に使いたいディレクトリの中に、2つのサブディレクトリ： <code class="docutils literal notranslate"><span class="pre">metadata</span></code> と <code class="docutils literal notranslate"><span class="pre">objects</span></code> を作ります。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">objects</span></code> 内に、転送したいデジタルオブジェクトを置きます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code> の中に、 <code class="docutils literal notranslate"><span class="pre">metadata.csv</span></code> というファイルを置きます。以下の準備手順を参照してください。</p></li>
+</ol>
+<p>例：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/transferName
+<span class="w">    </span>/objects
+<span class="w">        </span>file1.tif
+<span class="w">        </span>file2.tif
+<span class="w">        </span>etc
+<span class="w">    </span>/metadata
+<span class="w">        </span>metadata.csv
+</pre></div>
+</div>
+<p>複合オブジェクトの転送の場合：</p>
+<ol class="arabic simple">
+<li><p>転送に使いたいディレクトリの中に、2つのサブディレクトリ： <code class="docutils literal notranslate"><span class="pre">metadata</span></code> と <code class="docutils literal notranslate"><span class="pre">objects</span></code> を作ります。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">objects</span></code> 内に、各複合オブジェクトに対応するディレクトリを作成または配列します。これらのディレクトリの中にデジタルオブジェクトを配列します。</p></li>
+<li><p>メタデータの中に、 <code class="docutils literal notranslate"><span class="pre">metadata.csv</span></code> というファイルを置きます。以下の準備手順を参照してください。</p></li>
+</ol>
+<p>例：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/transferName
+<span class="w">    </span>/objects
+<span class="w">        </span>/directoryOne
+<span class="w">             </span>file1.tif
+<span class="w">             </span>file2.tif
+<span class="w">             </span>etc
+<span class="w">        </span>/directoryTwo
+<span class="w">             </span>file3.tif
+<span class="w">             </span>file4.tif
+<span class="w">             </span>etc
+<span class="w">    </span>/metadata
+<span class="w">        </span>metadata.csv
+</pre></div>
+</div>
+<p><strong>metadata.csvの準備</strong></p>
+<p>metadata.csvの最初のカラムは、filenameでなければなりません。内容は、オブジェクトへのパスかディレクトリになります。単純な転送の場合：</p>
+<p><code class="docutils literal notranslate"><span class="pre">objects/filename.tif</span></code></p>
+<p>複合転送の場合：</p>
+<p><code class="docutils literal notranslate"><span class="pre">objects/directoryName</span></code></p>
+<p>または、オブジェクトレベルのメタデータを含む複合転送の場合</p>
+<p><code class="docutils literal notranslate"><span class="pre">objects/directoryName/filename.tif</span></code></p>
+<p>metadata.csvにDublin Coreフィールドと非Dublin Coreフィールドの両方がある場合、Archivematicaはmetadata.csvファイル内の&quot;custom&quot; （non-Dublin Core）フィールド名を検索し、それらのフィールドに基づいてタブ区切りファイルを作成します。これにより、オペレータは、CONTENTdmコレクションに表示されているフィールド名をそのまま使用でき、Project Clientでのフィールドマッチングが容易になります。また、Dublin Core以外のフィールドは、CONTENTdmコレクションと同じ順序で入力することが推奨されます。ただし、metadata.csvに <em>のみ</em> Dublin Coreネームスペースのフィールドが含まれている場合、Archivematicaはこれらのフィールド名を使用して、dcネームスペースを取り除いたタブ区切りファイルを作成します。例えば、 <code class="docutils literal notranslate"><span class="pre">dc.title</span></code> は、 <code class="docutils literal notranslate"><span class="pre">title</span></code> になります。</p>
+<p>metadata.csvファイルの作成と転送に関する詳細は、 <a class="reference internal" href="../transfer/import-metadata.html#import-metadata"><span class="std std-ref">メタデータのインポート</span></a> を参照してください。</p>
+</section>
+<section id="controlling-the-file-order">
+<span id="contentdm-order"></span><h2>ファイルの順序の制御<a class="headerlink" href="#controlling-the-file-order" title="Link to this heading">¶</a></h2>
+<p>現在、タブ区切りファイルにリストされたファイルやディレクトリの順序を制御する唯一の方法は、それらがアルファベット順であることを確認することです。ソート方法は、 <a class="reference external" href="https://en.wikipedia.org/wiki/ASCII">ASCII</a> 文字（数字、大文字、アンダースコア、小文字など）に基づいています。</p>
+<p>ファイル順序を制御する他の方法は、将来のリリースで実装される可能性があります。issue： <cite>8448</cite> を参照してください。</p>
+</section>
+<section id="create-dip-for-contentdm">
+<span id="dip-contentdm"></span><h2>CONTENTdmのDIPを作成<a class="headerlink" href="#create-dip-for-contentdm" title="Link to this heading">¶</a></h2>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>CONTENTdmターゲットコレクションに&quot;AIP UUIDというフィールドと&quot;File UUID&quot;というフィールドがあることを確認してください。Archivematicaが作成するタブファイルには、この2つのフィールドが入力されます。</p>
+</div>
+<ol class="arabic simple">
+<li><p>Archivematicaダッシュボードの「Upload DIP」で、ドロップダウンメニューから「Upload DIP to CONTENTdm」というアクションを選択します。</p></li>
+<li><p>Archivematicaは、正規化または <a class="reference internal" href="../ingest/manual-normalization.html#manual-norm"><span class="std std-ref">手動で正規化した</span></a> アクセスオブジェクトと、Project Clientで使用するタブ区切りファイルで構成されるDIPを作成します。</p></li>
+</ol>
+<p>ダッシュボードでDIPをレビューし、個々のDIPオブジェクトやタブファイルをダウンロードするには、&quot;review&quot;をクリックします：</p>
+<a class="reference internal image-reference" href="../../_images/review-dip.png"><img alt="アップロードDIPマイクロサービスの&quot;レビュー&quot;をクリックして、DIPオブジェクトとタブファイルにアクセスします" class="align-center" src="../../_images/review-dip.png" style="width: 80%;" />
+</a>
+<p>次の画面では、アップロードされたDIPディレクトリが表示され、オペレータは、必要なDIPオブジェクトを検索できます。CONTENTdmタブファイルは、DIPオブジェクトと同じディレクトリにあります。</p>
+<a class="reference internal image-reference" href="../../_images/cdmDIP.png"><img alt="オブジェクトディレクトリ内の CONTENTdmタブファイルを示すDIP画面をダウンロード します" class="align-center" src="../../_images/cdmDIP.png" style="width: 80%;" />
+</a>
+<p>デフォルトでは、DIPは <code class="docutils literal notranslate"><span class="pre">/var/archivematica/sharedDirectory/watchedDirectories/uploadedDIPs/</span></code> に保存されます。この場所からSFTPクライアント経由で取得することも、ウェブブラウザ経由で個々のオブジェクトをダウンロードすることもできます。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>CONTENTdm Project Clientでの作業が完了し、デジタルオブジェクトがアップロードされたら、&quot;&quot;uploadedDIPsディレクトリをクリーンアップして、サービス上のスペースを節約し、ダウンロードDIPページを管理しやすくできます。これは、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-usage"><span class="std std-ref">[管理]タブの[処理ストレージ使用状況]</span></a> から実行できます。</p>
+</div>
+<p><a class="reference internal" href="#contentdm"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">CONTENTdm</a><ul>
+<li><a class="reference internal" href="#preparing-a-transfer-for-contentdm">CONTENTdmへの転送準備</a></li>
+<li><a class="reference internal" href="#controlling-the-file-order">ファイルの順序の制御</a></li>
+<li><a class="reference internal" href="#create-dip-for-contentdm">CONTENTdmのDIPを作成</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="access.html"
+                          title="前の章へ">アクセス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../preservation/preservation-planning.html"
+                          title="次の章へ">保存計画</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/access/contentdm.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../preservation/preservation-planning.html" title="保存計画"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="access.html" title="アクセス"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CONTENTdm</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

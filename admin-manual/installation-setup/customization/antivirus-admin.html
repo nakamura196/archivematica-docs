@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>アンチウイルス管理 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="タスク出力キャプチャ設定" href="task-config.html" />
+    <link rel="prev" title="ダッシュボード管理タブ" href="dashboard-config.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="task-config.html" title="タスク出力キャプチャ設定"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="dashboard-config.html" title="ダッシュボード管理タブ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">アンチウイルス管理</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="antivirus-administration">
+<span id="antivirus-admin"></span><h1>アンチウイルス管理<a class="headerlink" href="#antivirus-administration" title="Link to this heading">¶</a></h1>
+<p>Archivematicaは、 <a class="reference external" href="https://www.clamav.net/">ClamAV</a> アンチウイルスエンジンにより、アンチウイルス機能を提供します。デフォルトのアンチウイルスの設定は、可能な限り多くのファイルタイプやサイズのウイルスを検出、隔離、削除するように設定されています。</p>
+<p>ClamAVの設定が必要な場合は、オペレーティングシステム内の様々な環境変数を通して行うことができます。</p>
+<section id="clamdscan-or-clamscan">
+<h2>ClamdscanまたはClamscan<a class="headerlink" href="#clamdscan-or-clamscan" title="Link to this heading">¶</a></h2>
+<p>Clamscanはスタンドアロンアプリケーションです。Clamdscanは、同じツールのサーバーベースの実装です。</p>
+<p>導入方法によって、Archivematica MCP Clientは、環境変数 <code class="docutils literal notranslate"><span class="pre">CLAMAV_CLIENT_BACKEND</span></code> を、大文字小文字を区別しない以下の2つの値のいずれかに設定する必要があります：</p>
+<ul class="simple">
+<li><p>Clamdscanには <code class="docutils literal notranslate"><span class="pre">clamdscanner</span></code></p></li>
+<li><p>Clamscanには <code class="docutils literal notranslate"><span class="pre">clamscanner</span></code></p></li>
+</ul>
+<p>Archivematicaは、これらの値のいずれかを探します。値が認識されなければ、デフォルトでClamdscanになります。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ウイルスチェックにはClamdscanを使用することをお勧めします。</p>
+<p>ClamscanがClamdscanより遅い理由は、プロセスが開始されると、渡されたファイルごとにウイルスデータベースが再ロードされる必要があるからです。</p>
+<p>Clamdscanの有用性は、サービスの開始時にのみロードされるアンチウイルス定義データベースがその理由の一つになっています。ファイルは、ストリームまたはファイルシステム参照によってサービスに渡されます。</p>
+<p>パフォーマンスの違いを説明すると、1MBの画像ファイルは、Clamdscanでは平均2秒でスキャンできます。Clamscanを使用すると、同じファイルの平均スキャン時間は1分20秒になります。</p>
+</div>
+</section>
+<section id="antivirus-settings-and-their-impacts">
+<h2>アンチウイルスの設定とその影響<a class="headerlink" href="#antivirus-settings-and-their-impacts" title="Link to this heading">¶</a></h2>
+<p>Archivematicaのアンチウイルスは、環境変数を使って設定します。これらの詳細については、Archivematica GitHubのページ <a class="reference external" href="https://github.com/artefactual/archivematica/blob/3e52494735ebfeb0cabc477d95d692034f4b3142/src/MCPClient/install/README.md#environment-variables">MCPClient環境変数</a> に記載されています。</p>
+<p>アンチウイルスには、ファイルがスキャンされるかどうかに影響する3つの値、MaxFileSize、MaxScanSize、StreamMaxLengthがあります。これらのいずれかを超えると、Archivematicaは、ファイル全体がウイルススキャンされたことを保証できません。</p>
+<p>このような場合、Archivematicaは、すべてのウイルスが検出されたことを保証できないため、 <a class="reference internal" href="../../../user-manual/metadata/premis.html#premis-template"><span class="std std-ref">PREMIS</span></a> イベントは記録されません。</p>
+<p><a class="reference external" href="https://manpages.debian.org/jessie/clamav-daemon/clamd.conf.5.en.html">ClamAVマニュアルページ</a> ::より</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MaxFileSize</span> <span class="n">SIZE</span>
+    <span class="n">Files</span>  <span class="n">larger</span> <span class="n">than</span> <span class="n">this</span> <span class="n">limit</span> <span class="n">won</span><span class="s1">&#39;t be scanned. Affects the input file</span>
+    <span class="n">itself</span> <span class="k">as</span> <span class="n">well</span> <span class="k">as</span> <span class="n">files</span> <span class="n">contained</span> <span class="n">inside</span> <span class="n">it</span> <span class="p">(</span><span class="n">when</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">file</span> <span class="ow">is</span> <span class="n">an</span>
+    <span class="n">archive</span><span class="p">,</span> <span class="n">a</span> <span class="n">document</span> <span class="ow">or</span> <span class="n">some</span> <span class="n">other</span> <span class="n">kind</span> <span class="n">of</span> <span class="n">container</span><span class="p">)</span><span class="o">.</span>
+
+<span class="n">MaxScanSize</span> <span class="n">SIZE</span>
+    <span class="n">Sets</span> <span class="n">the</span> <span class="n">maximum</span> <span class="n">amount</span> <span class="n">of</span> <span class="n">data</span> <span class="n">to</span> <span class="n">be</span> <span class="n">scanned</span> <span class="k">for</span> <span class="n">each</span> <span class="nb">input</span> <span class="n">file</span><span class="o">.</span>
+    <span class="n">Archives</span> <span class="ow">and</span> <span class="n">other</span> <span class="n">containers</span> <span class="n">are</span> <span class="n">recursively</span> <span class="n">extracted</span>  <span class="ow">and</span>  <span class="n">scanned</span>
+    <span class="n">up</span> <span class="n">to</span> <span class="n">this</span> <span class="n">value</span><span class="o">.</span> <span class="n">The</span> <span class="n">size</span> <span class="n">of</span> <span class="n">an</span> <span class="n">archive</span> <span class="n">plus</span> <span class="n">the</span> <span class="nb">sum</span> <span class="n">of</span> <span class="n">the</span> <span class="n">sizes</span> <span class="n">of</span>
+    <span class="nb">all</span> <span class="n">files</span> <span class="n">within</span> <span class="n">archive</span> <span class="n">count</span> <span class="n">toward</span> <span class="n">the</span> <span class="n">scan</span> <span class="n">size</span><span class="o">.</span> <span class="n">For</span> <span class="n">example</span><span class="p">,</span> <span class="n">a</span>
+    <span class="mi">1</span><span class="n">M</span> <span class="n">uncompressed</span> <span class="n">archive</span> <span class="n">containing</span> <span class="n">a</span> <span class="n">single</span> <span class="mi">1</span><span class="n">M</span> <span class="n">inner</span> <span class="n">file</span> <span class="n">counts</span> <span class="k">as</span>
+    <span class="mi">2</span><span class="n">M</span> <span class="n">toward</span> <span class="n">the</span> <span class="nb">max</span> <span class="n">scan</span> <span class="n">size</span><span class="o">.</span>
+
+<span class="n">StreamMaxLength</span><span class="o">**</span> <span class="n">SIZE</span>
+    <span class="n">Close</span> <span class="n">the</span> <span class="n">STREAM</span> <span class="n">session</span> <span class="n">when</span> <span class="n">the</span> <span class="n">data</span> <span class="n">size</span> <span class="n">limit</span> <span class="ow">is</span> <span class="n">exceeded</span><span class="o">.</span>
+    <span class="o">**</span><span class="n">Clamdscan</span> <span class="n">Only</span>
+
+<span class="n">Notes</span><span class="p">:</span>
+    <span class="n">All</span> <span class="n">options</span> <span class="n">expressing</span> <span class="n">a</span> <span class="n">size</span> <span class="n">are</span> <span class="n">limited</span> <span class="n">to</span> <span class="nb">max</span> <span class="mi">2</span><span class="n">GB</span><span class="o">.</span> <span class="n">Values</span> <span class="ow">in</span>
+    <span class="n">excess</span> <span class="n">will</span> <span class="n">be</span> <span class="n">reset</span> <span class="n">to</span> <span class="n">the</span> <span class="n">maximum</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-of-clamav-values">
+<h2>ClamAV値の設定<a class="headerlink" href="#configuration-of-clamav-values" title="Link to this heading">¶</a></h2>
+<p>Archivematicaのデフォルトは、::に設定されています</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MaxFileSize</span><span class="o">=</span><span class="mi">2000</span><span class="n">M</span>
+<span class="n">MaxScanSize</span><span class="o">=</span><span class="mi">2000</span><span class="n">M</span>
+<span class="n">StreamMaxLength</span><span class="o">=</span><span class="mi">2000</span><span class="n">M</span>
+</pre></div>
+</div>
+<p>ここで、Mはメガバイト単位です</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Clamscan defaults cannot be set above 2GB (2000M) as per this link to
+ClamAV <a class="reference external" href="https://github.com/Cisco-Talos/clamav/issues/344">Issue 344</a> .</p>
+</div>
+<p>設定は、環境変数またはデプロイスクリプト（Ansible playbookなど）を使って行います。</p>
+<section id="ansible">
+<h3>Ansible<a class="headerlink" href="#ansible" title="Link to this heading">¶</a></h3>
+<p>ClamAV Ansibleロールのデフォルトは、Ansibleのインストールプロセスを進める前に、デフォルトの <a class="reference external" href="https://github.com/artefactual-labs/ansible-clamav/blob/master/defaults/main.yml">設定ファイル</a> で設定できます。</p>
+</section>
+<section id="docker-compose">
+<h3>ドッカーコンポーズ<a class="headerlink" href="#docker-compose" title="Link to this heading">¶</a></h3>
+<p>開発者であれば、これらの値を <a class="reference external" href="https://github.com/artefactual/archivematica/blob/qa/1.x/hack/docker-compose.yml">Compose .ymlファイル</a> で調整できます。</p>
+<p>その後、コンテナを再作成できます:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span> <span class="o">--</span><span class="n">force</span><span class="o">-</span><span class="n">recreate</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span> <span class="n">archivematica</span><span class="o">-</span><span class="n">mcp</span><span class="o">-</span><span class="n">client</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="impact-of-various-configuration-settings">
+<h2>各種コンフィギュレーション設定の影響<a class="headerlink" href="#impact-of-various-configuration-settings" title="Link to this heading">¶</a></h2>
+<p>デフォルトが <em>大きくなる</em> と、大きなデジタルファイルの転送時間は <em>遅くなります</em> 。 <em>より多くの</em> デジタルファイルが完全にスキャンされます。</p>
+<p>デフォルトが <em>小さくなる</em> と、転送の処理時間は、すべてのデジタルファイルについて <em>より速く</em> なります。完全にスキャンされるデジタルファイルは <em>少なく</em> なります。</p>
+</section>
+<section id="virus-definition-updates">
+<h2>ウイルス定義の更新<a class="headerlink" href="#virus-definition-updates" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">freshclam</span></code> というアップデートサービスが定期的に実行され、Archivematicaのウイルス定義がアップデートされます。ウイルスデータベースが最後にいつ更新されたかを確認するには、次の場所でログを確認してください:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">clamav</span><span class="o">/</span><span class="n">freshclam</span><span class="o">.</span><span class="n">log</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>トラブルシューティング<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p>Scan for Virusesマイクロサービスがファイルのサイズが大きすぎると報告しているにもかかわらず、設定したデフォルト値が正確であるように見える場合は、MCPクライアントの構成を更新しなければならない可能性があります。マイクロサービスが環境変数を調べます：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_CLIENT_MAX_FILE_SIZE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_CLIENT_MAX_SCAN_SIZE</span></code></p></li>
+</ul>
+<p>ウィルス・スキャナーにファイルを渡すかどうかを決定します。これらの値は、 <a class="reference external" href="https://github.com/artefactual-labs/ansible-archivematica-src/blob/d4474c3dbaef2b561c87e0650c6ee386be6910a7/README.md#environment-variables">Ansible環境変数</a> 、またはオペレーティングシステム環境自体の内部で設定します。</p>
+<p><a class="reference internal" href="#antivirus-admin"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">アンチウイルス管理</a><ul>
+<li><a class="reference internal" href="#clamdscan-or-clamscan">ClamdscanまたはClamscan</a></li>
+<li><a class="reference internal" href="#antivirus-settings-and-their-impacts">アンチウイルスの設定とその影響</a></li>
+<li><a class="reference internal" href="#configuration-of-clamav-values">ClamAV値の設定</a><ul>
+<li><a class="reference internal" href="#ansible">Ansible</a></li>
+<li><a class="reference internal" href="#docker-compose">ドッカーコンポーズ</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#impact-of-various-configuration-settings">各種コンフィギュレーション設定の影響</a></li>
+<li><a class="reference internal" href="#virus-definition-updates">ウイルス定義の更新</a></li>
+<li><a class="reference internal" href="#troubleshooting">トラブルシューティング</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="dashboard-config.html"
+                          title="前の章へ">ダッシュボード管理タブ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="task-config.html"
+                          title="次の章へ">タスク出力キャプチャ設定</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/admin-manual/installation-setup/customization/antivirus-admin.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="task-config.html" title="タスク出力キャプチャ設定"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="dashboard-config.html" title="ダッシュボード管理タブ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">アンチウイルス管理</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

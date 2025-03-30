@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>開発者マニュアル &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=def86cc0" />
+    
+    <script src="../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="APIの概要" href="api/api-overview.html" />
+    <link rel="prev" title="セキュリティ" href="../admin-manual/security/security.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="api/api-overview.html" title="APIの概要"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../admin-manual/security/security.html" title="セキュリティ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Archivematica文書</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">開発者マニュアル</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="developer-s-manual">
+<span id="dev-manual-index"></span><h1>開発者マニュアル<a class="headerlink" href="#developer-s-manual" title="Link to this heading">¶</a></h1>
+<p>Archivematicaのカスタマイズ、新しいモジュールの開発、アプリケーションのAPIを使用する開発者向けのガイドラインです。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/api-overview.html">APIの概要</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api-overview.html#archivematica-api">Archivematica API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api-overview.html#storage-service-api">Storage Service API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/api-overview.html#authentication">認証</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/api-overview.html#generating-an-api-key-for-a-user">ユーザーのAPIキーを生成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/api-overview.html#using-an-api-key-in-a-request">リクエストでAPIキーを使用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/api-reference-archivematica.html">Archivematica API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api-reference-archivematica.html#resources-and-endpoints">リソースとエンドポイント</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/api-reference-archivematica.html#transfer">転送</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#start-transfer">転送開始</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#list-unapproved-transfer-s">未承認転送のリスト</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#approve-transfer-s">転送を承認</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#status">ステータス</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#hide">非表示</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#completed">完了</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#start-reingest">再インジェストの開始</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/api-reference-archivematica.html#ingest">インジェスト</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#id1">ステータス</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#id2">非表示</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#list-sips-waiting-for-user-input">ユーザー入力待ちのSIPSをリストアップ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#id3">完了</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#reingest">再インジェスト</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#copy-metadata">メタデータをコピー</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/api-reference-archivematica.html#administration">管理</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#levels-of-description">記述のレベル</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#fetch-levels-of-description">説明のレベルを取得</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/api-reference-archivematica.html#unit">ユニット</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#list-jobs">ジョブ一覧</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#task">タスク</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/api-reference-archivematica.html#other">その他</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#path-metadata">パスのメタデータ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#processing-configuration">処理設定</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/api-reference-archivematica.html#beta">ベータ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#package">パッケージ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-archivematica.html#validate">妥当性確認</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/api-reference-storage-service.html">Storage Service API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api-reference-storage-service.html#resources-and-endpoints">リソースとエンドポイント</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/api-reference-storage-service.html#pipeline">Pipeline</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#get-all-pipelines">すべてのパイプラインを取得</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#create-new-pipeline">新しいパイプラインの作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#get-pipeline-details">パイプラインの詳細を取得</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/api-reference-storage-service.html#space">Space</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#get-all-spaces">すべてのスペースを取得</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#get-space-details">スペースの詳細を取得</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#browse-space-path">スペースパスをブラウズ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#create-space">スペースを作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#access-protocols">Access protocols</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#archipelago">Archipelago</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#arkivum">Arkivum</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#dataverse">Dataverse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#duracloud">DuraCloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#dspace-via-sword2-api">DSpace via SWORD2 API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#dspace-via-rest-api">DSpace via REST API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#fedora-via-sword2">Fedora via SWORD2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#gpg-encryption-on-local-filesystem">GPG encryption on Local Filesystem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#local-filesystem">Local Filesystem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#lockss">LOCKSS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#nfs">NFS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#pipeline-local-filesystem">Pipeline Local Filesystem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#rclone">RClone</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#swift">Swift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#s3-amazon">S3 (Amazon)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/api-reference-storage-service.html#location">Location</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#get-all-locations">全ロケーションを取得</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#create-new-location">新しい場所を作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#get-location-details">場所の詳細を取得</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#move-files-to-this-location">ファイルをこの場所に移動</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#browse-location-path">ロケーションパスをブラウズ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#sword-collection">SWORDコレクション</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/api-reference-storage-service.html#package">パッケージ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#get-all-packages">すべてのパッケージを取得</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#create-new-package">新しいパッケージを作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#get-package-details">パッケージの詳細を取得</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#update-package-contents">パッケージ内容の更新</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#update-package-metadata">パッケージのメタデータを更新</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#delete-package-request">パッケージ削除リクエスト</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#recover-aip-request">AIPリクエストの復旧</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#download-single-file">単一ファイルのダウンロード</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#download-package">パッケージのダウンロード</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#get-pointer-file">ポインタファイルの取得</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#check-fixity">fixityのチェック</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#aip-storage-callback-request">AIPストレージコールバックリクエスト</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#get-file-information-for-package">パッケージのファイル情報を取得</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#update-file-information-for-package">パッケージのファイル情報を更新</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#delete-file-information-for-package">パッケージのファイル情報を削除</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#query-file-information-on-packages">パッケージのファイル情報のクエリ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#reingest-aip">AIPの再インジェスト</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#move-package">パッケージの移動</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/api-reference-storage-service.html#sword-endpoints">SWORDエンドポイント</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development-environment.html">開発環境</a></li>
+</ul>
+</div>
+<p><a class="reference internal" href="#dev-manual-index"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../admin-manual/security/security.html"
+                          title="前の章へ">セキュリティ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="api/api-overview.html"
+                          title="次の章へ">APIの概要</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/dev-manual/index.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="api/api-overview.html" title="APIの概要"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../admin-manual/security/security.html" title="セキュリティ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Archivematica文書</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">開発者マニュアル</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

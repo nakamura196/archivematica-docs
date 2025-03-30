@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AIPの構造 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="アーカイブ情報コレクション（AICs）" href="aic.html" />
+    <link rel="prev" title="アーカイブストレージ" href="archival-storage.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="aic.html" title="アーカイブ情報コレクション（AICs）"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="archival-storage.html" title="アーカイブストレージ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">AIPの構造</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="aip-structure">
+<span id="id1"></span><h1>AIPの構造<a class="headerlink" href="#aip-structure" title="Link to this heading">¶</a></h1>
+<p>このページでは、Archivematica が作成するAIPの標準的な構造について説明します。</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#aip-name"><span class="std std-ref">名前</span></a></p></li>
+<li><p><a class="reference internal" href="#aip-contents"><span class="std std-ref">AIPの内容</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#aip-bagit-files"><span class="std std-ref">BagItファイル</span></a></p></li>
+<li><p><a class="reference internal" href="#aip-data-directory"><span class="std std-ref">データディレクトリ</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#aip-mets"><span class="std std-ref">AIP METSファイル</span></a></p></li>
+<li><p><a class="reference internal" href="#aip-readme"><span class="std std-ref">READMEファイル</span></a></p></li>
+<li><p><a class="reference internal" href="#aip-logs"><span class="std std-ref">ログ</span></a></p></li>
+<li><p><a class="reference internal" href="#aip-objects"><span class="std std-ref">オブジェクト</span></a></p></li>
+<li><p><a class="reference internal" href="#aip-thumbnails"><span class="std std-ref">サムネイル</span></a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<section id="name">
+<span id="aip-name"></span><h2>名前<a class="headerlink" href="#name" title="Link to this heading">¶</a></h2>
+<p>AIP名は以下のように構成されます：</p>
+<ol class="arabic simple">
+<li><p>転送に割り当てられた名前。これは、転送タイプと転送方法に応じて、人間の入力によるものであったり、転送ディレクトリの名前であったりします。</p></li>
+<li><p>インジェスト時にAIPにインジェストされたUUID。</p></li>
+</ol>
+<p>例えば、AIP名 <code class="docutils literal notranslate"><span class="pre">my-aip-d31cc44f-ce01-4e67-affe-513868d9cf3d</span></code> を見ると、 <code class="docutils literal notranslate"><span class="pre">my-aip</span></code> は、ユーザーによって割り当てられた名前で、 <code class="docutils literal notranslate"><span class="pre">d31cc44f-ce01-4e67-affe-513868d9cf3d</span></code> はインジェスト時に生成されたUUIDです。</p>
+</section>
+<section id="aip-contents">
+<span id="id2"></span><h2>AIPの内容<a class="headerlink" href="#aip-contents" title="Link to this heading">¶</a></h2>
+<p>Archivematica の AIP は、元のコンテンツ、処理、保存の変数に関係なく、構造的に一貫しています。これらは、 <a class="reference external" href="https://tools.ietf.org/html/rfc8493">IETF Trust BagItファイルのパッケージ化フォーマット</a> に従ってバッグにパッケージされます。このツリー構造は、典型的なArchivematica AIPを示しています：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[1] my-aip-d31cc44f-ce01-4e67-affe-513868d9cf3d
+[2] ├── bag-info.txt
+[3] ├── bagit.txt
+[4] ├── manifest-sha512.txt
+[5] ├── tagmanifest-md5.txt
+[6] └── data
+[7]     ├── logs
+[8]     ├── objects
+[9]     ├── thumbnails
+[10]    ├── METS.d31cc44f-ce01-4e67-affe-513868d9cf3d.xml
+[11]    └── README.html
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>[1] AIPルートディレクトリ</p></li>
+<li><p>[2 - 5] <a class="reference internal" href="#aip-bagit-files"><span class="std std-ref">AIP BagItファイル</span></a> ： <a class="reference external" href="https://tools.ietf.org/html/rfc8493">IETF Trust BagIt File Packaging Formatに従って作成された標準パッケージングファイル</a> .</p></li>
+<li><p>[6] <a class="reference internal" href="#aip-data-directory"><span class="std std-ref">データディレクトリ</span></a> ：BagIt仕様で必要とされる標準ディレクトリ。データディレクトリには、AIPコンテンツ情報と保存記述情報（PDI）が含まれます。</p></li>
+<li><p>[7] <a class="reference internal" href="#aip-logs"><span class="std std-ref">Logsディレクトリ</span></a> ：Archivematicaが AIP を生成するために使用するいくつかのツールのログ出力が含まれています。</p></li>
+<li><p>[8] <a class="reference internal" href="#aip-objects"><span class="std std-ref">Objectsディレクトリ</span></a> ：オリジナルのデジタルオブジェクトと、正規化されたバージョンが含まれます。</p></li>
+<li><p>[9] <a class="reference internal" href="#aip-thumbnails"><span class="std std-ref">サムネイルディレクトリ</span></a> ：オリジナルオブジェクトから生成されたサムネイルが含まれます。</p></li>
+<li><p>[10] <a class="reference internal" href="#aip-mets"><span class="std std-ref">AIP METSファイル</span></a></p></li>
+<li><p>[11] <a class="reference internal" href="#aip-readme"><span class="std std-ref">READMEファイル</span></a></p></li>
+</ul>
+<p>これらの各コンポーネントの詳細については、以下の該当セクションを参照してください。</p>
+<section id="bagit-files">
+<span id="aip-bagit-files"></span><h3>BagItファイル<a class="headerlink" href="#bagit-files" title="Link to this heading">¶</a></h3>
+<p>Archivematica は、BagIt の非常にシンプルな実装を使用しています。すべての AIP には、以下の BagItファイルが含まれています：</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">bag-info.txt</span></code> タグファイルには、以下のようなバッグのメタデータが含まれています：</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Payload-Oxum</span></code> ：バッグのペイロードのオクテットストリームの和。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Bagging-Date</span></code> バッグが作成された日付（例：2018-11-01）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Bag-Size</span></code> ：人間が読めるファイルサイズ（例えば42kB）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">External-Identifier</span></code> AIPのUUID。</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bagit.txt</span></code> ：バッグ宣言で、バージョンとエンコーディングを記述します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">manifest-sha256.txt</span></code> 各ペイロードファイル名と対応するSHA256チェックサムのリスト。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tagmanifest-md5.txt</span></code> タグファイルは、対応するMD5 チェックサムを持つ他のタグファイルを一覧表示します。</p></li>
+</ul>
+<p>この例では、AIPの最上位にあるディレクトリの内容を示しています。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>my-aip-d31cc44f-ce01-4e67-affe-513868d9cf3d
+├──<span class="w"> </span>bag-info.txt
+├──<span class="w"> </span>bagit.txt
+├──<span class="w"> </span>data
+├──<span class="w"> </span>manifest-sha256.txt
+└──<span class="w"> </span>tagmanifest-sha256.txt
+</pre></div>
+</div>
+</section>
+<section id="data-directory">
+<span id="aip-data-directory"></span><h3>データディレクトリ<a class="headerlink" href="#data-directory" title="Link to this heading">¶</a></h3>
+<p>データディレクトリは、AIP の METS ファイル、READMEファイル、および 3 つのフォルダから構成されます： <code class="docutils literal notranslate"><span class="pre">logs</span></code> <code class="docutils literal notranslate"><span class="pre">objects</span></code> と <code class="docutils literal notranslate"><span class="pre">thumbnails</span></code> 。</p>
+<p>この例は、AIP のデータディレクトリの内容を示しています。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>my-aip-d31cc44f-ce01-4e67-affe-513868d9cf3d
+└──<span class="w"> </span>data
+<span class="w">    </span>├──<span class="w"> </span>logs
+<span class="w">    </span>├──<span class="w"> </span>METS.d31cc44f-ce01-4e67-affe-513868d9cf3d.xml
+<span class="w">    </span>├──<span class="w"> </span>objects
+<span class="w">    </span>├──<span class="w"> </span>README.html
+<span class="w">    </span>└──<span class="w"> </span>thumbnails
+</pre></div>
+</div>
+<section id="aip-mets-file">
+<span id="aip-mets"></span><h4>AIP METSファイル<a class="headerlink" href="#aip-mets-file" title="Link to this heading">¶</a></h4>
+<p>AIP <a class="reference external" href="http://www.loc.gov/standards/mets/">METS ファイル</a> 、 <code class="docutils literal notranslate"><span class="pre">/data/METS.uuid.xml</span></code> は、AIP 内のすべてのデジタルオブジェクト（オリジナルファイル、保存マスター、ライセンスファイル、OCR テキストファイル、提出文書など）をリストアップし、相互の関係を記述し、デジタルオブジェクトをその記述的、技術的、出所、および権利メタデータにリンクします。</p>
+<p>AIP METS ファイル名は、接頭辞 <code class="docutils literal notranslate"><span class="pre">METS.</span></code> 、AIP の UUID、および拡張子 <code class="docutils literal notranslate"><span class="pre">.xml</span></code> から構成されます。UUID の存在により、AIP METS ファイルは以下の <a class="reference internal" href="#aip-objects"><span class="std std-ref">オブジェクト</span></a> セクションで説明する転送 METS ファイルと区別されることに注意してください。</p>
+<p>ArchivematicaのMETS実装の詳細については、 <a class="reference internal" href="../metadata/METS.html#mets-schema"><span class="std std-ref">ArchivematicaにおけるMETS</span></a> を参照してください。</p>
+</section>
+<section id="readme-file">
+<span id="aip-readme"></span><h4>READMEファイル<a class="headerlink" href="#readme-file" title="Link to this heading">¶</a></h4>
+<p>AIPのREADMEファイル（ <code class="docutils literal notranslate"><span class="pre">/data/README.html</span></code> ）は、Archivematica AIPの基本的な構造を説明した、人間が読むことのできるファイルです。Archivematica、OAIS、METS、PREMIS、その他の概念について説明されています。</p>
+</section>
+<section id="logs">
+<span id="aip-logs"></span><h4>ログ<a class="headerlink" href="#logs" title="Link to this heading">¶</a></h4>
+<p>ログディレクトリ <code class="docutils literal notranslate"><span class="pre">/data/logs</span></code> には、Archivematica内で実行されるツールやタスクのログ出力が含まれています。</p>
+<p>これは、AIP のログディレクトリの内容の例です：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>my-aip-d31cc44f-ce01-4e67-affe-513868d9cf3d
+└──<span class="w"> </span>data
+<span class="w">    </span>└──<span class="w"> </span>logs
+<span class="w">        </span>├──<span class="w"> </span>arrange.log
+<span class="w">        </span>├──<span class="w"> </span>fileFormatIdentification.log
+<span class="w">        </span>├──<span class="w"> </span>filenameChanges.log
+<span class="w">        </span>└──<span class="w"> </span>transfers
+<span class="w">            </span>├──<span class="w"> </span>first-transfer-abbff451-f077-4f66-a6e0-d83f6ebbeebf
+<span class="w">            </span>│<span class="w">   </span>└──<span class="w"> </span>logs
+<span class="w">            </span>│<span class="w">       </span>├──<span class="w"> </span>fileFormatIdentification.log
+<span class="w">            </span>│<span class="w">       </span>└──<span class="w"> </span>filenameChanges.log
+<span class="w">            </span>└──<span class="w"> </span>second-transfer-52fd11fa-fca8-4bc7-9214-e6510863759a
+<span class="w">                </span>└──<span class="w"> </span>logs
+<span class="w">                    </span>├──<span class="w"> </span>fileFormatIdentification.log
+<span class="w">                    </span>└──<span class="w"> </span>filenameChanges.log
+</pre></div>
+</div>
+<p>トップレベルのログ（ <code class="docutils literal notranslate"><span class="pre">arrange.log</span></code> 、 <code class="docutils literal notranslate"><span class="pre">fileFormatIdentification.log</span></code> など）は、「鑑定」タブまたは「インジェスト」タブで行われたタスクの出力です。たとえば、 <code class="docutils literal notranslate"><span class="pre">data/logs/fileFormatIdentification.log</span></code> は、[インジェスト]タブの[Normalize]マイクロサービス中に実行される <em>ファイル形式の識別</em> ジョブ中に作成されたログです。</p>
+<p>ログディレクトリには、転送サブディレクトリ（ <code class="docutils literal notranslate"><span class="pre">/data/logs/transfers</span></code> ）があり、転送タブで実行されたツールのログが含まれます。複数の転送を1つのSIP（これは1つのAIPになる）にまとめることができるので、転送サブディレクトリは複数のディレクトリを含むかもしれません。上記の例で続けると、2つの転送（ <code class="docutils literal notranslate"><span class="pre">first-transfer</span></code> と <code class="docutils literal notranslate"><span class="pre">second-transfer</span></code> ）が1つのAIP（ <code class="docutils literal notranslate"><span class="pre">my-aip</span></code> ）を作成するために組み合わさましれた。したがって、 <code class="docutils literal notranslate"><span class="pre">fileFormatIdentification.log</span></code> ファイルがあと2つあります：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data/logs/transfers/first-transfer-abbff451-f077-4f66-a6e0-d83f6ebbeebf/logs/fileFormatIdentification.log</span></code> は <em>マイクロサービス中に作成されたログ：[転送] タブの ファイルフォーマットの識別</em> <code class="docutils literal notranslate"><span class="pre">first-transfer</span></code> が処理されたときに作成されたログです。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data/logs/transfers/second-transfer-52fd11fa-fca8-4bc7-9214-e6510863759a/logs/fileFormatIdentification.log</span></code> は <em>マイクロサービス中に作成されたログ：[転送] タブの ファイルフォーマットの識別</em> <code class="docutils literal notranslate"><span class="pre">second-transfer</span></code> が処理されたときに作成されたログです。</p></li>
+</ul>
+<p>上記の例は、すべての可能なログを示しているわけではありません。 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> をどのように設定したかによって、AIP に表示されるログの数が多くなったり少なくなったり、あるいは異なるタイプのログが表示されたりすることがあります。</p>
+</section>
+<section id="objects">
+<span id="aip-objects"></span><h4>オブジェクト<a class="headerlink" href="#objects" title="Link to this heading">¶</a></h4>
+<p>オブジェクトディレクトリ <code class="docutils literal notranslate"><span class="pre">/data/objects</span></code> には、オリジナルのオブジェクト、保存マスタ、および2つのフォルダ、 <code class="docutils literal notranslate"><span class="pre">/metadata</span></code> と <code class="docutils literal notranslate"><span class="pre">/submissionDocumentation</span></code> が含まれます。SIPに下位レベルのディレクトリが含まれていた場合、オリジナルの転送から、または [評価] タブで配列されていたため、下位レベルのディレクトリも存在します。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>my-aip-d31cc44f-ce01-4e67-affe-513868d9cf3d
+└── data
+    └── objects
+        ├── 799px-Euroleague-LE_Roma_vs_Toulouse_IC-27-3e2bcabd-f33f-485b-a566-ff71c141b930.tif
+        ├── 799px-Euroleague-LE_Roma_vs_Toulouse_IC-27.bmp
+        ├── BBhelmet.ai
+        ├── G31DS-60559b5e-38a5-44f5-8c63-bb41bda5d2e8.tif
+        ├── G31DS.TIF
+        ├── metadata
+        │   └── transfers
+        │       ├── first-transfer-abbff451-f077-4f66-a6e0-d83f6ebbeebf
+        │       │   ├── directory_tree.txt
+        │       │   └── metadata.csv
+        │       └── second-transfer-52fd11fa-fca8-4bc7-9214-e6510863759a
+        │           └── directory_tree.txt
+        └── submissionDocumentation
+            ├── transfer-first-transfer-abbff451-f077-4f66-a6e0-d83f6ebbeebf
+            │   └── METS.xml
+            └── second-transfer-52fd11fa-fca8-4bc7-9214-e6510863759a
+                └── METS.xml
+</pre></div>
+</div>
+<p>オリジナルオブジェクトのファイル名は変更されません。保存マスターのコピーは、ファイル名にUUIDが付加されます。上記の例では、 <code class="docutils literal notranslate"><span class="pre">799px-Euroleague-LE_Roma_vs_Toulouse_IC-27.bmp</span></code> がオリジナルオブジェクトで、 <code class="docutils literal notranslate"><span class="pre">799px-Euroleague-LE_Roma_vs_Toulouse_IC-27-3e2bcabd-f33f-485b-a566-ff71c141b930.tif</span></code> が保存マスターです。保存マスターコピーの作成は、 <a class="reference internal" href="../preservation/preservation-planning.html#preservation-planning"><span class="std std-ref">保存計画タブ</span></a> のルールに従って行われます。</p>
+<p><code class="docutils literal notranslate"><span class="pre">/metadata</span></code> ディレクトリには、AIPに関連するメタデータが含まれます。メタデータディレクトリには、転送サブディレクトリ（ <code class="docutils literal notranslate"><span class="pre">/data/metadata/transfers</span></code> ）があり、メタデータファイルを、それらが発生した転送に固有のフォルダに分離します。複数の転送を1つのSIP（1つのAIPになる）にまとめることが可能なので、転送サブディレクトリは複数のフォルダを含むかもしれません。</p>
+<p><code class="docutils literal notranslate"><span class="pre">/submissionDocumentation</span></code> ディレクトリには、AIPの <a class="reference internal" href="../transfer/transfer.html#create-submission"><span class="std std-ref">提出文書</span></a> があります。メタデータディレクトリと同様に、転送サブディレクトリ <code class="docutils literal notranslate"><span class="pre">/data/submissionDocumentation/transfers</span></code> があり、これにより、提出ドキュメントファイルが、転送元の転送に固有のフォルダに分割されます。複数の転送を 1 つの SIP (1 つの AIP になります) に結合できるため、転送サブディレクトリには複数のフォルダが含まれる場合があります。転送フォルダには METS.XML ファイルが含まれていることに注意してください。これは、[転送] タブで転送ごとに生成された転送 METS です。転送（または結合された複数の転送）が SIP になると、転送 METS ファイルが新しい METS ファイルに結合され、それが <a class="reference internal" href="#aip-mets"><span class="std std-ref">AIP METS ファイル</span></a> になります。</p>
+</section>
+<section id="thumbnails">
+<span id="aip-thumbnails"></span><h4>サムネイル<a class="headerlink" href="#thumbnails" title="Link to this heading">¶</a></h4>
+<p><em>サムネイルの正規化</em> ジョブ中にサムネイル画像を生成することを選択した場合、オブジェクトディレクトリ <code class="docutils literal notranslate"><span class="pre">/data/thumbnails</span></code> にはサムネイル画像が含まれます。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>my-aip-d31cc44f-ce01-4e67-affe-513868d9cf3d
+└── data
+    └── thumbnails
+        ├── 0e9fd6db-ac57-453c-ba0f-c9cff9d0ac56.jpg
+        ├── 7d1c5e44-f1e1-4cf7-8b79-ca2284a6ce79.jpg
+        └── dd1a6fb8-7e49-47ca-921b-87b234c939b9.jpg
+</pre></div>
+</div>
+<p>サムネイルの作成は、オプションであり、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> で設定可能です。</p>
+<p><a class="reference internal" href="#aip-structure"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">AIPの構造</a><ul>
+<li><a class="reference internal" href="#name">名前</a></li>
+<li><a class="reference internal" href="#aip-contents">AIPの内容</a><ul>
+<li><a class="reference internal" href="#bagit-files">BagItファイル</a></li>
+<li><a class="reference internal" href="#data-directory">データディレクトリ</a><ul>
+<li><a class="reference internal" href="#aip-mets-file">AIP METSファイル</a></li>
+<li><a class="reference internal" href="#readme-file">READMEファイル</a></li>
+<li><a class="reference internal" href="#logs">ログ</a></li>
+<li><a class="reference internal" href="#objects">オブジェクト</a></li>
+<li><a class="reference internal" href="#thumbnails">サムネイル</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="archival-storage.html"
+                          title="前の章へ">アーカイブストレージ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="aic.html"
+                          title="次の章へ">アーカイブ情報コレクション（AICs）</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/archival-storage/aip-structure.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="aic.html" title="アーカイブ情報コレクション（AICs）"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="archival-storage.html" title="アーカイブストレージ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">AIPの構造</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

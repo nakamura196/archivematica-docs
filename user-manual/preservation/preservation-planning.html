@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>保存計画 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="ダッシュボード管理タブ" href="../administer/dashboard-admin.html" />
+    <link rel="prev" title="CONTENTdm" href="../access/contentdm.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../administer/dashboard-admin.html" title="ダッシュボード管理タブ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../access/contentdm.html" title="CONTENTdm"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">保存計画</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="preservation-planning">
+<span id="id1"></span><h1>保存計画<a class="headerlink" href="#preservation-planning" title="Link to this heading">¶</a></h1>
+<p>フォーマットポリシーレジストリ（FPR）は、Archivematicaユーザが特定のファイルフォーマットに対してArchivematicaが行うべきアクションを定義するためのデータベースです。例えば、Archivematica が JPEG ファイルを長期保存するためにどのように正規化するかを指定します。これはフォーマットポリシーと呼ばれ、Archivematica が目的の保存アクションを実行するために使用するツール、ルール、コマンドを定義します。</p>
+<p>正規化、パッケージ抽出、特性化、妥当性確認、識別、確認、テキスト変換などの保存アクションは、Archivematica の保存計画タブで管理されます。</p>
+<p>When you install Archivematica, default formats, rules and commands are
+installed and accessed through the Preservation Planning tab. When you upgrade
+to a new release of Archivematica, new formats, rules and commands may be added
+(check the release notes for the specific release to find out). In addition, you
+can maintain local rules to add new formats or customize the behaviour of
+Archivematica. Your local changes are maintained if you upgrade your
+Archivematica pipeline to a new version. Archivematica's default format policies
+are maintained by Artefactual. Format policies will change as community
+standards, practices and tools evolve. If you would like to suggest a different
+default format policy, consider opening an issue in the
+<a class="reference external" href="https://github.com/archivematica/Issues">Archivematica issues repo</a>.</p>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pres-policies"><span class="std std-ref">保存計画ポリシー</span></a></p></li>
+<li><p><a class="reference internal" href="#preservation-planning-definitions"><span class="std std-ref">定義</span></a></p></li>
+<li><p><a class="reference internal" href="#altering-commands-rules"><span class="std std-ref">コマンドとルールの変更</span></a></p></li>
+<li><p><a class="reference internal" href="#identification"><span class="std std-ref">識別</span></a></p></li>
+<li><p><a class="reference internal" href="#characterization"><span class="std std-ref">特性化</span></a></p></li>
+<li><p><a class="reference internal" href="#event-detail"><span class="std std-ref">イベント詳細</span></a></p></li>
+<li><p><a class="reference internal" href="#extraction"><span class="std std-ref">抽出</span></a></p></li>
+<li><p><a class="reference internal" href="#normalization"><span class="std std-ref">正規化</span></a></p></li>
+<li><p><a class="reference internal" href="#transcription"><span class="std std-ref">テキスト変換</span></a></p></li>
+<li><p><a class="reference internal" href="#validation"><span class="std std-ref">妥当性確認</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#fpr-jhove"><span class="std std-ref">JHOVE</span></a></p></li>
+<li><p><a class="reference internal" href="#fpr-mediaconch"><span class="std std-ref">MediaConch</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#verification"><span class="std std-ref">妥当性確認</span></a></p></li>
+</ul>
+<section id="preservation-planning-policies">
+<span id="pres-policies"></span><h2>保存計画ポリシー<a class="headerlink" href="#preservation-planning-policies" title="Link to this heading">¶</a></h2>
+<p>標準やツールの進化に合わせて、時間の経過とともにフォーマットの正規化ルールを知らせるために、デジタル保存環境の監視を含む地域のポリシーや慣行を確立することが機関にとって重要です。</p>
+<p>信頼されるデジタルリポジトリを監査するためのTRAC規格（ <a class="reference external" href="https://www.iso.org/standard/56510.html">ISO 16363：2012</a> ）に従って、ポリシーとプラクティスを文書化することをお勧めします。</p>
+</section>
+<section id="definitions">
+<span id="preservation-planning-definitions"></span><h2>定義<a class="headerlink" href="#definitions" title="Link to this heading">¶</a></h2>
+<section id="format">
+<span id="preservation-planning-formats"></span><h3>フォーマット<a class="headerlink" href="#format" title="Link to this heading">¶</a></h3>
+<p>フォーマットとは、デジタルストレージメディアに保存するために情報をエンコードする標準化された方法です。Archivematica は、英国国立公文書館が管理するファイルフォーマットの技術レジストリである <a class="reference external" href="http://www.nationalarchives.gov.uk/PRONOM/Default.aspx">PRONOM</a> からフォーマット情報を抽出することにより、数百のファイルフォーマットを認識します。</p>
+<p>[保存計画] タブの左側のサイドバーの上部にある <strong>フォーマット</strong> を選択すると、フォーマット表示ページが表示され、Archivematica が現在認識しているすべてのフォーマットのリストが表示されます。このテーブルの各エントリは、1 つ以上の関連フォーマット バージョンを表すレコードです。各フォーマットのバージョンも記録となります。たとえば、 <em>Graphics Interchange Format</em> のフォーマットレコードは、GIF フォーマットのさまざまなバージョン (GIF 1987a、1989a、および Generic gif) のフォーマットバージョンレコードで構成されています。</p>
+<p>Formatsビューページで <strong>Create new format</strong> を選択すれば、いつでもFPRに新しいフォーマットを追加できます。新しい書式はPRONOMに存在する必要はないことに注意してください。極めて稀な書式や一度しか使わない書式を扱う場合は、ここで完全にローカルな書式レコードを作成できます。</p>
+<p>フィールド：</p>
+<ul class="simple">
+<li><p><strong>グループ</strong> ：以下のフォーマットグループを参照してください。</p></li>
+<li><p><strong>説明</strong> ：フォーマットの名前。</p></li>
+</ul>
+<p>フォーマットを作成したら、フォーマットのバージョンを追加して、フォーマットのより詳細な情報を記録できます。</p>
+<p>フィールド：</p>
+<ul class="simple">
+<li><p><strong>説明</strong> ：フォーマットバージョンの名前。このテキストは、METSファイルのフォーマットタイプを指定するために使用されます。このフィールドは必須です。</p></li>
+<li><p><strong>バージョン</strong> ：この特定のフォーマットのバージョンのバージョン番号。たとえば、Adobe Illustrator 14 ファイルの場合は、 <em>14</em> と入力します。このフィールドは必須です。</p></li>
+<li><p><strong>Pronom id</strong> ：存在すれば、PRONOMにおける特定のフォーマットのバージョンの一意識別子。このフィールドはオプションです。</p></li>
+<li><p><strong>アクセスフォーマット</strong> ：このボックスにチェックを入れると、このフォーマットのバージョンがエンドユーザーにとって許容できるアクセスフォーマットであることを示します。このフィールドはオプションです。</p></li>
+<li><p><strong>保存フォーマット</strong> ：このボックスにチェックを入れると、このフォーマットのバージョンが長期保存に適した保存フォーマットであることを示します。このフィールドはオプションです。</p></li>
+</ul>
+</section>
+<section id="format-group">
+<span id="preservation-planning-format-group"></span><h3>フォーマットグループ<a class="headerlink" href="#format-group" title="Link to this heading">¶</a></h3>
+<p>フォーマットグループは、共通のプロパティを共有する関連ファイルフォーマットの便利なグループ化です。たとえば、FPR には&quot;Image （raster）&quot; グループがあり、GIF、JPEG、PNG のフォーマットレコードが含まれています。各フォーマットは1つのフォーマットグループに属します。</p>
+<p>[保存計画] タブの左側のサイドバーの上部近くにある <strong>グループ</strong> を選択すると、[フォーマットグループ] 表示ページが表示されます。ここには、Archivematica がフォーマットを分類するために使用するフォーマットグループのリストが表示されます。フォーマット名をクリックすると、そのグループに属するすべてのフォーマットが表示されます。</p>
+<p>以下のフォーマットグループは、FPRにあらかじめ入力されています：</p>
+<ul class="simple">
+<li><p>オーディオ</p></li>
+<li><p>バイナリ（データ）</p></li>
+<li><p>バイナリ（実行可能）</p></li>
+<li><p>CAD</p></li>
+<li><p>データの可視化</p></li>
+<li><p>データベース</p></li>
+<li><p>データセット</p></li>
+<li><p>デスクトップパブリッシング</p></li>
+<li><p>ディスクイメージ</p></li>
+<li><p>電子メール</p></li>
+<li><p>フラッシュ</p></li>
+<li><p>フォント</p></li>
+<li><p>地理情報システム</p></li>
+<li><p>画像（ラスター）</p></li>
+<li><p>画像（ベクター）</p></li>
+<li><p>パッケージ</p></li>
+<li><p>ポータブル文書フォーマット</p></li>
+<li><p>プレゼンテーション</p></li>
+<li><p>スプレッドシート</p></li>
+<li><p>統計</p></li>
+<li><p>テキスト（マークアップ）</p></li>
+<li><p>テキスト（プレーン）</p></li>
+<li><p>テキスト（ソースコード）</p></li>
+<li><p>テキスト（構造化）</p></li>
+<li><p>不明</p></li>
+<li><p>動画</p></li>
+<li><p>ワープロ</p></li>
+</ul>
+<p>フォーマットグループは、新しいデータがPRONOMからArchivematicaにインポートされるたびに手動で割り当てられます。フォーマットが誤って分類されていると思われる場合は、フォーマットを編集することで変更できます。その変更が他のユーザーにも関係すると思われる場合は、 <a class="reference external" href="https://github.com/archivematica/Issues">Archivematica issues repo</a> にissueを開くことを検討してください。</p>
+</section>
+<section id="purpose">
+<span id="preservation-planning-purpose"></span><h3>目的<a class="headerlink" href="#purpose" title="Link to this heading">¶</a></h3>
+<p>「目的」 とは、特定のツール、ルール、またはコマンドが Archivematica ワークフロー内で果たす機能を指します。これは、ツール、ルール、またはコマンドがデプロイされるコンテキストによって異なります。たとえば、変換ツールを使用して JPG ファイルを TIFF に正規化するルールには、 <em>保存</em> という目的がある場合があります。これは、このルールの目的が長期保存用の TIFF を作成することであることを意味します。</p>
+<p>「目的」という用語は、[保存計画] タブ内のさまざまな場所で使用されます。場合によっては、 <em>コマンドの使用法</em> などの同様の用語が代わりに使用されます。</p>
+</section>
+<section id="tools">
+<span id="preservation-planning-tools"></span><h3>ツール<a class="headerlink" href="#tools" title="Link to this heading">¶</a></h3>
+<p>Archivematica は、保存処理に使用される多くのオープンソースツールのラッパーとして機能します。これらのツールには、 <a class="reference external" href="https://projects.iq.harvard.edu/fits/home">FITS</a> のようなデジタル保存に特化したツールや、 <a class="reference external" href="https://inkscape.org/">Inkscape</a> のような異なるファイルフォーマットを扱うツールなどがあります。</p>
+<p>左側のサイドバーで、 <em>ポリシー レジストリのフォーマット</em> 見出しの下にある <strong>ツール</strong> を選択すると、ツールの完全なリストにアクセスできます。</p>
+<p>ツールはコマンドによって呼び出され、フォーマットに基づいて動作します。</p>
+</section>
+<section id="commands">
+<span id="preservation-planning-commands"></span><h3>コマンド<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h3>
+<p>フォーマットポリシーコマンドは、ツールの実行方法を制御するスクリプトまたはコマンドラインステートメントです。コマンドは、ファイルの識別などの特定の目的のために作成されます。たとえば、 <a class="reference internal" href="../transfer/transfer.html#transfer"><span class="std std-ref">転送</span></a> 中に、Archivematica にファイルのフォーマットを識別するように指示できます。これは、Archivematica にファイル識別コマンドを実行するように指示します。デフォルトの Archivematica インスタンスでは、これは &quot; <a class="reference external" href="https://www.itforarchivists.com/siegfried">Siegfried</a> を使用して識別する&quot; となり、転送に含まれるファイル識別ツール Siegfried を実行します。このコマンドは、転送中のファイルごとに 1 回実行されます。</p>
+<p>特定の目的に対する現在のコマンドを見るには、左側のサイドバーでその目的を見つけ（すなわち、 <strong>識別</strong> ）、サブメニュー項目 <strong>コマンド</strong> を選択します。</p>
+<a class="reference internal image-reference" href="../../_images/identification-commands.png"><img alt="Archivematica 1.9 の識別コマンドのリスト" class="align-center" src="../../_images/identification-commands.png" style="width: 80%;" />
+</a>
+<p>Archivematica には、様々なツールのデフォルトコマンドが含まれています。これらのコマンドは、いつでも無効にしたり、置き換えたりできます。</p>
+</section>
+<section id="rules">
+<span id="preservation-planning-rules"></span><h3>ルール<a class="headerlink" href="#rules" title="Link to this heading">¶</a></h3>
+<p>フォーマット ポリシー ルールは、コマンドをファイル フォーマットに関連付けます。コマンドと同様に、ルールもファイルの正規化など特定の目的のために作成されます。例えば、保存のためにファイルを正規化する場合、Archivematica に、すべての JPG ファイルに対して <em>Transcoding to jpg with convert</em> というコマンドを使うように指示できます。一方、SVG ファイルは、 <em>Transcoding to pdf with inkscape</em> というコマンドを使って PDF に変換されます。このように、ツール、ルール、コマンドはすべて、保存ポリシーを実行するために連携します。</p>
+<p>特定の目的に対する現在のルールを見るには、左側のサイドバーでその目的を見つけ（すなわち、 <strong>正規化</strong> ）、サブメニュー項目 <strong>ルール</strong> を選択します。</p>
+<a class="reference internal image-reference" href="../../_images/normalization-rules.png"><img alt="Archivematica 1.7.2 の正規化ルールのリスト" class="align-center" src="../../_images/normalization-rules.png" style="width: 80%;" />
+</a>
+<p>Archivematica には、様々なコマンドのデフォルトルールが含まれています。これらのルールはいつでも無効にしたり、置き換えたりできます。</p>
+</section>
+</section>
+<section id="altering-commands-and-rules">
+<span id="altering-commands-rules"></span><h2>コマンドとルールの変更<a class="headerlink" href="#altering-commands-and-rules" title="Link to this heading">¶</a></h2>
+<section id="writing-commands">
+<span id="id2"></span><h3>コマンドを書く<a class="headerlink" href="#writing-commands" title="Link to this heading">¶</a></h3>
+<p>Archivematica が使用するコマンドの書き方は、bashの1行を追加するものから、Pythonの数行を追加するもの、完全なUnixスクリプトを作成するものまで、多岐にわたります。そのため、必要な専門知識は、コンテキストによって異なります。スクリプトの複雑さにかかわらず、生産環境で使用する前にスクリプトを十分にテストすることをお勧めします。</p>
+<p>このページのさらに下には、[保存計画] タブの各セクションに関する情報があり、各セクションのコマンドに関する具体的な情報が記載されています。</p>
+<p>新しいコマンドを追加するには、コマンドの目的を決めます（例：識別または特性化）。次に、左側のサイドバーで目的を見つけ（例： <strong>特性化</strong> ）、サブメニュー項目 <strong>コマンド</strong> を選択します。[コマンド] ページが開いたら、 <strong>新しいコマンドを作成する</strong> をクリックします。</p>
+<p>フィールド：</p>
+<ul class="simple">
+<li><p><strong>関連ツール</strong> ：このコマンドが呼び出すツール。</p></li>
+<li><p><strong>説明</strong> ：コマンドの人間が読める識別子。素材の処理中に、決定ポイントのドロップダウンメニューを通じてユーザーに表示されます。</p></li>
+<li><p><strong>コマンド</strong> ：スクリプトのソース、または実行するコマンドライン文。</p></li>
+<li><p><strong>スクリプトタイプ</strong> ：オプションは、&quot;Bash Script&quot;、&quot;Python Script&quot;、&quot;Command Line&quot;、および&quot;No shebang&quot;です。最初の2つのオプションは、直接実行される前に、適切なshebangが最初の行として追加されます。&quot;No shebang&quot; では、shebangが最初の行に含まれていれば、どの言語でもスクリプトを書くことができます。</p></li>
+<li><p><strong>関連する出力フォーマット</strong> ：コマンドが出力するフォーマット。例えば、ffmpegを使って音声をMP3に正規化するコマンドを書く場合、ドロップダウンから適切なMP3フォーマットのバージョンを選択します。このフィールドはオプションです。</p></li>
+<li><p><strong>出力先</strong> ：正規化されたファイルが書き込まれるパス。このフィールドはオプションです。</p></li>
+<li><p><strong>Command usage</strong> ：コマンドの目的。Archivematica は、この情報をもとに、コマンドの実行が適切かどうかを判断します。</p></li>
+<li><p><strong>関連する妥当性確認コマンド</strong> ：出力が作成されたことを確認するために使用するコマンド。 このフィールドはオプションです。</p></li>
+<li><p><strong>関連イベント詳細コマンド</strong> ：このコマンドを実行しているソフトウェアに関する詳細情報を提供する関連コマンド。 これは、&quot;イベントの詳細&quot;プロパティとして METS ファイルに書き込まれます。 このフィールドはオプションです。</p></li>
+</ul>
+<p>識別の目的で作成されたコマンドには、他のコマンドとは多少異なるフィールドオプションがあります。</p>
+<p>フィールド：</p>
+<ul class="simple">
+<li><p><strong>関連ツール</strong> ：このコマンドが呼び出すツール。</p></li>
+<li><p><strong>説明</strong> ：コマンドの人間が読める識別子。素材の処理中に、決定ポイントのドロップダウンメニューを通じてユーザーに表示されます。</p></li>
+<li><p><strong>設定</strong> （識別コマンドのみ）：</p></li>
+<li><p><strong>スクリプトタイプ</strong> ：オプションには、&quot;Bash スクリプト&quot;、&quot;Python スクリプト&quot;、&quot;コマンドライン&quot;、および &quot;シバン不要&quot;があります。最初の 2 つのオプションには、直接実行される前に最初の行として適切なシバンが追加されます。&quot;シバン不要&quot;では、最初の行にシバンが含まれている限り、任意の言語でスクリプトを作成できます。</p></li>
+<li><p><strong>スクリプト</strong> ：実行されるスクリプト。</p></li>
+</ul>
+</section>
+<section id="changing-rules">
+<span id="id3"></span><h3>ルールの変更<a class="headerlink" href="#changing-rules" title="Link to this heading">¶</a></h3>
+<p>特定の目的に対する現在のルールを見るには、左側のサイドバーでその目的を見つけ（すなわち、 <strong>正規化</strong> ）、サブメニュー項目 <strong>ルール</strong> を選択します。</p>
+<p>Archivematica には、多くの異なるフォーマットに対するデフォルトのルールが含まれています。これらのルールはいつでも無効にしたり、置き換えたりできます。ルールを作成する前に、ルールを作成したいフォーマットとコマンドが存在しなければならないことに注意してください。</p>
+<p>フォーマットポリシールールを作成する場合、以下の必須フィールドを入力する必要があります：</p>
+<ul class="simple">
+<li><p><strong>目的</strong> ：Archivematica におけるルールの機能。目的オプションの詳細については、以下を参照してください。</p></li>
+<li><p><strong>フォーマット</strong> ：このルールが作用するファイルフォーマット。</p></li>
+<li><p><strong>コマンド</strong> ：このルールが使用されたときに呼び出される特定のコマンド。</p></li>
+</ul>
+<p>ルールの横にある &quot;置換&quot; をクリックして、既存のルールを置き換えることもできます。改訂履歴は追跡され、&quot;表示&quot;、次に&quot;改訂履歴&quot;の順にクリックすると表示されます。</p>
+</section>
+</section>
+<section id="identification">
+<span id="id4"></span><h2>識別<a class="headerlink" href="#identification" title="Link to this heading">¶</a></h2>
+<p>識別とは、ファイルに関する与えられた情報を分析し、そのフォーマットを導き出すプロセスです。Archivematica は、ファイルの拡張子を調べるツールや、ファイルの署名を分析するツールを使って、この作業を行うことができます。Archivematica は、必要に応じてファイルの識別をスキップするように設定もできます。</p>
+<section id="identification-tools">
+<h3>識別ツール<a class="headerlink" href="#identification-tools" title="Link to this heading">¶</a></h3>
+<p>Archivematica 1.16 には、3つのファイル識別ツールがあります：</p>
+<ul class="simple">
+<li><p>ファイル拡張子。ファイル拡張子によってファイルを識別する単純なスクリプトです。</p></li>
+<li><p><a class="reference external" href="https://github.com/openpreserve/fido/">FIDO</a> 。Open Preservation Foundation によって開発および維持されており、署名によってファイルを識別し、これを PRONOM ID に関連付けます。</p></li>
+<li><p><a class="reference external" href="https://www.itforarchivists.com/siegfried">Siegfried</a> Richard Lehane 氏が開発・保守しているこのツールは、署名によってファイルを識別し、これを PRONOM ID に結びつけます。SiegfriedはArchivematicaのデフォルトのファイル識別ツールです。</p></li>
+</ul>
+<p>[保存計画]タブでは、既存のツールの振る舞いをカスタマイズしたり、新しいファイル識別ツールを追加したりできます。</p>
+<a class="reference internal image-reference" href="../../_images/file-identification-tools.png"><img alt="Archivematica 1.9のファイル識別ツールのリスト" class="align-center" src="../../_images/file-identification-tools.png" style="width: 80%;" />
+</a>
+</section>
+<section id="identification-commands">
+<h3>識別コマンド<a class="headerlink" href="#identification-commands" title="Link to this heading">¶</a></h3>
+<p>識別コマンドには、ファイルを識別するときにツールが実行する実際のコードが含まれています。このコマンドは、転送中のすべてのファイルに対して実行されます。</p>
+<p>Archivematica のデフォルトコマンドは、 <a class="reference external" href="https://www.itforarchivists.com/siegfried">Siegfried</a> です。新しいコマンドが有効になると、Archivematica は、自動的にコマンドを無効にします。</p>
+<p>コマンドをコーディングするときは、スクリプトが最初のコマンドライン引数として識別されるファイルへのパスを取得することを期待する必要があります。ID を返すとき、ツールは識別子のみを含む 1 行を出力し、0 で終了する必要があります。情報メッセージ、診断メッセージ、およびエラーメッセージはすべて標準エラー出力に出力でき、ツールの結果を監視している Archivematica ユーザーに表示されます。失敗すると、ツールはゼロ以外で終了するはずです。</p>
+<p>識別コマンドには、Unix スクリプトの知識が必要です。</p>
+<p>識別コマンドは、転送中のファイルごとに 1 回実行されます。単一の引数 (識別するファイルへのパス) が渡され、スイッチは渡されません。</p>
+<p>成功すると、コマンドは次のことを行います：</p>
+<ul class="simple">
+<li><p>識別子を stdout に出力します</p></li>
+<li><p>終了 0</p></li>
+</ul>
+<p>失敗した場合、コマンドは次のことを行います：</p>
+<ul class="simple">
+<li><p>stdout に何も表示しない</p></li>
+<li><p>ゼロ以外で終了</p></li>
+</ul>
+<p>Archivematica は、ゼロ以外の終了コードに特別な意味を割り当てません。</p>
+<p>コマンドは、成功時またはエラー時に stderr に何かを出力することができますが、これは単なる情報であり、Archivematica は、特別な処理を行いません。コマンドによって stderr に出力されたものはすべて、Archivematica ダッシュボードのツール出力詳細ページに表示されます。識別に失敗した場合は、有用なエラー出力を stderr に出力する必要がありますが、識別に成功した場合は、有用な追加情報を stderr に出力することもできます。</p>
+<p>拡張子によってファイルを識別する Python スクリプトです：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os.path</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">extension</span><span class="p">)</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">extension</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="n">extension</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>次に、より複雑な Python の例を示します。これは、 <a class="reference external" href="https://exiftool.org/index.html">ExifTool</a> XML 出力を使ってファイルの MIME タイプを返します：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">xml</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="s1">&#39;exiftool&#39;</span><span class="p">,</span> <span class="s1">&#39;-X&#39;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">doc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;.//{http://ns.exiftool.ca/File/1.0/}MIMEType&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="o">&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">e</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>識別コマンドを書いたら、以下の手順でFPRに登録できます：</p>
+<ol class="arabic simple">
+<li><p>Archivematica ダッシュボードの&quot;保存計画&quot; タブに移動します。</p></li>
+<li><p>&quot;識別ツール&quot; ページに移動し、&quot;新しいツールの作成&quot; をクリックします。</p></li>
+<li><p>ツールの名前と、使用しているツールのバージョン番号を記入します。この例では、&quot;exiftool&quot; と&quot;9.37&quot; となります。</p></li>
+<li><p>&quot;作成&quot; をクリックします。</p></li>
+</ol>
+<p>次に、コマンド自体のレコードを作成します：</p>
+<ol class="arabic simple">
+<li><p>&quot;新しいコマンドの作成&quot; をクリックします。</p></li>
+<li><p>&quot;ツール&quot; ドロップダウンボックスからツールを選択します。</p></li>
+<li><p>このツールの機能をユーザーに説明するテキストを識別子に入力します。たとえば、&quot;Exiftool を使用して MIME タイプを識別する&quot; を選択します。</p></li>
+<li><p>適切なスクリプトの種類を選択します - この場合は、&quot;Python Script&quot;です。</p></li>
+<li><p>&quot;コマンド&quot; ボックスにスクリプトのソースコードを入力します。</p></li>
+<li><p>&quot;コマンドの作成&quot; をクリックします。</p></li>
+</ol>
+<p>最後に、ツールの可能な出力を FPR のフォーマットレコードに関連付けるルールを作成する必要があります。これは、サポートされているフォーマットごとに 1 回行う必要があります。例として MP3 で示します。</p>
+<ol class="arabic simple">
+<li><p>&quot;識別ルール&quot; ページに移動し、&quot;新しいツールのルール&quot; をクリックします。</p></li>
+<li><p>フォーマットのドロップダウンから適切なフォーマットを選択します。この例では、&quot;Audio：MPEG Audio：MPEG 1/2 Audio Layer 3&quot;です。</p></li>
+<li><p>コマンドのドロップダウンからコマンドを選択します。</p></li>
+<li><p>このフォーマットを識別したときにコマンドが出力するテキストを入力します。たとえば、Exiftool コマンドが MP3 ファイルを識別すると、&quot;audio/mpeg&quot; が出力されます。</p></li>
+<li><p>&quot;作成&quot; をクリックします。</p></li>
+</ol>
+<p>これが完了すると、作成した新しい転送で識別ステップで新しいツールを使用できるようになります。</p>
+<p>コマンドの書き方については、上記の <a class="reference internal" href="#writing-commands"><span class="std std-ref">コマンドの書き方</span></a> を参照してください。</p>
+</section>
+<section id="identification-rules">
+<h3>識別ルール<a class="headerlink" href="#identification-rules" title="Link to this heading">¶</a></h3>
+<p>識別ルールを使用すると、識別ツールによって作成された出力と FPR に存在するフォーマットの 1 つとの間の関係を定義できます。 <strong>拡張子によって識別されるフォーマットの識別ルールのみを作成します。</strong> Fido と Siegfried は両方とも、PUID を使用してファイルを識別します。PUID は汎用的であるため、どのツールが使用されているかに関係なく、Archivematica はルールの作成を求めないで常にこれらを検索します。</p>
+<p>ルール作成の詳細については、上記の <a class="reference internal" href="#changing-rules"><span class="std std-ref">ルールの変更</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="characterization">
+<span id="id5"></span><h2>特性化<a class="headerlink" href="#characterization" title="Link to this heading">¶</a></h2>
+<p>特性化は、オブジェクトの技術的なメタデータを作成するプロセスです。Archivematica の特性化は、オブジェクトの重要なプロパティを文書化することと、オブジェクト内に含まれる技術的なメタデータを抽出することの両方を目的としています。</p>
+<section id="characterization-tools">
+<h3>特性化<a class="headerlink" href="#characterization-tools" title="Link to this heading">¶</a></h3>
+<p>Archivematica には、インストール時に使用できる 4 つの特性化ツールがあります。特定のファイルに対してどのツールが実行されるかは、識別ツールによって決定されるファイルの種類によって異なります。</p>
+<p>デフォルトの特性化ツールはFITSであり、スキャンされるファイルに特定の特性化ルールが存在しない場合、FITSが使用されます。新しいデフォルトの特性化コマンドを作成でき、FITSを置き換えたり、すべてのファイルに対してFITSと並行して実行したりできます。</p>
+<p>スキャンされるファイルの種類に応じて、FITS の代わりにこれらのツールが 1 つ以上呼び出される場合があります。</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://ffmpeg.org/">FFprobe</a> 。Archivematica で使用される正規化ソフトウェアである FFmpeg と同じコア上に構築された特性化ツールです。</p></li>
+<li><p><a class="reference external" href="http://mediaarea.net/en/MediaInfo">MediaInfo</a> 。オーディオおよびビデオデータ向けの特性化ツールです。</p></li>
+<li><p><a class="reference external" href="https://exiftool.org/index.html">ExifTool</a> 。静止画像データと埋め込みメタデータの抽出を対象とした特性化ツールです。</p></li>
+<li><p><a class="reference external" href="https://forensicswiki.xyz/wiki/index.php?title=Fiwalk">fiwalk</a> 。Sleuthkit.s の一部であるバッチフォレンジック分析ツール</p></li>
+</ul>
+</section>
+<section id="characterization-commands">
+<h3>特性化コマンド<a class="headerlink" href="#characterization-commands" title="Link to this heading">¶</a></h3>
+<p>識別コマンドと同様に、特性化コマンドは、ツールを実行して標準出力に出力を生成するように設計されています。 特性評価コマンドからの出力は有効な XML であることが期待されており、ファイルの <code class="docutils literal notranslate"><span class="pre">&lt;objectCharacteristicsExtension&gt;</span></code> 要素内の AIP の METS ドキュメントに含まれます。</p>
+<p>特性化コマンドを作成する際には、 <code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">format</span></code> を <code class="docutils literal notranslate"><span class="pre">XML</span> <span class="pre">1.0</span></code> に設定する必要があります。</p>
+<p>コマンドの書き方については、上記の <a class="reference internal" href="#writing-commands"><span class="std std-ref">コマンドの書き方</span></a> を参照してください。</p>
+</section>
+<section id="characterization-rules">
+<h3>特性化ルール<a class="headerlink" href="#characterization-rules" title="Link to this heading">¶</a></h3>
+<p>特性化コマンドを特定のフォーマットに接続するには、特性化ルールを作成する必要があります。ルールのないフォーマットは、デフォルトでFITSによって特性化されることに注意してください。</p>
+<p>ルール作成の詳細については、上記の <a class="reference internal" href="#changing-rules"><span class="std std-ref">ルールの変更</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="event-detail">
+<span id="id6"></span><h2>イベント詳細<a class="headerlink" href="#event-detail" title="Link to this heading">¶</a></h2>
+<p>イベントの詳細により、コマンドを実行しているソフトウェアに関する情報が、&quot;イベントの詳細&quot;プロパティとして METS ファイルに書き込まれます。</p>
+<section id="event-detail-tools">
+<h3>イベント詳細ツール<a class="headerlink" href="#event-detail-tools" title="Link to this heading">¶</a></h3>
+<p>発生するイベントに応じて、イベントの詳細を METS ファイルに書き込むために、いくつかの異なるツールが使用されます。たとえば、ファイルの特性化に FFmpeg が使用されている場合、FFmpeg はイベントの詳細を METS に書き込むことができます。他の状況では、この機能を実行するためにコマンドラインコマンド <cite>echo</cite> が使われます。</p>
+</section>
+<section id="event-detail-commands">
+<h3>イベント詳細コマンド<a class="headerlink" href="#event-detail-commands" title="Link to this heading">¶</a></h3>
+<p>コマンドは、各種FPRコマンド使用時にMETSファイルに書き込まれるイベント詳細出力を記述するものであり、通常は、使用するツールの名前とバージョンを記述します。</p>
+<p>コマンドの書き方については、上記の <a class="reference internal" href="#writing-commands"><span class="std std-ref">コマンドの書き方</span></a> を参照してください。</p>
+</section>
+<section id="event-detail-rules">
+<h3>イベント詳細ルール<a class="headerlink" href="#event-detail-rules" title="Link to this heading">¶</a></h3>
+<p>ルールは、イベントの詳細には必要なく、コマンドのみに必要です。</p>
+</section>
+</section>
+<section id="extraction">
+<span id="id7"></span><h2>抽出<a class="headerlink" href="#extraction" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、転送フェーズにおいて、ZIPファイルやディスクイメージのようなパッケージのコンテンツを抽出できます。Archivematica には、パッケージを抽出するための事前定義されたルールがいくつか用意されており、Archivematica の管理者が自由にカスタマイズできます。</p>
+<section id="extraction-tools">
+<h3>抽出ツール<a class="headerlink" href="#extraction-tools" title="Link to this heading">¶</a></h3>
+<p>Archivematicaには、3つの抽出ツールが付属しています：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.7-zip.org/">7zip</a> 。ほとんどの 7zip 互換フォーマットに使用</p></li>
+<li><p>unrar-free：RAR形式に使用</p></li>
+<li><p><a class="reference external" href="https://www.sleuthkit.org/">Sleuthkit</a> 。多くのディスクイメージフォーマットに使用</p></li>
+</ul>
+</section>
+<section id="extraction-commands">
+<h3>抽出コマンド<a class="headerlink" href="#extraction-commands" title="Link to this heading">¶</a></h3>
+<p>抽出コマンドには、抽出するファイルとパッケージの抽出先のパスという 2 つの引数が渡されます。正規化コマンドと同様に、これらの引数は、 <code class="docutils literal notranslate"><span class="pre">bashScript</span></code> および <code class="docutils literal notranslate"><span class="pre">command</span></code> スクリプトに直接挿入され、位置引数として <code class="docutils literal notranslate"><span class="pre">pythonScript</span></code> と <code class="docutils literal notranslate"><span class="pre">asIs</span></code> スクリプトに渡されます。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>名前 (bashScript とコマンド)</p></th>
+<th class="head"><p>コマンドラインの位置（pythonScriptとasIs）</p></th>
+<th class="head"><p>説明</p></th>
+<th class="head"><p>サンプル値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>%outputDirectory%</p></td>
+<td><p>最初</p></td>
+<td><p>パッケージの内容を展開するディレクトリへのフルパス</p></td>
+<td><p>/path/to/filename-uuid/</p></td>
+</tr>
+<tr class="row-odd"><td><p>%inputFile%</p></td>
+<td><p>2番目</p></td>
+<td><p>パッケージファイルへのフルパス</p></td>
+<td><p>/path/to/filename</p></td>
+</tr>
+</tbody>
+</table>
+<p>追加のロジックを使用せずに既存のツール (7-zip) を呼び出す方法の簡単な例を次に示します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>7z<span class="w"> </span>x<span class="w"> </span>-bd<span class="w"> </span>-o<span class="s2">&quot;%outputDirectory%&quot;</span><span class="w"> </span><span class="s2">&quot;%inputFile%&quot;</span>
+</pre></div>
+</div>
+<p>コマンドの書き方については、上記の <a class="reference internal" href="#writing-commands"><span class="std std-ref">コマンドの書き方</span></a> を参照してください。</p>
+</section>
+<section id="extraction-rules">
+<h3>抽出ルール<a class="headerlink" href="#extraction-rules" title="Link to this heading">¶</a></h3>
+<p>抽出コマンドとパッケージフォーマットを関連付けるには、抽出ルールを作成する必要があります。</p>
+<p>ルール作成の詳細については、上記の <a class="reference internal" href="#changing-rules"><span class="std std-ref">ルールの変更</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="normalization">
+<span id="id8"></span><h2>正規化<a class="headerlink" href="#normalization" title="Link to this heading">¶</a></h2>
+<p>正規化とは、アクセスや保存など、指定された目的のために、特定の形式のファイルを別の形式に変換するプロセスです。たとえば、Archivematica には、アクセス用に PNG ファイルを JPG に変換し、保存用に TIFF に変換するルールを含めることがあります。</p>
+<p>正規化は、Archivematicaの主要なフォーマット保存戦略です。保存コピーはAIPに追加され、アクセスコピーはアクセスシステムにアップロードするためのDIPを生成するために使用されます。将来、異なるアーカイブフォーマットへの正規化やエミュレーションなど、さまざまな保存操作を可能にするため、オリジナルファイルは、常に保存されます。</p>
+<section id="normalization-tools">
+<h3>正規化ツール<a class="headerlink" href="#normalization-tools" title="Link to this heading">¶</a></h3>
+<p>Archivematica では、ファイルの形式に応じて、いくつかの異なるツールを使用して正規化タスクを実行します。画像ファイルの場合、ImageMagick <a class="reference external" href="https://imagemagick.org/script/convert.php">convert</a> と <a class="reference external" href="https://inkscape.org/">Inkscape</a> が一般的に使用されます。 <a class="reference external" href="https://www.ffmpeg.org/">ffmpeg</a> はオーディオビジュアルファイルに作用します。 <a class="reference external" href="https://www.ghostscript.com/">Ghostscript</a> と <a class="reference external" href="https://www.ps2pdf.com/">ps2pdf</a> は素材をPDFに変換するために使用されます。注目すべきツールのひとつに、Archivematica 固有のスクリプトがあり、maildir を電子メールに使われる mbox フォーマットにトランスコードできます。</p>
+</section>
+<section id="normalization-commands">
+<h3>正規化コマンド<a class="headerlink" href="#normalization-commands" title="Link to this heading">¶</a></h3>
+<p>正規化コマンドは追加のパラメーターを必要とするため、[保存計画] タブの他の種類のコマンドよりも多少複雑になります。正規化コマンドの目的は、入力ファイルを取得し、そのファイルのコピーを新しいフォーマットで作成することです。たとえば、Archivematica は、ビデオコンテンツを保存用に FFV1 に変換し、アクセス用に H.264 に変換するコマンドを提供します。</p>
+<p>Archivematica には、入出力ファイル名やその他の有用な情報を指定するパラメーターがいくつか用意されています。最も一般的なものを以下の例に示します。</p>
+<p>bashスクリプトやコマンドラインコマンドを書くときは、次のようにコードの中で変数を直接参照できます：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>inkscape<span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;%fileFullName%&quot;</span><span class="w"> </span>--export-pdf<span class="o">=</span><span class="s2">&quot;%outputDirectory%%prefix%%fileName%%postfix%.pdf&quot;</span>
+</pre></div>
+</div>
+<p>Pythonや他の言語でスクリプトを書く場合、値はコマンドラインオプションとしてスクリプトに渡され、それを解析する必要があります。以下のスクリプトは、Pythonに付属している argparse モジュールを使った例です：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--file-full-name&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;filename&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--output-file-name&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
+<span class="n">parsed</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_known_args</span><span class="p">()</span>
+<span class="n">args</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;ffmpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;-vsync&#39;</span><span class="p">,</span> <span class="s1">&#39;passthrough&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="n">parsed</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+    <span class="s1">&#39;-map&#39;</span><span class="p">,</span> <span class="s1">&#39;0:v&#39;</span><span class="p">,</span> <span class="s1">&#39;-map&#39;</span><span class="p">,</span> <span class="s1">&#39;0:a&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;-vcodec&#39;</span><span class="p">,</span> <span class="s1">&#39;ffv1&#39;</span><span class="p">,</span> <span class="s1">&#39;-g&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;-acodec&#39;</span><span class="p">,</span> <span class="s1">&#39;pcm_s16le&#39;</span><span class="p">,</span>
+    <span class="n">parsed</span><span class="o">.</span><span class="n">output</span><span class="o">+</span><span class="s1">&#39;.mkv&#39;</span>
+<span class="p">]</span>
+
+<span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>コマンドを作成したら、それを登録するプロセスは、新しい識別ツールを作成するのと似ています。以下の例では、上記の Python 正規化スクリプトを使用します。</p>
+<p>まず、新しいツールレコードを作成します：</p>
+<ol class="arabic simple">
+<li><p>Archivematica ダッシュボードの&quot;保存計画&quot; タブに移動します。</p></li>
+<li><p>&quot;識別ツール&quot; ページに移動し、&quot;新しいツールの作成&quot; をクリックします。</p></li>
+<li><p>ツールの名前と、使用しているツールのバージョン番号を記入します。この例では、&quot;exiftool&quot; と&quot;9.37&quot; となります。</p></li>
+<li><p>&quot;作成&quot; をクリックします。</p></li>
+</ol>
+<p>次に、新しいコマンドのレコードを作成します：</p>
+<ol class="arabic simple">
+<li><p>&quot;新しいツールコマンドの作成&quot; をクリックします。</p></li>
+<li><p>このツールの機能をユーザーに説明するテキストを [説明] に入力します。たとえば、&quot;ffmpeg を使用して mkv に正規化&quot;を選択することもできます。</p></li>
+<li><p>[コマンド] テキストボックスにコマンドのソースを入力します。</p></li>
+<li><p>適切なスクリプトの種類を選択します - この場合は、&quot;Python Script&quot;です。</p></li>
+<li><p>ドロップダウンから適切な出力フォーマットを選択します。これは、Archivematicaに対して、このコマンドがどのようなファイルを出力するかを示します。この場合、&quot;Videoを選択します：Matroska：Generic MKV&quot;.</p></li>
+<li><p>スクリプト変数を使用して、ビデオを保存する場所を入力します。通常は、 <code class="docutils literal notranslate"><span class="pre">%outputFileName%</span></code> 変数を使用し、ファイル拡張子を追加できます。この場合は <code class="docutils literal notranslate"><span class="pre">%outputFileName%.mkv</span></code> です</p></li>
+<li><p>妥当性確認コマンドを選択します。Archivematica は、このツールを使って、コマンドが作成したファイルが動作することを確認しようとします。Archivematica には、ファイルが存在するかどうか、サイズが0バイトより大きいかどうかをテストする2つのシンプルなツールが同梱されていますが、より複雑な妥当性確認を行う新しいコマンドを作成もできます。</p></li>
+<li><p>最後に、正規化イベントをカバーする METS ファイルのセクションに書き込まれる&quot;イベント詳細&quot; テキストを作成するコマンドを選択します。Archivematica にはすでに ffmpeg に適したコマンドが含まれていますが、カスタムコマンドの作成もできます。</p></li>
+<li><p>&quot;コマンドの作成&quot; をクリックします。</p></li>
+</ol>
+<p>最後に、コマンドを実行すべきフォーマットと関連付けるルールを作成しなければなりません。</p>
+<p>コマンドの書き方については、上記の <a class="reference internal" href="#writing-commands"><span class="std std-ref">コマンドの書き方</span></a> を参照してください。</p>
+<section id="normalization-command-variables-and-arguments">
+<h4>正規化コマンドの変数と引数<a class="headerlink" href="#normalization-command-variables-and-arguments" title="Link to this heading">¶</a></h4>
+<p>以下の変数と引数は、フォーマットポリシーコマンドスクリプトの振る舞いを制御します。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>名前 (bashScript とコマンド)</p></th>
+<th class="head"><p>コマンドラインオプション （pythonScript と asIs）</p></th>
+<th class="head"><p>説明</p></th>
+<th class="head"><p>サンプル値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>%SIPUUID%</p></td>
+<td><p>–sipuuid=</p></td>
+<td><p>処理中のSIPまたは転送（transfer）のUUID。</p></td>
+<td><p>4941c1e7-722b-41dc-900a-a17f7cfd32a9</p></td>
+</tr>
+<tr class="row-odd"><td><p>%sipName%</p></td>
+<td><p>–sip-name=</p></td>
+<td><p>処理されるSIPまたは転送の名前（パスから解析される）。</p></td>
+<td><p>this-is-a-sip</p></td>
+</tr>
+<tr class="row-even"><td><p>%SIPDirectory%</p></td>
+<td><p>–sip-directory=</p></td>
+<td><p>SIPまたは転送のフルパス。</p></td>
+<td><p>/dir/this-is-a-sip-4941c1e7-722b-41dc-900a-a17f7cfd32a9</p></td>
+</tr>
+<tr class="row-odd"><td><p>%SIPDirectoryBasename%</p></td>
+<td><p>–sip-directory-basename=</p></td>
+<td><p>SIPまたは転送のベースネーム。</p></td>
+<td><p>this-is-a-sip-4941c1e7-722b-41dc-900a-a17f7cfd32a9</p></td>
+</tr>
+<tr class="row-even"><td><p>%SIPLogsDirectory%</p></td>
+<td><p>–sip-logs-directory=</p></td>
+<td><p>SIPまたは転送のログディレクトリのフルパス。</p></td>
+<td><p>/dir/sip-4941c1e7-722b-41dc-900a-a17f7cfd32a9/logs</p></td>
+</tr>
+<tr class="row-odd"><td><p>%SIPObjectsDirectory%</p></td>
+<td><p>–sip-objects-directory=</p></td>
+<td><p>SIPまたは転送（forward）のオブジェクトディレクトリのフルパス。</p></td>
+<td><p>/dir/sip-4941c1e7-722b-41dc-900a-a17f7cfd32a9/objects</p></td>
+</tr>
+<tr class="row-even"><td><p>%fileUUID%</p></td>
+<td><p>–file-uuid=</p></td>
+<td><p>処理中のファイルのUUID。</p></td>
+<td><p>baa67175-f04d-4df6-8615-d05d0651eae2</p></td>
+</tr>
+<tr class="row-odd"><td><p>%originalLocation%</p></td>
+<td><p>–original-location=</p></td>
+<td><p>Archivematica によって最初に記録されたファイルのオリジナルのパス。このパスのファイル名コンポーネントはサニタイズされていないため、この文字列には、混合エンコーディングを含む任意のテキスト エンコーディングのデータが含まれる可能性があることに注意してください。</p></td>
+<td><p>/dir/sip-4941c1e7-722b-41dc-900a-a17f7cfd32a9/objects/ …/file name unsanitized.jpeg</p></td>
+</tr>
+<tr class="row-even"><td><p>%fileName%</p></td>
+<td><p>–input-file=</p></td>
+<td><p>処理するファイルのファイル名。この変数は、パス全体ではなく、ファイルのベース名を保持します。</p></td>
+<td><p>video.mov</p></td>
+</tr>
+<tr class="row-odd"><td><p>%fileDirectory%</p></td>
+<td><p>–file-directory=</p></td>
+<td><p>入力ファイルのあるディレクトリ。</p></td>
+<td><p>/path/to</p></td>
+</tr>
+<tr class="row-even"><td><p>%inputFile%</p></td>
+<td><p>–file-name=</p></td>
+<td><p>処理するファイルへの完全修飾パス。</p></td>
+<td><p>/path/to/video.mov</p></td>
+</tr>
+<tr class="row-odd"><td><p>%fileExtension%</p></td>
+<td><p>–file-extension=</p></td>
+<td><p>入力ファイルのファイル拡張子。</p></td>
+<td><p>mov</p></td>
+</tr>
+<tr class="row-even"><td><p>%fileExtensionWithDot%</p></td>
+<td><p>–file-extension-with-dot=</p></td>
+<td><p>上記と同様に、ピリオドを削除しません。</p></td>
+<td><p>.mov</p></td>
+</tr>
+<tr class="row-odd"><td><p>%outputFileUUID%</p></td>
+<td><p>–output-file-uuid=</p></td>
+<td><p>Archivematica によって出力ファイルに割り当てられる一意の識別子。</p></td>
+<td><p>1abedf3e-3a4b-46d7-97da-bd9ae13859f5</p></td>
+</tr>
+<tr class="row-even"><td><p>%outputDirectory%</p></td>
+<td><p>–output-directory=</p></td>
+<td><p>新しいファイルを書き込むディレクトリへの完全修飾パス。</p></td>
+<td><p>/var/archivematica/sharedDirectory/www/AIPsStore/uuid</p></td>
+</tr>
+<tr class="row-odd"><td><p>%outputFileName%</p></td>
+<td><p>–output-file-name=</p></td>
+<td><p>ファイル拡張子を除いた、出力ファイルへの完全修飾パス。</p></td>
+<td><p>/path/to/access/copies/video-uuid</p></td>
+</tr>
+<tr class="row-even"><td><p>%fileGrpUse%</p></td>
+<td><p>–file-grp-use=</p></td>
+<td><p>このファイルのファイルグループ。指定可能な値： * original * submissionDocumentation * preservation * access * service * license * text/ocr * メタデータ</p></td>
+<td><p>オリジナル</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="normalization-rules">
+<h3>正規化ルール<a class="headerlink" href="#normalization-rules" title="Link to this heading">¶</a></h3>
+<p>正規化コマンドを特定のフォーマットに関連付けるためには、正規化ルールを作成しなければなりません。正規化ルールには3つの目的があります：DIPで使用する「Access」、AIPで使用する「Preservation」、AIPとDIPの両方で使用する「Thumbnail」です。例えば、保存の目的でPNGをTIFFに正規化するというルールがある場合、保存の目的でPNGをGIFに正規化するという2つ目のルールを持つことはできません。</p>
+<p><a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> を変更することで、サムネイルの正規化をフォーマットごとではなく、パイプライン全体で行うかどうかを決めることができます。</p>
+<p>各正規化ルールの成功率は、正規化ルールページの &quot;成功&quot; 列に表示されます。</p>
+<p>ルール作成の詳細については、上記の <a class="reference internal" href="#changing-rules"><span class="std std-ref">ルールの変更</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="transcription">
+<span id="id9"></span><h2>テキスト変換<a class="headerlink" href="#transcription" title="Link to this heading">¶</a></h2>
+<p>テキスト変換は、 <a class="reference external" href="https://github.com/tesseract-ocr/tesseract">Tesseract</a> 、またはその他のTranscriptionツールを画像ファイルに対して実行し、テキストが含まれているかどうかを分析します。テキストが含まれている場合、テキストを読み込んでテキストファイルに出力できます。</p>
+<section id="transcription-tools">
+<h3>テキスト変換ツール<a class="headerlink" href="#transcription-tools" title="Link to this heading">¶</a></h3>
+<p>デフォルトでは、Archivematica は、オープンソース OCR ツールである <a class="reference external" href="https://github.com/tesseract-ocr/tesseract">Tesseract</a> というテキスト変換ツールに対応しています。</p>
+</section>
+<section id="transcription-commands">
+<h3>テキスト変換コマンド<a class="headerlink" href="#transcription-commands" title="Link to this heading">¶</a></h3>
+<p>デフォルトでは、Archivematica は、OCR ツール <a class="reference external" href="https://github.com/tesseract-ocr/tesseract">Tesseract</a> を使用する 1 つのテキスト変換コマンドに対応しています。</p>
+<p>テキスト変換コマンドは、それらのデータをSIP内のディスクに書き込むこ とが期待されます。OCRを実行するコマンドのために、メタデータは、SIPの <code class="docutils literal notranslate"><span class="pre">metadata/OCRfiles</span></code> ディレクトリの中に置くことができます。他の種類のテキスト変換は、 <code class="docutils literal notranslate"><span class="pre">metadata</span></code> ディレクトリの中にファイルを生成するべきです。</p>
+<p>たとえば、次の bash スクリプトは、Tesseract を使用してイメージをテキスト変換するために Archivematica によって使用されます：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">ocrfiles</span><span class="o">=</span><span class="s2">&quot;%SIPObjectsDirectory%metadata/OCRfiles&quot;</span>
+<span class="nb">test</span><span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ocrfiles</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ocrfiles</span><span class="s2">&quot;</span>
+
+tesseract<span class="w"> </span>%fileFullName%<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ocrfiles</span><span class="s2">/%fileName%&quot;</span>
+</pre></div>
+</div>
+<p>コマンドの書き方については、上記の <a class="reference internal" href="#writing-commands"><span class="std std-ref">コマンドの書き方</span></a> を参照してください。</p>
+</section>
+<section id="transcription-rules">
+<h3>テキスト変換ルール<a class="headerlink" href="#transcription-rules" title="Link to this heading">¶</a></h3>
+<p>転記コマンドを特定のフォーマットに関連付けるには、転記ルールを作成する必要があります。</p>
+<p>ルール作成の詳細については、上記の <a class="reference internal" href="#changing-rules"><span class="std std-ref">ルールの変更</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="validation">
+<span id="id10"></span><h2>妥当性確認<a class="headerlink" href="#validation" title="Link to this heading">¶</a></h2>
+<p>フォーマット妥当性確認により、ファイルが適切な形式であり、関連するフォーマット仕様に準拠していることが保証されます。Archivematica では、フォーマットに適用されるカスタムポリシーに対して妥当性確認を行うこともできます。</p>
+<p>Archivematica には 2 つの妥当性確認ツールがあります： <a class="reference external" href="https://openpreservation.org/products/jhove/">JHOVE</a> と <a class="reference external" href="https://mediaarea.net/MediaConch">MediaConch</a> です。</p>
+<section id="validation-commands">
+<h3>妥当性確認コマンド<a class="headerlink" href="#validation-commands" title="Link to this heading">¶</a></h3>
+<p>Archivematica 1.16 のデフォルトの妥当性確認コマンドは3つあります：</p>
+<ul class="simple">
+<li><p>JHOVE を使った妥当性確認</p></li>
+<li><p>MediaConch を使った妥当性確認</p></li>
+<li><p>MediaConchを使用してポリシーPLACEHOLDER_FOR_POLICY_FILE_NAMEと照合します</p></li>
+</ul>
+<p>コマンドの書き方については、上記の <a class="reference internal" href="#writing-commands"><span class="std std-ref">コマンドの書き方</span></a> を参照してください。</p>
+</section>
+<section id="validation-rules">
+<h3>妥当性確認ルール<a class="headerlink" href="#validation-rules" title="Link to this heading">¶</a></h3>
+<p>Archivematica には、いくつかの一般的なファイルフォーマットに対するデフォルトの妥当性確認ルールがあります。このデフォルトルールはJHOVEを使用します。Matroska（MKV）ファイルについては、Archivematica 1.7以降、MediaConchがデフォルトの妥当性確認ツールとして設定されています。</p>
+<p>MediaConch ポリシー コマンドを実装する場合、目的のフォーマットに対してポリシー チェック コマンドを呼び出すルールも作成する必要があります。たとえば、JPG ファイルをチェックする MediaConch ポリシーコマンドを作成した場合、フォーマットとコマンドを結び付けるルールも作成する必要があります。</p>
+<p>妥当性確認ルールは、いくつかのマイクロサービス中に呼び出されます：</p>
+<ul class="simple">
+<li><p><em>妥当性確認</em> マイクロサービスでは、転送タブで、ポリ シーに対するオリジナルファイルのチェックだけでなく、 フォーマットの妥当性確認も行います。</p></li>
+<li><p>[インジェスト] タブの <em>正規化</em> ] マイクロサービス中に、正規化中に生成されたアクセスと保存の派生物が妥当性確認されます。</p></li>
+<li><p>[転送] タブの <em>オリジナルのポリシー チェックを実行する</em> サービス中に、ここでは、オリジナルのデジタルオブジェクトをポリシーと照合してチェックできます。以下の <a class="reference internal" href="#fpr-mediaconch"><span class="std std-ref">MediaConch</span></a> を参照してください。</p></li>
+<li><p>[インジェスト] タブの <em>保存派生物のポリシーチェックを実行</em> と <em>アクセス派生物のポリシーチェックを実行</em> のマイクロサービス中、ここでは、保存派生物とアクセス派生物をポリシーに対してチェックできます。 以下の <a class="reference internal" href="#fpr-mediaconch"><span class="std std-ref">MediaConch</span></a> を参照してください。</p></li>
+</ul>
+<p>ルール作成の詳細については、上記の <a class="reference internal" href="#changing-rules"><span class="std std-ref">ルールの変更</span></a> を参照してください。</p>
+</section>
+<section id="jhove">
+<span id="fpr-jhove"></span><h3>JHOVE<a class="headerlink" href="#jhove" title="Link to this heading">¶</a></h3>
+<p>JHOVE は、Archivematica でファイルフォーマットを妥当性確認するために最もよく使用されるツールです。JHOVEは、指定されたファイルを見て、そのファイルが整フォーマット（フォーマットの構文要件を満たしている）かどうか、有効（整フォーマットであり、フォーマットの追加要件を満たしている）かどうかを評価します。JHOVE の動作の詳細については、 <a class="reference external" href="https://openpreservation.org/products/jhove/">JHOVE</a> ウェブサイトを参照してください。</p>
+<p>JHOVE が正常に妥当性確認できるファイルを検出すると、単純な成功メッセージが標準出力に表示されます：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Running<span class="w"> </span>Validate<span class="w"> </span>using<span class="w"> </span>JHOVE
+Command<span class="w"> </span><span class="s2">&quot;Validate using JHOVE&quot;</span><span class="w"> </span>was<span class="w"> </span>successful
+Creating<span class="w"> </span>validation<span class="w"> </span>event<span class="w"> </span><span class="k">for</span><span class="w"> </span>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/copy-compress-test-31de910f-77dd-425c-97dc-2319ac339954/objects/Landing_zone.jpg<span class="w"> </span><span class="o">(</span>adbef753-318b-47b5-8b5c-27ef51dc6003<span class="o">)</span>
+</pre></div>
+</div>
+<p>ファイルの妥当性確認イベントは METS.xml に書き込まれます。ダッシュボードには、妥当性確認が正常に完了したことが報告されます。</p>
+<p>場合によっては、JHOVEは、指定されたファイルを特定のフォーマットではなく、バイトストリームとして評価することがあります。これは、JHOVEのデフォルトの振る舞いです。バイトストリームが有効な場合、JHOVE は、これを妥当性確認に成功したとみなします。Archivematica の以前のバージョン（1.9.x 以前）では、バイトストリームの妥当性確認が成功した場合、ダッシュボードでエラーとして報告されていました。1.10以降、Archivematicaは、バイトストリームの妥当性確認に成功した場合、フォーマット指定に基づく妥当性確認の成功と区別するため、部分的な成功として報告します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Running<span class="w"> </span>Validate<span class="w"> </span>using<span class="w"> </span>JHOVE
+Command<span class="w"> </span><span class="s2">&quot;Validate using JHOVE&quot;</span><span class="w"> </span>was<span class="w"> </span>partially<span class="w"> </span>successful
+Creating<span class="w"> </span>validation<span class="w"> </span>event<span class="w"> </span><span class="k">for</span><span class="w"> </span>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/jhove-test-fbc8e8ca-a459-4219-9a95-c7a4065f7411/objects/sample.aif<span class="w"> </span><span class="o">(</span>d2413c00-4217-4933-ad07-78ba37c244ec<span class="o">)</span>
+</pre></div>
+</div>
+<p>完全に成功した場合と同様に、ファイルの妥当性確認イベントは METS.xml に書き込まれます。ダッシュボードには、妥当性確認が正常に完了したことが報告されます。</p>
+</section>
+<section id="mediaconch">
+<span id="fpr-mediaconch"></span><h3>MediaConch<a class="headerlink" href="#mediaconch" title="Link to this heading">¶</a></h3>
+<p>MediaConch は、Matroska （MKV） コンテナフォーマット、FFV1 ビデオコーデックフォーマット、LPCM オーディオコーデックフォーマットを使用したファイル専用の妥当性確認ツールとして、Archivematica 1.7 で導入されました。これは、Archivematica がオーディオビジュアルファイルの正規化を行う際に使用し、推奨するファイル形式です。正規化ルールの詳細については、以下の <a class="reference internal" href="#normalization"><span class="std std-ref">正規化</span></a> セクションを参照してください。</p>
+<p>MediaConch は、フォーマット仕様に対してファイルを妥当性確認するだけでなく、あらゆる機関が作成した内部ポリシーに対してファイルフォーマットを妥当性確認するためにも使用できます。</p>
+<p>ユーザーは、 <a class="reference external" href="https://mediaarea.net/MediaConchOnline/">MediaConchOnline</a> 、またはローカルにインストールしたMediaConchを使用して、Archivematicaにインジェストされるファイルに対してチェックするポリシーを作成できます。ポリシーには、アスペクト比、ビットレート、トラック情報などのルールを含めることができます。ポリシーのチェックは、mkvファイルに限定されません。ポリシーは、 <a class="reference external" href="http://mediaarea.net/en/MediaInfo">MediaInfo</a> によって特性化される、あらゆるフォーマットに対して作成できます。</p>
+<p>ポリシー妥当性確認のためのポリシーの作成方法の詳細については、 <a class="reference external" href="https://mediaarea.net/MediaConch/Documentation/HowToUse">MediaConch 文書</a> の&quot;ポリシーの作成&quot; セクションを参照してください。</p>
+<p>以下は、MediaConchOnline によって作成されたポリシーの例です。これは、MP3 ファイルに継続時間があるかどうかをチェックします。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;policy</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;and&quot;</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;MP3 has duration&quot;</span><span class="w"> </span><span class="na">license=</span><span class="s">&quot;CC-BY-SA-4.0+&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;description&gt;</span>Rudimentary<span class="w"> </span>test<span class="w"> </span>to<span class="w"> </span>check<span class="w"> </span>for<span class="w"> </span>an<span class="w"> </span>MP3<span class="w"> </span>having<span class="w"> </span>a<span class="w"> </span>duration<span class="w"> </span>value.<span class="nt">&lt;/description&gt;</span>
+<span class="w">  </span><span class="nt">&lt;rule</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Does the audio duration exist?&quot;</span><span class="w"> </span><span class="na">value=</span><span class="s">&quot;Duration&quot;</span><span class="w"> </span><span class="na">tracktype=</span><span class="s">&quot;General&quot;</span><span class="w"> </span><span class="na">occurrence=</span><span class="s">&quot;*&quot;</span><span class="w"> </span><span class="na">operator=</span><span class="s">&quot;exists&quot;</span><span class="nt">&gt;</span>mp3<span class="nt">&lt;/rule&gt;</span>
+<span class="nt">&lt;/policy&gt;</span>
+</pre></div>
+</div>
+<p>Archivematica で妥当性確認ポリシーを作成するには：</p>
+<ol class="arabic">
+<li><p>[保存計画] タブで、左側のサイドバーの [妥当性確認] の下にある <strong>コマンド</strong> をクリックします。 <em>MediaConch を使用してポリシー PLACEHOLDER_FOR_POLICY_FILE_NAME をチェックする</em> というサンプルポリシーが表示されます。 <strong>置換</strong> をクリックしてこのコマンドを編集するか、 <strong>新しいコマンドを作成</strong> をクリックして新しいコマンドを作成します。</p></li>
+<li><p>開いたフォームで、関連ツールとして <em>MediaConch</em> を選択し、コマンドに人が読める説明を付けます (これはタイトルとして使用されます)。プレースホルダーコマンドを編集している場合、一部のフィールドにはすでに値が設定されています。</p></li>
+<li><p>フォームの <strong>コマンド</strong> フィールドに、次の空のコマンドをコピーして貼り付けます：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">ammcpc</span> <span class="kn">import</span> <span class="n">MediaConchPolicyCheckerCommand</span>
+
+<span class="c1"># Valuate this constant with the text (XML) of the policy.</span>
+<span class="n">POLICY</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">&lt;!-- Add your MediaConch policy here! --&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="c1"># Valuate this constant with the name of the policy.</span>
+<span class="n">POLICY_NAME</span> <span class="o">=</span> <span class="s1">&#39;Add your policy name here&#39;</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">policy_checker</span> <span class="o">=</span> <span class="n">MediaConchPolicyCheckerCommand</span><span class="p">(</span>
+        <span class="n">policy</span><span class="o">=</span><span class="n">POLICY</span><span class="p">,</span>
+        <span class="n">policy_file_name</span><span class="o">=</span><span class="n">POLICY_NAME</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">policy_checker</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+<li><p>MediaConch で作成した XML を <code class="docutils literal notranslate"><span class="pre">POLICY</span> <span class="pre">=</span> <span class="pre">&quot;&quot;&quot;</span></code> と <code class="docutils literal notranslate"><span class="pre">&quot;&quot;&quot;.strip()</span></code> の間に追加します。ポリシー名を <code class="docutils literal notranslate"><span class="pre">POLICY_NAME</span> <span class="pre">=</span> <span class="pre">'Add</span> <span class="pre">your</span> <span class="pre">policy</span> <span class="pre">name</span> <span class="pre">here'</span></code> に追加します。以下の例では、ポリシーを使って、上記の説明のように MP3 に持続時間が設定されているかどうかを確認しています。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">ammcpc</span> <span class="kn">import</span> <span class="n">MediaConchPolicyCheckerCommand</span>
+
+<span class="c1"># Valuate this constant with the text (XML) of the policy.</span>
+<span class="n">POLICY</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="s2">&lt;policy type=&quot;and&quot; name=&quot;MP3 has duration&quot; license=&quot;CC-BY-SA-4.0+&quot;&gt;</span>
+<span class="s2">  &lt;description&gt;Rudimentary test to check for an MP3 having a duration value.&lt;/description&gt;</span>
+<span class="s2">  &lt;rule name=&quot;Does the audio duration exist?&quot; value=&quot;Duration&quot; tracktype=&quot;General&quot; occurrence=&quot;*&quot; operator=&quot;exists&quot;&gt;mp3&lt;/rule&gt;</span>
+<span class="s2">&lt;/policy&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="c1"># Valuate this constant with the name of the policy.</span>
+<span class="n">POLICY_NAME</span> <span class="o">=</span> <span class="s1">&#39;MP3 has duration&#39;</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">policy_checker</span> <span class="o">=</span> <span class="n">MediaConchPolicyCheckerCommand</span><span class="p">(</span>
+        <span class="n">policy</span><span class="o">=</span><span class="n">POLICY</span><span class="p">,</span>
+        <span class="n">policy_file_name</span><span class="o">=</span><span class="n">POLICY_NAME</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">policy_checker</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+<li><p>残りの欄は、以下のように記入します：</p>
+<ul class="simple">
+<li><p><strong>スクリプトタイプ</strong> ：Python スクリプト</p></li>
+<li><p><strong>関連する出力フォーマット</strong> ：空白のまま</p></li>
+<li><p><strong>出力場所</strong> ：空白のまま</p></li>
+<li><p><strong>コマンド使用法</strong> ：妥当性確認</p></li>
+<li><p><strong>関連する妥当性確認コマンド</strong> ：空白のまま</p></li>
+<li><p><strong>関連イベント詳細コマンド</strong> ：空白のまま</p></li>
+</ul>
+</li>
+<li><p>コマンドを保存します。保存したら、有効になっていることを確認します。</p></li>
+<li><p>左側のサイドバーにある「妥当性確認」の「 <strong>ルール」</strong> をクリックし、「 <strong>新しいルールを作成」</strong> をクリックします。</p></li>
+<li><p>開いたフォームで、 <strong>目的</strong> として <em>ポリシーに対する妥当性確認</em> を選択します。</p></li>
+<li><p><strong>関連するフォーマット</strong> の場合、ポリシーを使用するフォーマットを選択します。上記の MP3 デュレーションの例を使用する場合は、 <em>Audio を選択します：MPEG 1/2 Audio Layer 3：MPEG 1/2 Audio Layer 3 （fmt/134）</em> を選択します。</p></li>
+<li><p><strong>コマンド</strong> の場合、作成したばかりのコマンドを選択します。ドロップダウンには、使用可能なすべての妥当性確認コマンドが含まれます。</p></li>
+<li><p>Archivematica <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> が、オリジナルや派生物に対してポリシーチェックを実行するように設定されていることを確認します。次回に転送を開始すると、Archivematica は、ポリシーに照らし合わせてファイルをチェックします。</p></li>
+</ol>
+<p>Archivematica には、 <em>オリジナルに対してポリシーチェックを実行する</em> 、 <em>保存派生物に対してポリシーチェックを実行する</em> 、 <em>アクセス派生物に対してポリシーチェックを実行する</em> の3 つのポリシー チェックジョブがあります。派生物チェックは、保存またはアクセスのために正規化されたファイルに対してのみ実行されます。</p>
+<p>完了したジョブの背景は、転送内のすべての関連ファイルがポリシー チェックに合格した場合は緑色になり、1 つ以上のファイルがポリシー チェックに合格しなかった場合はピンク色に変わります。ジョブ名の左側にある歯車アイコンをクリックすると、ジョブに関する詳細情報が表示されます。</p>
+</section>
+</section>
+<section id="verification">
+<span id="id11"></span><h2>妥当性確認<a class="headerlink" href="#verification" title="Link to this heading">¶</a></h2>
+<p>妥当性確認は、正規化コマンドの後に自動的に実行されます。Archivematica は 2 つのコマンドを実行します。1 つはファイルが存在するかどうかを確認し、もう 1 つはファイルが存在し、サイズが 0 バイトより大きいかどうかを確認します。</p>
+<p>妥当性確認は、オリジナルファイルではなく、正規化の出力に対して実行されます。</p>
+<p>妥当性確認のためのルールを作成する必要はありません。</p>
+<p><a class="reference internal" href="#preservation-planning"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">保存計画</a><ul>
+<li><a class="reference internal" href="#preservation-planning-policies">保存計画ポリシー</a></li>
+<li><a class="reference internal" href="#definitions">定義</a><ul>
+<li><a class="reference internal" href="#format">フォーマット</a></li>
+<li><a class="reference internal" href="#format-group">フォーマットグループ</a></li>
+<li><a class="reference internal" href="#purpose">目的</a></li>
+<li><a class="reference internal" href="#tools">ツール</a></li>
+<li><a class="reference internal" href="#commands">コマンド</a></li>
+<li><a class="reference internal" href="#rules">ルール</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#altering-commands-and-rules">コマンドとルールの変更</a><ul>
+<li><a class="reference internal" href="#writing-commands">コマンドを書く</a></li>
+<li><a class="reference internal" href="#changing-rules">ルールの変更</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#identification">識別</a><ul>
+<li><a class="reference internal" href="#identification-tools">識別ツール</a></li>
+<li><a class="reference internal" href="#identification-commands">識別コマンド</a></li>
+<li><a class="reference internal" href="#identification-rules">識別ルール</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#characterization">特性化</a><ul>
+<li><a class="reference internal" href="#characterization-tools">特性化</a></li>
+<li><a class="reference internal" href="#characterization-commands">特性化コマンド</a></li>
+<li><a class="reference internal" href="#characterization-rules">特性化ルール</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#event-detail">イベント詳細</a><ul>
+<li><a class="reference internal" href="#event-detail-tools">イベント詳細ツール</a></li>
+<li><a class="reference internal" href="#event-detail-commands">イベント詳細コマンド</a></li>
+<li><a class="reference internal" href="#event-detail-rules">イベント詳細ルール</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#extraction">抽出</a><ul>
+<li><a class="reference internal" href="#extraction-tools">抽出ツール</a></li>
+<li><a class="reference internal" href="#extraction-commands">抽出コマンド</a></li>
+<li><a class="reference internal" href="#extraction-rules">抽出ルール</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#normalization">正規化</a><ul>
+<li><a class="reference internal" href="#normalization-tools">正規化ツール</a></li>
+<li><a class="reference internal" href="#normalization-commands">正規化コマンド</a><ul>
+<li><a class="reference internal" href="#normalization-command-variables-and-arguments">正規化コマンドの変数と引数</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#normalization-rules">正規化ルール</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#transcription">テキスト変換</a><ul>
+<li><a class="reference internal" href="#transcription-tools">テキスト変換ツール</a></li>
+<li><a class="reference internal" href="#transcription-commands">テキスト変換コマンド</a></li>
+<li><a class="reference internal" href="#transcription-rules">テキスト変換ルール</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#validation">妥当性確認</a><ul>
+<li><a class="reference internal" href="#validation-commands">妥当性確認コマンド</a></li>
+<li><a class="reference internal" href="#validation-rules">妥当性確認ルール</a></li>
+<li><a class="reference internal" href="#jhove">JHOVE</a></li>
+<li><a class="reference internal" href="#mediaconch">MediaConch</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#verification">妥当性確認</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../access/contentdm.html"
+                          title="前の章へ">CONTENTdm</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../administer/dashboard-admin.html"
+                          title="次の章へ">ダッシュボード管理タブ</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/preservation/preservation-planning.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../administer/dashboard-admin.html" title="ダッシュボード管理タブ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../access/contentdm.html" title="CONTENTdm"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">保存計画</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

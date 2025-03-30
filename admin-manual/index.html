@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>管理者マニュアル &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=def86cc0" />
+    
+    <script src="../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="Archivematicaのインストール" href="installation-setup/installation/installation.html" />
+    <link rel="prev" title="翻訳" href="../user-manual/translations/translations.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="installation-setup/installation/installation.html" title="Archivematicaのインストール"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../user-manual/translations/translations.html" title="翻訳"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Archivematica文書</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">管理者マニュアル</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="administrator-manual">
+<span id="admin-manual"></span><h1>管理者マニュアル<a class="headerlink" href="#administrator-manual" title="Link to this heading">¶</a></h1>
+<p>以下に、管理者マニュアルの各章の概要と、各章の主なセクションへのリンクを示します。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/installation/installation.html">Archivematicaのインストール</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/installation.html#overview">概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/installation.html#technical-requirements">技術的要件</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/installation/installation.html#operating-system">オペレーティングシステム</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/installation/installation.html#dependencies">依存関係</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/installation/installation.html#elasticsearch">Elasticsearch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/installation/installation.html#hardware">ハードウェア</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/installation/installation.html#minimum-hardware-requirements">最小ハードウェア要件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/installation/installation.html#recommended-minimum-production-requirements">推奨される最低製造要件</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/installation/installation.html#browser-compatability">ブラウザの互換性</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/installation.html#instructions-for-new-installations">新規設置の手順</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/installation.html#instructions-for-upgrades">アップグレードの手順</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/installation.html#advanced-installation-options">高度なインストールオプション</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/installation/install-ubuntu.html">UbuntuへのArchivematicaの手動インストール</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/install-ubuntu.html#ubuntu-22-04-jammy-installation-instructions">Ubuntu 22.04（Jammy）のインストール手順</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/install-ubuntu.html#post-install-configuration">インストール後の設定</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/installation/install-rocky.html">Rocky Linux 9にArchivematicaをインストールする</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/install-rocky.html#installation-instructions">インストール方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/install-rocky.html#post-install-configuration">インストール後の設定</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/installation/install-ansible.html">Ansibleを使った自動インストール</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/install-ansible.html#installation-instructions">インストール方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/install-ansible.html#deploy-development-branches">開発ブランチをデプロイ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/installation/install-advanced.html">高度なインストールオプション</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/install-advanced.html#install-for-development">開発に向けたインストール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/install-advanced.html#scaling-archivematica">Archivematicaのスケーリング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/installation/install-advanced.html#configure-archivematica-with-ssl">SSLでArchivematicaを設定</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/upgrading/upgrading.html">Archivematica 1.15 .xから 1.16.0 へのアップグレード</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#clean-up-completed-transfers-watched-directory">完了した転送監視ディレクトリをクリーンアップ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#create-a-backup">バックアップの作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#upgrade-on-ubuntu-packages">Ubuntuパッケージのアップグレード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#upgrade-on-rocky-linux-red-hat-packages">Rocky Linux/Red Hatパッケージのアップグレード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#upgrade-on-vagrant-ansible">Vagrant/Ansibleのアップグレード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#upgrade-in-indexless-mode">インデックスレスモードでのアップグレード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#upgrade-with-output-capturing-disabled">出力キャプチャを無効にしてアップグレード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#update-search-indices">検索インデックスの更新</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#reindex-the-documents">文書のインデックスを付け直す</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#recreate-the-indices">インデックスの再作成</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#review-the-processing-configuration">処理設定の見直し</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/upgrading/upgrading.html#migrate-from-mysql-5-x-to-8-x">MySQL 5.xから8.xへの移行</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/customization/customization.html">カスタマイズと自動化</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/customization.html#administration-tab">管理タブ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/customization.html#automating-microservice-decisions-using-the-dashboard">ダッシュボードを使ったマイクロサービスの意思決定の自動化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/customization.html#preservation-planning-configuration">保存計画の設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/customization.html#antivirus-configuration">アンチウイルスの設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/customization.html#email-notification-configuration">電子メール通知の設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/customization.html#resources-for-development-configuration">開発設定用リソース</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/customization.html#task-output-capturing-configuration">タスク出力キャプチャ設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/customization.html#customizing-for-scalability-and-performance">スケーラビリティとパフォーマンスのためのカスタマイズ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/customization/dashboard-config.html">ダッシュボード管理タブ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#processing-configuration">処理設定</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#using-a-custom-processing-configuration-file">カスタム処理設定ファイルの使用</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#general">一般</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#general-configuration">一般設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#storage-service-options">Storage Serviceオプション</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#checksum-algorithm">チェックサムアルゴリズム</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#elasticsearch-indexing">Elasticsearchインデックス作成</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#failures">障害</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#transfer-source-location">転送元の場所</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#aip-storage-locations">AIPの保存場所</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#processing-storage-usage">処理ストレージ使用状況</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#dip-upload">DIPアップロード</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#atom-dip-upload">AtoM DIPアップロード</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#id1">AtoM DIPアップロード</a></li>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#atom-server-configuration">AtoMサーバーの設定</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#archivesspace-dip-upload">ArchivesSpace DIPアップロード</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#premis-agent">PREMISエージェント</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#rest-api">Rest API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#api-keys">APIキー</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#ip-whitelist">IPホワイトリスト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#approving-a-transfer">転送の承認</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#listing-unapproved-transfers">未承認転送のリストアップ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#users">ユーザー</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#cli-creation-of-administrative-users">CLIによる管理ユーザーの作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#cli-password-resetting">CLIパスワードのリセット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#cli-configuration-pipeline-and-registration-on-the-storage-service">CLI設定パイプラインとStorage Serviceへの登録</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#security">セキュリティ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#handle-server-config">サーバー設定の処理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#language">言語</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/dashboard-config.html#version">バージョン</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/customization/antivirus-admin.html">アンチウイルス管理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/antivirus-admin.html#clamdscan-or-clamscan">ClamdscanまたはClamscan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/antivirus-admin.html#antivirus-settings-and-their-impacts">アンチウイルスの設定とその影響</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/antivirus-admin.html#configuration-of-clamav-values">ClamAV値の設定</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/antivirus-admin.html#ansible">Ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/antivirus-admin.html#docker-compose">ドッカーコンポーズ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/antivirus-admin.html#impact-of-various-configuration-settings">各種コンフィギュレーション設定の影響</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/antivirus-admin.html#virus-definition-updates">ウイルス定義の更新</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/antivirus-admin.html#troubleshooting">トラブルシューティング</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/customization/task-config.html">タスク出力キャプチャ設定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html">Archivematicaのスケーリング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#overview">概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#scaling-up-optimising-on-one-machine">スケールアップ：1台のマシンでの最適化</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#optimising-the-number-of-packages-processed-at-a-time">一度に処理するパッケージ数の最適化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#optimising-the-number-of-mcpserver-threads">MCPServerスレッド数の最適化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#deploy-multiple-mcpclients">複数のMCPClientsをデプロイ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#optimise-batch-size-for-large-files">大きなファイルのバッチサイズを最適化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#optimising-the-number-of-dashboard-workers">ダッシュボードワーカーの数の最適化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#optimising-the-number-of-storage-service-workers">Storage Serviceワーカー数の最適化</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#scaling-out-optimising-across-multiple-machines">スケールアウト：複数のマシンでの最適化</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#distributing-components-on-multiple-machines">複数のマシンにコンポーネントを分散</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#firewall-configuration">ファイアウォールの設定</a></li>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#create-multiple-instances-of-mcpclient-on-a-separate-machine">MCPClientのインスタンスを（別のマシン上で）複数作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#distribute-other-components-to-another-machine">他のコンポーネントを別のマシンに分散</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#optimising-settings-across-machines">マシン間の設定の最適化</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#optimize-batch-size-for-large-files">大容量ファイルのバッチサイズを最適化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#adjusting-timeouts">タイムアウトの調整</a></li>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#optimising-storage-locations">保存場所の最適化</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#process-configuration-strategies">プロセス構成戦略</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#optimising-what-and-how-preservation-actions-get-executed">保存アクションの内容と実行方法の最適化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#environment-configuration-options">環境設定オプション</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#disable-elasticsearch-indexing">Elasticsearchのインデックス作成を無効化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#allow-indexing-to-fail">インデックスの失敗を許可</a></li>
+<li class="toctree-l4"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#disabling-task-output">タスク出力を無効化</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#processing-configuration-options">処理設定オプション</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#preservation-action-rules">保存アクションの規則</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/scaling-archivematica.html#general-configuration-settings">一般構成設定</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/customization/instrumentation.html">パフォーマンス計装</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/instrumentation.html#overview">概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/instrumentation.html#prometheus">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/instrumentation.html#grafana">Grafana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/instrumentation.html#available-metrics">利用可能なメトリクス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/instrumentation.html#mcp-client-metrics">MCPクライアントメトリクス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/instrumentation.html#mcp-server-metrics">MCP Serverメトリクス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/instrumentation.html#dashboard-metrics">ダッシュボードのメトリクス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/instrumentation.html#storage-service-metrics">Storage Serviceメトリクス</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/customization/instrumentation.html#configuration">設定</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/instrumentation.html#configure-prometheus">Prometheusの設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/customization/instrumentation.html#configure-grafana">Grafanaの設定</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/integrations/integrations.html">統合</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/integrations.html#atom-integration">AtoMの統合</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/integrations.html#archivesspace-integration">ArchivesSpaceの統合</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/integrations.html#avalon-media-system-integration">Avalon Media Systemの統合</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/integrations.html#duracloud">Duracloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/integrations.html#swift">Swift</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/integrations.html#islandora">Islandora</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/integrations.html#arkivum">Arkivum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/integrations.html#handle-net-integration">Handle.Netの統合</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/integrations.html#dataverse">Dataverse</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/integrations/duracloud-setup.html">ArchivematicaでDuraCloudを使用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/duracloud-setup.html#configure-duracloud">DuraCloudの設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/duracloud-setup.html#configure-the-archivematica-storage-service">Archivematica Storage Serviceの設定</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/integrations/atom-setup.html">AtoM 2.xをArchivematicaで使用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/atom-setup.html#install-atom">AtoMのインストール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/atom-setup.html#configure-dip-upload">DIPアップロードの設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/atom-setup.html#user-instructions">ユーザーへの指示</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/integrations/archivesspace-setup.html">ArchivematicaでのArchivesSpaceの使用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/archivesspace-setup.html#connecting-archivematica-and-archivesspace">ArchivematicaとArchivesSpaceの接続</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/archivesspace-setup.html#sending-material-to-archivesspace">ArchivesSpaceに素材を送信</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/integrations/archivesspace-setup.html#matching-objects-to-archivesspace-resources-on-the-appraisal-tab">ArchivesSpaceのリソースにオブジェクトをマッチング</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation-setup/integrations/archivesspace-setup.html#uploading-to-archivesspace-using-dip-upload">DIPアップロードを使用した ArchivesSpaceへのアップロード</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-setup/integrations/handlenet-setup.html">Archivematicaでハンドルシステムを使用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/handlenet-setup.html#connecting-archivematica-and-handle-net">ArchivematicaとHandle.Netの接続</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-setup/integrations/handlenet-setup.html#binding-pids-to-a-handle-net-registry">Handle.NetレジストリへのPIDのバインド</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance/maintenance.html">メンテナンス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="maintenance/maintenance.html#management-commands">管理コマンド</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance/maintenance.html#maintaining-elasticsearch">Elasticsearchのメンテナンス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/maintenance.html#rebuild-the-indexes">インデックスの再構築</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/maintenance.html#external-access">外部アクセス</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance/maintenance.html#data-backup">データバックアップ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/maintenance.html#archivematica-database-backup-and-restore">Archivematicaデータベースのバックアップとリストア</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/maintenance.html#storage-service-database-backup-and-restore">Storage Serviceデータベースのバックアップと復元</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/maintenance.html#id3">Elasticsearch</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance/maintenance.html#faq">よくあるご質問</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/maintenance.html#how-to-clean-up-a-full-disk">フルディスクのクリーンアップ方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/maintenance.html#how-to-restart-services">サービスの再起動方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/maintenance.html#error-stack-trace">エラースタックトレース</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/maintenance.html#transfer-won-t-start">転送が始まらない</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/maintenance.html#how-to-clear-user-sessions">ユーザーセッションをクリアする方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/maintenance.html#how-to-clear-the-application-database">アプリケーションデータベースのクリア方法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security/security.html">セキュリティ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="security/security.html#elasticsearch-access-control">Elasticsearchのアクセス制御</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security/security.html#mysql">MySQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security/security.html#atom">AtoM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security/security.html#gearman">Gearman</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security/security.html#authentication-backends">認証バックエンド</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="security/security.html#ldap-setup">LDAPの設定</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="security/security.html#ldap-backend-configuration">LDAPバックエンドの設定</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="security/security.html#shibboleth-setup">Shibbolethの設定</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="security/security.html#shibboleth-backend-configuration-in-archivematica-dashboard">ArchivematicaダッシュボードでのShibbolethバックエンド設定</a></li>
+<li class="toctree-l4"><a class="reference internal" href="security/security.html#shibboleth-backend-configuration-in-storage-service">Storage Serviceにおける Shibbolethバックエンドの設定</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="security/security.html#oidc-setup">OIDCのセットアップ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="security/security.html#oidc-backend-configuration-in-archivematica-dashboard">ArchivematicaダッシュボードでのOIDCバックエンド設定</a></li>
+<li class="toctree-l4"><a class="reference internal" href="security/security.html#oidc-backend-configuration-in-storage-service">Storage ServiceのOIDCバックエンド設定</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="security/security.html#cas-setup">CASのセットアップ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="security/security.html#cas-backend-configuration-in-archivematica-dashboard">ArchivematicaダッシュボードでのCASバックエンド設定</a></li>
+<li class="toctree-l4"><a class="reference internal" href="security/security.html#cas-backend-configuration-in-storage-service">Storage ServiceのCASバックエンド設定</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="security/security.html#password-validation">パスワード認証</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security/security.html#cookie-and-session-security">クッキーとセッションのセキュリティ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security/security.html#content-security-policy-csp">コンテンツセキュリティポリシー（CSP）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="security/security.html#csp-configuration-in-archivematica-dashboard">Archivematica DashboardでのCSP構成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="security/security.html#csp-backend-configuration-in-storage-service">Storage ServiceのCSPバックエンド構成</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="security/security.html#ca-certificates">CA証明書</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="security/security.html#upgrade-the-certifi-package-frequently"><code class="docutils literal notranslate"><span class="pre">certifi</span></code> パッケージは頻繁にアップグレードしてください</a></li>
+<li class="toctree-l3"><a class="reference internal" href="security/security.html#use-the-environment-string-requests-ca-bundle">環境文字列REQUESTS_CA_BUNDLEを使用</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="security/security.html#trusting-additional-cas">追加のCAを信頼する</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../user-manual/translations/translations.html"
+                          title="前の章へ">翻訳</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="installation-setup/installation/installation.html"
+                          title="次の章へ">Archivematicaのインストール</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/admin-manual/index.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="installation-setup/installation/installation.html" title="Archivematicaのインストール"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../user-manual/translations/translations.html" title="翻訳"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Archivematica文書</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">管理者マニュアル</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>マニュアル正規化 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="アーカイブストレージ" href="../archival-storage/archival-storage.html" />
+    <link rel="prev" title="インジェスト" href="ingest.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../archival-storage/archival-storage.html" title="アーカイブストレージ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="ingest.html" title="インジェスト"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">マニュアル正規化</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="manual-normalization">
+<span id="manual-norm"></span><h1>マニュアル正規化<a class="headerlink" href="#manual-normalization" title="Link to this heading">¶</a></h1>
+<p>正規化とは、アクセスや保存のためにファイルのコピーを作成することです。通常、Archivematica は、[インジェスト] タブの <a class="reference internal" href="ingest.html#normalize"><span class="std std-ref">正規化マイクロサービス</span></a> 中にこのアクションを実行し、[保存計画] タブの <a class="reference internal" href="../preservation/preservation-planning.html#normalization"><span class="std std-ref">正規化ルール</span></a> を適用して アクセスおよび/または保存の派生物を作成します。</p>
+<p>ただし、場合によっては、ユーザーが Archivematica の外部でアクセスコピーまたは保存コピーを作成することが合理的である場合があります。たとえば、デジタル化ワークフローの一部として、または Archivematica のツールスイートで正規化できないファイルを操作する場合などです。</p>
+<p>&quot;手動正規化&quot; という用語は、Archivematica の2つの異なるワークフローを指すのに使われます：</p>
+<ol class="arabic simple">
+<li><p>Archivematica にインジェストする前に、転送に正規化されたファイルを追加</p></li>
+<li><p>正規化マイクロサービス中にSIPに正規化されたファイルを追加</p></li>
+</ol>
+<p>どちらのオプションでも、ユーザーは手動正規化イベントを記述する PREMIS イベント詳細メタデータを追加できます。</p>
+<p>手動で正規化されたデリバティブは、標準転送に追加できます。その他の転送タイプは、サポートされていません。</p>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#man-norm-before"><span class="std std-ref">ワークフロー1：Archivematicaに転送する前の手動正規化</span></a></p></li>
+<li><p><a class="reference internal" href="#man-norm-ingest"><span class="std std-ref">ワークフロー 2：インジェスト中の手動正規化</span></a></p></li>
+<li><p><a class="reference internal" href="#man-norm-premis-detail"><span class="std std-ref">手動正規化のためのPREMIS eventDetailの追加</span></a></p></li>
+<li><p><a class="reference internal" href="#man-norm-same-name"><span class="std std-ref">同じ名前のファイルの正規化</span></a></p></li>
+</ul>
+<section id="workflow-1-manual-normalization-prior-to-transfer-to-archivematica">
+<span id="man-norm-before"></span><h2>ワークフロー1：Archivematicaに転送する前の手動正規化<a class="headerlink" href="#workflow-1-manual-normalization-prior-to-transfer-to-archivematica" title="Link to this heading">¶</a></h2>
+<p>このワークフローは、素材が Archivematica に転送される前に、ユーザーがファイルのアクセスコピーや保存コピーを作成していることを前提としています。</p>
+<p>例えば、デジタル化プロジェクトでは、高解像度のオリジナル（マスター）画像と低解像度のアクセスコピーが作成されることがあります。この正規化作業をArchivematicaが重複して行うことは冗長です。転送処理前に <code class="docutils literal notranslate"><span class="pre">manualNormalization</span></code> と呼ばれるフォルダを追加することで、Archivematicaは、既に正規化作業が行われたことを認識し、正規化作業を重複させることがなくなります。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>このワークフローでは、オリジナルのオブジェクトとその派生アクセスまたは保存との間に1対1の関係が必要です。単一のオリジナルのオブジェクトに関連する複数のアクセスまたは保存派生物の作成はサポートされていません。</p>
+</div>
+<ol class="arabic">
+<li><p>オリジナル（マスター）コピーと手動で正規化した派生ファイルのファイルを作成します。Archivematicaがオリジナルファイルと派生ファイルのリンクを認識するためには、ファイル名が一致している必要があります。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>to-be-preserved/
+├──<span class="w"> </span>hooded-pitcher-plant.gif
+├──<span class="w"> </span>hooded-pitcher-plant.png
+├──<span class="w"> </span>hooded-pitcher-plant.tif
+├──<span class="w"> </span>ornamental-onion.gif
+├──<span class="w"> </span>ornamental-onion.png
+├──<span class="w"> </span>ornamental-onion.tif
+├──<span class="w"> </span>pepperbox-poppy.gif
+├──<span class="w"> </span>pepperbox-poppy.png
+└──<span class="w"> </span>pepperbox-poppy.tif
+</pre></div>
+</div>
+<p>この例では、各ファイルの 3 つのコピー (GIF、PNG、TIFF) があります。PNG ファイルはオリジナル ファイルとして使用され、TIFF ファイルは保存用の派生ファイルとして、GIF ファイルはアクセス用の派生ファイルとして使用されます。</p>
+</li>
+<li><p>転送ディレクトリを作成し、その中の最上位にオリジナルのファイルを置きます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>my-manually-normalized-material/
+├──<span class="w"> </span>hooded-pitcher-plant.png
+├──<span class="w"> </span>ornamental-onion.png
+└──<span class="w"> </span>pepperbox-poppy.png
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">manualNormalization</span></code> というサブディレクトリを作成します（大文字のNに注意）。 <code class="docutils literal notranslate"><span class="pre">manualNormalization</span></code> ディレクトリ内に <code class="docutils literal notranslate"><span class="pre">access</span></code> と <code class="docutils literal notranslate"><span class="pre">preservation</span></code> というディレクトリを作成します (両方は必要ありません。保存コピーしかない場合は、 <code class="docutils literal notranslate"><span class="pre">preservation</span></code> ディレクトリのみを作成します。逆も同様です)。手動で正規化したファイルを適切なディレクトリに配列します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>my-manually-normalized-material/
+├──<span class="w"> </span>manualNormalization
+│<span class="w">   </span>└──<span class="w"> </span>access
+│<span class="w">       </span>├──<span class="w"> </span>hooded-pitcher-plant.gif
+│<span class="w">       </span>├──<span class="w"> </span>ornamental-onion.gif
+│<span class="w">       </span>└──<span class="w"> </span>pepperbox-poppy.gif
+│<span class="w">   </span>└──<span class="w"> </span>preservation
+│<span class="w">       </span>├──<span class="w"> </span>hooded-pitcher-plant.tif
+│<span class="w">       </span>├──<span class="w"> </span>ornamental-onion.tif
+│<span class="w">       </span>└──<span class="w"> </span>pepperbox-poppy.tif
+├──<span class="w"> </span>hooded-pitcher-plant.png
+├──<span class="w"> </span>ornamental-onion.png
+└──<span class="w"> </span>pepperbox-poppy.png
+</pre></div>
+</div>
+<p>上の例では、GIF アクセス派生物が <code class="docutils literal notranslate"><span class="pre">manualNormalization/access</span></code> ディレクトリに移動され、TIFF 保存派生物が <code class="docutils literal notranslate"><span class="pre">manualNormalization/preservation</span></code> ディレクトリに移動されたことがわかります。</p>
+<p>Archivematicaがオリジナルファイルとその派生ファイルのリンクを認識するためには、ファイル名が一致している必要があります。</p>
+</li>
+<li><p>転送を転送元の場所に配列し、通常どおり標準転送を開始します。手順については、 <a class="reference internal" href="../transfer/transfer.html#transfer"><span class="std std-ref">転送r</span></a> および <a class="reference internal" href="ingest.html#ingest"><span class="std std-ref">インジェスト</span></a> の文書を参照してください。</p></li>
+<li><p>[インジェスト] タブで正規化マイクロサービスに到達したら、アクセス、保存、またはその両方のために正規化するかどうかを選択します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>受け入れる前に正規化結果を確認することを選択した場合は、転送のオブジェクトディレクトリに <code class="docutils literal notranslate"><span class="pre">manualNormalization</span></code> フォルダとその内容があり、その <code class="docutils literal notranslate"><span class="pre">access</span></code> および/または <code class="docutils literal notranslate"><span class="pre">preservation</span></code> フォルダとその内容はそのままです。</p>
+</div>
+</li>
+<li><p>AIP が作成されると、オリジナルとその保存派生物が通常どおり AIP の <code class="docutils literal notranslate"><span class="pre">data</span></code> ディレクトリに配列されることがわかります。正規化が完了すると、 <code class="docutils literal notranslate"><span class="pre">manualNormalization</span></code> ディレクトリとサブフォルダーが削除されたことに注意してください。アクセスのために正規化を選択した場合は、DIP も作成されます。</p></li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>オリジナルとその派生物の間には 1 対 1 の関係がある必要がありますが、すべてのオリジナルが対応する数の派生物を持つ必要はないことに注意してください。次のような構造も同様に機能します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>my-manually-normalized-material/
+├──<span class="w"> </span>manualNormalization
+│<span class="w">   </span>└──<span class="w"> </span>access
+│<span class="w">       </span>└──<span class="w"> </span>pepperbox-poppy.gif
+│<span class="w">   </span>└──<span class="w"> </span>preservation
+│<span class="w">       </span>├──<span class="w"> </span>hooded-pitcher-plant.tif
+│<span class="w">       </span>└──<span class="w"> </span>pepperbox-poppy.tif
+├──<span class="w"> </span>hooded-pitcher-plant.png
+├──<span class="w"> </span>ornamental-onion.png
+└──<span class="w"> </span>pepperbox-poppy.png
+</pre></div>
+</div>
+<p>上記のような転送では、Archivematica は選択された正規化オプションに従ってギャップを埋めます。たとえば、ユーザーが &quot;保存のために正規化&quot;を選択した場合、 <code class="docutils literal notranslate"><span class="pre">ornamental-onion.png</span></code> の保存派生物が Archivematica によって作成されます。</p>
+</div>
+</section>
+<section id="workflow-2-manual-normalization-during-ingest">
+<span id="man-norm-ingest"></span><h2>ワークフロー 2：インジェスト中の手動正規化<a class="headerlink" href="#workflow-2-manual-normalization-during-ingest" title="Link to this heading">¶</a></h2>
+<p>このワークフローでは、Archivematica で処理されている間に、ユーザーがファイルのアクセスコピーや保存コピーを作成することを想定しています。例えば、素材の処理中に、ユーザーは素材を特殊な方法（例えば、独自のツールを使用するなど）で正規化する必要があると判断するかもしれません。</p>
+<p>このワークフローでは、ユーザーが Archivematica で転送を開始し、外部正規化ツールを使用して必要な派生物を作成し、ディスク上の現在処理中のディレクトリ内に派生ファイルを手動で配列してから、Archivematica に戻って続ける必要があります。</p>
+<ol class="arabic">
+<li><p>転送ディレクトリを作成し、その中の最上位にオリジナルのファイルを置きます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>my-manually-normalized-material/
+├──<span class="w"> </span>hooded-pitcher-plant.png
+├──<span class="w"> </span>ornamental-onion.png
+└──<span class="w"> </span>pepperbox-poppy.png
+</pre></div>
+</div>
+</li>
+<li><p>転送を転送元の場所に配列し、通常どおり標準転送を開始します。手順については、 <a class="reference internal" href="../transfer/transfer.html#transfer"><span class="std std-ref">転送r</span></a> および <a class="reference internal" href="ingest.html#ingest"><span class="std std-ref">インジェスト</span></a> の文書を参照してください。</p></li>
+<li><p>[インジェスト] タブの正規化マイクロサービスに到達したら、ドロップダウンメニューから <strong>手動で正規化</strong> を選択します。</p></li>
+<li><p>手動でファイルを正規化します。</p></li>
+<li><p>SFTP ファイルブラウザーまたは コマンドラインのSSHを使用して、パイプラインの処理場所に移動し、approveNormalization 監視ディレクトリを見つけます。デフォルトの場所は <code class="docutils literal notranslate"><span class="pre">/var/archivematica/sharedDirectory/watchedDirectories/approveNormalization/preservation/</span></code> であり、ここに転送ディレクトリが含まれます。パイプラインに定義されている処理場所を確認するには、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/#index" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">ストレージサービス</span></a> の設定を確認する必要がある場合があります。</p></li>
+<li><p>手動で正規化した派生物を転送ディレクトリにコピーします。 <code class="docutils literal notranslate"><span class="pre">manualNormalization</span></code> ディレクトリを含むディレクトリ構造を作成する必要があります。 <code class="docutils literal notranslate"><span class="pre">manualNormalization</span></code> ディレクトリ内に <code class="docutils literal notranslate"><span class="pre">access</span></code> と <code class="docutils literal notranslate"><span class="pre">preservation</span></code> というディレクトリを作成します (両方は必要ありません。保存コピーしかない場合は、 <code class="docutils literal notranslate"><span class="pre">preservation</span></code> ディレクトリのみを作成します。逆も同様です)。手動で正規化したファイルを適切なディレクトリに配列します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>my-manually-normalized-material/
+├──<span class="w"> </span>manualNormalization
+│<span class="w">   </span>└──<span class="w"> </span>access
+│<span class="w">       </span>└──<span class="w"> </span>pepperbox-poppy.gif
+│<span class="w">   </span>└──<span class="w"> </span>preservation
+│<span class="w">       </span>├──<span class="w"> </span>hooded-pitcher-plant.tif
+│<span class="w">       </span>└──<span class="w"> </span>pepperbox-poppy.tif
+├──<span class="w"> </span>hooded-pitcher-plant.png
+├──<span class="w"> </span>ornamental-onion.png
+└──<span class="w"> </span>pepperbox-poppy.png
+</pre></div>
+</div>
+<p>上記の例では、 <code class="docutils literal notranslate"><span class="pre">pepperbox-poppy.png</span></code> には保存用とアクセス用の派生物が作成されましたが、 <code class="docutils literal notranslate"><span class="pre">hooded-pitcher-plant.png</span></code> には保存用コピーのみが作成されました。</p>
+<p>Archivematicaがオリジナルファイルとその派生ファイルのリンクを認識するためには、ファイル名が一致している必要があります。</p>
+</li>
+<li><p>ダッシュボードに戻り、正規化を承認します。</p></li>
+<li><p>AIP が作成されると、オリジナルとその保存派生物が通常どおり AIP の <code class="docutils literal notranslate"><span class="pre">data</span></code> ディレクトリに配列されることがわかります。正規化が完了すると、 <code class="docutils literal notranslate"><span class="pre">manualNormalization</span></code> ディレクトリとサブフォルダーが削除されたことに注意してください。アクセスコピーを持っていた場合、DIP も作成されます。</p></li>
+</ol>
+</section>
+<section id="adding-premis-eventdetail-for-manual-normalization">
+<span id="man-norm-premis-detail"></span><h2>手動正規化のためのPREMIS eventDetailの追加<a class="headerlink" href="#adding-premis-eventdetail-for-manual-normalization" title="Link to this heading">¶</a></h2>
+<p>Archivematicaが正規化を実行すると、PREMISイベントが作成され、正規化イベントを記述するMETSに追加されます。しかし、手動で素材を正規化した場合、ArchivematicaはPREMISイベントを作成しません。この機能により、手動で正規化した素材に対してPREMISイベントを記述できます。</p>
+<p>手動で正規化したファイルを最初の転送（ワークフロー1）に含めるか、処理中（ワークフロー2）に含めるかにかかわらず、PREMIS eventDetailを追加する手順は同じです。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>手動正規化 PREMIS イベントを追加する場合は、 <a class="reference internal" href="../administer/dashboard-admin.html#dashboard-processing"><span class="std std-ref">処理設定</span></a> で &quot;リマインダー：必要に応じてメタデータを追加&quot; を <strong>なし</strong> に設定し、好機を逃さないようにすると便利です。SIP がこのマイクロサービスを通過すると、PREMIS イベントを追加できなくなります。</p>
+</div>
+<ol class="arabic">
+<li><p>上記のワークフロー1または2の手順に従ってください。</p></li>
+<li><p>正規化が承認されると、Archivematicaは停止し、メタデータを追加するよう促します。メタデータのアイコンをクリックしてください。</p>
+<a class="reference internal image-reference" href="../../_images/AddMetadataIcon.png"><img alt="メタデータのアイコンをクリック" class="align-center" src="../../_images/AddMetadataIcon.png" style="width: 75%;" />
+</a>
+</li>
+<li><p>メタデータの下にある&quot;手動正規化イベントの詳細&quot; を選択します。</p>
+<a class="reference internal image-reference" href="../../_images/ManualNormEventLink.png"><img alt="手動正規化イベント詳細追加へのリンク" class="align-center" src="../../_images/ManualNormEventLink.png" style="width: 75%;" />
+</a>
+</li>
+<li><p>イベントの詳細を追加します。これは、 <code class="docutils literal notranslate"><span class="pre">program=ImageMagick;</span> <span class="pre">version=6.6.4.0;</span> <span class="pre">command=%convertPath%</span> <span class="pre">%fileFullName%</span> <span class="pre">+compress</span> <span class="pre">%preservationFileDirectory%%fileTitle%.%preservationFormat%</span></code> のような技術的なツールの出力かもしれないし、または下の例のようなもっと説明的なものかもしれません。</p>
+<a class="reference internal image-reference" href="../../_images/NormalizationEventDetail.png"><img alt="イベントの詳細を追加" class="align-center" src="../../_images/NormalizationEventDetail.png" style="width: 75%;" />
+</a>
+</li>
+<li><p>メタデータを保存し、インジェストタブをクリックして処理を続行します。</p></li>
+<li><p>処理を続けるには、メタデータリマインダーのドロップダウンボックスから [続ける] を選択します。</p></li>
+</ol>
+</section>
+<section id="normalizing-files-with-the-same-name">
+<span id="man-norm-same-name"></span><h2>同じ名前のファイルの正規化<a class="headerlink" href="#normalizing-files-with-the-same-name" title="Link to this heading">¶</a></h2>
+<p>The  manual normalization workflow outlined above assumes that there are no
+conflicts between filenames. For example, if the original filenames are
+<code class="docutils literal notranslate"><span class="pre">file1.doc</span></code> and <code class="docutils literal notranslate"><span class="pre">file2.xls</span></code>, there is no conflict. But if you are manually
+normalizing both <code class="docutils literal notranslate"><span class="pre">file1.doc</span></code> and <code class="docutils literal notranslate"><span class="pre">file1.xls</span></code>, even if the extensions of the
+normalized files are different, you will need to provide a CSV file to document
+the relationships between the original and normalized files.</p>
+<ol class="arabic">
+<li><p>ディレクトリ構造を作成します。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>manually-normalized-duplicate-names/
+├── manualNormalization
+│   └── access
+│       ├── file1.jpg
+│       └── file1.pdf
+│   └── preservation
+│       ├── file1.pdf
+│       └── file1.tif
+├── file1.crw
+├── file1.doc
+└── file1.tga
+</pre></div>
+</div>
+<p>上記の例では、 <code class="docutils literal notranslate"><span class="pre">file1.tga</span></code> には JPG アクセス派生物と TIFF 保存派生があります。 <code class="docutils literal notranslate"><span class="pre">file1.doc</span></code> には PDF へのアクセスと保存派生物があります。 <code class="docutils literal notranslate"><span class="pre">file1.crw</span></code> には派生物がありません。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">normalization.csv</span></code> という名前の CSV ファイルを作成します。CSV には、オリジナルのファイルのパス、アクセス派生物のパス、保存派生物のパスの 3 つの列が必要です。手動で正規化された派生物がない場合でも、重複する名前を持つすべてのファイルをリストアップする必要があります。</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>file1.tga</p></td>
+<td><p>manualNormalization/access/file1.jpg</p></td>
+<td><p>manualNormalization/preservation/file1.tif</p></td>
+</tr>
+<tr class="row-even"><td><p>file1.doc</p></td>
+<td><p>manualNormalization/access/file1.pdf</p></td>
+<td><p>manualNormalization/preservation/sfile1.pdf</p></td>
+</tr>
+<tr class="row-odd"><td><p>file1.crw</p></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p><code class="docutils literal notranslate"><span class="pre">normalization.csv</span></code> は大文字と小文字を区別します。ファイルパスが正確であることを確認してください。列ヘッダーは含めないでください。</p>
+</div>
+</li>
+<li><p>CSVファイルを転送の最上位に含めます。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>manually-normalized-duplicate-names/
+├── manualNormalization
+│   └── access
+│       ├── file1.jpg
+│       └── file1.pdf
+│   └── preservation
+│       ├── file1.pdf
+│       └── file1.tif
+├── file1.crw
+├── file1.doc
+├── file1.tga
+└── normalization.csv
+</pre></div>
+</div>
+</li>
+<li><p>上記のワークフロー1または2に従って転送します。</p></li>
+</ol>
+<p>上記の例では、保存とアクセスの両方に対して手動で正規化されたファイルがありますが、該当する列を空白にすることで、アクセスまたは保存のみに対して手動で正規化されたファイルを持つことも可能です。</p>
+<p>他のシナリオも可能です：</p>
+<p>オリジナルのファイルはサブディレクトリにはありませんが、正規化されたコピーはサブディレクトリにあります：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>file1.tga,manualNormalization/access/subdir1/file1.jpg,manualNormalization/preservation/subdir1/file1.tif
+file1.doc,manualNormalization/access/subdir1/file1.pdf,manualNormalization/preservation/subdir1/file1.pdf
+</pre></div>
+</div>
+<p>サブディレクトリ内の一部の正規化されたコピーのみ：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>file1.tga,manualNormalization/access/subdir1/file1.jpg,manualNormalization/preservation/subdir1/file1.tif
+file1.doc,manualNormalization/access/file1.pdf,manualNormalization/preservation/subdir1/file1.pdf
+</pre></div>
+</div>
+<p>ファイル名を区別するためだけに使用されるサブディレクトリ：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>file1.tga,manualNormalization/access/subdir1/file1.jpg,manualNormalization/preservation/subdir1/file1.tif
+file1.ppm,manualNormalization/access/subdir2/file1.jpg,manualNormalization/preservation/subdir2/file1.tif
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ファイル名に Archivematica のツールセットが処理できない文字が含まれている場合、Archivematica はその文字を最も近い同等の文字に置き換えてファイル名を変更します (詳細については、 <a class="reference internal" href="../transfer/change-filenames.html#change-filenames"><span class="std std-ref">ファイル名の変更</span></a> を参照してください)。Normalization.csv ファイルは、オリジナルのファイル名または変更されたファイル名のいずれでも機能します。</p>
+</div>
+<p><a class="reference internal" href="#manual-norm"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">マニュアル正規化</a><ul>
+<li><a class="reference internal" href="#workflow-1-manual-normalization-prior-to-transfer-to-archivematica">ワークフロー1：Archivematicaに転送する前の手動正規化</a></li>
+<li><a class="reference internal" href="#workflow-2-manual-normalization-during-ingest">ワークフロー 2：インジェスト中の手動正規化</a></li>
+<li><a class="reference internal" href="#adding-premis-eventdetail-for-manual-normalization">手動正規化のためのPREMIS eventDetailの追加</a></li>
+<li><a class="reference internal" href="#normalizing-files-with-the-same-name">同じ名前のファイルの正規化</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="ingest.html"
+                          title="前の章へ">インジェスト</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../archival-storage/archival-storage.html"
+                          title="次の章へ">アーカイブストレージ</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/ingest/manual-normalization.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../archival-storage/archival-storage.html" title="アーカイブストレージ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="ingest.html" title="インジェスト"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">マニュアル正規化</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

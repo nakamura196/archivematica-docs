@@ -1,0 +1,913 @@
+.. _dashboard-config:
+
+============================
+Dashboard Administration tab
+============================
+
+The Archivematica administration pages, under the Administration tab of the
+dashboard, allow you to configure application components and manage users.
+
+*On this page:*
+
+* :ref:`Processing configuration <process-config>`
+* :ref:`General <admin-dashboard-general>`
+* :ref:`Failures <admin-dashboard-failures>`
+* :ref:`Transfer source locations <admin-dashboard-transfer-source>`
+* :ref:`AIP storage locations <admin-dashboard-AIP-stor>`
+* :ref:`Processing storage usage <admin-dashboard-usage>`
+* :ref:`DIP upload <admin-dashboard-dip-upload>`
+
+  * :ref:`AtoM DIP upload <admin-dashboard-atom>`
+  * :ref:`ArchivesSpace DIP upload <admin-dashboard-AS>`
+
+* :ref:`PREMIS agent <admin-dashboard-premis>`
+* :ref:`REST API <admin-dashboard-rest>`
+* :ref:`Users <admin-dashboard-users>`
+* :ref:`Handle Server config <admin-handlenet>`
+* :ref:`Language <admin-language-choice>`
+* :ref:`Version <admin-version>`
+
+.. _process-config:
+
+Processing configuration
+------------------------
+
+The processing configuration administration page of the dashboard allows users
+to configure the job decision points presented by Archivematica during transfer
+and ingest. When you install Archivematica, there are two default processing
+configurations:
+
+* ``Default``, which is used for any transfer started manually from the
+  :ref:`Transfer tab <create-transfer>`, automatically via the `automation tools`_,
+  or in any other context where no other processing configuration is specified.
+* ``Automated``, which is used for transfers automatically started from Jisc
+  RDSS environments (if you are not a Jisc user, feel free to delete this
+  configuration).
+
+.. image:: images/processing-config.*
+   :align: center
+   :width: 80%
+   :alt: Image showing the processing configuration page in the dashboard
+
+By clicking **Edit**, you will be taken to a form where you can configure the
+default processingMCP.xml that governs these decisions. Clicking on **Add** will
+allow you to create a new processing configuration. When you change the options
+using the web interface the necessary XML will be written behind the scenes.
+
+.. image:: images/processing-config-choices.*
+   :align: center
+   :width: 80%
+   :alt: Image showing the processing configuration edit page in the dashboard
+
+For more information about configuring processing decisions in the Archivematica
+dashboard, see :ref:`Processing configuration <dashboard-processing>` page in
+the User Manual. The Processing configuration page contains a list of all of the
+decision points and their options.
+
+You can also revert the default and automated processing configurations to their
+pre-sets by clicking on **Reset**. Please note that the pre-sets for the
+default processing configuration are noted on the :ref:`Processing
+configuration <dashboard-processing>` in the User Manual.
+
+Changes to this form are written to a file called ``processingMCP.xml``. When
+you start a transfer in the Archivematica dashboard, it automatically uses the
+default processingMCP.xml.
+
+.. _processingmcp-file:
+
+Using a custom processing configuration file
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For more advanced workflows, you may wants to create multiple processing
+configurations - for example, along with the default config, users might want to
+have a configuration specific to video files. You can add a new processing
+configuration through the user interface by clicking on the **Add** button.
+
+Once you have created a custom processing configuration, you can download the
+XML file by clicking on **Download**. Rename this file ``processingMCP.xml``.
+Then place this file in the root directory of the transfer. Archivematica will
+now use the included file to make processing decisions, rather than the default
+configuration.
+
+The processingMCP.xml follows a specific XML format:
+
+.. code:: xml
+
+   <processingMCP>
+    <preconfiguredChoices>
+        <!-- Display metadata reminder -->
+        <preconfiguredChoice>
+            <appliesTo>eeb23509-57e2-4529-8857-9d62525db048</appliesTo>
+            <goToChain>5727faac-88af-40e8-8c10-268644b0142d</goToChain>
+        </preconfiguredChoice>
+        <!-- Extract packages -->
+        <preconfiguredChoice>
+            <appliesTo>dec97e3c-5598-4b99-b26e-f87a435a6b7f</appliesTo>
+            <goToChain>01d80b27-4ad1-4bd1-8f8d-f819f18bf685</goToChain>
+        </preconfiguredChoice>
+        <!-- Delete extracted packages -->
+        <preconfiguredChoice>
+            <appliesTo>f19926dd-8fb5-4c79-8ade-c83f61f55b40</appliesTo>
+            <goToChain>85b1e45d-8f98-4cae-8336-72f40e12cbef</goToChain>
+        </preconfiguredChoice>
+        <!-- Select pre-normalize file format identification command -->
+        <preconfiguredChoice>
+            <appliesTo>7a024896-c4f7-4808-a240-44c87c762bc5</appliesTo>
+            <goToChain>3c1faec7-7e1e-4cdd-b3bd-e2f05f4baa9b</goToChain>
+        </preconfiguredChoice>
+        <!-- Select compression algorithm -->
+        <preconfiguredChoice>
+            <appliesTo>01d64f58-8295-4b7b-9cab-8f1b153a504f</appliesTo>
+            <goToChain>9475447c-9889-430c-9477-6287a9574c5b</goToChain>
+        </preconfiguredChoice>
+        <!-- Select compression level -->
+        <preconfiguredChoice>
+            <appliesTo>01c651cb-c174-4ba4-b985-1d87a44d6754</appliesTo>
+            <goToChain>414da421-b83f-4648-895f-a34840e3c3f5</goToChain>
+        </preconfiguredChoice>
+      </preconfiguredChoices>
+     </processingMCP>
+
+Note that ``appliesTo`` is the UUID associated with the microservice job
+presented in the dashboard and ``goToChain`` is the UUID of the desired
+selection.
+
+.. _admin-dashboard-general:
+
+General
+-------
+
+The General configuration page allows you to connect your Archivematica instance
+to the Storage Service and set the default checksum algorithm used in
+processing.
+
+.. figure:: images/generalConfig.*
+   :align: center
+   :figwidth: 70%
+   :width: 100%
+   :alt: General configuration options in Administration tab of the dashboard
+
+   General configuration options in Administration tab of the dashboard
+
+General configuration
+^^^^^^^^^^^^^^^^^^^^^
+
+Fields:
+
+* **Site URL**: This is the public URL of your Archivematica dashboard. This
+  field is optional.
+
+.. note::
+   Archivematica will try to register itself with the Storage Service. If you
+   have installed Archivematica with a static URL or IP address, you may not
+   need to set the Site URL here. However, if you expect the URL or IP address
+   to change you should use a URL that will not change over time.
+
+Storage Service options
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Archivematica's storage spaces and locations are controlled by a back-end
+application called the Storage Service. For more information about the Storage
+Service, see the :ref:`Storage Service documentation <storageservice:index>`.
+
+Fields:
+
+* **Storage Service URL**: Full URL of the storage service. E.g.
+  https://192.168.168.192:8000
+* **Storage Service User**: User in the Storage Service to authenticate as.
+  Obtain Storage Service credentials from the Administration tab of the Storage
+  Service.
+* **API key**: API key of the storage service user. Obtain Storage Service
+  credentials from the Administration tab of the Storage Service.
+* **Use default configuration**: Check this box if you have deployed the Storage
+  Service using the default space and location configurations. If you have set
+  up custom configurations, uncheck it.
+
+Checksum algorithm
+^^^^^^^^^^^^^^^^^^
+
+You can select which checksum algorithm Archivematica will use during the
+*Assign UUIDs and checksums* microservice in Transfer. Choose between MD5,
+SHA-1, SHA-256 and SHA-512.
+
+Elasticsearch indexing
+^^^^^^^^^^^^^^^^^^^^^^
+
+As of Archivematica 1.7, installing Elasticsearch is optional. Elasticsearch
+powers the indexes that are used for searching in the :ref:`Backlog <backlog>`,
+:ref:`Appraisal <appraisal>`, and/or :ref:`Archival Storage <archival-storage>`.
+Installing Archivematica without Elasticsearch results in reduced consumption of
+compute resources and lower operational complexity. Disabling Elasticsearch
+means that the Backlog, Appraisal, and/or Archival Storage tabs will not appear
+in the user interface and their functionality will not be available.
+
+This section in the General configuration shows if Elasticsearch is enabled or
+disabled.
+
+.. figure:: images/elasticsearch-indexing.*
+   :align: center
+   :width: 30%
+   :alt: The Elasticsearch indexing section reading "Transfers related indexes enabled", "AIPs related indexes enabled".
+
+   In this example, indexing is enabled for both transfers and AIPs.
+
+It is possible to disable indexing for transfers (the Backlog and Appraisal
+tabs), for AIPs (the Archival Storage tab), or for both. For more information on
+disabling Elasticsearch, please see :ref:`Elasticsearch <install-elasticsearch>`
+in the Administrator Manual.
+
+.. _admin-dashboard-failures:
+
+Failures
+--------
+
+This page displays packages that failed during processing.
+
+.. figure:: images/failuresAdmin.*
+   :align: center
+   :figwidth: 70%
+   :width: 100%
+   :alt: Failures report in the dashboard
+
+   Failures report in the dashboard
+
+
+Clicking the date, name or UUID will display a report of the failure:
+
+.. image:: images/failReport.*
+   :align: center
+   :width: 70%
+   :alt: Failure report for a failed transfer
+
+The failure report can be removed from the Dashboard by clicking Delete.
+
+.. _admin-dashboard-transfer-source:
+
+Transfer source location
+------------------------
+
+Archivematica allows you to start transfers using the operating system's file
+browser or via a web interface. Source files for transfers, however, cannot be
+uploaded using the web interface; they must exist on volumes accessible to the
+Archivematica MCP server and configured via the Storage Service.
+
+When starting a transfer you are required to select one or more directories of
+files to add to the transfer.
+
+.. _admin-dashboard-AIP-stor:
+
+AIP storage locations
+---------------------
+
+AIP storage directories are directories in which completed AIPs are stored.
+Storage directories can be specified in a manner similar to transfer source
+directories using the Storage Service.
+
+You can view your transfer source directories in the Administrative tab of the
+dashboard under "AIP storage locations".
+
+.. _admin-dashboard-usage:
+
+Processing storage usage
+------------------------
+
+This section of the Administration page displays various processing locations
+with their current usage of available space.
+
+.. image:: images/ProcessingUsage.*
+   :align: center
+   :width: 80%
+   :alt: Processing storage usage area of Administration page
+
+Administrators can use the "clear" buttons to delete the contents of these
+processing locations to make more room on their server.
+
+.. _admin-dashboard-dip-upload:
+
+DIP upload
+----------
+
+Archivematica has access integrations with two access platforms: AtoM and
+ArchivesSpace.
+
+.. _admin-dashboard-atom:
+
+AtoM DIP upload
+^^^^^^^^^^^^^^^
+
+Archivematica can upload DIPs directly to an `AtoM`_ website so that the
+contents can be accessed online.
+
+The AtoM DIP upload configuration page is where you specify the details
+of the AtoM installation you'd like the DIPs uploaded to (and, if
+using Rsync to transfer the DIP files, Rsync transfer details).
+
+Before setting these details, please ensure that you have a working AtoM
+site that is properly connected to Archivematica. See :ref:`Using AtoM
+2.x with Archivematica <atom-setup>` for more information.
+
+.. image:: images/AtoMDIPConfig.*
+   :align: center
+   :width: 80%
+   :alt: Configuration screen for AtoM DIP uploads
+
+Fields:
+
+* **Upload URL**: the URL of the destination AtoM website.
+* **Login email**: the email address used to log in to AtoM.
+* **Login password**: the password used to log in to AtoM.
+* **AtoM version**: the version of the destination AtoM website.
+* **Rsync target**: if you'd like to send the DIP with Rsync before it is
+  deposited in AtoM, enter the destination value for rsync, e.g.
+  ``foobar.com:/dips``. This field is optional.
+* **Rsync command**: if you've entered an Rsync target, specify the remote
+  shell manually, e.g. ``ssh -p 22222 -l user``. This field is optional.
+* **Debug mode**: if you would like to have additional details in failure
+  reports, also enable debug mode by choosing "Yes".
+
+AtoM DIP upload
++++++++++++++++
+
+If AtoM is installed on a remote server, Archivematica uses SSH and rsync to
+copy the DIP to a temporary directory on the AtoM server. If Archivematica and
+AtoM share a common filesystem (e.g. a shared network directory) this step is
+unnecessary.
+
+Archivematica sends a REST request to AtoM to tell AtoM which archival
+description is the target of the DIP. The DIP target description is identified
+by the description's "slug".  The actual upload of the DIP contents to AtoM is
+done via a background job, and may take some time to process if a large DIP is
+uploaded.
+
+An AtoM background worker uploads the DIP metadata (METS file) and digital
+objects from the temporary directory to AtoM, links them to the target
+description, then deletes the temporary files.
+
+You will also need to make some changes in the AtoM user interface:
+
+* The SWORD plugin (Admin --> Plugins --> qtSwordPlugin) must be enabled in
+  order for AtoM to receive uploaded DIPs.
+
+* Enabling Job scheduling (Admin --> Settings --> Job scheduling) in version 2.1
+  or lower is also recommended.
+
+* When using a SWORD deposit in a location other than `/tmp`, this location
+  should be set in the global settings (Admin --> Settings --> Global --> SWORD
+  deposit directory).
+
+AtoM DIP upload can use Rsync as a transfer mechanism. Rsync is an open source
+utility for efficiently transferring files. The rsync-target parameter is used
+to specify an Rsync-style target host/directory pairing, ``foobar.com:~/dips/``
+for example. The rsync-command parameter is used to specify rsync connection
+options, ``ssh -p 22222 -l user`` for example. If you are using the rsync
+option, please see AtoM server configuration below.
+
+To set any parameters for AtoM DIP upload change the values, preserving the
+existing format they're specified in, in the ``Command arguments`` field then
+click "Save".
+
+.. NOTE::
+
+   If you are planning to use the :ref:`metadata-only DIP upload to AtoM
+   <upload-metadata-atom>` functionality don't forget to enable the :ref:`API
+   plugin in AtoM <atom:api-intro>`, generate a API key, and update the ``REST
+   API key`` field accordingly. Metadata-only DIP upload is only available if
+   you are using AtoM 2.4 or higher.
+
+AtoM server configuration
++++++++++++++++++++++++++
+
+This server configuration step is necessary to allow Archivematica to log in
+to the AtoM server without passwords, and only when the user is deploying the
+rsync option described above in the AtoM DIP upload section.
+
+To enable sending DIPs from Archivematica to the AtoM server:
+
+Generate SSH keys for the Archivematica user. Leave the passphrase field
+blank.
+
+.. code:: bash
+
+   $ sudo -u archivematica ssh-keygen
+
+
+Copy the contents of ``/var/lib/archivematica/.ssh/id_rsa.pub`` somewhere
+handy, you will need it later.
+
+Now, it's time to configure the AtoM server so Archivematica can send the DIPs
+using SSH/rsync. For that purpose, you will create a user called ``archivematica``
+and we are going to assign that user a restricted shell with access only to
+rsync:
+
+.. code:: bash
+
+   $ sudo apt-get install rssh
+   $ sudo useradd -d /home/archivematica -m -s /usr/bin/rssh archivematica
+   $ sudo passwd -l archivematica
+   $ sudo vim /etc/rssh.conf // Make sure that allowrsync is uncommented!
+
+Add the SSH key that we generated before:
+
+.. code:: bash
+
+   $ sudo mkdir /home/archivematica/.ssh
+   $ chmod 700 /home/archivematica/.ssh/
+   $ sudo vim /home/archivematica/.ssh/authorized_keys // Paste here the contents of id_dsa.pub
+   $ chown -R archivematica:archivematica /home/archivematica
+
+.. NOTE::
+
+   AtoM 2.7 has added a new feature that deletes the DIP directory from the SWORD
+   deposit after uploading the DIP to AtoM. In order for AtoM to delete this
+   directory, the AtoM user (`www-data` or `nginx` by default) must have write
+   permissions to this directory in order to delete it. The easiest way is to use
+   the setfacl command.
+
+   Install the `acl` package on Ubuntu or Rocky Linux:
+
+   .. code-block:: bash
+
+      sudo apt-get install acl # Ubuntu
+      sudo yum install acl  # Rocky Linux
+
+   Create a new SWORD deposit directory (Use the `nginx` group on Rocky Linux
+   instead of `www-data`):
+
+   .. code-block:: bash
+
+      sudo mkdir /home/archivematica/atom_sword_deposit
+      sudo chown archivematica:www-data /home/archivematica/atom_sword_deposit
+      sudo chmod 770 /home/archivematica/atom_sword_deposit
+
+   Set the ACL on new directory (Use the `nginx` user on Rocky Linux instead of
+   `www-data`) :
+
+   .. code-block:: bash
+
+      sudo setfacl -d -m u:www-data:rwX /home/archivematica/atom_sword_deposit
+
+      The ACL sets `rw-` permissions for files and `rwx` permissions for
+      directories for the nginx user and then the `www-data` (or `nginx`) user can
+      delete the temporay DIP directory.
+
+
+In Archivematica, make sure that you update the ``--rsync-target`` accordingly.
+These are the parameters that we are passing to the upload-qubit microservice.
+Go to the Administration > Upload DIP page in the dashboard.
+
+Generic parameters:
+
+.. code:: bash
+
+   --url="http://atom-hostname/index.php" \
+   --email="demo@example.com" \
+   --password="demo" \
+   --uuid="%SIPUUID%" \
+   --rsync-target="archivematica@atom-hostname:/tmp" \
+   --debug
+
+.. _admin-dashboard-AS:
+
+ArchivesSpace DIP upload
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Before ingesting digital objects destined for ArchivesSpace, ensure that the
+ArchivesSpace DIP upload settings in the Administration tab of the dashboard
+have been set.
+
+These settings should be created and saved before digital objects destined for
+upload to ArchivesSpace are processed. Note that these can be set once and used
+for processing any number of transfers (i.e. they do not need to be re-set for
+each transfer).
+
+.. image:: images/ASDIPConfig.*
+   :align: right
+   :width: 45%
+   :alt: ArchivesSpace configuration settings
+
+Fields:
+
+* **ArchivesSpace host**: the URL of the host database. Do not include
+  ``https://`` or ``www.``, e.g. ``aspace.test.org``.
+* **ArchivesSpace backend port**: the port of the database, e.g. ``8089``.
+* **ArchivesSpace administrative user**: the username of a user with
+  administrative permissions in ArchivesSpace.
+* **ArchivesSpace administrative user password**: the password for user set
+  above. If you make changes to this configuration, you will need to re-enter
+  the password.
+* **Restrictions Apply**: Selecting *Yes* will apply a blanket access
+  restriction to all content uploaded from Archivematica to ArchivesSpace.
+  Selecting *No* will send all content to ArchivesSpace without restrictions.
+  Should you wish to enable the PREMIS-based restrictions functionality, choose
+  *Base on PREMIS*.
+* **XLink Show**: indicate how the link to the digital object, as it appears in
+  ArchivesSpace, should operate.
+
+  * *Embed*: the digital object screen is embedded in the current window.
+  * *New*: the digital object screen opens in a new window.
+  * *None*: no specific behaviour is passed to the link.
+  * *Other*: no specific behaviour is passed to the link.
+  * *Replace*: the digital object screen opens in the current window.
+
+* **XLink Actuate**: indicates when a digital object should display in
+  ArchivesSpace (e.g. whether the link occurs automatically or must be requested
+  by the user). Used in conjunction with XLink Show attribute.
+
+  * *None*: no specific behaviour is passed to the link.
+  * *onLoad*: link is activated when the document loads (used when Show =
+    Embed).
+  * *Other*: no specific behaviour is passed to the link.
+  * *onRequest*: link is activated when the user selects the link.
+
+* **Object Type**: entering a value from ArchivesSpace's controlled list of
+  object types will apply this value to all objects. This field is optional.
+* **Use statement**: entering a value from ArchivesSpace's controlled list of
+  use statements will apply this value to all objects. This field is optional.
+* **URL prefix**: the URL of DIP object server as you wish it to appear in
+  ArchivesSpace record. Example: ``http://example.com``
+* **Conditions governing access**: entering a value in this field will populate
+  the Conditions governing access note in ArchivesSpace for all objects.
+* **Conditions governing use**: entering a value in this field will populate
+  the Conditions governing use note in ArchivesSpace for all objects.
+* **ArchivesSpace repository number**: the identifier for the ArchivesSpace
+  repository where you are uploading DIPs. Note that the default identifier for
+  a single-repository ArchivesSpace instance is *2*.
+
+.. NOTE::
+   In order to save changes to the ArchivesSpace DIP upload configuration, you
+   must enter the password before clicking save. Note that Archivematica will
+   *not* display an error if the password is not entered.
+
+.. _admin-dashboard-premis:
+
+PREMIS agent
+------------
+
+The PREMIS agent name and code can be set here via the administration interface.
+
+.. image:: images/PREMISAdmin.*
+   :align: center
+   :width: 80%
+   :alt: PREMIS agent settings in Administration tab
+
+The PREMIS agent information is used in the METS files created by Archivematica
+to identify the agency performing the digital preservation events.
+
+.. _admin-dashboard-rest:
+
+Rest API
+--------
+
+In addition to automation using the ``processingMCP.xml`` file, Archivematica
+includes a REST API for automating transfer approval. Using this API, you can
+create a custom script that copies a transfer to the appropriate directory
+then uses the curl command, or some other means, to let Archivematica know
+that the copy is complete.
+
+API keys
+^^^^^^^^
+
+Use of the REST API requires the use of API keys. An API key is associated
+with a specific user. To generate an API key for a user:
+
+* Browse to /administration/accounts/list/
+
+* Click the "Edit" button for the user you'd like to generate an API key for
+
+* Click the "Regenerate API key" checkbox
+
+* Click "Save"
+
+After generating an API key, you can click the "Edit" button for the user and
+you should see the API key.
+
+IP whitelist
+^^^^^^^^^^^^
+
+The API key is always required but in some cases the administrator may want to
+add an additional security measurement. IP whitelisting allows you to create a
+list of trusted IP addresses from which you can access to the API.
+
+The IP whitelist can be edited in the administration interface at
+``/administration/api/``. If the whitelist is empty all requests will be
+allowed.
+
+Approving a transfer
+^^^^^^^^^^^^^^^^^^^^
+
+The REST API can be used to approve a transfer. The transfer must first be
+copied into the appropriate watch directory. To determine the location of the
+appropriate watch directory, first figure out where the shared directory is
+from the watchDirectoryPath value of
+``/etc/archivematica/MCPServer/serverConfig.conf``. Within that directory is a
+subdirectory activeTransfers. In this subdirectory are watch directories for
+the various transfer types.
+
+When using the REST API to approve a transfer, if a transfer type isn't
+specified, the transfer will be deemed a standard transfer.
+
+**HTTP Method**: POST
+
+**URL**: /api/transfer/approve
+
+**Parameters**:
+
+``directory``: directory name of the transfer
+
+``type`` (optional): transfer type [standard|dspace|unzipped bag|zipped bag]
+
+``api_key``: an API key
+
+``username``: the username associated with the API key
+
+Example curl command:
+
+.. code:: bash
+
+   curl --data "username=rick&api_key=f12d6b323872b3cef0b71be64eddd52f87b851a6&type=standard&directory=MyTransfer" http://127.0.0.1/api/transfer/approve
+
+Example result:
+
+.. code:: bash
+
+   {"message": "Approval successful."}
+
+Listing unapproved transfers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The REST API can be used to get a list of unapproved transfers. Each
+transfer's directory name and type is returned.
+
+**Method**: ``GET``
+
+**URL**: ``/api/transfer/unapproved``
+
+**Parameters**:
+
+``api_key``: an API key
+
+``username``: the username associated with the API key
+
+Example curl command:
+
+.. code:: bash
+
+   curl "http://127.0.0.1/api/transfer/unapproved?username=rick&api_key=f12d6b323872b3cef0b71be64eddd52f87b851a6"
+
+Example result:
+
+.. code:: bash
+
+   {
+       "message": "Fetched unapproved transfers successfully.",
+       "results": [{
+               "directory": "MyTransfer",
+              "type": "standard"
+           }
+       ]
+   }
+
+.. _admin-dashboard-users:
+
+Users
+-----
+
+The dashboard provides a simple cookie-based user authentication system using
+the `Django authentication framework`_. Access to the dashboard is limited only
+to logged-in users and a login page will be shown when the user is not
+recognized. If the application can't find any user in the database, the user
+creation page will be shown instead, allowing the creation of an administrator
+account.
+
+Users can be also created, modified and deleted from the Administration tab.
+Only users who are administrators can create and edit user accounts.
+
+You can add a new user to the system by clicking the "Add new" button on the
+user administration page. By adding a user you provide a way to access
+Archivematica using a username/password combination. Should you need to change
+a user's username or password, you can do so by clicking the "Edit" button,
+corresponding to the user, on the administration page. Should you need to
+revoke a user's access, you can click the corresponding "Delete" button.
+
+CLI creation of administrative users
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you need an additional administrator user one can be created via the
+command-line, issue the following commands:
+
+.. code:: bash
+
+   sudo -u archivematica bash -c " \
+       set -a -e -x
+       source /etc/default/archivematica-dashboard || \
+           source /etc/sysconfig/archivematica-dashboard \
+               || (echo 'Environment file not found'; exit 1)
+       cd /usr/share/archivematica/dashboard
+       /usr/share/archivematica/virtualenvs/archivematica/bin/python manage.py createsuperuser
+   ";
+
+CLI password resetting
+^^^^^^^^^^^^^^^^^^^^^^
+
+If you've forgotten the password for your administrator user, or any other
+user, you can change it via the command-line:
+
+.. code:: bash
+
+   sudo -u archivematica bash -c " \
+       set -a -e -x
+       source /etc/default/archivematica-dashboard || \
+           source /etc/sysconfig/archivematica-dashboard \
+               || (echo 'Environment file not found'; exit 1)
+       cd /usr/share/archivematica/dashboard
+       /usr/share/archivematica/virtualenvs/archivematica/bin/python manage.py changepassword <username>
+   ";
+
+CLI configuration pipeline and registration on the Storage Service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+On new installations, the superuser can be configured and the pipeline
+registered on the Storage Service using the command-line instead of the GUI.
+These commands configure the pipeline and register it on the Storage Service
+exactly like the GUI for the initial configuration screen:
+
+.. code:: bash
+
+   sudo -u archivematica bash -c " \
+       set -a -e -x
+       source /etc/default/archivematica-dashboard || \
+           source /etc/sysconfig/archivematica-dashboard \
+               || (echo 'Environment file not found'; exit 1)
+       cd /usr/share/archivematica/dashboard
+       /usr/share/python/archivematica-dashboard/bin/python manage.py install \
+           --username=<username> \
+           --password=<password> \
+           --email=<email-address> \
+           --org-name=<org-name> \
+           --org-id=<org-id> \
+           --api-key=<api-key>\
+           --ss-url=<ss-ulr> \
+           --ss-user=<ss-username> \
+           --ss-api-key=<ss-api-key> \
+           --whitelist=<whitelist>
+   ";
+
+Where:
+
+* ``api-key``: API key that will be added to the username <username>. For
+  example: "test", "4e5f32ab2aefd3577e1b19a2de5d4dd65f90101a".
+
+* ``ss-url``: Archivematica Storage Service URL. For example:
+  http://example.archivematica.org:8000.
+
+* ``ss-user``: The Storage Service username that will be used to register the
+  pipeline. This username must already exist in the Storage Service.
+
+* ``ss-api-key``: The <ss-username> API key. This key must already exist in the
+  Storage Service for the user <ss-username>.
+
+* ``whitelist``: Whitespace-separated list of IP addresses or hostnames allowed
+  to use the API. If the whitelist is left empty, all IP addresses and
+  hostnames will be allowed. For example: "192.168.1.3
+  example.archivematica.org 127.0.0.1" or "".
+
+This command is most suitable to use on automated installations, for example
+when deploying using Ansible. For manual installations, please use the web
+configuration method described in the Post Install Configuration sections:
+
+* :ref:`Ubuntu Post Install Configuration <ubuntu-post-install-config>`.
+* :ref:`Rocky Linux Post Install Configuration <rocky-post-install-config>`.
+
+Security
+^^^^^^^^
+
+Archivematica uses `PBKDF2`_ as the default algorithm to store passwords. This
+should be sufficient for most users: it's quite secure, requiring massive
+amounts of computing time to break. However, other algorithms could be used as
+the following document explains: `How Django stores passwords`_ .
+
+Our plan is to extend this functionality in the future adding groups and
+granular permissions support.
+
+.. _admin-handlenet:
+
+Handle server config
+--------------------
+
+Archivematica can mint persistent identifiers (PIDs) for digital objects,
+directories, or AIPs by defining the PIDs in a configured `Handle.Net`_
+registry. Handle.Net can then create persistent URLs (PURLs) from the PIDs and
+can reroute requests to the persistent URLs to a target URL that is configured
+in Handle.Net.
+
+.. note::
+
+   In order to use the Handle.Net configuration, you will need to provide an
+   available web service. See the `PID webservice being used by IISH`_ for an
+   example of a compatible web service.
+
+.. image:: images/handlenet-config.*
+   :align: right
+   :width: 45%
+   :alt: Handle.Net configuration settings
+
+Fields:
+
+* **Web service endpoint**: The URL for (POST) requests to create and resolve
+  PIDs.
+* **Web service key**: Web service key needed for authentication to make
+  PID-binding requests to the PID web service endpoint.
+* **Naming authority**: Handle naming authority (e.g., 12345)
+* **Resolver URL**: The URL to append generated PIDs to in order to create
+  (potentially qualified) PURLs (persistent URLs) that resolve to the applicable
+  resolve URL. Note the second "r" in "resolver"!
+* **AIP PID source**: The source of the AIP's persistent identifier. The UUID of
+  the AIP is the default since it is virtually guaranteed to be unique. However,
+  the accession number of the transfer may be used, assuming the user can
+  guarantee a 1-to-1 relationship between the transfer and the AIP.
+* **Verify SSL certificates**: Selecting this box will ensure that Archivematica
+  verifies SSL certificates when making requests to bind PIDs.
+* **Archive resolve URL template**: Template (Django or Jinja2) for the URL that
+  a unit's PURL should resolve to. Has access to ``pid`` and
+  ``naming_authority`` variables. Example:
+  ``https://access.myinstitution.org/dip/{{ naming_authority }}/{{ pid }}``
+* **METS resolve URL template**: Template (Django or Jinja2) for the URL that a
+  unit's PURL with the "mets" qualifier should resolve to. Has access to "pid"
+  and "naming_authority" variables. Example:
+  ``https://access.myinstitution.org/mets/{{ naming_authority }}/{{ pid }}``
+* **File resolve URL template**: Template (Django or Jinja2) for the URL
+  that a file's PURL should resolve to. Has access to "pid" and
+  "naming_authority" variables. Example:
+  ``https://access.myinstitution.org/access/{{ naming_authority }}/{{ pid }}``
+* **Access derivative resolve URL template**: Template (Django or Jinja2) for
+  the URL that a file's PURL with the "access" qualifier should resolve to. Has
+  access to "pid" and "naming_authority" variables. Example:
+  ``https://access.myinstitution.org/access/{{ naming_authority }}/{{ pid }}``
+* **Preservation derivative resolve URL template**: Template (Django or Jinja2)
+  for the URL that a file's PURL with the "preservation" qualifier should
+  resolve to. Has access to "pid" and "naming_authority" variables. Example:
+  ``https://access.myinstitution.org/preservation/{{ naming_authority }}/{{ pid }}``
+* **Original file resolve URL template**: Template (Django or Jinja2) for the
+  URL that a file's PURL with the "original" qualifier should resolve to. Has
+  access to "pid" and "naming_authority" variables. Example:
+  ``https://access.myinstitution.org/original/{{ naming_authority }}/{{ pid }}``
+* **PID/handle request request body template**: Template (Django or Jinja2) that
+  constructs the HTTP request body using the rendered URL templates above. Has
+  access to the following variables: "pid", "naming_authority",
+  "base_resolve_url", and "qualified_resolve_urls", the last of which is a list
+  of dicts with "url" and "qualifier" keys. Example::
+
+    <?xml version='1.0' encoding='UTF-8'?>
+    <soapenv:Envelope
+      xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/'
+      xmlns:pid='http://pid.myinstitution.org/'>
+      <soapenv:Body>
+        <pid:UpsertPidRequest>
+          <pid:na>{{ naming_authority }}</pid:na>
+          <pid:handle>
+            <pid:pid>{{ naming_authority }}/{{ pid }}</pid:pid>
+            <pid:locAtt>
+              <pid:location weight='1' href='{{ base_resolve_url }}'/>
+              {% for qrurl in qualified_resolve_urls %}
+                <pid:location
+                  weight='0'
+                  href='{{ qrurl.url }}'
+                  view='{{ qrurl.qualifier }}'/>
+              {% endfor %}
+            </pid:locAtt>
+          </pid:handle>
+        </pid:UpsertPidRequest>
+      </soapenv:Body>
+    </soapenv:Envelope>
+
+
+
+
+.. _admin-language-choice:
+
+Language
+--------
+
+The language menu allows you to choose from select languages.
+
+Archivematica is translated by volunteers through `Transifex`_. The completeness
+of a language is dependent on how many strings have been translated in
+Transifex. For information about contributing translations to the Archivematica
+project, see :ref:`Translations <translations>`.
+
+.. _admin-version:
+
+Version
+-------
+This tab displays the version of Archivematica you're using.
+
+:ref:`Back to the top <dashboard-config>`
+
+.. _AtoM: https://www.accesstomemory.org
+.. _Django authentication framework: https://django.readthedocs.io/en/1.4.X/topics/auth.html
+.. _Handle.Net: https://www.handle.net/index.html
+.. _PBKDF2: https://en.wikipedia.org/wiki/PBKDF2
+.. _How Django stores passwords: https://django.readthedocs.io/en/1.4.X/topics/auth.html#how-django-stores-passwords
+.. _automation tools: https://github.com/artefactual/automation-tools
+.. _Transifex: https://www.transifex.com/artefactual/archivematica/
+.. _PID webservice being used by IISH: https://github.com/IISH/PID-webservice

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>よくあるご質問 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="ユーザーマニュアル" href="../../user-manual/index.html" />
+    <link rel="prev" title="エラーレポート" href="error-reporting.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../../user-manual/index.html" title="ユーザーマニュアル"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="error-reporting.html" title="エラーレポート"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">よくあるご質問</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="faq">
+<span id="id1"></span><h1>よくあるご質問<a class="headerlink" href="#faq" title="Link to this heading">¶</a></h1>
+<ol class="arabic">
+<li><p><strong>Archivematicaのインストール、保守、運用にはどのような技術スキルが必要ですか？</strong></p>
+<p>Archivematicaのインストールと保守を成功させるためには、お客様またはお客様の組織の誰かが、Linuxベースのサーバの使用と保守、サーバへのログイン、コマンドラインによる操作に慣れている必要があります。また、トラブルシューティングを支援するために、Linuxベースのシステムのエラーを読み、理解し、調査できる必要があります。</p>
+<p>Archivematicaの操作は、ウェブベースのダッシュボードで行われるため、アーキビスト/ライブラリアン/キュレーターは、組織内の誰かがテクニカルサポートを提供できる限り、必ずしも上記のようなスキルセットを持つ必要はありません。 <a class="reference external" href="https://en.wikipedia.org/wiki/Open_Archival_Information_System">OAIS</a> の知識があれば、Archivematicaをより直感的に使用できますが、必ずしも必須条件ではありません。</p>
+<p>社内でテクニカル・サポートを提供できない組織は、Artefactual Systemsを通じて <a class="reference external" href="https://www.artefactual.com/services/technical-support/">保守契約</a> を検討できます。</p>
+</li>
+<li><p><strong>Archivematicaのインストールがうまくいきません/Archivematicaのインストールが難しいのはなぜですか？</strong></p>
+<p>Archivematicaは、多くの依存関係を持つ複雑なソフトウェアで、そのすべてがオープンソースです。複雑でオープンソースであるため、インストール用のクリックスルー実行ファイルを作成することは不可能です。</p>
+<p><a class="reference internal" href="../../admin-manual/installation-setup/installation/installation.html#installation"><span class="std std-ref">installation</span></a> インストール中にエラーが発生した場合は、 <a class="reference external" href="https://groups.google.com/forum/#!forum/archivematica">Archivematicaユーザーフォーラム</a> に投稿することをお勧めします。</p>
+</li>
+<li><p><strong>Archivematicaは何をする会社ですか？</strong></p>
+<p>Archivematicaの主な目的は、標準ベースで、自己文書化され、システムに依存しないアーカイブ情報パッケージ（AIP）を作成することです。AIPは、堅牢なPREMIS保存メタデータを実装したMETS XMLファイルを含み、米国議会図書館のBagItフォーマットでパッケージ化され、ファイルマニフェストとAIPコンテンツに関する情報を含みます。AIPの物理的および論理的構造は、METS structMapに記述されています。</p>
+</li>
+<li><p><strong>Archivematicaは、固定性チェックを行いますか？</strong></p>
+<p>Archivematicaは、オブジェクトをシステムに転送する際にチェックサムを生成し、AIPを保存する前にチェックサムを妥当性確認します。また、 <a class="reference internal" href="../../user-manual/transfer/transfer.html#transfer-checksums"><span class="std std-ref">既存のチェックサム</span></a> を含めることも可能です。</p>
+<p>ストレージ内のAIPの固定性をチェックするために、Artefactualは、Storage Service内にFixity <a class="reference external" href="https://wiki.archivematica.org/Storage_Service_API#Check_fixity">APIエンドポイント</a> を作成しました。このエンドポイントはバッグチェックを実行し、チェック結果でStorage Serviceデータベースを更新します。Artefactualはまた、 <a class="reference external" href="https://github.com/artefactual/fixity">Fixity</a> という別のコマンドラインヘルパーアプリケーションを作成しました。このアプリケーションは、このエンドポイントを使用して、AIPストア全体のバッチ固定性チェックを可能にします。</p>
+</li>
+<li><p><strong>Archivematicaは、ストレージシステムですか？</strong></p>
+<p>Archivematicaは、ストレージシステムに依存しないように設計されているため、様々な既存のストレージシステムとの統合が可能です。</p>
+</li>
+<li><p><strong>Archivematica ストレージサービスとは何ですか？なぜ別のアプリケーションがあるのですか？</strong></p>
+<p>Archivematica Storage Serviceは、Archivematicaインストールのストレージと転送元のロケーションを管理します。各機関には、Storage Serviceの管理を担当する管理者を1人か2人置き、その人たちだけにアクセスを制限することをお勧めします。これは、Storage Serviceが独立したアプリケーションとして管理されている理由の1つであり、もう1つの理由は、複数のArchivematicaパイプラインを1つのStorage Serviceで管理できるようにするためです。</p>
+</li>
+<li><p><strong>Archivematicaの容量は？どれくらいの量を処理できますか？</strong></p>
+<p>容量は、ソフトウェアがインストールされているサーバに割り当てられたリソースに大きく依存します。Archivematicaは、100,000ファイルのSIPと数TBのビデオファイルのテストに成功しています。Artefactualはクライアントと協力して、機関ごとに最適なユースケースとワークフローを決定します。</p>
+</li>
+<li><p><strong>アーカイブ情報パッケージ（AIP）のフォーマットと構造は？</strong></p>
+<p><a class="reference external" href="https://www.archivematica.org/en/docs/archivematica-1.9/user-manual/archival-storage/aip-structure/">Archivematica AIP</a> は、主にインジェストされたオブジェクト、処理中に生成された保存マスタ、METS XMLでエンコードされた技術、保存、監査、説明メタデータで構成されます。METSファイルには、Object、Event、Agent、Rightsの各エンティティを含む、堅牢なPREMIS実装が含まれています。説明メタデータの標準として、Dublin Coreがサポートされています。</p>
+</li>
+<li><p><strong>AIPのMETS XMLファイルには、どのような保存メタデータが含まれていますか？</strong></p>
+<p>Archivematicaはデフォルトで、Object、Event、Agent、Rightsの各エンティティを含む、非常に堅牢なPREMISを実装しています。標準イベントには、インジェスト、固定性チェック、メッセージダイジェスト計算、解凍、解凍、ウィルスチェック、フォーマット識別、フォーマット妥当性確認、正規化が含まれます。ソフトウェア・プラットフォーム、組織、ログイン・ユーザーの名前は、各イベントのエージェントとして取り込まれます。ライツステートメントは、csvメタデータとして取り込むことも、処理中にメタデータエントリー・テンプレートを介してユーザーが追加することもできます。</p>
+</li>
+<li><p><strong>Archivematicaでレコードの鑑定や整理はできますか？</strong></p>
+<p>はい！Archivematica 1.6の鑑定ダッシュボードでは、取り込まれたファイルに対してアーカイブの鑑定や整理を行うことができます。寄贈契約書、転送様式、受入記録などの提出文書は、インジェストされたデジタルオブジェクトと一緒に保存のためにSIPに追加でき、AIPの保存メタデータでは提出文書として識別されます。AtoMでは、アクセッションモジュールにより、ユーザーはアクセッション、アクルーダル、デアクセッションを記録し、鑑定と選択に関する情報を記録することができます。</p>
+</li>
+<li><p><strong>Archivematicaには、なぜデジタル素材へのアクセスを提供するモジュールがないのですか？</strong></p>
+<p>一応、そうなっています！これは、 <a class="reference external" href="https://www.accesstomemory.org/en/docs/2.8/#home" title="(in AtoM v2.8)"><span class="xref std std-ref">AtoM</span></a> と呼ばれ、Artefactual Systems社が管理・開発するオープンソースで自由に利用できるソフトウェアアプリケーションです。ArchivematicaとAtoMは、連携して開発されており、ArchivematicaからAtoMにアクセスコピーを送信できます。AtoMはまた、デジタルとアナログのすべての素材のアーカイブ記述を管理するために使用でき、ユーザーは、調査を行うために複数のシステムを参照する必要がありません。</p>
+<p>AtoM とは異なるアクセスシステムの使用を希望される可能性があることを当社は認識しています。そのため、CONTENTdm、Islandora、DSpace、ArchivesSpaceなどのワークフローを開発しました。他の統合も可能です。以下の次の質問を参照してください。</p>
+</li>
+<li><p><strong>Archivematicaにコンテンツを記述できますか？</strong></p>
+<p>メタデータは、CSVファイルとして、または処理中にダッシュボードからインジェストできます。しかし、Archivematicaは、アーカイブの記述システムではありません。詳細なコンテクストやコンテンツの記述は、AtoMのようなアクセスシステムで行うことができます。</p>
+</li>
+<li><p><strong>Archivematicaは、どのようにしてウイルスを防ぐのですか？</strong></p>
+<p>インジェストされたすべてのコンテンツは、Archivematicaにバンドルされている確立されたオープンソースソフトウェアツールであるclamAVを使用して、ウイルスやマルウェアがないか自動的にスキャンされます。ウイルス定義は定期的に更新されます。</p>
+</li>
+<li><p><strong>正規化とは何ですか？また、正規化はどのように機能しますか？</strong></p>
+<p>トランスコード（正規化）は、 <a class="reference internal" href="../../user-manual/preservation/preservation-planning.html#preservation-planning"><span class="std std-ref">保存計画タブ</span></a> に入力された保存コマンドを使用することで自動化されます。トランスコード用のバンドルツールには、ffmpeg、Inkscape、Ghostscript、ImageMagickがあります。保存計画タブには、ユーザーが編集できる何百ものフォーマット固有のコマンドが用意されています。</p>
+</li>
+<li><p><strong>インジェスト中にエラーがあるかどうかを確認するにはどうすればよいですか？</strong></p>
+<p>エラーは、処理中にArchivematicaダッシュボードに表示されます。アラートは、 <a class="reference internal" href="../../admin-manual/installation-setup/customization/customization.html#email-config"><span class="std std-ref">指定されたユーザーに電子メール（</span></a> ）で送信もできます。また、特定の種類のエラーレポートは、ダッシュボードの「管理」タブに保持されます。例えば、転送またはSIPを拒否して再スタートする、エラーを受け入れて処理を続行する、是正措置を取ってマイクロサービスを再実行する、コマンドラインで問題をトラブルシューティングするなどがあります。</p>
+</li>
+<li><p><strong>Archivematicaを別のシステム（アクセス、ストレージなど）と連携して使用する必要があります。2つのシステムを統合する方法は？</strong></p>
+<p>Archivematicaが統合されているシステムやツールのリストは、ほぼすべてのリリースで増えています。Archivematicaと、現在 <a class="reference external" href="https://trello.com/b/aB72IgiX/archivematica-roadmap">ロードマップ</a> に掲載されていないシステムとの統合にご興味がある場合は、以下のアイデアをご参照ください：</p>
+</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://groups.google.com/forum/#!forum/archivematica">Archivematicaユーザーフォーラム</a> に投稿し、Archivematicaと他のシステム間でワークフローを作成した経験があるかどうか、コミュニティメンバーに尋ねてください。</p></li>
+<li><p>ソフトウェア開発のスキルをお持ちの方は、2つのシステムを統合するために必要なコードを書くことを検討してください。実用的であれば、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/e0b169aba822481b4038426a59188b0ea6450361/CONTRIBUTING.md">プルリクエスト</a> を通じて、Archivematicaのコードベースにコードを追加していただければ幸いです。</p></li>
+<li><p>Artefactual Systemsと契約して、 <a class="reference external" href="https://www.artefactual.com/services/software-development/">コードを書いてください。</a> 。当社は、お客様と協力して要件を特定し、コミュニティ全体の利益のために、新しい統合コードを次のソフトウェアリリースに含めます。</p></li>
+</ul>
+</div></blockquote>
+<p><a class="reference internal" href="#faq"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="error-reporting.html"
+                          title="前の章へ">エラーレポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../../user-manual/index.html"
+                          title="次の章へ">ユーザーマニュアル</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/getting-started/troubleshooting/faq.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../../user-manual/index.html" title="ユーザーマニュアル"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="error-reporting.html" title="エラーレポート"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">よくあるご質問</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

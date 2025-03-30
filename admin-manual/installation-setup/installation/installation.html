@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Archivematicaのインストール &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="UbuntuへのArchivematicaの手動インストール" href="install-ubuntu.html" />
+    <link rel="prev" title="管理者マニュアル" href="../../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="install-ubuntu.html" title="UbuntuへのArchivematicaの手動インストール"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../../index.html" title="管理者マニュアル"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematicaのインストール</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="installing-archivematica">
+<span id="installation"></span><h1>Archivematicaのインストール<a class="headerlink" href="#installing-archivematica" title="Link to this heading">¶</a></h1>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview"><span class="std std-ref">概要</span></a></p></li>
+<li><p><a class="reference internal" href="#treq"><span class="std std-ref">技術的要件</span></a></p></li>
+<li><p><a class="reference internal" href="#instructions"><span class="std std-ref">新規設置の手順</span></a></p></li>
+<li><p><a class="reference internal" href="#upgrades"><span class="std std-ref">アップグレードの手順</span></a></p></li>
+<li><p><a class="reference internal" href="#advanced"><span class="std std-ref">高度なインストールオプション</span></a></p></li>
+</ul>
+<section id="overview">
+<span id="id1"></span><h2>概要<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>以下の表は、Archivematicaのインストール方法と使用方法の一覧です。さらにページ下部には、新規インストールや高度なインストールオプションに関する詳細情報が記載されています。</p>
+<p>インストール手順に関してサポートや説明が必要な場合は、 <a class="reference external" href="https://groups.google.com/forum/#!forum/archivematica">Archivematicaユーザーフォーラム</a> をご利用ください。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>生産デプロイのための新規インストール</p></th>
+<th class="head"></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Ubuntu 22.04 64ビットサーバーエディション</p></td>
+<td><p><a class="reference internal" href="install-ansible.html#install-ansible"><span class="std std-ref">Ansible Ubuntu 22.04 (Jammy) を使用した自動インストール</span></a></p></td>
+<td><p>Windowsマシンをホスト環境として使用している場合、これらの手順は機能しません。</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rocky Linux 9 x86-64</p></td>
+<td><p><a class="reference internal" href="install-rocky.html#install-pkg-rocky"><span class="std std-ref">Rocky Linux 9 （Blue Onyx）にArchivematicaをインストール</span></a></p></td>
+<td><p>Archivematicaバージョン1.15.0以降は、Rocky Linux 9へのインストールをサポートしています。</p></td>
+</tr>
+<tr class="row-even"><td><p>Windows OS</p></td>
+<td><p>非対応</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>最新リリースの試運転</p></th>
+<th class="head"></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Archivematicaのサンドボックス</p></td>
+<td><p><a class="reference internal" href="../../../getting-started/quick-start/quick-start.html#using-the-sandbox"><span class="std std-ref">サンドボックスの使用</span></a></p></td>
+<td><p>サンドボックスは、毎日自動的にリセットされます。作成されたパッケージは永久に保存されません。さらに、同時に複数のデモユーザーがログインしている可能性があり、ソフトウェアを使用している間に他のユーザーが行った変更が見える可能性があります。</p></td>
+</tr>
+<tr class="row-odd"><td><p>VagrantとVirtualBoxを使ったローカル仮想マシン</p></td>
+<td><p><a class="reference internal" href="../../../getting-started/quick-start/quick-start.html#installing-on-vm"><span class="std std-ref">Vagrantを使って仮想マシンにインストール</span></a></p></td>
+<td><p>この仮想マシンは、生産環境で使用することを意図していません。</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>開発環境</p></th>
+<th class="head"></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DockerとLinux</p></td>
+<td><p><a class="reference external" href="https://github.com/artefactual/archivematica/blob/qa/1.x/hack/README.md">Archivematica development on Docker Compose</a></p></td>
+<td><p>Dockerは、non-rootユーザーとして使用する方法を説明します。これは、全ての人にとって望ましいことではないかもしません。</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Archivematicaの処理負荷を複数のマシンに分散</p></th>
+<th class="head"></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>カスタマイズされたセットアップとネットワーク構成に基づく</p></td>
+<td><p><a class="reference internal" href="../customization/scaling-archivematica.html#scaling-archivematica"><span class="std std-ref">Archivematicaのスケーリング</span></a></p></td>
+<td><p>Archivematicaを複数のマシンにインストールする場合、Archivematicaの各プロセスが関連するポートで相互にアクセスできるようにする必要があります。ファイアウォールの設定でこれを許可しなければなりません。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="technical-requirements">
+<span id="treq"></span><h2>技術的要件<a class="headerlink" href="#technical-requirements" title="Link to this heading">¶</a></h2>
+<section id="operating-system">
+<h3>オペレーティングシステム<a class="headerlink" href="#operating-system" title="Link to this heading">¶</a></h3>
+<p>Archivematica 1.16.0 ここでは、次のオペレーティングシステムのインストール手順が示されています：</p>
+<ul class="simple">
+<li><p>Ubuntu 22.04 64ビットサーバーエディション</p></li>
+<li><p>Rocky Linux 9 x86-64</p></li>
+</ul>
+<p>他の Linuxディストリビューションも動作するはずですが、これらのインストール手順をカスタマイズする必要があります。</p>
+<p>macOSへの対応は理論的には可能です。ただし、テストされていないため、これらの指示からより大幅に逸脱する必要があります。</p>
+<p>ArchivematicaをWindows環境で直接実行することはまずありません。仮想化プラットフォームを使用してLinux VMを実行することを検討してください。</p>
+</section>
+<section id="dependencies">
+<h3>依存関係<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h3>
+<p>Archivematicaには、依存するソフトウェアの長いリストがあります。以下の指示に従うと、これらの依存関係がすべてインストールされます。</p>
+<p>パフォーマンスを向上させるために、次のような一部のコンポーネントを別のマシンにインストールできることに注意してください：</p>
+<ul class="simple">
+<li><p>MySQL</p></li>
+<li><p>Gearman</p></li>
+<li><p>Elasticsearch（Archivematica 1.7ではオプション。以下を参照してください）</p></li>
+</ul>
+<p>追加のマシンを使用するには、追加の設定が必要です。詳しくは、 <a class="reference internal" href="#advanced"><span class="std std-ref">Advanced</span></a> を参照してください。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematica 1.16 は、PerconaとMariaDBの代替を含むMySQL 8.0でテストされています。</p>
+<p>Archivematicaが実行するツールの中には、Javaのインストールを必要とするものがあります（主にElasticsearchとfits）。Ubuntu 22.04ではOpen JDK 8が使用されていますが、Open JDK 11がデフォルトです。代わりにOracle Java 8を使用することも可能です。</p>
+<p>残りの依存関係は、Archivematica がインストールしたバージョンのままにしておく必要があります。</p>
+</div>
+</section>
+<section id="elasticsearch">
+<span id="install-elasticsearch"></span><h3>Elasticsearch<a class="headerlink" href="#elasticsearch" title="Link to this heading">¶</a></h3>
+<p>Archivematica 1.7では、Elasticsearchのインストールはオプションです。Elasticsearchは、 <a class="reference internal" href="../../../user-manual/backlog/backlog.html#backlog"><span class="std std-ref">Backlog</span></a> 、 <a class="reference internal" href="../../../user-manual/appraisal/appraisal.html#appraisal"><span class="std std-ref">Appraisal</span></a> 、 <a class="reference internal" href="../../../user-manual/archival-storage/archival-storage.html#archival-storage"><span class="std std-ref">Archival Storage</span></a> の検索に使用されるインデックスを生成します。Elasticsearchを使用せずにArchivematicaをインストールすると、コンピューティングリソースの消費量が削減され、運用の複雑さが軽減されます。Elasticsearchを無効にすると、ユーザーインターフェースにBacklog、Appraisal、Archival Storageのタブが表示されなくなり、これらの機能が利用できなくなります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">archivematica_src_search_enabled</span></code> 設定属性を設定することで、管理者は、Elasticsearchがインデックスを作成する件数を定義できます。これにより、複数の異なるダッシュボードページにわたる検索に影響を与えることができます。</p>
+<p><code class="docutils literal notranslate"><span class="pre">archivematica_src_search_enabled</span></code> コンフィギュレーション属性の可能な値：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">transfers</span></code> ：転送のみインデックスされます。検索は、[Backlog]タブと[Appraisal]タブで有効ですが、[Archival Storage]タブでは有効ではありません。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">aips</span></code> ：AIPのみがインデックスされます。検索は、[Archival Storage]タブでは有効ですが、[Backlog]タブや[Appraisal]タブでは有効ではありません。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">aips,transfers</span></code> または <code class="docutils literal notranslate"><span class="pre">true</span></code> ：AIPと転送の両方がインデックス化されています。Backlog、Appraisal、Archival Storageタブで作品を検索します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">false</span></code> ：インデックスレスモード。AIPも転送もインデックスされません。Backlog、Appraisal、Archival Storageタブは機能しません。</p></li>
+</ul>
+<p>Elasticsearchを使用する場合、Archivematica 1.16.0 にはバージョン6.xが必要です（6.8.21でテスト済み）。</p>
+<p>Elasticsearchを無効化する詳細については、ArchivematicaのansibleロールのREADMEを参照してください。</p>
+</section>
+<section id="hardware">
+<h3>ハードウェア<a class="headerlink" href="#hardware" title="Link to this heading">¶</a></h3>
+<p>Archivematicaは、Linuxがサポートするほとんどのハードウェアで動作可能ですが、大規模なコレクションを処理するには、より優れたハードウェアが必要になります。</p>
+<section id="minimum-hardware-requirements">
+<span id="requirements-small"></span><h4>最小ハードウェア要件<a class="headerlink" href="#minimum-hardware-requirements" title="Link to this heading">¶</a></h4>
+<p>小規模なコレクション（100 ファイル以下の転送、合計ファイルサイズ 1GB以下）を使用した小規模な機能テストでは、以下の最小ハードウェア要件を推奨します：</p>
+<ul class="simple">
+<li><p>プロセッサー：2 CPUコア</p></li>
+<li><p>メモリー：2GB以上</p></li>
+<li><p>ディスク容量（処理）：7GB＋処理されるコレクションに必要なディスク容量の2～3倍（例：1GBの転送を処理する場合は3GB）</p></li>
+</ul>
+</section>
+<section id="recommended-minimum-production-requirements">
+<span id="requirements-production"></span><h4>推奨される最低製造要件<a class="headerlink" href="#recommended-minimum-production-requirements" title="Link to this heading">¶</a></h4>
+<p>生産環境での処理におけるハードウェア要件は、処理されるファイルのサイズと数にほぼ完全に異なります。これらの推奨事項は、実用的な生産システムの最低限と考えるべきです：</p>
+<ul class="simple">
+<li><p>プロセッサー：2 CPUコア</p></li>
+<li><p>メモリ：4GB</p></li>
+<li><p>ディスク容量（処理）200GB</p></li>
+</ul>
+<p>より一般的には、以下のようにディプロイします：</p>
+<ul class="simple">
+<li><p>プロセッサー：8 CPUコア</p></li>
+<li><p>メモリー：16GB</p></li>
+</ul>
+<p>処理用ディスクスペースについては、20GBに加え、処理することが予想される最大の転送に必要なディスクスペースの4倍を割り当てることをお勧めします。最大の転送が50GBの場合、少なくとも220GBのディスク容量を割り当てます。</p>
+<p>必要な転送元ディスク容量は主観的なものであり、個々のワークフローにより異なります。</p>
+<p>必要なストレージディスク容量は、保存する素材の量や保存方法（圧縮または非圧縮）によって異なります。</p>
+<p>これらの要件は、特定の種類の素材には適さない場合があります。たとえば、オーディオビジュアル素材は、画像や文書よりも多くの処理能力を必要とします。</p>
+</section>
+</section>
+<section id="browser-compatability">
+<h3>ブラウザの互換性<a class="headerlink" href="#browser-compatability" title="Link to this heading">¶</a></h3>
+<p>Archivematicaは、FirefoxとChromeで最も広範囲にテストされています。Microsoft Edgeでのテストは最小限ですが、成功しています。</p>
+</section>
+</section>
+<section id="instructions-for-new-installations">
+<span id="instructions"></span><h2>新規設置の手順<a class="headerlink" href="#instructions-for-new-installations" title="Link to this heading">¶</a></h2>
+<p>Archivematicaは、Rocky Linux/Red HatまたはUbuntu環境で、パッケージまたはAnsibleスクリプトを使用してインストールできます。現時点では、公式にテストされ、サポートされているインストール環境でのインストール手順が提供されています：</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="install-ansible.html#install-ansible"><span class="std std-ref">Ansible</span></a> を使ってUbuntu 22.04に自動インストールします。</p></li>
+<li><p><a class="reference internal" href="install-rocky.html#install-pkg-rocky"><span class="std std-ref">Rocky Linux 9/Red HatへのOSパッケージの手動インストール</span></a></p></li>
+</ul>
+<p><a class="reference internal" href="install-ubuntu.html#install-pkg-ubuntu"><span class="std std-ref">Ubuntu 22.04</span></a> 、OSパッケージの手動インストールは、文書化されていますが、公式にはサポートされていません。</p>
+<p><a class="reference internal" href="install-advanced.html#development"><span class="std std-ref">Docker</span></a> を使用してArchivematicaをインストールすることは、生産環境でのデプロイメントでは公式にはサポートされていません。しかし、Archivematicaのコードに携わる人にとっては、好ましい開発環境となります。</p>
+<p>インストール環境の詳細については、 <a class="reference external" href="https://github.com/artefactual-labs/ansible-archivematica-src">ansible-archivematica-src</a> repo、 <a class="reference external" href="https://github.com/artefactual/deploy-pub">deploy-pub</a> repo、 <a class="reference external" href="https://groups.google.com/forum/#!forum/archivematica">Archivematica user forum</a> でお尋ねください。</p>
+</section>
+<section id="instructions-for-upgrades">
+<span id="upgrades"></span><h2>アップグレードの手順<a class="headerlink" href="#instructions-for-upgrades" title="Link to this heading">¶</a></h2>
+<p>Archivematicaの旧バージョンからアップグレードする場合は、 <a class="reference internal" href="../upgrading/upgrading.html#upgrade"><span class="std std-ref">アップグレード手順</span></a> を参照してください。</p>
+</section>
+<section id="advanced-installation-options">
+<span id="advanced"></span><h2>高度なインストールオプション<a class="headerlink" href="#advanced-installation-options" title="Link to this heading">¶</a></h2>
+<p>Archivematicaをインストールするには、ユーザーのニーズに応じて様々な方法があります。ここでは、一般的な高度なインストール方法について説明します。</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="install-advanced.html#development"><span class="std std-ref">開発のためのインストール</span></a></p></li>
+<li><p><a class="reference internal" href="install-advanced.html#ssl-support"><span class="std std-ref">SSLでArchivematicaを設定</span></a></p></li>
+<li><p><a class="reference internal" href="../customization/task-config.html#task-output-capturing-admin"><span class="std std-ref">タスクの出力キャプチャを無効にしてArchivematicaを構成</span></a></p></li>
+<li><p><a class="reference internal" href="../customization/scaling-archivematica.html#scaling-archivematica"><span class="std std-ref">Archivematicaのスケーリング</span></a></p></li>
+</ul>
+<p><a class="reference internal" href="#installation"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Archivematicaのインストール</a><ul>
+<li><a class="reference internal" href="#overview">概要</a></li>
+<li><a class="reference internal" href="#technical-requirements">技術的要件</a><ul>
+<li><a class="reference internal" href="#operating-system">オペレーティングシステム</a></li>
+<li><a class="reference internal" href="#dependencies">依存関係</a></li>
+<li><a class="reference internal" href="#elasticsearch">Elasticsearch</a></li>
+<li><a class="reference internal" href="#hardware">ハードウェア</a><ul>
+<li><a class="reference internal" href="#minimum-hardware-requirements">最小ハードウェア要件</a></li>
+<li><a class="reference internal" href="#recommended-minimum-production-requirements">推奨される最低製造要件</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#browser-compatability">ブラウザの互換性</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#instructions-for-new-installations">新規設置の手順</a></li>
+<li><a class="reference internal" href="#instructions-for-upgrades">アップグレードの手順</a></li>
+<li><a class="reference internal" href="#advanced-installation-options">高度なインストールオプション</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../../index.html"
+                          title="前の章へ">管理者マニュアル</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="install-ubuntu.html"
+                          title="次の章へ">UbuntuへのArchivematicaの手動インストール</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/admin-manual/installation-setup/installation/installation.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="install-ubuntu.html" title="UbuntuへのArchivematicaの手動インストール"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../../index.html" title="管理者マニュアル"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematicaのインストール</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

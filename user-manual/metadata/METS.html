@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ArchivematicaのMETS &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="Archivematicaのダブリンコア" href="dublincore.html" />
+    <link rel="prev" title="ダッシュボード管理タブ" href="../administer/dashboard-admin.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="dublincore.html" title="Archivematicaのダブリンコア"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../administer/dashboard-admin.html" title="ダッシュボード管理タブ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ArchivematicaのMETS</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="mets-in-archivematica">
+<span id="mets-schema"></span><h1>ArchivematicaのMETS<a class="headerlink" href="#mets-in-archivematica" title="Link to this heading">¶</a></h1>
+<section id="general-description">
+<h2>概要<a class="headerlink" href="#general-description" title="Link to this heading">¶</a></h2>
+<p>Metadata Encoding &amp; Transmission Standard、 <a class="reference external" href="http://www.loc.gov/standards/mets/">METS</a> は、XMLで表現された様々なメタデータをエンコードするためのスキーマです。Archivematicaで使用されているPREMISやDublin Coreなどのメタデータ標準のラッパーとして機能します。</p>
+<p>Archivematica の METS ファイルは、次のセクションで構成される基本的な汎用構造を持ちます：</p>
+<ul class="simple">
+<li><p>metsHdr（METSヘッダ）（1つのみ）</p></li>
+<li><p>dmdSec（説明メタデータセクション）（1つ以上）</p></li>
+<li><p>amdSec（管理メタデータセクション）（1つ以上）</p></li>
+<li><p>fileSec（ファイルセクション）（1つのみ）</p></li>
+<li><p>structMap（構造マップ）（1つのみ）</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;mets:mets<span class="w"> </span>xmlns:mets<span class="o">=</span><span class="s2">&quot;http://www.loc.gov/METS/&quot;</span><span class="w"> </span>xmlns:xlink<span class="o">=</span><span class="s2">&quot;http://www.w3.org/1999/xlink&quot;</span><span class="w"> </span>xmlns:xsi<span class="o">=</span><span class="s2">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><span class="w"> </span>xsi:schemaLocation<span class="o">=</span><span class="s2">&quot;http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/version1121/mets.xsd&quot;</span>&gt;
+&lt;mets:metsHdr<span class="w"> </span><span class="nv">CREATEDATE</span><span class="o">=</span><span class="s2">&quot;2019-11-14T11:15:34&quot;</span>/&gt;
+&lt;mets:dmdSec<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;dmdSec_1&quot;</span>&gt;...&lt;/mets:dmdSec&gt;
+<span class="w">  </span>&lt;mets:mdWrap<span class="w"> </span><span class="nv">MDTYPE</span><span class="o">=</span><span class="s2">&quot;PREMIS:OBJECT&quot;</span>&gt;...&lt;/mets:mdWrap&gt;
+&lt;/mets:dmdSec&gt;
+&lt;mets:dmdSec<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;dmdSec_2&quot;</span>&gt;...&lt;/mets:dmdSec&gt;
+&lt;mets:amdSec<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;amdSec_1&quot;</span>&gt;
+<span class="w">    </span>&lt;mets:techMD<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;techMD_1&quot;</span>&gt;...&lt;/mets:techMD&gt;
+<span class="w">    </span>&lt;mets:rightsMD<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;rightsMD_1&quot;</span>&gt;...&lt;/mets:rightsMD&gt;
+<span class="w">    </span>&lt;mets:digiprovMD<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;digiprovMD_1&quot;</span>&gt;...&lt;/mets:digiprovMD&gt;
+<span class="w">    </span>&lt;mets:digiprovMD<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;digiprovMD_2&quot;</span>&gt;...&lt;/mets:digiprovMD&gt;
+<span class="w">    </span>&lt;mets:digiprovMD<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;digiprovMD_3&quot;</span>&gt;...&lt;/mets:digiprovMD&gt;
+<span class="w">    </span>&lt;mets:digiprovMD<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;digiprovMD_4&quot;</span>&gt;...&lt;/mets:digiprovMD&gt;
+&lt;/mets:amdSec&gt;
+&lt;mets:amdSec<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;amdSec_2&quot;</span>&gt;...&lt;/mets:amdSec&gt;
+&lt;mets:amdSec<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;amdSec_3&quot;</span>&gt;...&lt;/mets:amdSec&gt;
+&lt;mets:amdSec<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;amdSec_4&quot;</span>&gt;...&lt;/mets:amdSec&gt;
+&lt;mets:amdSec<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;amdSec_5&quot;</span>&gt;...&lt;/mets:amdSec&gt;
+&lt;mets:fileSec&gt;
+<span class="w">    </span>&lt;mets:fileGrp<span class="w"> </span><span class="nv">USE</span><span class="o">=</span><span class="s2">&quot;original&quot;</span>&gt;
+<span class="w">    </span>&lt;mets:fileGrp<span class="w"> </span><span class="nv">USE</span><span class="o">=</span><span class="s2">&quot;submissionDocumentation&quot;</span>&gt;
+<span class="w">    </span>&lt;mets:fileGrp<span class="w"> </span><span class="nv">USE</span><span class="o">=</span><span class="s2">&quot;preservation&quot;</span>&gt;
+<span class="w">    </span>&lt;mets:fileGrp<span class="w"> </span><span class="nv">USE</span><span class="o">=</span><span class="s2">&quot;metadata&quot;</span>&gt;
+&lt;/mets:fileSec&gt;
+&lt;mets:structMap<span class="w"> </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;structMap_1&quot;</span><span class="w"> </span><span class="nv">LABEL</span><span class="o">=</span><span class="s2">&quot;Archivematica default&quot;</span><span class="w"> </span><span class="nv">TYPE</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span>&gt;...&lt;/mets:structMap&gt;
+&lt;/mets:mets&gt;
+</pre></div>
+</div>
+<p>以下は、Archivematica で作成された AIP に存在する上記のセクションのより詳細な概要です。</p>
+<p>次にスキップ：</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#metshdr"><span class="std std-ref">&lt;metsHdr&gt;</span></a></p></li>
+<li><p><a class="reference internal" href="#dmdsec"><span class="std std-ref">&lt;dmdSec&gt;</span></a></p></li>
+<li><p><a class="reference internal" href="#amdsec"><span class="std std-ref">&lt;amdSec&gt;</span></a></p></li>
+<li><p><a class="reference internal" href="#filesec"><span class="std std-ref">&lt;fileSec&gt;</span></a></p></li>
+<li><p><a class="reference internal" href="#structmap"><span class="std std-ref">&lt;structMap&gt;</span></a></p></li>
+</ul>
+<section id="metshdr">
+<span id="id1"></span><h3>&lt;metsHdr&gt;<a class="headerlink" href="#metshdr" title="Link to this heading">¶</a></h3>
+<p>METS ファイルごとに 1 つの METS ヘッダー セクションがあります。これには CREATEDATE 属性が含まれます。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;metsHdr</span><span class="w"> </span><span class="na">CREATEDATE=</span><span class="s">”2019-06-18T23:52:11”/</span><span class="nt">&gt;</span>
+</pre></div>
+</div>
+<p>AIPが再インジェストされた場合、metsHderセクションにはLASTMODDATEも含まれます。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;metsHdr</span><span class="w"> </span><span class="na">CREATEDATE=</span><span class="s">”2019-06-18T23:52:11”</span><span class="w"> </span><span class="na">LASTMODDATE=</span><span class="s">”2019-06-27T00:28:56”/</span><span class="nt">&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="dmdsec">
+<span id="id2"></span><h3>&lt;dmdSec&gt;<a class="headerlink" href="#dmdsec" title="Link to this heading">¶</a></h3>
+<p>AIP全体に対して1つのdmdSecが存在し、そこにはPREMIS Intellectual Entity 情報が含まれます。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:OBJECT&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:object</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:type=</span><span class="s">&quot;premis:intellectualEntity&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:objectIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:objectIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:objectIdentifierType&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:objectIdentifierValue&gt;</span>6a82ffa2-91e2-48e1-b0d0-55b0de21568e<span class="nt">&lt;/premis:objectIdentifierValue&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:objectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:objectIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:objectIdentifierType&gt;</span>ULID<span class="nt">&lt;/premis:objectIdentifierType&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:objectIdentifierValue&gt;</span>01D9T8MJM9NEQ390H239VT50CQ<span class="nt">&lt;/premis:objectIdentifierValue&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:objectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:objectIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:objectIdentifierType&gt;</span>EXID<span class="nt">&lt;/premis:objectIdentifierType&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:objectIdentifierValue&gt;</span>https://example.com/AIP/id/1348554167<span class="nt">&lt;/premis:objectIdentifierValue&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:objectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:originalName&gt;</span>demo-1-6a82ffa2-91e2-48e1-b0d0-55b0de21568e<span class="nt">&lt;/premis:originalName&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:object&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+<p>説明メタデータ用に 1 つ以上の dmdSecs が存在する場合もあります。dmdSec には dmdSec_1、dmdSec_2 などの番号が付けられ、デフォルトで Dublin Core メタデータが含まれています。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">&lt;mets:dmdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;dmdSec_3&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;DC&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">        </span><span class="nt">&lt;dcterms:dublincore</span><span class="w"> </span><span class="na">xmlns:dc=</span><span class="s">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="w"> </span><span class="na">xmlns:dcterms=</span><span class="s">&quot;http://purl.org/dc/terms/&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://purl.org/dc/terms/ https://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:title&gt;</span>Directory<span class="w"> </span>containing<span class="w"> </span>artwork<span class="nt">&lt;/dc:title&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:creator&gt;</span>Milton<span class="w"> </span>Bradley<span class="nt">&lt;/dc:creator&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:subject&gt;</span>Art<span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:subject&gt;</span>Photography<span class="nt">&lt;/dc:subject&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:subject&gt;&lt;/dc:subject&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:subject&gt;&lt;/dc:subject&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:subject&gt;&lt;/dc:subject&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:description&gt;</span>Color<span class="w"> </span>photographs<span class="w"> </span>taken<span class="w"> </span>in<span class="w"> </span>the<span class="w"> </span>last<span class="w"> </span>century.<span class="w"> </span>The<span class="w"> </span>photographs<span class="w"> </span>are<span class="w"> </span>colorful<span class="w"> </span>and<span class="w"> </span>vibrant.<span class="w"> </span><span class="nt">&lt;/dc:description&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:publisher&gt;&lt;/dc:publisher&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:contributor&gt;&lt;/dc:contributor&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:date&gt;&lt;/dc:date&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:type&gt;&lt;/dc:type&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:format&gt;&lt;/dc:format&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:identifier&gt;&lt;/dc:identifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:source&gt;&lt;/dc:source&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:language&gt;&lt;/dc:language&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:language&gt;&lt;/dc:language&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:relation&gt;&lt;/dc:relation&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:coverage&gt;&lt;/dc:coverage&gt;</span>
+<span class="w">          </span><span class="nt">&lt;dc:rights&gt;&lt;/dc:rights&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/dcterms:dublincore&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:dmdSec&gt;</span>
+</pre></div>
+</div>
+<p>Dublin Core メタデータの場合、MDTYPE は、 <strong>DC</strong> になります。別のメタデータ規格が含まれている場合、MDTYPE は、 <strong>その他</strong> になります。</p>
+<p>転送/インジェスト中にユーザーがDCメタデータを入力せず、DCメタデータが転送に 含まれていない場合（例：metadata.csvファイル、 <a class="reference internal" href="../transfer/import-metadata.html#import-metadata"><span class="std std-ref">メタデータのインポート</span></a> を参照）、dmdSecsは追加されません。</p>
+</section>
+<section id="amdsec">
+<span id="id3"></span><h3>&lt;amdSec&gt;<a class="headerlink" href="#amdsec" title="Link to this heading">¶</a></h3>
+<p>オリジナルのオブジェクトと保存オブジェクトごとに 1 つの amdSec があります。amdSec は、PREMIS エンティティを次のようにラップします：</p>
+<ul class="simple">
+<li><p>PREMISオブジェクト：techMD（技術メタデータ）</p></li>
+<li><p>PREMISイベント：digiprovMD（デジタル実証メタデータ）</p></li>
+<li><p>PREMISエージェント：digiprovMD（デジタル実証メタデータ）</p></li>
+<li><p>PREMISライツ：rightsMD（権利タデータ）</p></li>
+</ul>
+<p>各 amdSec には 1 つの techMD が含まれます。techMDは、objectIdentifier、objectCharacteristics、originalName などの PREMIS オブジェクトの意味単位をラップするために使用されます。以下の techMD の例を参照してください：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">&lt;mets:amdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;amdSec_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:techMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;techMD_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:OBJECT&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:object</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:type=</span><span class="s">&quot;premis:file&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:objectIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:objectIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:objectIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:objectIdentifierValue&gt;</span>d8717b3a-d12c-408a-9c37-732425331f44<span class="nt">&lt;/premis:objectIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:objectIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:objectCharacteristics&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:compositionLevel&gt;</span>0<span class="nt">&lt;/premis:compositionLevel&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:fixity&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:messageDigestAlgorithm&gt;</span>sha256<span class="nt">&lt;/premis:messageDigestAlgorithm&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:messageDigest&gt;</span>1cad1038c85dde1d018116c15fd32d2dac34d645b548611eb042f37169fcdee0<span class="nt">&lt;/premis:messageDigest&gt;</span>
+<span class="w">              </span><span class="nt">&lt;/premis:fixity&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:size&gt;</span>47941948<span class="nt">&lt;/premis:size&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:format&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:formatDesignation&gt;</span>
+<span class="w">                  </span><span class="nt">&lt;premis:formatName&gt;</span>Tagged<span class="w"> </span>Image<span class="w"> </span>File<span class="w"> </span>Format<span class="nt">&lt;/premis:formatName&gt;</span>
+<span class="w">                  </span><span class="nt">&lt;premis:formatVersion&gt;&lt;/premis:formatVersion&gt;</span>
+<span class="w">                </span><span class="nt">&lt;/premis:formatDesignation&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:formatRegistry&gt;</span>
+<span class="w">                  </span><span class="nt">&lt;premis:formatRegistryName&gt;&lt;/premis:formatRegistryName&gt;</span>
+<span class="w">                  </span><span class="nt">&lt;premis:formatRegistryKey&gt;&lt;/premis:formatRegistryKey&gt;</span>
+<span class="w">                </span><span class="nt">&lt;/premis:formatRegistry&gt;</span>
+<span class="w">              </span><span class="nt">&lt;/premis:format&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:creatingApplication&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:dateCreatedByApplication&gt;</span>2019-11-14<span class="nt">&lt;/premis:dateCreatedByApplication&gt;</span>
+<span class="w">              </span><span class="nt">&lt;/premis:creatingApplication&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:objectCharacteristics&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:originalName&gt;</span>%SIPDirectory%objects/View_from_lookout_over_Queenstown_towards_the_Remarkables_in_spring-d8717b3a-d12c-408a-9c37-732425331f44.tif<span class="nt">&lt;/premis:originalName&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:relationship&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:relationshipType&gt;</span>derivation<span class="nt">&lt;/premis:relationshipType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:relationshipSubType&gt;</span>has<span class="w"> </span>source<span class="nt">&lt;/premis:relationshipSubType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:relatedObjectIdentifier&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:relatedObjectIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:relatedObjectIdentifierType&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:relatedObjectIdentifierValue&gt;</span>d0c46bbb-63b1-4530-ad1f-f65d9a32e434<span class="nt">&lt;/premis:relatedObjectIdentifierValue&gt;</span>
+<span class="w">              </span><span class="nt">&lt;/premis:relatedObjectIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:relatedEventIdentifier&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:relatedEventIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:relatedEventIdentifierType&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:relatedEventIdentifierValue&gt;</span>d7746761-d98c-4a78-80e0-2e91e4c187d4<span class="nt">&lt;/premis:relatedEventIdentifierValue&gt;</span>
+<span class="w">              </span><span class="nt">&lt;/premis:relatedEventIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:relationship&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:object&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:techMD&gt;</span>
+</pre></div>
+</div>
+<p>各 amdsec には、PREMIS オブジェクトに関連する PREMIS イベント用の複数の digiprovMD が含まれます。以下は、 fixity チェックの PREMIS イベントの例です：</p>
+<blockquote>
+<div><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nt">&lt;mets:digiprovMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;digiprovMD_10&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:EVENT&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:event</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:eventIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:eventIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:eventIdentifierValue&gt;</span>8c6714b3-ab18-44e2-8507-80691ad1dafa<span class="nt">&lt;/premis:eventIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:eventIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventType&gt;</span>fixity<span class="w"> </span>check<span class="nt">&lt;/premis:eventType&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventDateTime&gt;</span>2019-11-14T11:00:50.632264+00:00<span class="nt">&lt;/premis:eventDateTime&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventDetailInformation&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:eventDetail&gt;</span>program=&quot;sha512sum<span class="w"> </span>-c<span class="w"> </span>--strict<span class="w"> </span>/var/archivematica/sharedDirectory/currentlyProcessing/demo-1-581137cd-1d75-44cd-99bb-3edb2ecb8098/metadata/checksum.sha512&quot;;<span class="w"> </span>version=&quot;sha512sum<span class="w"> </span>(GNU<span class="w"> </span>coreutils)<span class="w"> </span>8.28&quot;<span class="nt">&lt;/premis:eventDetail&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:eventDetailInformation&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:eventOutcomeInformation&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:eventOutcome&gt;</span>pass<span class="nt">&lt;/premis:eventOutcome&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:eventOutcomeDetail&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:eventOutcomeDetailNote&gt;&lt;/premis:eventOutcomeDetailNote&gt;</span>
+<span class="w">              </span><span class="nt">&lt;/premis:eventOutcomeDetail&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:eventOutcomeInformation&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:linkingAgentIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierType&gt;</span>preservation<span class="w"> </span>system<span class="nt">&lt;/premis:linkingAgentIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierValue&gt;</span>Archivematica-1.10<span class="nt">&lt;/premis:linkingAgentIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:linkingAgentIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:linkingAgentIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierType&gt;</span>repository<span class="w"> </span>code<span class="nt">&lt;/premis:linkingAgentIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierValue&gt;</span>12345<span class="nt">&lt;/premis:linkingAgentIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:linkingAgentIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:linkingAgentIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierType&gt;</span>Archivematica<span class="w"> </span>user<span class="w"> </span>pk<span class="nt">&lt;/premis:linkingAgentIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingAgentIdentifierValue&gt;</span>1<span class="nt">&lt;/premis:linkingAgentIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:linkingAgentIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:event&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:digiprovMD&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>オリジナルオブジェクトのamdSecは、1つ以上のrightsMDを含むこともあります。rightsMDは、転送とともにアップロードされたrights.csvのような別のファイルのメタデータへの参照を含むことがあります。以下は、AIP METSファイルのrightsMDセクションにあるPREMIS Rightsステートメントの例です：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nt">&lt;mets:rightsMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;rightsMD_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:RIGHTS&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:rightsStatement</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;http://www.loc.gov/premis/v3&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:rightsStatementIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:rightsStatementIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:rightsStatementIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:rightsStatementIdentifierValue&gt;</span>3ee20e47-1cbd-4a2b-881f-39a6ce66ecc2<span class="nt">&lt;/premis:rightsStatementIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:rightsStatementIdentifier&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:rightsBasis&gt;</span>Copyright<span class="nt">&lt;/premis:rightsBasis&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:copyrightInformation&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:copyrightStatus&gt;</span>copyright<span class="w"> </span>status<span class="nt">&lt;/premis:copyrightStatus&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:copyrightJurisdiction&gt;</span>CA<span class="nt">&lt;/premis:copyrightJurisdiction&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:copyrightStatusDeterminationDate&gt;</span>2001-01-01<span class="nt">&lt;/premis:copyrightStatusDeterminationDate&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:copyrightNote&gt;</span>Note<span class="w"> </span>1<span class="nt">&lt;/premis:copyrightNote&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:copyrightApplicableDates&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:startDate&gt;</span>2002-02-02<span class="nt">&lt;/premis:startDate&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:endDate&gt;</span>2003-03-03<span class="nt">&lt;/premis:endDate&gt;</span>
+<span class="w">              </span><span class="nt">&lt;/premis:copyrightApplicableDates&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:copyrightInformation&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:rightsGranted&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:act&gt;</span>Act<span class="w"> </span>1<span class="nt">&lt;/premis:act&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:restriction&gt;</span>Allow<span class="nt">&lt;/premis:restriction&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:termOfGrant&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:startDate&gt;</span>2004-04-04<span class="nt">&lt;/premis:startDate&gt;</span>
+<span class="w">                </span><span class="nt">&lt;premis:endDate&gt;</span>2005-05-05<span class="nt">&lt;/premis:endDate&gt;</span>
+<span class="w">              </span><span class="nt">&lt;/premis:termOfGrant&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:rightsGrantedNote&gt;</span>Grant<span class="w"> </span>note<span class="w"> </span>1<span class="nt">&lt;/premis:rightsGrantedNote&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:rightsGranted&gt;</span>
+<span class="w">            </span><span class="nt">&lt;premis:linkingObjectIdentifier&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingObjectIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:linkingObjectIdentifierType&gt;</span>
+<span class="w">              </span><span class="nt">&lt;premis:linkingObjectIdentifierValue&gt;</span>4d1b15a5-f5ea-43b6-a02a-a9be2eaab383<span class="nt">&lt;/premis:linkingObjectIdentifierValue&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/premis:linkingObjectIdentifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/premis:rightsStatement&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:rightsMD&gt;</span>
+</pre></div>
+</div>
+<p>amdSec には、0 個以上のソース メタデータまたは sourceMD、セクションもあります。これは、amdSec 内の唯一の non-PREMIS セクションであり、コンテンツには XML スキーマは使用されません。SourceMD は、圧縮または解凍されたバッグ転送タイプが使用されるたびに、bag-info.txt の内容から作成されます。ユーザーが [転送] タブでディスクイメージに関するメタデータを入力した場合、ディスクイメージ転送用にも作成されます。</p>
+</section>
+<section id="filesec">
+<span id="id4"></span><h3>&lt;fileSec&gt;<a class="headerlink" href="#filesec" title="Link to this heading">¶</a></h3>
+<p>すべてのファイルをリストする fileSec が 1 つあります。fileSec は、次の 2 つ以上の fileGrps で構成されます：</p>
+<ul class="simple">
+<li><p>オリジナル</p></li>
+<li><p>保存</p></li>
+<li><p>サービス</p></li>
+<li><p>提出書類</p></li>
+<li><p>メタデータ</p></li>
+<li><p>ライセンス</p></li>
+<li><p>テキスト</p></li>
+<li><p>削除</p></li>
+</ul>
+<p>これらは USE アトリビュートと呼ばれ、各 fileGrp に付随しなければなりません。fileGrp <em>original</em> は、すべての METS ファイルに必要です。AIPが保存ファイル用に正規化されたものを含む場合、fileGrp <em>preservation</em> が使用されます。 <em>service</em> fileGrp は、AIP にサブフォルダが含まれる場合（デジタル化ワークフローの出力など）に使用できます。</p>
+<p>各 fileGrp は、異なるバージョンのファイルを関連付けるために使用される GROUPID と、 <a class="reference internal" href="#structmap"><span class="std std-ref">構造マップ</span></a> でファイルを識別するための FILEID として後で使用される ID を持ちます。</p>
+<p>GROUPID には、オリジナルのファイルの UUID (objectIdentifierValue から) が含まれます。ID は、記述されているファイルの (objectIdentifierValue からの) UUID です。これは、オリジナルのファイルが同じ GROUPID と ID を持つことを意味します。ただし、関連ファイル (保存用に正規化されたファイルなど) は、オリジナルのファイルと同じ GROUPID を持ちますが、ID は異なります。</p>
+<p>以下は、AIP METS ファイルのオリジナル fileGrp セクションの例です：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">&lt;mets:fileSec&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:fileGrp</span><span class="w"> </span><span class="na">USE=</span><span class="s">&quot;original&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-d0c46bbb-63b1-4530-ad1f-f65d9a32e434&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-d0c46bbb-63b1-4530-ad1f-f65d9a32e434&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_2&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/View_from_lookout_over_Queenstown_towards_the_Remarkables_in_spring.jpg&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-b255e64f-4478-4010-961f-34cc2ba3ebf9&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-b255e64f-4478-4010-961f-34cc2ba3ebf9&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_4&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/artwork/MARBLES.TGA&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-4d1b15a5-f5ea-43b6-a02a-a9be2eaab383&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-4d1b15a5-f5ea-43b6-a02a-a9be2eaab383&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_6&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/beihai.tif&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-38c544d8-ed55-45e3-9d0f-3de6352bb13d&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-38c544d8-ed55-45e3-9d0f-3de6352bb13d&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_8&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/bird.mp3&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-294a27e3-95de-4036-a092-e65401b8564a&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-294a27e3-95de-4036-a092-e65401b8564a&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_18&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/ocr-image.png&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:file</span><span class="w"> </span><span class="na">GROUPID=</span><span class="s">&quot;Group-4c8ccb7f-ab05-48a4-b8e3-d67056ab27bb&quot;</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;file-4c8ccb7f-ab05-48a4-b8e3-d67056ab27bb&quot;</span><span class="w"> </span><span class="na">ADMID=</span><span class="s">&quot;amdSec_19&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:FLocat</span><span class="w"> </span><span class="na">xlink:href=</span><span class="s">&quot;objects/piiTestDataCreditCardNumbers.txt&quot;</span><span class="w"> </span><span class="na">LOCTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERLOCTYPE=</span><span class="s">&quot;SYSTEM&quot;</span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:file&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:fileGrp&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="structmap">
+<span id="id5"></span><h3>&lt;structMap&gt;<a class="headerlink" href="#structmap" title="Link to this heading">¶</a></h3>
+<p>METS には少なくとも 1 つの物理構造マップ、または structMap が存在します。これには、&quot;Archivematica Default&quot; というラベルが付けられており、ディスク上に配列されたオブジェクトディレクトリ内のディレクトリとファイルがリストアップされます。</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">&lt;mets:structMap</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;structMap_1&quot;</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;Archivematica default&quot;</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;physical&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;demo-1-6a82ffa2-91e2-48e1-b0d0-55b0de21568e&quot;</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;Directory&quot;</span><span class="w"> </span><span class="na">DMDID=</span><span class="s">&quot;dmdSec_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;objects&quot;</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;Directory&quot;</span><span class="w"> </span><span class="na">DMDID=</span><span class="s">&quot;dmdSec_8&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;View_from_lookout_over_Queenstown_towards_the_Remarkables_in_spring-d8717b3a-d12c-408a-9c37-732425331f44.tif&quot;</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;Item&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-d8717b3a-d12c-408a-9c37-732425331f44&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;View_from_lookout_over_Queenstown_towards_the_Remarkables_in_spring.jpg&quot;</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;Item&quot;</span><span class="w"> </span><span class="na">DMDID=</span><span class="s">&quot;dmdSec_2&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-d0c46bbb-63b1-4530-ad1f-f65d9a32e434&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">        </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;artwork&quot;</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;Directory&quot;</span><span class="w"> </span><span class="na">DMDID=</span><span class="s">&quot;dmdSec_3&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;MARBLES-7733ab3a-656e-4a8d-986c-1fc5ab890d7e.tif&quot;</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;Item&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-7733ab3a-656e-4a8d-986c-1fc5ab890d7e&quot;</span><span class="nt">/&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">          </span><span class="nt">&lt;mets:div</span><span class="w"> </span><span class="na">LABEL=</span><span class="s">&quot;MARBLES.TGA&quot;</span><span class="w"> </span><span class="na">TYPE=</span><span class="s">&quot;Item&quot;</span><span class="w"> </span><span class="na">DMDID=</span><span class="s">&quot;dmdSec_4&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;mets:fptr</span><span class="w"> </span><span class="na">FILEID=</span><span class="s">&quot;file-b255e64f-4478-4010-961f-34cc2ba3ebf9&quot;</span><span class="nt">/&gt;</span>
+<span class="w">          </span><span class="nt">&lt;/mets:div&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/mets:div&gt;</span>
+</pre></div>
+</div>
+<p>ジョブ <em>文書空のディレクトリ</em> マイクロサービスの実行を選択した場合、2 番目の structMap が作成されます。このstructMapには、&quot;Normative Directory Structureというラベルが付けられます。&quot; AIPの再インジェストでは、この新しい「論理」structMapが解析されて、空のディレクトリが再作成されます。</p>
+<p>A logical structmap describes a relationship between objects in an Archivematica
+AIP that might not be true to their 'physical' layout on disk, as is here where
+empty directories have previously been removed but are still recorded so as to
+be recreated in the future.</p>
+<p>ユーザーが転送に <a class="reference internal" href="../transfer/import-metadata.html#structmap-xml"><span class="std std-ref">カスタム structMap</span></a> を含めた場合、これも METS ファイルに含まれます。</p>
+<p><a class="reference internal" href="#mets-schema"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">ArchivematicaのMETS</a><ul>
+<li><a class="reference internal" href="#general-description">概要</a><ul>
+<li><a class="reference internal" href="#metshdr">&lt;metsHdr&gt;</a></li>
+<li><a class="reference internal" href="#dmdsec">&lt;dmdSec&gt;</a></li>
+<li><a class="reference internal" href="#amdsec">&lt;amdSec&gt;</a></li>
+<li><a class="reference internal" href="#filesec">&lt;fileSec&gt;</a></li>
+<li><a class="reference internal" href="#structmap">&lt;structMap&gt;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../administer/dashboard-admin.html"
+                          title="前の章へ">ダッシュボード管理タブ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="dublincore.html"
+                          title="次の章へ">Archivematicaのダブリンコア</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/metadata/METS.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="dublincore.html" title="Archivematicaのダブリンコア"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../administer/dashboard-admin.html" title="ダッシュボード管理タブ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ArchivematicaのMETS</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

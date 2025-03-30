@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>UbuntuへのArchivematicaの手動インストール &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="Rocky Linux 9にArchivematicaをインストールする" href="install-rocky.html" />
+    <link rel="prev" title="Archivematicaのインストール" href="installation.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="install-rocky.html" title="Rocky Linux 9にArchivematicaをインストールする"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Archivematicaのインストール"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" accesskey="U">管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">UbuntuへのArchivematicaの手動インストール</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="manually-installing-archivematica-on-ubuntu">
+<span id="install-pkg-ubuntu"></span><h1>UbuntuへのArchivematicaの手動インストール<a class="headerlink" href="#manually-installing-archivematica-on-ubuntu" title="Link to this heading">¶</a></h1>
+<p>Archivematicaのパッケージは、packages.archivematica.orgでホストされており、複数のオペレーティングシステム用のパッケージを格納する中心的な場所となっています。パッケージは、Ubuntu 22.04で利用可能です。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Ubuntuのパッケージを使用した手動インストールは、公式にはサポートされていません。 <a class="reference internal" href="installation.html#instructions"><span class="std std-ref">新規インストールの手順</span></a> を参照してください。</p>
+</div>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ubuntu-instructions"><span class="std std-ref">Ubuntu 22.04（Jammy）のインストール手順</span></a></p></li>
+<li><p><a class="reference internal" href="#ubuntu-post-install-config"><span class="std std-ref">インストール後の設定</span></a></p></li>
+</ul>
+<section id="ubuntu-22-04-jammy-installation-instructions">
+<span id="ubuntu-instructions"></span><h2>Ubuntu 22.04（Jammy）のインストール手順<a class="headerlink" href="#ubuntu-22-04-jammy-installation-instructions" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>以下のコマンドを使ってリポジトリをインストールします：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://packages.archivematica.org/1.16.x/key.asc<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/etc/apt/keyrings/archivematica-1.16.x.gpg
+
+sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;deb [arch=amd64 signed-by=/etc/apt/keyrings/archivematica-1.16.x.gpg] http://packages.archivematica.org/1.16.x/ubuntu jammy main&quot; &gt; /etc/apt/sources.list.d/archivematica.list&#39;</span>
+sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;deb [arch=amd64 signed-by=/etc/apt/keyrings/archivematica-1.16.x.gpg] http://packages.archivematica.org/1.16.x/ubuntu-externals jammy main&quot; &gt; /etc/apt/sources.list.d/archivematica-externals.list&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Elasticsearchのパッケージソースを追加します（オプション）。Elasticsearchは、独自のパッケージリポジトリから提供されています。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><a class="reference internal" href="installation.html#install-elasticsearch"><span class="std std-ref">Elasticsearchを使用せずにArchivematicaを実行</span></a> する場合は、この手順をスキップしてください。</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://artifacts.elastic.co/GPG-KEY-elasticsearch<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/etc/apt/keyrings/elasticsearch-6.x.gpg
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [signed-by=/etc/apt/keyrings/elasticsearch-6.x.gpg] https://artifacts.elastic.co/packages/6.x/apt stable main&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/apt/sources.list.d/elastic-6.x.list
+</pre></div>
+</div>
+</li>
+<li><p>最新のOSリリースにアップデートします。このステップでは、システムに追加したパッケージ・リポジトリからソフトウェアのリストも取得します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>upgrade
+</pre></div>
+</div>
+</li>
+<li><p>必要なパッケージをインストール</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>openjdk-8-jre-headless<span class="w"> </span>mysql-server
+</pre></div>
+</div>
+</li>
+<li><p>Elasticsearchのインストール（オプション）</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematicaをインデックスレスモード（Elasticsearchなし）で実行する場合は、この手順をスキップしてください。</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>elasticsearch
+</pre></div>
+</div>
+</li>
+<li><p>Now that MySQL is up and running, install the Storage Service. You will be
+prompted to create a password for its database. If necessary, the password
+can be changed after the installation is complete.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>archivematica-storage-service
+</pre></div>
+</div>
+</li>
+<li><p>Storage Serviceを設定します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>/etc/nginx/sites-enabled/default
+sudo<span class="w"> </span>ln<span class="w"> </span>-sf<span class="w"> </span>/etc/nginx/sites-available/storage<span class="w"> </span>/etc/nginx/sites-enabled/storage
+</pre></div>
+</div>
+</li>
+<li><p>Archivematicaパッケージをインストールします。インストールの順序は重要で、archivematica-mcp-serverパッケージをdashboardパッケージの前にインストールする必要があります。archivematica-mcp-clientパッケージを別のマシンにインストールすることも可能ですが、この手順では、その構成は説明しません。</p>
+<p>archivematica-mcp-serverパッケージは、MySQLをインストールし、Archivematicaが使用するデータベースを設定します。インストールされるMySQLのバージョンによって、表示されるインターフェイスが若干異なる場合があります。</p>
+<p>You will be prompted to create a password for the database. If necessary,
+the password can be changed after the installation is complete.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>archivematica-mcp-server
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>archivematica-dashboard
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>archivematica-mcp-client
+</pre></div>
+</div>
+</li>
+<li><p>Archivematicaコンポーネントを設定します（オプション）。Archivematicaが認識する多くの環境変数があり、これを使用して設定方法を変更できます。全リストは、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/dashboard/install/README.md">Dashboard install README</a> 、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/MCPClient/install/README.md">MCPClient install README</a> 、 <a class="reference external" href="https://github.com/artefactual/archivematica/blob/stable/1.16.x/src/MCPServer/install/README.md">MCPServer install README</a> を参照してください。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematicaをインデックスレスモード（Elasticsearchなし）で実行する場合は、関連する環境変数を <code class="docutils literal notranslate"><span class="pre">false</span></code> に設定する行を追加して、関連するsystemd EnvironmentFileファイルを変更してください：</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_DASHBOARD_DASHBOARD_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/default/archivematica-dashboard&#39;</span>
+sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_MCPSERVER_MCPSERVER_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/default/archivematica-mcp-server&#39;</span>
+sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_SEARCH_ENABLED=false&quot; &gt;&gt; /etc/default/archivematica-mcp-client&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>ダッシュボードを設定します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>ln<span class="w"> </span>-sf<span class="w"> </span>/etc/nginx/sites-available/dashboard.conf<span class="w"> </span>/etc/nginx/sites-enabled/dashboard.conf
+</pre></div>
+</div>
+</li>
+<li><p>Elasticsearchを起動します（オプション）。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>Archivematicaをインデックスレスモード（Elasticsearchなし）で実行する場合は、この手順をスキップしてください。</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+sudo<span class="w"> </span>service<span class="w"> </span>elasticsearch<span class="w"> </span>restart
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>elasticsearch
+</pre></div>
+</div>
+</li>
+<li><p>残りのサービスを開始</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>service<span class="w"> </span>clamav-freshclam<span class="w"> </span>restart
+sleep<span class="w"> </span>120s
+sudo<span class="w"> </span>service<span class="w"> </span>clamav-daemon<span class="w"> </span>start
+sudo<span class="w"> </span>service<span class="w"> </span>gearman-job-server<span class="w"> </span>restart
+sudo<span class="w"> </span>service<span class="w"> </span>archivematica-mcp-server<span class="w"> </span>start
+sudo<span class="w"> </span>service<span class="w"> </span>archivematica-mcp-client<span class="w"> </span>restart
+sudo<span class="w"> </span>service<span class="w"> </span>archivematica-storage-service<span class="w"> </span>start
+sudo<span class="w"> </span>service<span class="w"> </span>archivematica-dashboard<span class="w"> </span>restart
+sudo<span class="w"> </span>service<span class="w"> </span>nginx<span class="w"> </span>restart
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>fits-nailgun
+sudo<span class="w"> </span>service<span class="w"> </span>fits-nailgun<span class="w"> </span>start
+</pre></div>
+</div>
+<p>gearmanやclamavコマンドに問題がある場合は、再起動してみてください：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>service<span class="w"> </span>gearman-job-server<span class="w"> </span>restart
+sudo<span class="w"> </span>service<span class="w"> </span>clamav-daemon<span class="w"> </span>restart
+</pre></div>
+</div>
+</li>
+<li><p>ファイアウォールの設定（該当する場合）</p>
+<p>Ubuntuでは、デフォルトのファイアウォール設定ツールはufw（Uncomplicated Firewall）です。ファイアウォールの状態を見るには、次のように入力します：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>ufw<span class="w"> </span>status
+</pre></div>
+</div>
+<p>ufwがアクティブな場合は、ダッシュボードとStorage Serviceが使用するポート、つまり80と8000をブロックしていないことを確認する必要があります。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">80</span>/tcp
+sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">8000</span>/tcp
+sudo<span class="w"> </span>ufw<span class="w"> </span>reload
+</pre></div>
+</div>
+</li>
+<li><p><a class="reference internal" href="#ubuntu-post-install-config"><span class="std std-ref">インストール後の設定</span></a> を完了します。</p></li>
+</ol>
+</section>
+<section id="post-install-configuration">
+<span id="ubuntu-post-install-config"></span><h2>インストール後の設定<a class="headerlink" href="#post-install-configuration" title="Link to this heading">¶</a></h2>
+<p>新規インストールが正常に完了したら、以下の手順に従って新しいサーバーの設定を完了します。</p>
+<ol class="arabic">
+<li><p>Storage Serviceは、Archivematicaダッシュボードとは別のウェブアプリケーションとして実行されます。Ubuntuパッケージをインストールした場合、Storage Serviceはデフォルトではポート8000で公開されます。ウェブブラウザを使用して、インストールしたマシンのIPアドレス（例： <code class="docutils literal notranslate"><span class="pre">http://&lt;MY-IP-ADDR&gt;:8000</span></code> （ローカル開発セットアップの場合は、 <code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code> または <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8000</span></code> ）からStorage Serviceに移動します。</p>
+<p>localhostの代わりにIPアドレスまたは完全修飾ドメイン名を使用している場合は、ファイアウォールのルールを設定し、Archivematicaを使用するポート80と8000のみにアクセスを許可する必要があります。</p>
+</li>
+<li><p>Storage Serviceには独自のユーザーセットがあります。少なくとも1人の管理ユーザーを追加します:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">archivematica</span> <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot; </span><span class="se">\</span>
+<span class="s2">    set -a -e -x</span>
+    <span class="n">source</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">default</span><span class="o">/</span><span class="n">archivematica</span><span class="o">-</span><span class="n">storage</span><span class="o">-</span><span class="n">service</span> <span class="o">||</span> \
+        <span class="n">source</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">archivematica</span><span class="o">-</span><span class="n">storage</span><span class="o">-</span><span class="n">service</span> \
+            <span class="o">||</span> <span class="p">(</span><span class="n">echo</span> <span class="s1">&#39;Environment file not found&#39;</span><span class="p">;</span> <span class="n">exit</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">archivematica</span><span class="o">/</span><span class="n">storage</span><span class="o">-</span><span class="n">service</span>
+    <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">archivematica</span><span class="o">/</span><span class="n">virtualenvs</span><span class="o">/</span><span class="n">archivematica</span><span class="o">-</span><span class="n">storage</span><span class="o">-</span><span class="n">service</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
+    <span class="s2">&quot;;</span>
+</pre></div>
+</div>
+<p>このユーザーを作成すると、ArchivematicaパイプラインをStorage Service APIに接続するためのAPIキーが生成されます。editをクリックすると、新しいユーザーの詳細が表示されます。APIキーはページの一番下にあります。後でインストール後の設定で使用するので、これをクリップボードにコピーします。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>テストユーザーを変更し、デフォルトのパスワードを変更することを推奨します。これにより、テストユーザー用の新しいAPIキーも生成されますが、この場合は、クリップボードにコピーする必要はありません。</p>
+</div>
+</li>
+<li><p>インストールを完了するには、Webブラウザを使用してArchivematicaのダッシュボードに移動し、インストールを行ったマシンのIPアドレス（例： <code class="docutils literal notranslate"><span class="pre">http://&lt;MY-IP-ADDR&gt;:80</span></code> （ローカルで開発セットアップを行う場合は、 <code class="docutils literal notranslate"><span class="pre">http://localhost:80</span></code> または <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:80</span></code> ））を使用します。</p></li>
+<li><p>「ようこそ」ページで、組織名、組織識別子、ユーザー名、メールアドレス、パスワードを入力し、Archivematicaパイプラインの管理ユーザーを作成します。</p></li>
+<li><p>次の画面で、Storage ServiceのURLとユーザー名を入力し、ステップ（2）でコピーしたAPIキーを貼り付けて、パイプラインをStorage Serviceに接続します。</p>
+<ul class="simple">
+<li><p>Storage ServiceとArchivematicaダッシュボードが同じマシンにインストールされている場合は、この画面でStorage ServiceのURLとして <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8000</span></code> を与える必要があります。</p></li>
+<li><p>ストレージサービスと Archivematica ダッシュボードが異なるノード（サーバ）にインストールされている場合は、ストレージサービスインスタンスの IP アドレスまたは完全修飾ドメイン名（例： <code class="docutils literal notranslate"><span class="pre">http://&lt;MY-IP-ADDR&gt;:8000</span></code> * ）を使用する必要があります。ファイアウォールのルール（例：iptables、ufw、AWS セキュリティグループ）が、ダッシュボードの IP から適切なポートの ストレージサービスIP へのリクエストを許可するように設定されていることを確認しなければなりません。</p></li>
+</ul>
+</li>
+</ol>
+<p><a class="reference internal" href="#install-pkg-ubuntu"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">UbuntuへのArchivematicaの手動インストール</a><ul>
+<li><a class="reference internal" href="#ubuntu-22-04-jammy-installation-instructions">Ubuntu 22.04（Jammy）のインストール手順</a></li>
+<li><a class="reference internal" href="#post-install-configuration">インストール後の設定</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="installation.html"
+                          title="前の章へ">Archivematicaのインストール</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="install-rocky.html"
+                          title="次の章へ">Rocky Linux 9にArchivematicaをインストールする</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/admin-manual/installation-setup/installation/install-ubuntu.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="install-rocky.html" title="Rocky Linux 9にArchivematicaをインストールする"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Archivematicaのインストール"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" >管理者マニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">UbuntuへのArchivematicaの手動インストール</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

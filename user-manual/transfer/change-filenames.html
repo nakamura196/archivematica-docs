@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ファイル名の変更 &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="Dataverseの統合" href="dataverse.html" />
+    <link rel="prev" title="ウイルスのスキャン" href="scan-for-viruses.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="dataverse.html" title="Dataverseの統合"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="scan-for-viruses.html" title="ウイルスのスキャン"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ファイル名の変更</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="filename-changes">
+<span id="change-filenames"></span><h1>ファイル名の変更<a class="headerlink" href="#filename-changes" title="Link to this heading">¶</a></h1>
+<p>ファイル名の変更マイクロサービスは、処理中に転送タブとインジェストタブの2回実行されます。このマイクロサービスの目的は、Archivematica のツールやプロセスがオブジェクト名やディレクトリ名に含まれる文字のために失敗しないようにすることです。</p>
+<p>Archivematica は、 <a class="reference internal" href="../preservation/preservation-planning.html#preservation-planning-tools"><span class="std std-ref">保存計画ツール</span></a> などのさまざまなツールをグループ化し、保存ワークフローを作成します。Archivematica が使用するツールの中には、ツールがファイル名またはディレクトリ名として有効な文字とみなす範囲が狭く定義されているものがあります。ツールが無効とみなす文字が見つかると、ツールが失敗し、処理が停止し、Archivematica が正常に動作しなくなる可能性があります。</p>
+<p>このようなエラーが発生しないように、Archivematica は、より制限の厳しいツールの要件に適合するようにファイル名やディレクトリ名を変更するスクリプトを実装しています。有効な文字は次のように定義されます：</p>
+<p><code class="docutils literal notranslate"><span class="pre">-_.()abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</span></code></p>
+<p>スクリプトは、上記のリストに含まれていない文字を、最も同等の文字に置き換えようとします。たとえば、 <code class="docutils literal notranslate"><span class="pre">Č</span></code> という文字は、 <code class="docutils literal notranslate"><span class="pre">C</span></code> に置き換えられます。スクリプトが同等の文字を見つけられない場合、その文字はアンダースコアに置き換えられます。この変更はMETSファイルに記録されます。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>オリジナル名</p></th>
+<th class="head"><p>編集名</p></th>
+<th class="head"><p>METS出力</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>i &amp; tem</p></td>
+<td><p>i___tem</p></td>
+<td><p>Original name=&quot;%transferDirectory%objects/i &amp;amp; tem.png&quot;; new name=&quot;%transferDirectory%objects/i___tem.png&quot;</p></td>
+</tr>
+<tr class="row-odd"><td><p>Česká republika.png</p></td>
+<td><p>Ceska_republika.png</p></td>
+<td><p>Original name=&quot;%transferDirectory%objects/Česká republika.png&quot;; new name=&quot;%transferDirectory%objects/Ceska_republika.png&quot;</p></td>
+</tr>
+<tr class="row-even"><td><p>Éireann</p></td>
+<td><p>Eireann</p></td>
+<td><p>Original name=&quot;%transferDirectory%objects/Éireann.png&quot;; new name=&quot;%transferDirectory%objects/Eireann.png&quot;</p></td>
+</tr>
+<tr class="row-odd"><td><p>España</p></td>
+<td><p>エスパーニャ</p></td>
+<td><p>Original name=&quot;%transferDirectory%objects/España.png&quot;; new name=&quot;%transferDirectory%objects/Espana.png&quot;</p></td>
+</tr>
+<tr class="row-even"><td><p>Росси́я</p></td>
+<td><p>ロシア</p></td>
+<td><p>Original name=&quot;%transferDirectory%objects/Росси́я.png&quot;; new name=&quot;%transferDirectory%objects/Rossiia.png&quot;</p></td>
+</tr>
+</tbody>
+</table>
+<p>その他の情報は、PREMISのイベント全文を参照してください：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;PREMIS:EVENT&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">    </span><span class="nt">&lt;premis:event</span><span class="w"> </span><span class="na">xmlns:premis=</span><span class="s">&quot;info:lc/xmlns/premis-v2&quot;</span><span class="w"> </span><span class="na">xsi:schemaLocation=</span><span class="s">&quot;info:lc/xmlns/premis-v2 http://www.loc.gov/standards/premis/v2/premis-v2-2.xsd&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;2.2&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventIdentifierType&gt;</span>UUID<span class="nt">&lt;/premis:eventIdentifierType&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventIdentifierValue&gt;</span>ef7ef8b8-c363-4dfe-9b67-4100d1bfa7f2<span class="nt">&lt;/premis:eventIdentifierValue&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:eventIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventType&gt;</span>filename<span class="w"> </span>change<span class="nt">&lt;/premis:eventType&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventDateTime&gt;</span>2019-01-17T22:07:17+00:00<span class="nt">&lt;/premis:eventDateTime&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventDetail&gt;</span>prohibited<span class="w"> </span>characters<span class="w"> </span>removed:program=&quot;change_names&quot;;<span class="w"> </span>version=&quot;1.10.d0ccb7d7661cf35c769dcc0846d8f087998af713&quot;<span class="nt">&lt;/premis:eventDetail&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:eventOutcomeInformation&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventOutcome&gt;&lt;/premis:eventOutcome&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:eventOutcomeDetail&gt;</span>
+<span class="w">          </span><span class="nt">&lt;premis:eventOutcomeDetailNote&gt;</span>Original<span class="w"> </span>name=&quot;%transferDirectory%objects/Росси́я.png&quot;;<span class="w"> </span>new<span class="w"> </span>name=&quot;%transferDirectory%objects/Rossiia.png&quot;<span class="nt">&lt;/premis:eventOutcomeDetailNote&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/premis:eventOutcomeDetail&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:eventOutcomeInformation&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:linkingAgentIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:linkingAgentIdentifierType&gt;</span>preservation<span class="w"> </span>system<span class="nt">&lt;/premis:linkingAgentIdentifierType&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:linkingAgentIdentifierValue&gt;</span>Archivematica-1.7<span class="nt">&lt;/premis:linkingAgentIdentifierValue&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:linkingAgentIdentifier&gt;</span>
+<span class="w">      </span><span class="nt">&lt;premis:linkingAgentIdentifier&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:linkingAgentIdentifierType&gt;</span>repository<span class="w"> </span>code<span class="nt">&lt;/premis:linkingAgentIdentifierType&gt;</span>
+<span class="w">        </span><span class="nt">&lt;premis:linkingAgentIdentifierValue&gt;&lt;/premis:linkingAgentIdentifierValue&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/premis:linkingAgentIdentifier&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/premis:event&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="nt">&lt;/mets:mdWrap&gt;</span>
+</pre></div>
+</div>
+<p>Archivematica にバンドルされているツール内の文字制限に対処するためのこの戦略により、ファイル名とディレクトリ名が大幅に変更される可能性があります。変更記録に簡単にアクセスできるようにするために、Archivematica AIP には、オリジナルの名前と変更後の名前を示すログ ファイルが含まれています。次の 2 つのログ ファイルがあります：</p>
+<ul class="simple">
+<li><p>The log file for name changes that happen during Transfer is located in the
+AIP at <code class="docutils literal notranslate"><span class="pre">data/logs/transfers/my-transfer-name/logs/filenameChanges.log</span></code></p></li>
+<li><p>The log file for name changes that happen during Ingest is located in the AIP
+at <code class="docutils literal notranslate"><span class="pre">data/logs/filenameChanges.log</span></code></p></li>
+</ul>
+<p>これらのログには、PREMIS イベント内に埋め込まれた情報の平文レンダリングが含まれています。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Changed</span> <span class="n">name</span><span class="p">:</span> <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">Росси́я</span><span class="o">.</span><span class="n">png</span>  <span class="o">-&gt;</span>  <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">Rossiia</span><span class="o">.</span><span class="n">png</span>
+<span class="n">Changed</span> <span class="n">name</span><span class="p">:</span> <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">Éireann</span><span class="o">.</span><span class="n">png</span>  <span class="o">-&gt;</span>  <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">Eireann</span><span class="o">.</span><span class="n">png</span>
+<span class="n">Changed</span> <span class="n">name</span><span class="p">:</span> <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">f</span> <span class="o">&amp;</span> <span class="n">ile</span><span class="o">.</span><span class="n">png</span>  <span class="o">-&gt;</span>  <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">f___ile</span><span class="o">.</span><span class="n">png</span>
+<span class="n">Changed</span> <span class="n">name</span><span class="p">:</span> <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">Česká</span> <span class="n">republika</span><span class="o">.</span><span class="n">ong</span>  <span class="o">-&gt;</span>  <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">Ceska_republika</span><span class="o">.</span><span class="n">ong</span>
+<span class="n">Changed</span> <span class="n">name</span><span class="p">:</span> <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">Ísland</span><span class="o">.</span><span class="n">png</span>  <span class="o">-&gt;</span>  <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">Island</span><span class="o">.</span><span class="n">png</span>
+<span class="n">Changed</span> <span class="n">name</span><span class="p">:</span> <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">España</span><span class="o">.</span><span class="n">png</span>  <span class="o">-&gt;</span>  <span class="o">%</span><span class="n">transferDirectory</span><span class="o">%</span><span class="n">objects</span><span class="o">/</span><span class="n">Espana</span><span class="o">.</span><span class="n">png</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#change-filenames"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="scan-for-viruses.html"
+                          title="前の章へ">ウイルスのスキャン</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="dataverse.html"
+                          title="次の章へ">Dataverseの統合</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/transfer/change-filenames.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="dataverse.html" title="Dataverseの統合"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="scan-for-viruses.html" title="ウイルスのスキャン"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ファイル名の変更</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

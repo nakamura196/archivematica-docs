@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>圧縮バッグと解凍バッグ &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="フォレンジックディスクイメージ" href="forensic.html" />
+    <link rel="prev" title="メタデータのインポート" href="import-metadata.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="forensic.html" title="フォレンジックディスクイメージ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="import-metadata.html" title="メタデータのインポート"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">圧縮バッグと解凍バッグ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="unzipped-and-zipped-bags">
+<span id="bags"></span><h1>圧縮バッグと解凍バッグ<a class="headerlink" href="#unzipped-and-zipped-bags" title="Link to this heading">¶</a></h1>
+<p>Archivematica は、米国議会図書館の <a class="reference external" href="https://tools.ietf.org/html/rfc8493">BagIt</a> 仕様に従ってパッケージ化された素材のインジェストをサポートしています。ユーザーは、適切な <a class="reference internal" href="transfer.html#transfer-types"><span class="std std-ref">転送タイプ</span></a> を使用して、圧縮バッグと解凍バッグの両方をインジェストすることができます。</p>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#bag-structure-requirements"><span class="std std-ref">バッグ構造の要件</span></a></p></li>
+<li><p><a class="reference internal" href="#configure-bags"><span class="std std-ref">バッグの設定</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#unzipped-bags"><span class="std std-ref">解凍されたバッグ</span></a></p></li>
+<li><p><a class="reference internal" href="#zipped-bags"><span class="std std-ref">圧縮されたバッグ</span></a></p></li>
+<li><p><a class="reference internal" href="#adding-metadata-bags"><span class="std std-ref">バッグにメタデータを追加</span></a></p></li>
+<li><p><a class="reference internal" href="#other-bag-configs"><span class="std std-ref">バッグを設定するその他の方法</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#searching-bags"><span class="std std-ref">バッグのメタデータを索引付けして検索</span></a></p></li>
+</ul>
+<section id="bag-structure-requirements">
+<span id="id1"></span><h2>バッグ構造の要件<a class="headerlink" href="#bag-structure-requirements" title="Link to this heading">¶</a></h2>
+<p>バッグは、 <a class="reference external" href="https://tools.ietf.org/html/rfc8493">BagIt</a> 仕様の要件に準拠する必要があります。そうでない場合、Archivematicaは失敗し、ファイルはクリーンアップされて削除されます。</p>
+<p>バッグが不注意で故障する原因となる問題には、以下のようなものがあります：</p>
+<ul class="simple">
+<li><p>バッグが作成された後に、見えないファイルがバッグに追加されました。</p></li>
+<li><p><cite>bagit.txt</cite> にあるエンコード要件は、 <cite>bag-info.txt</cite> にある文字のエンコードと一致しません。</p></li>
+<li><p>バッグ作成後にファイル（例：metadata.csv）を編集します。</p></li>
+<li><p>構造上の問題。バッグの構造化の方法については、 <a class="reference internal" href="import-metadata.html#metadata-bags"><span class="std std-ref">バッグにメタデータを追加</span></a> を参照してください。</p></li>
+</ul>
+</section>
+<section id="configuring-bags">
+<span id="configure-bags"></span><h2>バッグの設定<a class="headerlink" href="#configuring-bags" title="Link to this heading">¶</a></h2>
+<p>バッグは、特定の保存目標を達成するために様々な方法で構成できます。</p>
+<section id="unzipped-bags">
+<span id="id2"></span><h3>解凍されたバッグ<a class="headerlink" href="#unzipped-bags" title="Link to this heading">¶</a></h3>
+<p>アンジップされたバッグは、手作業で作成するか、 <a class="reference external" href="https://github.com/LibraryOfCongress/bagit-python">BagIt-python</a> や <a class="reference external" href="https://github.com/LibraryOfCongress/bagger">Bagger</a> のような BagIt ツールを使用して作成できます。バッグは、 <a class="reference external" href="https://tools.ietf.org/html/rfc8493">BagIt</a> の仕様に準拠していなければなりません。</p>
+<p>アンジップされたバッグをインジェストするには、TransferタブのTransfer Typeドロップダウンメニューから <strong>Unzipped bag</strong> を選択し、Transferブラウザから素材を選択します。</p>
+<a class="reference internal image-reference" href="../../_images/unzipped-bag-transfer.png"><img alt="ダッシュボードで解凍されたバッグの転送" class="align-center" src="../../_images/unzipped-bag-transfer.png" style="width: 80%;" />
+</a>
+<p>上のスクリーンショットは、保存すべき3つのデジタルオブジェクト（ <code class="docutils literal notranslate"><span class="pre">LICENSE</span></code> 、 <code class="docutils literal notranslate"><span class="pre">README</span></code> 、 <code class="docutils literal notranslate"><span class="pre">TRADEMARK</span></code> ）と、BagIt仕様で要求される付属ファイル（ <code class="docutils literal notranslate"><span class="pre">bag-info.txt</span></code> 、 <code class="docutils literal notranslate"><span class="pre">bagit.txt</span></code> 、およびマニフェストファイル（この場合はsha512チェックサム用））を含むシンプルなバッグを示しています。保存するべきデジタルオブジェクトは、 <code class="docutils literal notranslate"><span class="pre">data</span></code> というサブディレクトリ内にあることに注意してください。</p>
+<p>転送処理の詳細については、転送ページの <a class="reference internal" href="transfer.html#process-transfer"><span class="std std-ref">process transfer</span></a> を参照してください。</p>
+</section>
+<section id="zipped-bags">
+<span id="id3"></span><h3>圧縮されたバッグ<a class="headerlink" href="#zipped-bags" title="Link to this heading">¶</a></h3>
+<p>ジップされたバッグは、手作業で作成するか、 <a class="reference external" href="https://github.com/LibraryOfCongress/bagit-python">BagIt-python</a> や <a class="reference external" href="https://github.com/LibraryOfCongress/bagger">Bagger</a> のような BagIt ツールを使用して作成できます。バッグは <a class="reference external" href="https://tools.ietf.org/html/rfc8493">BagIt</a> の仕様に準拠している必要があります。</p>
+<p>ジップバッグをインジェストするには、ダッシュボードの転送タブのドロップダウンメニューから、転送タイプ <strong>ジップバッグ</strong> を選択します。転送ブラウザを開くと、 <code class="docutils literal notranslate"><span class="pre">.zip</span></code> 、 <code class="docutils literal notranslate"><span class="pre">.tgz</span></code> 、 <code class="docutils literal notranslate"><span class="pre">tar.gz</span></code> の圧縮形式を使用した素材のみ転送に選択できます。これらは、Archivematicaがzip形式で転送できる唯一の圧縮形式です。</p>
+<a class="reference internal image-reference" href="../../_images/zipped-bag.png"><img alt="ダッシュボードでの圧縮されたバッグの転送" class="align-center" src="../../_images/zipped-bag.png" style="width: 80%;" />
+</a>
+<p>バッグ自体の内部構造は、上図のように <a class="reference internal" href="#unzipped-bags"><span class="std std-ref">アンジップされたバッグ</span></a> のようにします。</p>
+<p>ジップされたバッグの転送では、常にバッグの名前が転送名として使用されることに注意してください。</p>
+<p>転送処理の詳細については、転送ページの <a class="reference internal" href="transfer.html#process-transfer"><span class="std std-ref">process transfer</span></a> を参照してください。</p>
+</section>
+<section id="adding-descriptive-rights-metadata-and-submission-documentation-to-bags">
+<span id="adding-metadata-bags"></span><h3>説明/権利メタデータと提出文書をバッグに追加<a class="headerlink" href="#adding-descriptive-rights-metadata-and-submission-documentation-to-bags" title="Link to this heading">¶</a></h3>
+<p>標準的な転送と同様に、解凍および圧縮されたバッグ転送に、説明および権利メタデータを追加することが可能です。詳しくは、 <a class="reference internal" href="import-metadata.html#metadata-bags"><span class="std std-ref">バッグにメタデータを追加する</span></a> を参照してください。</p>
+</section>
+<section id="other-ways-to-configure-bags">
+<span id="other-bag-configs"></span><h3>バッグを設定するその他の方法<a class="headerlink" href="#other-ways-to-configure-bags" title="Link to this heading">¶</a></h3>
+<p>標準的な転送設定とバッグを組み合わせるには、次のような他の方法もあります：</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="transfer.html#create-submission"><span class="std std-ref">提出書類を伴う転送</span></a></p></li>
+<li><p><a class="reference internal" href="transfer.html#transfer-pids"><span class="std std-ref">永続的識別子</span></a></p></li>
+<li><p><a class="reference internal" href="transfer.html#transfer-derivatives"><span class="std std-ref">保存またはアクセス派生物を含む素材の転送 (手動正規化)</span></a></p></li>
+<li><p><a class="reference internal" href="transfer.html#transfer-access-copies"><span class="std std-ref">アクセスコピーのみで素材の転送</span></a></p></li>
+<li><p><a class="reference internal" href="transfer.html#transfer-service-files"><span class="std std-ref">サービス (メザニン) ファイルで素材を転送</span></a></p></li>
+</ul>
+<p>しかし、Artefactual は、すべての設定をテストするわけではありません。ワークフローを生産で実行する前に、独自の設定を徹底的にテストし、結果を確認することをお勧めします。転送用バッグのさまざまな設定方法について質問がある場合は、 <a class="reference external" href="https://groups.google.com/forum/#!forum/archivematica">Archivematica ユーザーフォーラム</a> への投稿をご検討ください。</p>
+</section>
+</section>
+<section id="index-and-search-bag-metadata">
+<span id="searching-bags"></span><h2>バッグのメタデータを索引付けして検索<a class="headerlink" href="#index-and-search-bag-metadata" title="Link to this heading">¶</a></h2>
+<p>Archivematica 1.4 以降では、 <code class="docutils literal notranslate"><span class="pre">bag-info.txt</span></code> ファイル内のフィールドは Elasticsearch のソースメタデータとしてインデックス付けされ、バッグの転送が保管された後、[アーカイブ保管] タブでその内容を検索できるようになります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">bag-info.txt</span></code> ファイルのラベルは、METS <code class="docutils literal notranslate"><span class="pre">sourceMD</span></code> フィールドで XML としてシリアライズされ、AIP の Objects ディレクトリにリンクされます。</p>
+<p>たとえば、bag-info.txt には次の情報が含まれる場合があります (サンプルは <a class="reference external" href="https://tools.ietf.org/html/draft-kunze-bagit-10">https://tools.ietf.org/html/draft-kunze-bagit-10</a>). から提供されます)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Source</span><span class="o">-</span><span class="n">Organization</span><span class="p">:</span> <span class="n">Spengler</span> <span class="n">University</span>
+<span class="n">Organization</span><span class="o">-</span><span class="n">Address</span><span class="p">:</span> <span class="mi">1400</span> <span class="n">Elm</span> <span class="n">St</span><span class="o">.</span><span class="p">,</span> <span class="n">Cupertino</span><span class="p">,</span> <span class="n">California</span><span class="p">,</span> <span class="mi">95014</span>
+<span class="n">Contact</span><span class="o">-</span><span class="n">Name</span><span class="p">:</span> <span class="n">Edna</span> <span class="n">Janssen</span>
+<span class="n">Contact</span><span class="o">-</span><span class="n">Phone</span><span class="p">:</span> <span class="o">+</span><span class="mi">1</span> <span class="mi">408</span><span class="o">-</span><span class="mi">555</span><span class="o">-</span><span class="mi">1212</span>
+<span class="n">Contact</span><span class="o">-</span><span class="n">Email</span><span class="p">:</span> <span class="n">ej</span><span class="nd">@spengler</span><span class="o">.</span><span class="n">edu</span>
+<span class="n">External</span><span class="o">-</span><span class="n">Description</span><span class="p">:</span> <span class="n">Uncompressed</span> <span class="n">greyscale</span> <span class="n">TIFF</span> <span class="n">images</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">Yoshimuri</span> <span class="n">papers</span> <span class="n">colle</span><span class="o">...</span>
+<span class="n">Bagging</span><span class="o">-</span><span class="n">Date</span><span class="p">:</span> <span class="mi">2008</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">15</span>
+<span class="n">External</span><span class="o">-</span><span class="n">Identifier</span><span class="p">:</span> <span class="n">spengler_yoshimuri_001</span>
+<span class="n">Bag</span><span class="o">-</span><span class="n">Size</span><span class="p">:</span> <span class="mi">260</span> <span class="n">GB</span>
+<span class="n">Payload</span><span class="o">-</span><span class="n">Oxum</span><span class="p">:</span> <span class="mf">279164409832.1198</span>
+<span class="n">Bag</span><span class="o">-</span><span class="n">Group</span><span class="o">-</span><span class="n">Identifier</span><span class="p">:</span> <span class="n">spengler_yoshimuri</span>
+<span class="n">Bag</span><span class="o">-</span><span class="n">Count</span><span class="p">:</span> <span class="mi">1</span> <span class="n">of</span> <span class="mi">15</span>
+<span class="n">Internal</span><span class="o">-</span><span class="n">Sender</span><span class="o">-</span><span class="n">Identifier</span><span class="p">:</span> <span class="o">/</span><span class="n">storage</span><span class="o">/</span><span class="n">images</span><span class="o">/</span><span class="n">yoshimuri</span>
+<span class="n">Internal</span><span class="o">-</span><span class="n">Sender</span><span class="o">-</span><span class="n">Description</span><span class="p">:</span> <span class="n">Uncompressed</span> <span class="n">greyscale</span> <span class="n">TIFFs</span> <span class="n">created</span> <span class="kn">from</span> <span class="nn">microfilm</span> <span class="ow">and</span> <span class="n">are</span><span class="o">...</span>
+</pre></div>
+</div>
+<p>結果の AIP の METS XML ファイルに保存されると、上記の情報は次のように表現されます：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mets:amdSec</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;amdSec_14&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;mets:sourceMD</span><span class="w"> </span><span class="na">ID=</span><span class="s">&quot;sourceMD_1&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;mets:mdWrap</span><span class="w"> </span><span class="na">MDTYPE=</span><span class="s">&quot;OTHER&quot;</span><span class="w"> </span><span class="na">OTHERMDTYPE=</span><span class="s">&quot;BagIt&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;mets:xmlData&gt;</span>
+<span class="w">        </span><span class="nt">&lt;transfer_metadata&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Source-Organization&gt;</span>Spengler<span class="w"> </span>University<span class="nt">&lt;/Source-Organization&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Organization-Address&gt;</span>1400<span class="w"> </span>Elm<span class="w"> </span>St.,<span class="w"> </span>Cupertino,<span class="w"> </span>California,<span class="w"> </span>95014<span class="nt">&lt;/Organization-Address&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Contact-Name&gt;</span>Edna<span class="w"> </span>Janssen<span class="nt">&lt;/Contact-Name&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Contact-Phone&gt;</span>+1<span class="w"> </span>408-555-1212<span class="nt">&lt;/Contact-Phone&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Contact-Email&gt;</span>ej@spengler.edu<span class="nt">&lt;/Contact-Email&gt;</span>
+<span class="w">          </span><span class="nt">&lt;External-Description&gt;</span><span class="w"> </span>Uncompressed<span class="w"> </span>greyscale<span class="w"> </span>TIFF<span class="w"> </span>images<span class="w"> </span>from<span class="w"> </span>the<span class="w"> </span>Yoshimuri<span class="w"> </span>papers<span class="w"> </span>colle...<span class="nt">&lt;/External-Description&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Bagging-Date&gt;</span>2008-01-15<span class="nt">&lt;/Bagging-Date&gt;</span>
+<span class="w">          </span><span class="nt">&lt;External-Identifier&gt;</span>spengler_yoshimuri_001<span class="nt">&lt;/External-Identifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Bag-Size&gt;</span>260<span class="w"> </span>GB<span class="nt">&lt;/Bag-Size&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Payload-Oxum&gt;</span>279164409832.1198<span class="nt">&lt;/Payload-Oxum&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Bag-Group-Identifier&gt;</span>spengler_yoshimuri<span class="nt">&lt;/Bag-Group-Identifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Bag-Count&gt;</span>1<span class="w"> </span>of<span class="w"> </span>15<span class="nt">&lt;/Bag-Count&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Internal-Sender-Identifier&gt;</span>/storage/images/yoshimuri<span class="nt">&lt;/Internal-Sender-Identifier&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Internal-Sender-Description&gt;</span>Uncompressed<span class="w"> </span>greyscale<span class="w"> </span>TIFFs<span class="w"> </span>created<span class="w"> </span>from<span class="w"> </span>microfilm<span class="w"> </span>and<span class="w"> </span>are...<span class="nt">&lt;/Internal-Sender-Description&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/transfer_metadata&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/mets:xmlData&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/mets:mdWrap&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/mets:sourceMD&gt;</span>
+<span class="nt">&lt;/mets:amdSec&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>METS ファイルに解析されるためには、bag-info.txt ラベル (つまり、Source-Organization) が XML に準拠している必要があり、スペースや禁止文字を含めることはできません。</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;transfer_metadata&gt;</span></code> タグに含まれるメタデータは、 <a class="reference internal" href="../archival-storage/archival-storage.html#archival-storage"><span class="std std-ref">Archival Storage</span></a> タブでの検索に使用できるようになりました。</p>
+<p>検索パラメーター <strong>を使って、bag-info.txt内のいずれかの用語（すなわち ``Spengler University`` ）を検索すると、</strong> いずれかのフィールド（または <a class="reference internal" href="../archival-storage/archival-storage.html#search-aip"><span class="std std-ref">AIPストアの検索</span></a> に従ってAIP名など）に検索用語を含む保存されたパッケージが表示されるはずです。</p>
+<a class="reference internal image-reference" href="../../_images/bag-info-basic-search.png"><img alt="画像は、&quot;Spengler University&quot; という用語を使い、検索パラメーターを&quot;Any&quot; に、検索タイプを&quot;Keyword に設定して実行した検索を示しています&quot;" class="align-center" src="../../_images/bag-info-basic-search.png" style="width: 80%;" />
+</a>
+<p>上記の例では、AIP <code class="docutils literal notranslate"><span class="pre">coyote</span></code> には、bag-info.txt ではなく、説明メタデータに検索フレーズが含まれていました。他の 2 つの AIP には、bag-info.txt に検索フレーズが含まれていました。</p>
+<p>検索パラメータとして <strong>メタデータを転送</strong> を選択すると、検索結果を絞り込んで、bag-info.txt からのメタデータのみを検索できます。これにより、METS ファイル内の <code class="docutils literal notranslate"><span class="pre">&lt;transfer_metadata&gt;</span></code> タグ内のものが検索されます。</p>
+<a class="reference internal image-reference" href="../../_images/bag-info-transfer-md-search.png"><img alt="画像は、&quot;Spengler University&quot; という用語を使い、検索パラメーターを&quot;Transfer metadata&quot; に設定し、検索タイプを&quot;Keyword に設定して行った検索を示しています&quot;" class="align-center" src="../../_images/bag-info-transfer-md-search.png" style="width: 80%;" />
+</a>
+<p>検索結果をさらに絞り込むには、 <strong>Transfer metadata （other）</strong> 検索パラメーターを使用します。これにより、検索したい <code class="docutils literal notranslate"><span class="pre">&lt;transfer_metadata&gt;</span></code> 内の特定のサブフィールドを定義できます。例えば、検索フレーズ&quot;Spengler University&quot; が <code class="docutils literal notranslate"><span class="pre">Source-Organization</span></code> フィールドに存在し、他のフィールドに存在しない AIP を検索したい場合などです。</p>
+<a class="reference internal image-reference" href="../../_images/bag-info-transfer-md-other-search.png"><img alt="画像は、&quot;Spengler University&quot; という用語を用い、検索パラメーターを&quot;Transfer metadata （other）&quot; に設定し、フィールド名を&quot;Source-Organization&quot; に設定し、検索タイプを&quot;Keyword に設定して検索を実行したものです&quot;" class="align-center" src="../../_images/bag-info-transfer-md-other-search.png" style="width: 80%;" />
+</a>
+<p>&lt;transfer_metadata&gt;、またはそのサブフィールドの1つで日付範囲を検索するには、ユーザーは、コロンで区切られたISO日付フォーマットで2つの日付を入力します。例えば、 <code class="docutils literal notranslate"><span class="pre">2015-01-03:2015-04-14</span></code> .</p>
+<p><a class="reference internal" href="#bags"><span class="std std-ref">トップに戻る</span></a> 。</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">圧縮バッグと解凍バッグ</a><ul>
+<li><a class="reference internal" href="#bag-structure-requirements">バッグ構造の要件</a></li>
+<li><a class="reference internal" href="#configuring-bags">バッグの設定</a><ul>
+<li><a class="reference internal" href="#unzipped-bags">解凍されたバッグ</a></li>
+<li><a class="reference internal" href="#zipped-bags">圧縮されたバッグ</a></li>
+<li><a class="reference internal" href="#adding-descriptive-rights-metadata-and-submission-documentation-to-bags">説明/権利メタデータと提出文書をバッグに追加</a></li>
+<li><a class="reference internal" href="#other-ways-to-configure-bags">バッグを設定するその他の方法</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#index-and-search-bag-metadata">バッグのメタデータを索引付けして検索</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="import-metadata.html"
+                          title="前の章へ">メタデータのインポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="forensic.html"
+                          title="次の章へ">フォレンジックディスクイメージ</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/transfer/bags.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="forensic.html" title="フォレンジックディスクイメージ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="import-metadata.html" title="メタデータのインポート"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">圧縮バッグと解凍バッグ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>外部ツール &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="システム要件" href="system-requirements.html" />
+    <link rel="prev" title="マイクロサービス" href="microservices.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="system-requirements.html" title="システム要件"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="microservices.html" title="マイクロサービス"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">外部ツール</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="external-tools">
+<span id="id1"></span><h1>外部ツール<a class="headerlink" href="#external-tools" title="Link to this heading">¶</a></h1>
+<p>Archivematicaは、オープンソースのフレームワークやサービス（DjangoやGearmanなど）をベースに構築されており、ISO-OAIS 機能モデルに基づき、デジタルオブジェクトのインジェストからアクセスまでの処理をサポートするフリーでオープンソースのツールも統合されています。Archivematicaには、 <a class="reference external" href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU Affero General Public License（AGPL）</a> でリリースされているコアソフトウェアに加え、以下のツールがバンドルされています。</p>
+<section id="bagit">
+<h2><a class="reference external" href="https://github.com/LibraryOfCongress/bagit-python">BagIt</a><a class="headerlink" href="#bagit" title="Link to this heading">¶</a></h2>
+<p>デジタルオブジェクトとメタデータをアーカイブ保存用にパッケージ化するための標準とスクリプトです。Archivematicaは、bagit-pythonライブラリを使用しています。</p>
+<p><strong>ライセンス</strong> ：パブリックドメイン</p>
+</section>
+<section id="bulk-extractor">
+<h2><a class="reference external" href="https://github.com/simsong/bulk_extractor">bulk_extractor</a><a class="headerlink" href="#bulk-extractor" title="Link to this heading">¶</a></h2>
+<p>ディスクイメージとファイルコンテンツ分析ツール。</p>
+<p><strong>ライセンス</strong> ：パブリックドメイン</p>
+</section>
+<section id="clamav">
+<h2><a class="reference external" href="http://www.clamav.net/">ClamAV</a><a class="headerlink" href="#clamav" title="Link to this heading">¶</a></h2>
+<p>UNIX用アンチウイルスツールキット。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU一般公衆ライセンス</a></p>
+</section>
+<section id="django">
+<h2><a class="reference external" href="https://www.djangoproject.com/">Django</a><a class="headerlink" href="#django" title="Link to this heading">¶</a></h2>
+<p>Djangoは、高水準のPython Webフレームワークであり、迅速な開発とクリーンで実用的な設計を奨励します。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">BSD（3-clause）</a></p>
+</section>
+<section id="elasticsearch">
+<h2><a class="reference external" href="https://www.elastic.co/">ElasticSearch</a><a class="headerlink" href="#elasticsearch" title="Link to this heading">¶</a></h2>
+<p>Elasticsearchは、Luceneライブラリに基づく検索エンジンです。HTTP WebインターフェイスとスキーマフリーのJSON文書を備えた、マルチテナント対応の分散型全文検索エンジンを提供します。ElasticsearchはJavaで開発されています。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.apache.org/licenses/LICENSE-2.0">Apacheライセンスバージョン2.0</a></p>
+</section>
+<section id="exiftool">
+<h2><a class="reference external" href="https://exiftool.org/index.html">ExifTool</a><a class="headerlink" href="#exiftool" title="Link to this heading">¶</a></h2>
+<p>ExifToolは、プラットフォームに依存しないPerlライブラリと、様々なファイルのメタ情報を読み取り、書き込み、編集を行うためのコマンドラインアプリケーションです。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://dev.perl.org/licenses/artistic.html">GNU一般公衆ライセンスバージョン1</a> または <a class="reference external" href="https://www.gnu.org/licenses/old-licenses/gpl-1.0.html">芸術的ライセンス</a></p>
+</section>
+<section id="ffmpeg">
+<h2><a class="reference external" href="http://ffmpeg.org/">FFmpeg</a><a class="headerlink" href="#ffmpeg" title="Link to this heading">¶</a></h2>
+<p>オーディオとビデオを録音、変換、ストリーミングするための完全なクロスプラットフォームソリューションです。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">GNU劣等一般公衆ライセンスバージョン2.1</a></p>
+</section>
+<section id="fido">
+<h2><a class="reference external" href="https://github.com/openpreserve/fido/">fido</a><a class="headerlink" href="#fido" title="Link to this heading">¶</a></h2>
+<p>Format Identification for Digital Objects （FIDO）は、デジタルオブジェクトのファイルフォーマットを識別するためのPythonコマンドラインツールです。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.apache.org/licenses/LICENSE-2.0">Apacheライセンスバージョン2.0</a></p>
+</section>
+<section id="file-information-tool-set-fits">
+<h2><a class="reference internal" href="#file-information-tool-set-fits">File Information Tool Set（FITS）</a><a class="headerlink" href="#file-information-tool-set-fits" title="Link to this heading">¶</a></h2>
+<p>ファイルフォーマットの識別と妥当性確認ソフトウェアの統合ツールです。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="http://www.gnu.org/licenses/lgpl-3.0.html">GNU劣等一般公衆ライセンス</a></p>
+</section>
+<section id="gearman">
+<h2><a class="reference external" href="http://gearman.org/">Gearman</a><a class="headerlink" href="#gearman" title="Link to this heading">¶</a></h2>
+<p>Gearmanは、作業をより適した他のマシンやプロセスにファームアウトするための汎用アプリケーションフレームワークを提供します。</p>
+<p><strong>ライセンス</strong> ：BSDライセンス</p>
+</section>
+<section id="ghostscript">
+<h2><a class="reference external" href="https://www.ghostscript.com/">Ghostscript</a><a class="headerlink" href="#ghostscript" title="Link to this heading">¶</a></h2>
+<p>PostScript言語と PDF のインタプリタです。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNUアフェロ一般公衆ライセンス（AGPL）</a></p>
+</section>
+<section id="imagemagick">
+<h2><a class="reference external" href="http://www.imagemagick.org/script/index.php">Imagemagick</a><a class="headerlink" href="#imagemagick" title="Link to this heading">¶</a></h2>
+<p>ImageMagickは、ラスター画像やベクター画像ファイルを表示、変換、編集するための無料のオープンソースのソフトウェアスイートです。200以上の画像ファイル形式を読み取り、書き込みができます。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="http://www.imagemagick.org/script/license.php">Imagemagickライセンス</a> （GPL互換）</p>
+</section>
+<section id="inkscape">
+<h2><a class="reference external" href="https://www.inkscape.org/">Inkscape</a><a class="headerlink" href="#inkscape" title="Link to this heading">¶</a></h2>
+<p>ベクトル画像をScalable Vector Graphic（SVG）形式に変換します。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html">GNU一般公衆ライセンスバージョン2</a></p>
+</section>
+<section id="jhove">
+<h2><a class="reference external" href="https://github.com/openpreserve/jhove">JHOVE</a><a class="headerlink" href="#jhove" title="Link to this heading">¶</a></h2>
+<p>ファイルフォーマット妥当性確認ツール。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="http://www.gnu.org/licenses/lgpl-3.0.html">GNU劣等一般公衆ライセンス</a></p>
+</section>
+<section id="mediaconch">
+<h2><a class="reference external" href="https://mediaarea.net/MediaConch">MediaConch</a><a class="headerlink" href="#mediaconch" title="Link to this heading">¶</a></h2>
+<p>MediaConchは、保存レベルのオーディオビジュアルファイルを対象とした、実装チェッカー、ポリシーチェッカー、レポーター、フィクサーで構成される、拡張可能なオープンソースソフトウェアプロジェクトです。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://opensource.org/licenses/BSD-2-Clause">BSD（2-clause）</a></p>
+</section>
+<section id="mediainfo">
+<h2><a class="reference external" href="https://mediaarea.net/en/MediaInfo">MediaInfo</a><a class="headerlink" href="#mediainfo" title="Link to this heading">¶</a></h2>
+<p>MediaInfoは、ビデオおよびオーディオファイルに最も関連性の高い技術データとタグデータを統合して表示する便利な機能です。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://opensource.org/licenses/BSD-2-Clause">BSD（2-clause）</a></p>
+</section>
+<section id="nailgun">
+<h2><a class="reference external" href="https://github.com/facebook/nailgun">Nailgun</a><a class="headerlink" href="#nailgun" title="Link to this heading">¶</a></h2>
+<p>コマンドラインから Javaプログラムを実行するためのクライアント、プロトコル、サーバー。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.apache.org/licenses/LICENSE-2.0">Apacheライセンスバージョン2.0</a></p>
+</section>
+<section id="nfs-common">
+<h2><a class="reference external" href="https://linux-nfs.org">NFS-common</a><a class="headerlink" href="#nfs-common" title="Link to this heading">¶</a></h2>
+<p>ネットワークファイルシステムアクセス - ネットワークストレージデバイス上のファイルへのアクセスを許可します。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU一般公衆ライセンス</a></p>
+</section>
+<section id="p7zip">
+<h2><a class="reference external" href="http://p7zip.sourceforge.net/">p7zip</a><a class="headerlink" href="#p7zip" title="Link to this heading">¶</a></h2>
+<p>7-Zip は、高圧縮率のファイルアーカイバーです。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU一般公衆ライセンス</a></p>
+</section>
+<section id="python-lxml">
+<h2><a class="reference external" href="https://lxml.de/">Python-lxml</a><a class="headerlink" href="#python-lxml" title="Link to this heading">¶</a></h2>
+<p>libxml2とlibxsltのPythonバインディング。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU一般公衆ライセンス</a></p>
+</section>
+<section id="rsync">
+<h2><a class="reference external" href="https://rsync.samba.org/">rsync</a><a class="headerlink" href="#rsync" title="Link to this heading">¶</a></h2>
+<p>高速で多機能なリモート（およびローカル）ファイルコピーツール。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU一般公衆ライセンス</a></p>
+</section>
+<section id="siegfried">
+<h2><a class="reference external" href="https://github.com/richardlehane/siegfried">Siegfried</a><a class="headerlink" href="#siegfried" title="Link to this heading">¶</a></h2>
+<p>ファイルフォーマット識別ツール。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.apache.org/licenses/LICENSE-2.0">Apacheライセンスバージョン2.0</a></p>
+</section>
+<section id="sleuthkit">
+<h2><a class="reference external" href="http://www.sleuthkit.org/">Sleuthkit</a><a class="headerlink" href="#sleuthkit" title="Link to this heading">¶</a></h2>
+<p>ディスクイメージ管理・抽出ツールキット。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://opensource.org/license/cpl1-0-txt/">共通パブリックライセンス</a></p>
+</section>
+<section id="tesseract">
+<h2><a class="reference external" href="https://github.com/tesseract-ocr/">Tesseract</a><a class="headerlink" href="#tesseract" title="Link to this heading">¶</a></h2>
+<p>光学式文字認識ツール（画像ファイルを読み取り、テキストに変換）。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.apache.org/licenses/LICENSE-2.0">Apacheライセンスバージョン2.0</a></p>
+</section>
+<section id="ubuntu-linux">
+<h2><a class="reference external" href="https://ubuntu.com/">Ubuntu Linux</a><a class="headerlink" href="#ubuntu-linux" title="Link to this heading">¶</a></h2>
+<p>コンピューティングハードウェアとのインターフェース。Ubuntu Linux サーバーエディション。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU一般公衆ライセンス</a></p>
+</section>
+<section id="uuid">
+<h2><a class="reference external" href="http://www.ossp.org/pkg/lib/uuid/">UUID</a><a class="headerlink" href="#uuid" title="Link to this heading">¶</a></h2>
+<p>DCE 1.1、ISO/IEC 11578：1996、IETF RFC-4122準拠のUniversally Unique Identifier （UUID）を生成するためのコマンドラインインターフェイス（CLI）。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU一般公衆ライセンス</a></p>
+</section>
+<section id="unar">
+<h2><a class="reference external" href="https://theunarchiver.com/command-line">unar</a><a class="headerlink" href="#unar" title="Link to this heading">¶</a></h2>
+<p>Unarchiverは、アーカイブ解凍プログラムです。</p>
+<p><strong>ライセンス</strong> ： <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU一般公衆ライセンス</a></p>
+<p><a class="reference internal" href="#external-tools"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">外部ツール</a><ul>
+<li><a class="reference internal" href="#bagit">BagIt</a></li>
+<li><a class="reference internal" href="#bulk-extractor">bulk_extractor</a></li>
+<li><a class="reference internal" href="#clamav">ClamAV</a></li>
+<li><a class="reference internal" href="#django">Django</a></li>
+<li><a class="reference internal" href="#elasticsearch">ElasticSearch</a></li>
+<li><a class="reference internal" href="#exiftool">ExifTool</a></li>
+<li><a class="reference internal" href="#ffmpeg">FFmpeg</a></li>
+<li><a class="reference internal" href="#fido">fido</a></li>
+<li><a class="reference internal" href="#file-information-tool-set-fits">File Information Tool Set（FITS）</a></li>
+<li><a class="reference internal" href="#gearman">Gearman</a></li>
+<li><a class="reference internal" href="#ghostscript">Ghostscript</a></li>
+<li><a class="reference internal" href="#imagemagick">Imagemagick</a></li>
+<li><a class="reference internal" href="#inkscape">Inkscape</a></li>
+<li><a class="reference internal" href="#jhove">JHOVE</a></li>
+<li><a class="reference internal" href="#mediaconch">MediaConch</a></li>
+<li><a class="reference internal" href="#mediainfo">MediaInfo</a></li>
+<li><a class="reference internal" href="#nailgun">Nailgun</a></li>
+<li><a class="reference internal" href="#nfs-common">NFS-common</a></li>
+<li><a class="reference internal" href="#p7zip">p7zip</a></li>
+<li><a class="reference internal" href="#python-lxml">Python-lxml</a></li>
+<li><a class="reference internal" href="#rsync">rsync</a></li>
+<li><a class="reference internal" href="#siegfried">Siegfried</a></li>
+<li><a class="reference internal" href="#sleuthkit">Sleuthkit</a></li>
+<li><a class="reference internal" href="#tesseract">Tesseract</a></li>
+<li><a class="reference internal" href="#ubuntu-linux">Ubuntu Linux</a></li>
+<li><a class="reference internal" href="#uuid">UUID</a></li>
+<li><a class="reference internal" href="#unar">unar</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="microservices.html"
+                          title="前の章へ">マイクロサービス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="system-requirements.html"
+                          title="次の章へ">システム要件</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/getting-started/overview/external-tools.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="system-requirements.html" title="システム要件"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="microservices.html" title="マイクロサービス"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">外部ツール</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

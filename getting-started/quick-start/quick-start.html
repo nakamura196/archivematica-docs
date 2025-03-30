@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Archivematicaクイックスタートガイド &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="設定" href="configuration.html" />
+    <link rel="prev" title="システム要件" href="../overview/system-requirements.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="設定"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../overview/system-requirements.html" title="システム要件"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematicaクイックスタートガイド</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="archivematica-quick-start-guide">
+<span id="quick-start"></span><h1>Archivematicaクイックスタートガイド<a class="headerlink" href="#archivematica-quick-start-guide" title="Link to this heading">¶</a></h1>
+<p>このガイドでは、Archivematicaの転送とインジェストのプロセスをテスト用に説明します。本ガイドは、Archivematicaを初めてお使いになる方、また、実際に試してみたい方を対象としています。完全なインストール手順については、 <a class="reference internal" href="../../admin-manual/installation-setup/installation/installation.html#installation"><span class="std std-ref">インストール</span></a> を参照してください。このガイドを始める前に、 <a class="reference external" href="https://www.oclc.org/research/publications/2000/lavoie-oais.html">OAIS Reference Model</a> について少し知っておくと、SIP、AIP、DIPという頭字語が理解できるようになります。</p>
+<p>このガイドでは、標準的な転送で実行される基本的なアクションを説明し、Archivematicaの高度な機能については説明しません。より複雑なコンテンツの処理については、 <a class="reference internal" href="../../user-manual/index.html#user-manual"><span class="std std-ref">ユーザーマニュアル</span></a> を参照してください。以下の手順は、特に断りのない限り、SandboxとArchivematica仮想マシンの両方に適用できます。</p>
+<p>このチュートリアルを終えるまでに、次のことができるようになります：</p>
+<ul class="simple">
+<li><p>Archivematicaで標準転送を作成</p></li>
+<li><p>転送先からAIPとDIPを作成</p></li>
+<li><p>ファイルの識別を見直す</p></li>
+<li><p>ファイルの正規化を見直す</p></li>
+<li><p>Archivematicaパイプラインの自動化</p></li>
+</ul>
+<p><em>このページでは：</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#quick-start-install"><span class="std std-ref">タスク#0 - Archivematicaテストインスタンスをセットアップする</span></a></p></li>
+<li><p><a class="reference internal" href="#quick-start-transfer"><span class="std std-ref">タスク#1 - 標準的な転送を開始</span></a></p></li>
+<li><p><a class="reference internal" href="#quick-start-ingest"><span class="std std-ref">タスク#2 - AIPとDIPを作る</span></a></p></li>
+<li><p><a class="reference internal" href="#quick-start-storage"><span class="std std-ref">タスク#3 - AIPとDIPの保管</span></a></p></li>
+<li><p><a class="reference internal" href="#quick-start-review"><span class="std std-ref">タスク#4 - AIPとDIPを見直す</span></a></p></li>
+<li><p><a class="reference internal" href="#quick-start-config"><span class="std std-ref">タスク#5 - コンフィギュレーションによるワークフローの自動化</span></a></p></li>
+<li><p><a class="reference internal" href="#quick-start-resources"><span class="std std-ref">Archivematicaを使いこなすためのその他の方法</span></a></p></li>
+</ul>
+<section id="task-0-set-up-your-archivematica-test-instance">
+<span id="quick-start-install"></span><h2>タスク#0 - Archivematicaテストインスタンスをセットアップする<a class="headerlink" href="#task-0-set-up-your-archivematica-test-instance" title="Link to this heading">¶</a></h2>
+<p>Archivematicaをフルインストールする環境がない場合、Archviematicaのサンドボックス、またはローカルにインストールされたArchivematica VMでテストできます。</p>
+<section id="using-the-sandbox">
+<span id="id1"></span><h3>サンドボックスの使用<a class="headerlink" href="#using-the-sandbox" title="Link to this heading">¶</a></h3>
+<p>Artefactualは、 <a class="reference external" href="https://sandbox.archivematica.org/">Archivematica sandbox</a> を以下の認証情報で管理しています：</p>
+<ul class="simple">
+<li><p>ユーザー名：<a class="reference external" href="mailto:demo&#37;&#52;&#48;example&#46;com">demo<span>&#64;</span>example<span>&#46;</span>com</a></p></li>
+<li><p>パスワード：demodemo</p></li>
+</ul>
+<p>サンドボックスは、Archivematicaの最新リリースを簡単にテストする方法として提供されています。ウェブサイトは、毎日自動的にリセットされます。作成したパッケージは永久に保存されません。また、同時に複数のデモユーザーがログインしている場合がありますので、ソフトウェアの使用中に他のユーザーによる変更が表示される場合があります。</p>
+<p>デモサイトは、公開編集されており、モデレートされていません。セキュリティのため、テスト転送は Artefactual が提供するサンプルデータに限定されます。独自のデータを使用してテストしたいユーザーは、Vagrant ボックス (後述) をダウンロードして、ローカルでテストしてください。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>サンドボックスを使用している場合は、タスク#1に進むことができます。</p>
+</div>
+</section>
+<section id="installing-on-a-virtual-machine-using-vagrant">
+<span id="installing-on-vm"></span><h3>Vagrantを使って仮想マシンにインストール<a class="headerlink" href="#installing-on-a-virtual-machine-using-vagrant" title="Link to this heading">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>この仮想マシンは、<strong>生産環境での使用を想定していません</strong>。これは、開発者や経験豊富なユーザーがVagrantを使ってArchivematicaを試してみるためのものです。製造環境でArchivematicaを使い始める場合は、本マニュアルで説明する他のインストール方法を参照してください。</p>
+</div>
+<p>このガイドでは、コンピュータにArchivematicaがインストールされた新しいOracle <a class="reference external" href="https://www.virtualbox.org/">VirtualBox</a> 仮想マシンをセットアップします。このガイドは、MacOS X、Linux、Windows、FreeBSDなど、ほとんどのオペレーティングシステムで動作します。</p>
+<p><strong>最低システム要件</strong> ：4GBのRAM、10GBのディスク容量。</p>
+<section id="install-vagrant-and-virtualbox">
+<span id="vagrant-install-dependencies"></span><h4>VagrantとVirtualBoxをインストール<a class="headerlink" href="#install-vagrant-and-virtualbox" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>VirtualBoxをhttps://www.virtualbox.org/（またはパッケージマネージャーを使用）からインストールします。VirtualBox 5.2.18以降が必要です。</p></li>
+<li><p><a class="reference external" href="https://www.vagrantup.com">https://www.vagrantup.com</a>/からVagrantをインストールします（またはパッケージマネージャを使います）。Vagrant 2.1.4以降が必要です。</p></li>
+</ol>
+</section>
+<section id="spin-it-up">
+<h4>起動<a class="headerlink" href="#spin-it-up" title="Link to this heading">¶</a></h4>
+<ol class="arabic">
+<li><p>コンピュータのコマンドラインインターフェイスを使って、新しいディレクトリを作成し、それを開きます。場所は、重要ではありませんが、後でそのディレクトリに戻る必要があります- それ以降のコマンドライン操作はすべて、そのディレクトリの中から実行する必要があります。また、このディレクトリにいくつかのフォルダを追加すると、local-transfersで利用できるようになります。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>archivematica-vagrant<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>archivematica-vagrant
+</pre></div>
+</div>
+</li>
+<li><p>カレントディレクトリをVagrant環境に初期化します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vagrant<span class="w"> </span>init<span class="w"> </span>artefactual/archivematica
+</pre></div>
+</div>
+</li>
+<li><p>Vagrantを実行します（再度、Vagrantファイルを保存したディレクトリから実行します）。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vagrant<span class="w"> </span>up
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Vagrantは、カスタムボックスをダウンロードし、VirtualBoxで起動します。ボックスはかなり大きい (約3.4 GB) ため、ダウンロードには、接続の速度に応じて、数分から1時間以上かかる場合があります。</p>
+<p>これにはしばらく時間がかかります。お使いのコンピュータにもよりますが、1時間程度かかる場合もあります。Archivematicaのプロビジョニング中は、コンピュータの動作が非常に遅くなる可能性があります。Archivematicaのビルド中は、作業を保存し、コンピュータから離れるようにしてください。</p>
+<p>プロビジョニングが完了したら、仮想マシンにログインできます：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vagrant<span class="w"> </span>ssh
+</pre></div>
+</div>
+<p>これで、WebブラウザからArchivematicaインスタンスにアクセスできるようになります：</p>
+<ul class="simple">
+<li><p>Archivematica： ` &lt;<a class="reference external" href="http://10.10.10.20">http://10.10.10.20</a>&gt;`_ .ユーザー名：admin、パスワード：archivematica</p></li>
+<li><p>Storage Service： ` &lt;<a class="reference external" href="http://10.10.10.20:8000">http://10.10.10.20:8000</a>&gt;`_ .ユーザー名：admin、パスワード：archivematica</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="task-1-start-a-standard-transfer">
+<span id="quick-start-transfer"></span><h2>タスク#1 - 標準的な転送を開始<a class="headerlink" href="#task-1-start-a-standard-transfer" title="Link to this heading">¶</a></h2>
+<p>転送とは、1つまたは複数のファイルをグループとして処理することです。転送元は、Archivematicaが接続されているストレージシステムであればどこでもかまいません。最初の転送を開始するには、Archivematicaの転送ダッシュボード（ <a class="reference external" href="https://sandbox.archivematica.org/">Archivematica Sandbox</a> またはArchivematica VMのメインページ）にアクセスします。ArchivematicaインスタンスのTransferタブをクリックしても、転送ページにアクセスできます。</p>
+<p>転送プロセスは、一連のマイクロサービスで構成され、そのマイクロサービスは、ジョブで構成されています。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>マイクロサービスとは、Archivematica内で特定の目標を達成するためのアクションのグループです。転送がArchivematicaの転送要件に準拠しているかどうかを確認するのもマイクロサービスです。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ジョブは、マイクロサービス内の個別のアクションです。転送の内容を処理ディレクトリに移動するのはジョブです。</p>
+</div>
+<p>マイクロサービス名をクリックすると、各マイクロサービスを展開できます。これにより、マイクロサービスを構成するすべてのジョブを見ることができます。各ジョブ名の右にある歯車のアイコンをクリックすると、コマンド情報を一覧表示する新しいウィンドウが開き、各ジョブのコマンドを見ることができます。 <em>Show arguments</em> をクリックすると、Archivematicaがジョブの実行に使用するpythonコマンドが表示されます。</p>
+<p>ジョブが正常に完了すると緑色になり、失敗すると赤色になります。</p>
+<p><strong>ステップ：</strong></p>
+<ol class="arabic simple">
+<li><p>転送タイプボックスで標準が選択されていることを確認してください。</p></li>
+<li><p>転送先の名前を入力してください（何でもかまいません）。</p></li>
+<li><p>閲覧をクリックして、利用可能なコンテンツを確認します。 必ずフォルダーアイコンをクリックしてディレクトリ ツリーを展開してください。</p></li>
+<li><p>SampleTransfers内の <em>images</em> ディレクトリを見つけ、Addをクリックします。</p></li>
+<li><p>選択したディレクトリが選択ボックスの下に表示されます。</p></li>
+<li><p>緑色の <em>Start transfer</em> ボタンをクリックして転送を開始します。</p></li>
+<li><p>プロンプトが表示されたら、好きなように決定してください。ただし、転送を止めるようなもの（つまり、&quot;Reject&quot;と表示されているもの）は選択しないでください。決定ポイントの詳細については、 <a class="reference internal" href="../../user-manual/transfer/transfer.html#transfer"><span class="std std-ref">転送タブの文書</span></a> を参照してください。</p></li>
+<li><p><em>Identify file format</em> マイクロサービスに到達したら、いったん中断して次のセクションを読んでください。</p></li>
+</ol>
+<section id="review-file-formats">
+<h3>ファイルフォーマットの見直し<a class="headerlink" href="#review-file-formats" title="Link to this heading">¶</a></h3>
+<p>すべてのジョブのコマンドを参照する必要はありませんが、 <em>Identify file format</em> マイクロサービスの出力を見てみることをお勧めします。Archivematicaの最も重要な仕事の一つは、ファイル形式を特定し、そのファイルを可能な限り保存することです。</p>
+<p><strong>ステップ：</strong></p>
+<ol class="arabic simple">
+<li><p>プロンプトが表示されたら、「はい」を選択してファイルフォーマットを識別します。</p></li>
+<li><p>ファイルフォーマットの識別が完了したら、ジョブ名の右側にある歯車のアイコンをクリックしてジョブページを開きます。</p></li>
+<li><p>ジョブページのSTDOUTという見出しの下に、以下のような情報が表示されます：</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IDCommand</span> <span class="n">UUID</span><span class="p">:</span> <span class="mi">8</span><span class="n">cc792b4</span><span class="o">-</span><span class="mi">362</span><span class="n">d</span><span class="o">-</span><span class="mi">4002</span><span class="o">-</span><span class="mi">8981</span><span class="o">-</span><span class="n">a4e808c04b24</span>
+<span class="n">File</span><span class="p">:</span> <span class="p">(</span><span class="mi">9305</span><span class="n">a71e</span><span class="o">-</span><span class="mi">5180</span><span class="o">-</span><span class="mi">4</span><span class="n">c49</span><span class="o">-</span><span class="n">b93e</span><span class="o">-</span><span class="n">c934d7a433dc</span><span class="p">)</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">archivematica</span><span class="o">/</span><span class="n">sharedDirectory</span><span class="o">/</span><span class="n">currentlyProcessing</span><span class="o">/</span><span class="n">demo</span><span class="o">-</span><span class="n">test</span><span class="o">-</span><span class="n">f706d98d</span><span class="o">-</span><span class="n">faa6</span><span class="o">-</span><span class="mi">450</span><span class="n">f</span><span class="o">-</span><span class="mi">92</span><span class="n">c7</span><span class="o">-</span><span class="n">b608f1106f2e</span><span class="o">/</span><span class="n">objects</span><span class="o">/</span><span class="n">pictures</span><span class="o">/</span><span class="n">MARBLES</span><span class="o">.</span><span class="n">TGA</span>
+<span class="n">fmt</span><span class="o">/</span><span class="mi">402</span>
+
+<span class="n">Command</span> <span class="n">output</span><span class="p">:</span> <span class="n">fmt</span><span class="o">/</span><span class="mi">402</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">archivematica</span><span class="o">/</span><span class="n">sharedDirectory</span><span class="o">/</span><span class="n">currentlyProcessing</span><span class="o">/</span><span class="n">demo</span><span class="o">-</span><span class="n">test</span><span class="o">-</span><span class="n">f706d98d</span><span class="o">-</span><span class="n">faa6</span><span class="o">-</span><span class="mi">450</span><span class="n">f</span><span class="o">-</span><span class="mi">92</span><span class="n">c7</span><span class="o">-</span><span class="n">b608f1106f2e</span><span class="o">/</span><span class="n">objects</span><span class="o">/</span><span class="n">pictures</span><span class="o">/</span><span class="n">MARBLES</span><span class="o">.</span><span class="n">TGA</span> <span class="n">identified</span> <span class="k">as</span> <span class="n">a</span> <span class="n">Truevision</span> <span class="n">TGA</span> <span class="n">Bitmap</span> <span class="mf">2.0</span>
+</pre></div>
+</div>
+<p>以上のことから、ファイルMARBLES.TGAは、Truevision TGA Bitmap 2.0として識別されました。Archivematicaは、 <a class="reference external" href="https://www.nationalarchives.gov.uk/PRONOM/Default.aspx">PRONOM</a> （英国国立公文書館が管理する技術情報のレジストリ）を使用してファイルを識別し、正規化、特性化、その他のファイル操作イベントを通知します。Archivematicaは、Truvision TGA Bitmap 2.0のPRONOMフォーマット識別子である <a class="reference external" href="https://www.nationalarchives.gov.uk/PRONOM/fmt/402">fmt/402</a> （フォーマット402）としてTGAファイルを識別します。転送の各アイテムには、同様のSTDOUTセクションがあるはずです。</p>
+<p>Archivematicaはバックグラウンドで転送処理を続行します。 <em>Create SIP from Transfer microservice</em> に到達したら、次のセクションをお読みください。</p>
+</section>
+<section id="create-a-sip">
+<h3>SIPの作成<a class="headerlink" href="#create-a-sip" title="Link to this heading">¶</a></h3>
+<p>Transferタブの最後のマイクロサービスは、 <em>Create SIP from Transfer</em> です。最後のジョブである <em>Create SIP（s）</em> は、インジェストタブに直接進むか、転送をバックログに送ることができます。バックログについての詳細は、 <a class="reference internal" href="../../user-manual/backlog/backlog.html#backlog"><span class="std std-ref">バックログ文書</span></a> を参照してください。</p>
+<p><strong>ステップ：</strong></p>
+<ol class="arabic simple">
+<li><p>プロンプトが表示されたら、 <em>「Create single SIP and continue processing」（単一のSIPを作成し、処理を続行する）を選択します。</em> 。</p></li>
+</ol>
+</section>
+</section>
+<section id="task-2-make-aips-and-dips">
+<span id="quick-start-ingest"></span><h2>タスク#2 - AIPとDIPを作る<a class="headerlink" href="#task-2-make-aips-and-dips" title="Link to this heading">¶</a></h2>
+<p>Archivematicaの主な機能は、SIPからArchival Information Packages（AIP）とDissemination Information Packaes（DIP）を作成することです。先ほど転送タブでSIPを作成しました。インジェストタブでは、AIPとDIPを作成するマイクロサービスを実行します。</p>
+<p><strong>ステップ：</strong></p>
+<ol class="arabic simple">
+<li><p>インジェストタブをクリックします。</p></li>
+<li><p>必要に応じて決定してください（繰り返しますが、&quot;Reject&quot;と書かれたものは選択しないでください）。インジェスト中に表示される決定ポイントの詳細については、 <a class="reference internal" href="../../user-manual/ingest/ingest.html#ingest"><span class="std std-ref">インジェストタブ文書</span></a> を参照してください。</p></li>
+<li><p>[正規化]の決定ポイントまで来たら、一旦立ち止まって次のセクションを読んでください。</p></li>
+</ol>
+<section id="normalization">
+<h3>正規化<a class="headerlink" href="#normalization" title="Link to this heading">¶</a></h3>
+<p>インジェストも転送と同様、一連のマイクロサービスで構成されています。インジェスト中に行われる最も重要なマイクロサービスはNormalizeです。Normalizationは、デジタルコンテンツを長期保存（AIPの場合）やアクセス（DIPの場合）に適した形式に変換するプロセスです。Normalizationマイクロサービスに到達すると、コンテンツをどのように正規化するかを決定するプロンプトが表示されます。</p>
+<p><strong>ステップ：</strong></p>
+<ol class="arabic simple">
+<li><p>プロンプトが表示されたら、 <em>Normalize for preservation and access</em> を選択します。このオプションを選択すると、ArchivematicaにSIPのコンテンツの保存用コピー（AIP）とアクセス用コピー（DIP）を作成することを知らせます。</p></li>
+<li><p>正規化が完了すると、正規化を承認するよう促されます。承認を選択する前に、ドロップダウンメニューの隣にある小さなページアイコンをクリックしてください。</p></li>
+<li><p>正規化レポートは、別タブで開きます。このレポートの読み方については、以下に記載されています。</p></li>
+<li><p>メインタブで、ページ上部の「Preservation Planning」タブをクリックします。Preservation Planningタブが開いたら、&quot;SVG&quot;（またはレビューしたいファイル形式）を検索します。ファイル形式名をクリックします。</p></li>
+<li><p>「正規化レポート」と「保存計画」の2つのタブが開いているはずです。正規化レポートに戻り、次の2つのセクションを確認してください。</p></li>
+</ol>
+<section id="reviewing-normalization-for-preservation">
+<h4>保存のための正規化の見直し<a class="headerlink" href="#reviewing-normalization-for-preservation" title="Link to this heading">¶</a></h4>
+<p>正規化レポートは、SIPのコンテンツで正規化が試みられたかどうかを詳細に示します。このスクリーンショットは、Scalable Vector Graphicとして識別されたlion.svgのレポートを示し、保存の列が強調表示されます。</p>
+<a class="reference internal image-reference" href="../../_images/normalization-report-preservation.png"><img alt="正規化レポートの行で、保存の列が赤枠で示されます。" class="align-left" src="../../_images/normalization-report-preservation.png" style="width: 100%;" />
+</a>
+<p>SVGを検索した保存計画タブに戻ると、SVGファイルは保存フォーマットとみなされていることがわかります。したがって、正規化レポートには次のことが示されます：</p>
+<ul class="simple">
+<li><p>保存の正規化が試みられました。</p></li>
+<li><p>保存の正規化は失敗しませんでした。</p></li>
+<li><p>画像はすでに保存フォーマットになっていました。</p></li>
+</ul>
+<p>本質的に、これは保存の正規化が開始されたことを意味しますが、Archivematicaはファイルがすでに保存フォーマットであることを認識したため、アクションは実行されませんでした。</p>
+</section>
+<section id="reviewing-normalization-for-access">
+<h4>アクセス正規化の見直し<a class="headerlink" href="#reviewing-normalization-for-access" title="Link to this heading">¶</a></h4>
+<p>このスクリーンショットは、アクセス列が強調表示されたlion.svgのレポートを示しています。</p>
+<a class="reference internal image-reference" href="../../_images/normalization-report-access.png"><img alt="赤いボックスで示されたアクセス列を含む正規化レポートの行。" class="align-left" src="../../_images/normalization-report-access.png" style="width: 100%;" />
+</a>
+<p>アクセスの正規化については、以下のように報告されています：</p>
+<ul class="simple">
+<li><p>アクセスの正規化が試みられました。</p></li>
+<li><p>アクセスの正規化は失敗しませんでした。</p></li>
+<li><p>画像はアクセスフォーマットできませんでした。</p></li>
+</ul>
+<p>このことが lion.svgにとって何を意味するのかを確認するために、保存計画タブをもう少し詳しく見ていきます。</p>
+<p><strong>ステップ：</strong></p>
+<ol class="arabic simple">
+<li><p>保存計画タブに戻る。</p></li>
+<li><p>下にスクロールし、左側のサイドバーにある <em>正規化</em> セクションを見つける。 <em>ルール</em> をクリックしてください。</p></li>
+<li><p>&quot;Scalable Vector Graphics&quot;（または解析するファイル形式）を検索します。</p></li>
+</ol>
+<p>結果は、SVGファイルに対するアクセスと正規化のルールを示しています。Command列では、SVGの優先アクセス形式がPDFであることがわかります。Archivematicaは、このルールに従ってアクセスコピーを作成するため、正規化レポートから、SVGファイルのPDFコピーがDIP用に正常に作成されたことが推測できます。これを確認するには、 <em>Normalize for access</em> ジョブのコマンド出力をチェックするか（上記の <em>Identify file format</em> のコマンド出力をチェックした方法と同様）、DIPが保存されたらそれを確認します。</p>
+<p>インジェストの処理を続け、AIPとDIPの決定ポイントに達したら止めます。</p>
+</section>
+</section>
+</section>
+<section id="task-3-store-aips-and-dips">
+<span id="quick-start-storage"></span><h2>タスク#3 - AIPとDIPの保管<a class="headerlink" href="#task-3-store-aips-and-dips" title="Link to this heading">¶</a></h2>
+<p>Archivematicaはパッケージを作成するためのツールです。生産環境では、ストレージは、Archivematicaの外部で、ユーザーや機関が選択したストレージシステムに保存されますが、このデモでは、AIPとDIPをArchivematicaのデフォルトの内部ストレージに保存します。</p>
+<p>AIPは、常に最初に保管すべきです。パッケージが小さいため、DIP の保管オプションは、通常最初に表示されるため、すぐに保管したくなります。しかし、AIPに何か問題が起きた場合、DIPを保管システムやアクセスシステムから削除しなければなりません。AIPを最初に処理することで、AIPが安全であることを認識しながらDIPを保管し、アクセスできるようになります。</p>
+<p><strong>ステップ：</strong></p>
+<ol class="arabic simple">
+<li><p><em>Store AIP</em> と <em>Upload DIP</em> マイクロサービスがあなたに決定ポイントを促すまで、インジェストを処理します。</p></li>
+<li><p><em>Store AIP</em> ドロップダウンから&quot;Store AIP&quot;を選択します。</p></li>
+<li><p>しばらくすると、AIPの保存場所を選択する別の決定ポイントが表示されます。選択肢は1つだけ - &quot;Store AIP in standard Archivematicaディレクトリ&quot;だけです。このオプションを選択します。</p></li>
+<li><p>AIPが正常に保存されたら、DIPの処理に移ります。ローカルにインストールされたArchivematica VMもSandboxもアクセスシステムに接続されていないため、 <em>Upload DIP</em> で、&quot;Store DIP&quot;を選択します。</p></li>
+<li><p>DIPの保存場所を選択するプロンプトが表示されます。&quot;Store DIP in standard Archivematica directory&quot;オプションは1つだけです。このオプションを選択します。</p></li>
+</ol>
+<p>これでAIPとDIPがArchivematicaの内部ストレージに保存されました。これでArchivematicaのワークフローは完了です！</p>
+</section>
+<section id="task-4-review-aips-and-dips">
+<span id="quick-start-review"></span><h2>タスク#4 - AIPとDIPを見直す<a class="headerlink" href="#task-4-review-aips-and-dips" title="Link to this heading">¶</a></h2>
+<p>AIPとDIPが保存されたので、見直すことができます。</p>
+<section id="review-aip">
+<h3>AIPを見直す<a class="headerlink" href="#review-aip" title="Link to this heading">¶</a></h3>
+<p><strong>ステップ：</strong></p>
+<ol class="arabic simple">
+<li><p>Archival Storageタブをクリックします。検索結果にAIPが表示されるはずですが、表示されない場合は、タスク#1で付けた名前を使用して検索できます。</p></li>
+<li><p>使用しているArchivematicaのバージョンに応じて、AIP の名前をクリックすると、AIPの詳細ページが開くか、AIPがすぐにダウンロードされます。AIPの詳細ページが表示されたら、[ダウンロード]ボタンをクリックします。</p></li>
+<li><p>ダウンロードが完了したら、AIPを開きます。コンピュータにインストールされている7zipファイルを開くことができるプログラムを使用する必要があります。必要であれば、こちらから7Zipをダウンロードできます：<a class="reference external" href="https://www.7-zip.org/download.html">https://www.7-zip.org/download.html</a></p></li>
+<li><p>AIPを解凍したら、オブジェクトディレクトリが見つかるまでフォルダを移動します。このディレクトリには、転送したオリジナル画像と保存用コピーが含まれています。Objectsディレクトリのファイル形式を、Preservation Planningタブのルールと比較できます。</p></li>
+<li><p>METSファイルが見つかるまでフォルダを移動し、ウェブブラウザまたはテキストエディタで開きます。タイトルは、&quot;METS.7e58760a-e357-4165-9428-26f5bb2ba8ee.xml&quot;のようになります。</p></li>
+<li><p>METSの&lt;mets:fileSec&gt;タグを見つけます。fileSecの中で、オリジナル転送の各アイテムに関する情報を見つけることができるはずです - これらは、&lt;mets:fileGrp USE=&quot;original&quot;&gt;というタグが付けられたセクションにあります。下にスクロールすると、各保存コピーの補足情報を見ることができます。これは、&lt;mets:fileGrp USE=&quot;preservation&quot;&gt;というタグの付いたセクションにあります。</p></li>
+</ol>
+<p>METS.xmlファイルは、お使いのファイルに関するすべての情報と、それらのオリジナルファイルに作用したプロセスやツールに関する情報が含まれているため、非常に長いファイルです。METSファイルの内容と構造の詳細については、メタデータセクションの <a class="reference internal" href="../../user-manual/metadata/METS.html#mets-schema"><span class="std std-ref">METSページ</span></a> を確認してください。</p>
+</section>
+<section id="review-dip">
+<h3>DIPの見直し<a class="headerlink" href="#review-dip" title="Link to this heading">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>このセクションはVMを使用している場合にのみ適用されます。Archivematicaサンドボックスでは、Storage Serviceにアクセスできません。</p>
+</div>
+<p><strong>ステップ：</strong></p>
+<ol class="arabic simple">
+<li><p>DIPを取得するには、Archivematica Storage Serviceにアクセスする必要があります。Archivematica VMのURLの末尾に&quot;:8000&quot;を追加します（例：<a class="reference external" href="http://10.10.10.20:8000/">http://10.10.10.20:8000/</a>）。</p></li>
+<li><p>ストレージサービスで、Packagesタブをクリックします。</p></li>
+<li><p>ページの右端に検索ボックスがあります。タスク#1で付けた名前を入力してDIPを検索します。</p></li>
+<li><p>2つの結果が表示されるはずです。ひとつは自分のAIPで、もうひとつはDIPです。&quot;Type&quot;欄に表示されています。</p></li>
+<li><p>どのファイルがDIPであるかを確認したら、&quot;Download&quot;をクリックします。</p></li>
+<li><p>ダウンロードが完了したら、DIPを開きます。コンピュータにインストールされているtarファイルを開くことができるプログラムを使用する必要があります。前述の7ZipでTARファイルを開くことができます：<a class="reference external" href="https://www.7-zip.org/download.html">https://www.7-zip.org/download.html</a></p></li>
+<li><p>DIPを解凍したら、objectsディレクトリを開きます。このディレクトリには、オリジナル画像から派生したアクセスコピーが含まれています。objectsディレクトリ内のファイル形式を、[Preservation Planning]タブのルールと比較できます。</p></li>
+<li><p>DIPにはサムネイルディレクトリもあり、画像の小さなJPGバージョンがあります。画像がJPGに変換できなかった場合（SVGファイルの場合）、代わりに一般的なアイコンが含まれます。</p></li>
+</ol>
+</section>
+</section>
+<section id="task-5-automate-workflow-through-configuration">
+<span id="quick-start-config"></span><h2>タスク#5 - コンフィギュレーションによるワークフローの自動化<a class="headerlink" href="#task-5-automate-workflow-through-configuration" title="Link to this heading">¶</a></h2>
+<p>Administrationタブをクリックすると、Archivematicaの処理設定画面が表示されます。ステップ1からステップ3で実行したArchivematicaのテスト中に発生した各デシジョンポイントをこのページで自動化できます。これは、デシジョンポイントに遭遇するたびに同じデシジョンを行うことがわかっている場合に使用します。</p>
+<p><strong>ステップ：</strong></p>
+<ol class="arabic simple">
+<li><p>[管理]タブをクリックします。「default」と呼ばれる単一の処理設定が表示されます。</p></li>
+<li><p>さまざまなオプションを検討し、好きなように変更してください。オプションは、以前のタスクで行った決定ポイントから認識できます。</p></li>
+</ol>
+<p>たとえば、いつも同じ圧縮ツールを使い、いつも同じ割合でパッケージを圧縮したいので、圧縮アルゴリズムと圧縮レベルを自動化したいと思うかもしれません。圧縮関連の処理設定を行うには、次のことを行います：</p>
+<ol class="arabic simple">
+<li><p><em>Select compression algorithm</em> の横にあるチェックボックスをオンにします。</p></li>
+<li><p>右側のドロップダウンを使って、圧縮アルゴリズムを選択します。 <em>7z using bzip2</em> が最も一般的です。</p></li>
+<li><p><em>の横にあるチェックボックスをオンにする圧縮レベルを選択</em></p></li>
+<li><p>右側のドロップダウンを使って、圧縮レベルを選択します - <em>5 - 通常の圧縮モード</em> 速度とサイズのバランスが取れています。</p></li>
+</ol>
+<p>処理設定を設定する前に、Archivematicaでいくつかのテストを実行することをお勧めします。Archivematicaに慣れてくると、どのような判断を何度も繰り返しているかが分かってきます。これらは、処理設定による自動化に最適です。</p>
+</section>
+<section id="more-ways-to-get-familiar-with-archivematica">
+<span id="quick-start-resources"></span><h2>Archivematicaを使いこなすためのその他の方法<a class="headerlink" href="#more-ways-to-get-familiar-with-archivematica" title="Link to this heading">¶</a></h2>
+<p>このチュートリアルでは、Archivematicaの非常に基本的なワークフローについて説明します。より複雑なコンテンツの処理については、 <a class="reference internal" href="../../user-manual/index.html#user-manual"><span class="std std-ref">ユーザーマニュアル</span></a> を参照してください。</p>
+<p><a class="reference internal" href="#quick-start"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Archivematicaクイックスタートガイド</a><ul>
+<li><a class="reference internal" href="#task-0-set-up-your-archivematica-test-instance">タスク#0 - Archivematicaテストインスタンスをセットアップする</a><ul>
+<li><a class="reference internal" href="#using-the-sandbox">サンドボックスの使用</a></li>
+<li><a class="reference internal" href="#installing-on-a-virtual-machine-using-vagrant">Vagrantを使って仮想マシンにインストール</a><ul>
+<li><a class="reference internal" href="#install-vagrant-and-virtualbox">VagrantとVirtualBoxをインストール</a></li>
+<li><a class="reference internal" href="#spin-it-up">起動</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#task-1-start-a-standard-transfer">タスク#1 - 標準的な転送を開始</a><ul>
+<li><a class="reference internal" href="#review-file-formats">ファイルフォーマットの見直し</a></li>
+<li><a class="reference internal" href="#create-a-sip">SIPの作成</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#task-2-make-aips-and-dips">タスク#2 - AIPとDIPを作る</a><ul>
+<li><a class="reference internal" href="#normalization">正規化</a><ul>
+<li><a class="reference internal" href="#reviewing-normalization-for-preservation">保存のための正規化の見直し</a></li>
+<li><a class="reference internal" href="#reviewing-normalization-for-access">アクセス正規化の見直し</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#task-3-store-aips-and-dips">タスク#3 - AIPとDIPの保管</a></li>
+<li><a class="reference internal" href="#task-4-review-aips-and-dips">タスク#4 - AIPとDIPを見直す</a><ul>
+<li><a class="reference internal" href="#review-aip">AIPを見直す</a></li>
+<li><a class="reference internal" href="#review-dip">DIPの見直し</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#task-5-automate-workflow-through-configuration">タスク#5 - コンフィギュレーションによるワークフローの自動化</a></li>
+<li><a class="reference internal" href="#more-ways-to-get-familiar-with-archivematica">Archivematicaを使いこなすためのその他の方法</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../overview/system-requirements.html"
+                          title="前の章へ">システム要件</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="configuration.html"
+                          title="次の章へ">設定</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/getting-started/quick-start/quick-start.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="設定"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../overview/system-requirements.html" title="システム要件"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >はじめに</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archivematicaクイックスタートガイド</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

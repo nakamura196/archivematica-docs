@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>アーカイブストレージ &#8212; Archivematica 1.16.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=def86cc0" />
+    
+    <script src="../../_static/documentation_options.js?v=7bb0b1e0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="AIPの構造" href="aip-structure.html" />
+    <link rel="prev" title="マニュアル正規化" href="../ingest/manual-normalization.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="aip-structure.html" title="AIPの構造"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../ingest/manual-normalization.html" title="マニュアル正規化"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">アーカイブストレージ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="archival-storage">
+<span id="id1"></span><h1>アーカイブストレージ<a class="headerlink" href="#archival-storage" title="Link to this heading">¶</a></h1>
+<p>Archival Storageタブには、Archivematicaインスタンスに保存されているArchival Information Packages （AIP）がすべて表示されます。ページの上部には検索インターフェイスがあり、簡単なクエリやブーリアンクエリを作成して、保存されているAIPや個々のアイテムを検索できます。テーブルの上部には、保存されている AIP の合計サイズとインデックス付けされたファイルの数が表示されます。デフォルトでは、テーブルにはAIPの名前、UUID、ディスク上のサイズ、AIPが作成された日付、ステータス、AIPが暗号化されているかどうかが表示されます。</p>
+<a class="reference internal image-reference" href="../../_images/archival-storage-tab.png"><img alt="保存された AIP を表示する [アーカイブストレージ] タブ" class="align-center" src="../../_images/archival-storage-tab.png" style="width: 80%;" />
+</a>
+<p>Archival Storageタブでは、個々のAIPを選択してダウンロードしたり、削除したり、 <a class="reference internal" href="../ingest/ingest.html#reingest"><span class="std std-ref">AIPの再インジェスト</span></a> したりできます。</p>
+<p>普及情報パッケージ（Dissemination Information Packages：DIP）は、保存されていても「アーカイバルストレージ」タブには表示されないことに注意してください。保存されたDIPへのアクセスについては、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/#index" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">Storage Service</span></a> の文書を参照してください。</p>
+<p><em>このページ上</em></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#browse-aip"><span class="std std-ref">AIPストアの閲覧</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#csv-download"><span class="std std-ref">すべてのAIPメタデータをCSVファイルでダウンロード</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#search-aip"><span class="std std-ref">AIPストアの検索</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#conducting-search"><span class="std std-ref">検索の実施</span></a></p></li>
+<li><p><a class="reference internal" href="#search-for-aics"><span class="std std-ref">AICの検索</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#aip-information-page"><span class="std std-ref">AIP情報ページ</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#download-aip"><span class="std std-ref">AIPのダウンロード</span></a></p></li>
+<li><p><a class="reference internal" href="#metadata-only-dip-upload"><span class="std std-ref">メタデータのみのDIPアップロード</span></a></p></li>
+<li><p><a class="reference internal" href="#reingest-aip"><span class="std std-ref">AIPの再インジェスト</span></a></p></li>
+<li><p><a class="reference internal" href="#delete-aip"><span class="std std-ref">AIPの削除</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#aip-encryption"><span class="std std-ref">AIP暗号化</span></a></p></li>
+<li><p><a class="reference internal" href="#stored-aip-structure"><span class="std std-ref">保存されたAIP構造</span></a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><a class="reference internal" href="../../admin-manual/installation-setup/installation/installation.html#install-elasticsearch"><span class="std std-ref">Elasticsearch を使用せずに Archivematica</span></a> を実行している場合、または Elasticsearch の機能が制限されている場合、ダッシュボードに [アーカイブストレージ] タブが表示されないことがあります。</p>
+</div>
+<section id="browsing-the-aip-store">
+<span id="browse-aip"></span><h2>AIPストアの閲覧<a class="headerlink" href="#browsing-the-aip-store" title="Link to this heading">¶</a></h2>
+<p>[アーカイブストレージをブラウズ] テーブルの下部には、 <strong>列選択</strong> アイコンがあります。これをクリックして、[アーカイブストレージ] テーブルで表示する列を選択します。青い行は、列が現在表示されていることを示します。白い行は、その列が現在表示されていないことを示します。</p>
+<a class="reference internal image-reference" href="../../_images/archival-storage-select-columns.png"><img alt="[アーカイブストレージ] タブの [列選択] オプション" class="align-center" src="../../_images/archival-storage-select-columns.png" style="width: 80%;" />
+</a>
+<p>青または白の行をクリックすると、各列のこの値が切り替わります。以下の例では、利用可能なすべての列が選択されています。選択したカラムは、ユーザーセッション間でも保持され、同じArchivematicaパイプラインの他のユーザーにも適用されます。</p>
+<a class="reference internal image-reference" href="../../_images/archival-storage-all-columns.png"><img alt="The Archival Storage tab with all columns selected" class="align-center" src="../../_images/archival-storage-all-columns.png" style="width: 80%;" />
+</a>
+<p>列のヘッダーをクリックすると、昇順または降順に並べ替えることができます。上下のキャレット（矢印）が表示されます。（例： <strong>ファイル数：</strong> 以下参照）。</p>
+<a class="reference internal image-reference" href="../../_images/archival-storage-sorted-column.png"><img alt="ファイル数に基づいて並べ替えられた[アーカイブストレージ] タブ" class="align-center" src="../../_images/archival-storage-sorted-column.png" style="width: 80%;" />
+</a>
+<p>画面上部の <strong>ファイル表示</strong> オプションを有効にすると、アーカイブストレージ AIPに含まれるすべてのファイルが [アーカイブストレージテーブルをブラウズ] に一覧表示されます。</p>
+<a class="reference internal image-reference" href="../../_images/archival-storage-show-files.png"><img alt="[ファイルの表示] が選択された [アーカイブ ストレージ] タブ" class="align-center" src="../../_images/archival-storage-show-files.png" style="width: 80%;" />
+</a>
+<p><strong>列を選択</strong> オプションは、 <strong>ファイルを表示</strong> テーブルでも利用できます。</p>
+<a class="reference internal image-reference" href="../../_images/archival-storage-show-files-columns.png"><img alt="[ファイルの表示] ビューで列を選択" class="align-center" src="../../_images/archival-storage-show-files-columns.png" style="width: 80%;" />
+</a>
+<p>列の並べ替えは、 <strong>ファイル表示</strong> テーブルでも可能です（例： <strong>AIP</strong> 以下の列を参照してください）。</p>
+<a class="reference internal image-reference" href="../../_images/archival-storage-show-files-sort.png"><img alt="[ファイル表示] ビューを AIP 列ごとに並べ替え" class="align-center" src="../../_images/archival-storage-show-files-sort.png" style="width: 80%;" />
+</a>
+<p>また、 <strong>AIP</strong> の列セルには、AIP情報ページへのハイパーリンクが含まれていることに注意してください（例：&quot;transfer1&quot; ）。そのページから、個々のAIPを選択してダウンロードしたり、削除したり、AIPの再インジェストを開始したりできます。</p>
+<section id="downloading-all-aip-metadata-in-a-csv-file">
+<span id="csv-download"></span><h3>すべてのAIPメタデータをCSVファイルでダウンロード<a class="headerlink" href="#downloading-all-aip-metadata-in-a-csv-file" title="Link to this heading">¶</a></h3>
+<p>[アーカイブ ストレージの参照] タブで使用できるすべての列に表示されるすべての値は、CSV (カンマ区切り) ファイルにダウンロードできます。この CSV ファイルは、以下で説明する検索機能を超えて、AIP 情報のより詳細な分析とフィルタリングに使用できます。CSV データは、レポート作成ツールやグラフ作成ツールへの入力データとして使用することもできます。</p>
+<p><strong>アーカイブストレージをブラウズ</strong> テーブルの右上にある <strong>CSV をダウンロード</strong> リンクをクリックします。</p>
+<a class="reference internal image-reference" href="../../_images/archival-storage-csv-download.png"><img alt="CSV ダウンロードを使用して、すべてのAIPメタデータをダウンロード" class="align-center" src="../../_images/archival-storage-csv-download.png" style="width: 80%;" />
+</a>
+<p>CSV ファイルを保存する場所を指定するプロンプトが表示されます。CSV データには、現在どの列が選択されているかにかかわらず、すべての列の値が含まれます。また、[アーカイブストレージ] タブに現在どの AIP が表示されているかに関係なく、アーカイブストレージ内の各 AIP のメタデータも含みます。</p>
+</section>
+</section>
+<section id="searching-the-aip-store">
+<span id="search-aip"></span><h2>AIPストアの検索<a class="headerlink" href="#searching-the-aip-store" title="Link to this heading">¶</a></h2>
+<p>Archival Storageタブでは、Archivematicaインスタンスのインデックスに表示されているAIPを検索できます。すべての検索結果を自由に検索することも、1つ以上の検索パラメーターを使用して検索を制限することもできます：</p>
+<ul class="simple">
+<li><p><strong>File UUID</strong> ：AIP内の特定のファイルのUUID。</p></li>
+<li><p><strong>ファイル拡張子</strong> ：AIP内のファイルのフォーマット拡張子。</p></li>
+<li><p><strong>AIP UUID</strong> ：AIPのUUID。</p></li>
+<li><p><strong>AIP名</strong> ：AIPの名前。</p></li>
+<li><p><strong>Identifiers</strong> ： <a class="reference internal" href="../transfer/transfer.html#transfer-pids"><span class="std std-ref">identifiers.json</span></a> ファイルを使用して AIP に追加された外部識別子；または、提出文書として含まれる MODS ファイルまたは Islandora 転送の METS ファイル（ <a class="reference internal" href="../../admin-manual/installation-setup/integrations/integrations.html#islandora-integration"><span class="std std-ref">Islandora 統合</span></a> を使用）の <code class="docutils literal notranslate"><span class="pre">&lt;identifier&gt;</span></code> フィールドの値。</p></li>
+<li><p><strong>AIC の一部</strong> ：AIPの説明メタデータに追加された <a class="reference internal" href="aic.html#aic"><span class="std std-ref">AIC</span></a> 番号。 <code class="docutils literal notranslate"><span class="pre">AIC#</span></code> の後に値（すなわち <code class="docutils literal notranslate"><span class="pre">AIC#GWQ498</span></code> ）が続く形式。これはAICを構成する個々のAIPを検索します。</p></li>
+<li><p><strong>AIC identifier</strong> ：作成された <a class="reference internal" href="aic.html#aic"><span class="std std-ref">AIC</span></a> の識別子。 <code class="docutils literal notranslate"><span class="pre">AIC#</span></code> の後に値（例： <code class="docutils literal notranslate"><span class="pre">AIC#GWQ498</span></code> ）が続く形式。この検索はAICパッケージを返します。</p></li>
+<li><p><strong>転送メタデータ</strong> ： <a class="reference internal" href="../transfer/forensic.html#disk-image-workflow"><span class="std std-ref">ディスクイメージ転送タイプ用の特別なメタデータフォームを使用して追加されたメタデータ</span></a> .</p></li>
+<li><p><strong>Transfer metadata （other）</strong> ：バッグ転送の <code class="docutils literal notranslate"><span class="pre">bag-info.txt</span></code> の内容。このオプションを選択すると、2つ目のデータ入力ボックスがポップアップ表示され、検索したい特定の <code class="docutils literal notranslate"><span class="pre">bag-info.txt</span></code> フィールドを定義できます。たとえば、 <code class="docutils literal notranslate"><span class="pre">bag-info.txt</span></code> に <code class="docutils literal notranslate"><span class="pre">Source-Organization:</span> <span class="pre">My</span> <span class="pre">Org</span></code> という行が含まれている場合、2つ目のデータ入力ボックスに <code class="docutils literal notranslate"><span class="pre">Source-Organization</span></code> と入力すると、検索対象をそのフィールドに限定できます。</p></li>
+</ul>
+<p>また、検索文字列をキーワード、フレーズ、または日付範囲として定義もできます：</p>
+<ul class="simple">
+<li><p><strong>Keyword</strong> ：デフォルトでは、Keywordオプションは検索文字列をブーリアンOR検索として扱います。例えば、 <code class="docutils literal notranslate"><span class="pre">2015-Annual-Report</span></code> を検索すると、実際には&quot;2015 OR Annual OR Report&quot; が検索されるため、&quot;2015&quot; または&quot;Annual&quot; または&quot;Report&quot; という名前のものが検索結果に含まれます。特定の文字列を検索するには、文字列の周りに引用符を追加します - <code class="docutils literal notranslate"><span class="pre">&quot;2015-Annual-Report&quot;</span></code> 。</p></li>
+<li><p><strong>Phrase</strong> ：フレーズ・オプションは検索をより柔軟にします。 <code class="docutils literal notranslate"><span class="pre">council-minutes</span></code> 、 <code class="docutils literal notranslate"><span class="pre">councilminutes</span></code> 、 <code class="docutils literal notranslate"><span class="pre">council-report</span></code> という名前のAIPを見つけるために <code class="docutils literal notranslate"><span class="pre">council*</span></code> のようなあいまい検索を行うためにPhraseオプションを使うことができます。</p></li>
+<li><p><strong>日付範囲</strong> ：2つの日付の間にArchivematicaで作成されたAIPを検索できます。 <code class="docutils literal notranslate"><span class="pre">2015-01-02:2015-03-15</span></code> のように、日付、コロン、2 番目の日付を入力すると、日付範囲を検索できます。</p></li>
+</ul>
+<section id="conducting-a-search">
+<span id="conducting-search"></span><h3>検索の実施<a class="headerlink" href="#conducting-a-search" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>[Archival Storage］タブで、画面上部のテキストボックスに検索語を入力します。検索結果を特定のパラメーター（AIP名やファイルUUIDなど）に限定したい場合は、最初のドロップダウンボックスを使用してパラメーターを選択します。デフォルトでは、パラメーターが <strong>Any</strong> に設定されており、ストレージインデックス全体を検索します。2番目のドロップダウンメニューを使用して、キーワード、フレーズ、日付範囲のいずれで検索するかを選択します。</p></li>
+<li><p>AIP ではなく、個々のファイルを検索結果に表示したい場合は、 <strong>ファイルを表示</strong> のチェックボックスを選択します。</p></li>
+<li><p>ブール検索を構築するには、 <strong>新規追加</strong> をクリックします。2つ目のテキストボックスとドロップダウンメニューが表示されます。 <em>Or</em> 、 <em>And</em> 、または <em>Not</em> をブールコネクターとして選択できます。</p></li>
+</ol>
+<a class="reference internal image-reference" href="../../_images/search-archival-storage.png"><img alt="特定の AIP UUID の結果を示す [アーカイブストレージ タブ] と拡張子.png の結果を表示します。結果は1つになります。" class="align-center" src="../../_images/search-archival-storage.png" style="width: 80%;" />
+</a>
+<p>検索結果の横にある <strong>View raw</strong> をクリックすると、検索用にインデックス化された生の JSON ストリームを表示もできます。JSONにはMETSデータ、データを生成したArchivematicaのバージョン、AIPのUUID、インデックスが作成された時間、AIP内の相対ファイルパスが含まれています。</p>
+</section>
+<section id="searching-for-archival-information-collections-aics">
+<span id="search-for-aics"></span><h3>アーカイブ情報コレクション（AIC）の検索<a class="headerlink" href="#searching-for-archival-information-collections-aics" title="Link to this heading">¶</a></h3>
+<p>Archivematica には、1つのコレクションを複数のAIPに分割し、 <a class="reference internal" href="aic.html#aic"><span class="std std-ref">Archival Information Collection</span></a> （AIC） として連結する機能があります。AICの検索については、 <a class="reference internal" href="aic.html#search-aic"><span class="std std-ref">AICの検索</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="aip-information-page">
+<span id="id2"></span><h2>AIP情報ページ<a class="headerlink" href="#aip-information-page" title="Link to this heading">¶</a></h2>
+<p>AIPの名前をクリックすると、AIP情報ページが開きます。このページから、関連するDIPのアップロード、AIPの再インジェスト、AIPの削除、AIPのダウンロード、METSおよびポインターファイルの閲覧が可能です。</p>
+<a class="reference internal image-reference" href="../../_images/aip-information-page.png"><img alt="AIPの情報ページ。" class="align-center" src="../../_images/aip-information-page.png" style="width: 80%;" />
+</a>
+<section id="downloading-an-aip">
+<span id="download-aip"></span><h3>AIPのダウンロード<a class="headerlink" href="#downloading-an-aip" title="Link to this heading">¶</a></h3>
+<p>AIPをダウンロードするには、 <strong>Download</strong> をクリックします。ウェブブラウザでダウンロードが始まります。非常に大きなAIPの場合、ダウンロードが開始されるまでに数分かかることがあります。非常に大きなAIPをダウンロードする場合、Archivematicaのデフォルトのタイムアウトにかかり、AIPがダウンロードされないことがあります。タイムアウトの調整については、 <a class="reference internal" href="../../admin-manual/installation-setup/customization/scaling-archivematica.html#scaling-up"><span class="std std-ref">Scaling up</span></a> 文書を参照してください。AIPのサイズが大きすぎる場合は、ストレージから直接ダウンロードする必要があります。</p>
+<p>AIP の仕組みの詳細については、 <a class="reference internal" href="aip-structure.html#aip-structure"><span class="std std-ref">AIPの構造</span></a> を参照してください。</p>
+<section id="downloading-the-mets-file">
+<span id="download-mets"></span><h4>METSファイルのダウンロード<a class="headerlink" href="#downloading-the-mets-file" title="Link to this heading">¶</a></h4>
+<p>AIP <a class="reference external" href="http://www.loc.gov/standards/mets/">METS ファイル</a> は、AIP 内のすべてのデジタルオブジェクト（オリジナルファイル、保存マスター、ライセンスファイル、OCRテキストファイル、提出文書など）をリストアップし、相互の関係を記述し、デジタルオブジェクトをその記述的、技術的、出所、および権利メタデータにリンクします。</p>
+<p>AIP をダウンロードせずに METS ファイルを見るには、 <em>METSファイル</em> の隣にある <strong>View</strong> をクリックします。METS ファイルは、ブラウザで開くか、自動的にダウンロードが開始されます。</p>
+<p>ArchivematicaのMETS実装の詳細については、 <a class="reference internal" href="../metadata/METS.html#mets-schema"><span class="std std-ref">ArchivematicaにおけるMETS</span></a> を参照してください。</p>
+</section>
+<section id="downloading-the-pointer-file">
+<span id="download-pointer"></span><h4>ポインターファイルのダウンロード<a class="headerlink" href="#downloading-the-pointer-file" title="Link to this heading">¶</a></h4>
+<p>AIPポインターファイルは、AIP がどのように保存用にパッケージされたか、その固定性、AIP の保存場所に関する情報を提供します。ポインターファイルは主に Archivematica が AIP を取得するために使用します。</p>
+<p>ポインターファイルをダウンロードするには、 <em>ポインターファイル</em> の隣にある <strong>表示</strong> をクリックしてください。ポインターファイルはブラウザで開くか、自動的にダウンロードが開始されます。</p>
+</section>
+</section>
+<section id="metadata-only-upload-to-atom">
+<span id="metadata-only-dip-upload"></span><h3>AtoMへのメタデータのみのアップロード<a class="headerlink" href="#metadata-only-upload-to-atom" title="Link to this heading">¶</a></h3>
+<p>AIP情報ページから、接続されている <a class="reference external" href="https://www.accesstomemory.org/en/docs/2.8/#home" title="(in AtoM v2.8)"><span class="xref std std-ref">AtoM</span></a> サイトにメタデータのみのアップロードを送信することが可能です。詳しくは、 <a class="reference internal" href="../access/access.html#upload-metadata-atom"><span class="std std-ref">AtoMへのメタデータのみのアップロード</span></a> を参照してください。</p>
+</section>
+<section id="re-ingest-aip">
+<span id="reingest-aip"></span><h3>AIPの再インジェスト<a class="headerlink" href="#re-ingest-aip" title="Link to this heading">¶</a></h3>
+<p>AIP情報ページから、メタデータの追加や更新、DIPのオンデマンド作成、すべてのマイクロサービスの再実行などのために、AIPを再インジェストすることが可能です。詳細は、 <a class="reference internal" href="../ingest/ingest.html#reingest"><span class="std std-ref">再インジェスト AIP</span></a> を参照してください。</p>
+</section>
+<section id="delete-aip">
+<span id="id3"></span><h3>AIPの削除<a class="headerlink" href="#delete-aip" title="Link to this heading">¶</a></h3>
+<p>ArchivematicaでAIPを削除するには、2つのステップがあります。まず、ユーザがAIPの削除を要求します。次に、Storage Serviceの管理者がStorage Serviceのインターフェイスから削除を承認する必要があります。管理者がリクエストを承認すると、Archival StorageからAIPが削除され、インデックスが更新されます。管理者が要求を拒否した場合、AIPはストレージに残ります。</p>
+<ol class="arabic">
+<li><p>AIP 情報ページで、ページ下部の <strong>削除</strong> アクションタブに移動します。</p>
+<a class="reference internal image-reference" href="../../_images/DeleteButton.png"><img alt="AIPを削除するためのダッシュボードリクエスト" class="align-center" src="../../_images/DeleteButton.png" style="width: 80%;" />
+</a>
+</li>
+<li><p>AIP UUIDと削除理由を入力します。</p>
+<a class="reference internal image-reference" href="../../_images/ReasonDelete.png"><img alt="削除理由" class="align-center" src="../../_images/ReasonDelete.png" style="width: 80%;" />
+</a>
+</li>
+<li><p>[削除] をクリックします。[アーカイブストレージ] タブを更新すると、AIP のステータスが <em>Deletion requested</em> と表示されます。</p></li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p>Archivematica は、Storage Service 内と、ダッシュボードから検索できる Elasticsearch インデックスの 2 つの方法で AIP の場所と存在を追跡します。Storage Serviceではなくファイルシステムから直接 AIP を削除すると、両方のアプリケーションで不整合が発生するため、生産環境ではお勧めできません。</p>
+</div>
+</section>
+</section>
+<section id="aip-encryption">
+<span id="id4"></span><h2>AIP暗号化<a class="headerlink" href="#aip-encryption" title="Link to this heading">¶</a></h2>
+<p>Archivematica 1.7からは、AIPを暗号化して安全に保管できるようになりました。この機能は、機関がAIPをオフサイトで保管する場合に特に便利です。</p>
+<p>暗号化されたAIPを作成するには、Archivematicaがストレージサービスで暗号化されたスペースと場所を設定する必要があります。詳しくは、 <a class="reference external" href="https://www.archivematica.org/en/docs/storage-service-0.23/administrators/#gpg" title="(in Archivematica Storage Service v0.23)"><span class="xref std std-ref">暗号化</span></a> を参照してください。</p>
+<ol class="arabic simple">
+<li><p>通常のマイクロサービスを介して転送を実行します。</p></li>
+<li><p>[インジェスト] タブの「Store AIP location job」で、暗号化されたAIPの場所を選択します。これで暗号化されたAIPができました！</p></li>
+</ol>
+<p>AIPが暗号化されているかどうかは、[Archival Storage] タブの表の 「暗号化」列を見ればわかります。暗号化されたAIPは、 <em>True</em> と表示されます。</p>
+<a class="reference internal image-reference" href="../../_images/ArchiStorEncryptedColumn.png"><img alt="暗号化された AIP を表示する [アーカイブストレージ] タブ" class="align-center" src="../../_images/ArchiStorEncryptedColumn.png" style="width: 80%;" />
+</a>
+<p>AIPポインターファイルは、暗号化イベントのための <cite>PREMIS：EVENT</cite> エレメントを含みます。</p>
+<p>AIP自体は、[Archival Storage] タブから暗号化されていない形でダウンロードできます。</p>
+</section>
+<section id="aip-storage-structure">
+<span id="stored-aip-structure"></span><h2>AIPストレージ構造<a class="headerlink" href="#aip-storage-structure" title="Link to this heading">¶</a></h2>
+<p>ArchivematicaのStorage Serviceは、効率的な保存と検索のために、AIPのUUID（各AIPに割り当てられた32桁の英数字からなる一意の汎用識別子）に基づいたディレクトリツリー構造を採用しています。各UUIDは、管理しやすい4文字のチャンク（&quot;UUID quad&quot; ）に分割されます。</p>
+<a class="reference internal image-reference" href="../../_images/AIP-quad-directories.png"><img alt="AIP クアッドディレクトリを表示するファイルブラウザのスクリーンショット。最下位レベルのディレクトリを開いて AIP パッケージを表示します。" class="align-center" src="../../_images/AIP-quad-directories.png" style="width: 80%;" />
+</a>
+<p>各四角形は、ディレクトリを表します。AIPのUUIDの最初の4文字（最初のUUIDの四角形）は、AIPストレージのメインサブディレクトリの名前として使われます。2番目のUUIDの四角は最初のサブディレクトリの名前として使われ、以下同様です。最後の4文字（最後のUUIDの四角形）は、AIPストアのディレクトリツリーのリーフを作成するために使われ、そのUUIDを持つAIPはそのリーフに存在します。</p>
+<p>このフォルダ構造は、圧縮されたAIPも圧縮されていないAIPも同じです。保存のために圧縮されたAIPは <code class="docutils literal notranslate"><span class="pre">.7z</span></code> です。非圧縮AIPは、zipファイルではなく、ディレクトリとして保存します。</p>
+<p>クワッドディレクトリ構造は、保存のためだけに使用されます。AIPをダウンロードすると、クワッドディレクトリではなく、AIPそのものが得られます。</p>
+<p>AIP の仕組みの詳細については、 <a class="reference internal" href="aip-structure.html#aip-structure"><span class="std std-ref">AIPの構造</span></a> を参照してください。</p>
+<p><a class="reference internal" href="#archival-storage"><span class="std std-ref">トップに戻る</span></a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">アーカイブストレージ</a><ul>
+<li><a class="reference internal" href="#browsing-the-aip-store">AIPストアの閲覧</a><ul>
+<li><a class="reference internal" href="#downloading-all-aip-metadata-in-a-csv-file">すべてのAIPメタデータをCSVファイルでダウンロード</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#searching-the-aip-store">AIPストアの検索</a><ul>
+<li><a class="reference internal" href="#conducting-a-search">検索の実施</a></li>
+<li><a class="reference internal" href="#searching-for-archival-information-collections-aics">アーカイブ情報コレクション（AIC）の検索</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aip-information-page">AIP情報ページ</a><ul>
+<li><a class="reference internal" href="#downloading-an-aip">AIPのダウンロード</a><ul>
+<li><a class="reference internal" href="#downloading-the-mets-file">METSファイルのダウンロード</a></li>
+<li><a class="reference internal" href="#downloading-the-pointer-file">ポインターファイルのダウンロード</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metadata-only-upload-to-atom">AtoMへのメタデータのみのアップロード</a></li>
+<li><a class="reference internal" href="#re-ingest-aip">AIPの再インジェスト</a></li>
+<li><a class="reference internal" href="#delete-aip">AIPの削除</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aip-encryption">AIP暗号化</a></li>
+<li><a class="reference internal" href="#aip-storage-structure">AIPストレージ構造</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../ingest/manual-normalization.html"
+                          title="前の章へ">マニュアル正規化</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="aip-structure.html"
+                          title="次の章へ">AIPの構造</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user-manual/archival-storage/archival-storage.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="aip-structure.html" title="AIPの構造"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../ingest/manual-normalization.html" title="マニュアル正規化"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">Archivematica 1.16.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Archivematica文書</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >ユーザーマニュアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">アーカイブストレージ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2023, Artefactual Systems Inc..
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>
